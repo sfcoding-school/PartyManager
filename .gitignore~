@@ -27,7 +27,3 @@ proguard/
 *.ipr
 *.iws
 .idea/
-
-#androidStudio
-.gradle
-.DS_Store
