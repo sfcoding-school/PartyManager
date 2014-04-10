@@ -1,5 +1,6 @@
 package com.partymanager.app;
 
+import com.partymanager.R;
 
 import android.app.Activity;
 import android.app.ActionBar;
