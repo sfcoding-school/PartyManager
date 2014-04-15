@@ -47,6 +47,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LoginButton;
+
+
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -91,6 +97,7 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
 /*
 
         if (savedInstanceState == null) {
@@ -308,7 +315,6 @@ public class MainActivity extends Activity
         editor.commit();
     }
 
-
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
@@ -342,7 +348,6 @@ public class MainActivity extends Activity
         }
     }
 
-
     /**
      * @return Application's {@code SharedPreferences}.
      */
@@ -352,7 +357,6 @@ public class MainActivity extends Activity
         return getSharedPreferences(MainActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
-
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
