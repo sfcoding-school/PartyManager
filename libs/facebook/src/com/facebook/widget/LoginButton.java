@@ -430,6 +430,7 @@ public class LoginButton extends Button {
      */
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
+
     }
 
     /**

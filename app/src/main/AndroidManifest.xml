@@ -47,6 +47,20 @@
         </receiver>
 
         <service android:name="com.partymanager.gcm.GcmIntentService" />
+
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity
+            android:name="com.partymanager.app.MainActivity3"
+            android:label="@string/title_activity_main_activity3" >
+        </activity>
     </application>
 
 </manifest>
