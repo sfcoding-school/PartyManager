@@ -58,7 +58,7 @@
             android:value="@string/app_id" />
 
         <activity
-            android:name="com.partymanager.app.MainActivity3"
+            android:name=".app.ProfileActivity"
             android:label="@string/title_activity_main_activity3" >
         </activity>
     </application>

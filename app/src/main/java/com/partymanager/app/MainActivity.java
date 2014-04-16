@@ -78,16 +78,16 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /////////////////////////////
+        //Controllo se esiste già una sessione FB attiva
         Session session = Session.getActiveSession();
 
         if (session != null && session.isOpened()) {
-            Toast.makeText(getApplicationContext(),"open" , Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"open" , Toast.LENGTH_LONG).show();
         } else {
-            Intent newact = new Intent(this, MainActivity3.class);
+            Intent newact = new Intent(this, ProfileActivity.class);
             startActivity(newact);
         }
-        //////////////////////////////////
+        //Fine controllo sessione
 
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -178,6 +178,12 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.profile) {
+            Intent newact = new Intent(this, ProfileActivity.class);
+            newact.putExtra("chiave", "1");
+            startActivity(newact);
             return true;
         }
         return super.onOptionsItemSelected(item);
