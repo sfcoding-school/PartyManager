@@ -130,7 +130,8 @@ public class ProfileActivity extends Activity {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
             //textInstructionsOrLink.setText(URL_PREFIX_FRIENDS + session.getAccessToken());
-            buttonLoginLogout.setText("logout");
+            buttonLoginLogout.setText("Logout");
+            foto_profilo.setVisibility(View.VISIBLE);
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     onClickLogout();
@@ -155,8 +156,9 @@ public class ProfileActivity extends Activity {
             }
 
         } else {
-            textInstructionsOrLink.setText("instructions");
-            buttonLoginLogout.setText("login");
+            foto_profilo.setVisibility(View.INVISIBLE);
+            textInstructionsOrLink.setText(R.string.instruction);
+            buttonLoginLogout.setText("Login");
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     onClickLogin();
@@ -232,6 +234,5 @@ public class ProfileActivity extends Activity {
         finish();
         return;
     }
-
 
 }

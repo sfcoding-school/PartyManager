@@ -8,10 +8,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+
+    <!-- Menù -->
     <string name="action_settings">Impostazioni</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="btn_sett_profile">Profilo</string>
+
+    <!-- Activity Profilo e FB -->
     <string name="app_id">401068586702319</string>
     <string name="title_activity_main_activity3">Profilo</string>
-    <string name="btn_sett_profile">Profilo</string>
+    <string name="instruction">Per poter utilizzare l\'applicazione bisogna accedere tramite facebook.
+        Fai click sul tasto sotto per accedere</string>
 
 </resources>
