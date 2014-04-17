@@ -7,13 +7,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,29 +26,13 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProfileActivity extends Activity {
@@ -55,23 +41,25 @@ public class ProfileActivity extends Activity {
     private TextView textInstructionsOrLink;
     private Button buttonLoginLogout;
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
-
+    private static ImageView foto_profilo = null;
     private int view_profilo = 0;
     public String url;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TEST
+        //Passaggio dati tra activity per click Profilo
         Bundle datipassati = getIntent().getExtras();
         String dato1 = "non ha funzionato";
         if (datipassati != null) {
             dato1 = datipassati.getString("chiave");
             view_profilo = Integer.parseInt(dato1);
         }
-        //END TEST
 
+        //Controllo KEY HASH per connessione FB
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.partymanager", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -87,10 +75,13 @@ public class ProfileActivity extends Activity {
             Toast.makeText(getApplicationContext(), "error2 - ProfileActivity", Toast.LENGTH_LONG).show();
         }
 
+        //Inizializzazione componenti layout
         setContentView(R.layout.activity_main_activity3);
         buttonLoginLogout = (Button) findViewById(R.id.buttonLoginLogout);
         textInstructionsOrLink = (TextView) findViewById(R.id.instructionsOrLink);
+        foto_profilo = (ImageView) findViewById(R.id.foto_profilo);
 
+        //Controllo sessione FB
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
         Session session = Session.getActiveSession();
@@ -175,13 +166,37 @@ public class ProfileActivity extends Activity {
     }
 
     private String buildUserInfoDisplay(GraphUser user) {
-        //StringBuilder userInfo = new StringBuilder("");
-
-        //userInfo.append(String.format("Name: %s\n\n", user.getName()));
-
         String userInfo = user.getName();
+        getFacebookProfilePicture(user.getId());
+        return userInfo;
+    }
 
-        return userInfo;//.toString();
+    private static void getFacebookProfilePicture(final String userID){
+        new AsyncTask<Void, Void, Bitmap>()
+        {
+            @Override
+            protected Bitmap doInBackground(Void... args){
+                URL imageURL = null;
+                Bitmap bitmap = null;
+                try {
+                    imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap){
+                // safety check
+                if (bitmap != null){
+                    foto_profilo.setImageBitmap(bitmap);
+                }
+            }
+        }.execute();
     }
 
     private void onClickLogin() {
