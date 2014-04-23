@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="/home/ulisse/Scrivania/PartyManager/libs/facebook/src/main/assets" />
+        <source path="/home/luca/PartyManager/libs/facebook/src/main/assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="/home/ulisse/Scrivania/PartyManager/libs/facebook/src/release/assets" />
+        <source path="/home/luca/PartyManager/libs/facebook/src/release/assets" />
     </dataSet>
 
 </merger>
