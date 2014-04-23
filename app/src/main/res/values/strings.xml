@@ -8,10 +8,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-<<<<<<< HEAD
-    <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-=======
 
     <!-- Menù -->
     <string name="action_settings">Impostazioni</string>
@@ -22,6 +19,5 @@
     <string name="title_activity_main_activity3">Profilo</string>
     <string name="instruction">Per poter utilizzare l\'applicazione bisogna accedere tramite facebook.
         Fai click sul tasto sotto per accedere</string>
->>>>>>> d4424f28d57c4bb892ef59efa17dbb2facd33ff7
 
 </resources>

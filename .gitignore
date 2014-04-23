@@ -34,3 +34,6 @@ proguard/
 
 #linux
 *~
+
+#facebook
+libs/facebook/build
