@@ -1,28 +1,39 @@
 package com.partymanager.app;
 
-import com.partymanager.R;
-
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+<<<<<<< HEAD
 import android.os.Bundle;
+=======
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+>>>>>>> d4424f28d57c4bb892ef59efa17dbb2facd33ff7
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+<<<<<<< HEAD
 import android.support.v4.widget.DrawerLayout;
+=======
+>>>>>>> d4424f28d57c4bb892ef59efa17dbb2facd33ff7
 import android.widget.TextView;
+import android.widget.Toast;
 
-
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.facebook.Session;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.partymanager.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,6 +44,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+<<<<<<< HEAD
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -42,6 +54,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.util.Log;
+=======
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+>>>>>>> d4424f28d57c4bb892ef59efa17dbb2facd33ff7
 
 
 public class MainActivity extends Activity
@@ -79,6 +97,18 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Controllo se esiste già una sessione FB attiva
+        Session session = Session.getActiveSession();
+
+        if (session != null && session.isOpened()) {
+            //Toast.makeText(getApplicationContext(),"open" , Toast.LENGTH_LONG).show();
+        } else {
+            Intent newact = new Intent(this, ProfileActivity.class);
+            startActivity(newact);
+        }
+        //Fine controllo sessione
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -188,6 +218,12 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.profile) {
+            Intent newact = new Intent(this, ProfileActivity.class);
+            newact.putExtra("chiave", "1");
+            startActivity(newact);
             return true;
         }
         return super.onOptionsItemSelected(item);
