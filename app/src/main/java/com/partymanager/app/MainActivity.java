@@ -201,6 +201,11 @@ public class MainActivity extends Activity
             startActivity(newact);
             return true;
         }
+        if (id == R.id.Nuovo_evento) {
+            Intent newact = new Intent(this, CreaEventoActivity.class);
+            startActivity(newact);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
