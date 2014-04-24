@@ -56,8 +56,8 @@ public class MainActivity extends Activity
     SharedPreferences prefs;
 
     String regid;
-
     /*NOTIFICHE*/
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -130,7 +130,7 @@ public class MainActivity extends Activity
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = Eventi.newInstance();
+                fragment = EventiListFragment.newInstance();
                 mTitle = getString(R.string.title_section0);
                 break;
             case 1:

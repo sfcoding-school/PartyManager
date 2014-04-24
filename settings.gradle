@@ -1,1 +1,1 @@
-include ':app', ':app2', ':libs:facebook'
+include ':app' , ':libs:facebook'

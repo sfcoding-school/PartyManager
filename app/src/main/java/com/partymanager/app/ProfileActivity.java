@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -66,7 +67,7 @@ public class ProfileActivity extends Activity {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 String sign = Base64.encodeToString(md.digest(), Base64.DEFAULT);
-                //Log.e("MY KEY HASH:", sign);
+                Log.e("MY KEY HASH:", sign);
                 //Toast.makeText(getApplicationContext(), sign, Toast.LENGTH_LONG).show();
             }
         } catch (NameNotFoundException e) {
