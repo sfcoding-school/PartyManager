@@ -2,15 +2,26 @@ package com.partymanager.app;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Request;
@@ -22,34 +33,18 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.partymanager.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
-
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class CreaEventoActivity extends Activity {
 
     Button add_friends;
     ImageButton finito;
     EditText nome_evento;
+    TextView container_friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +54,13 @@ public class CreaEventoActivity extends Activity {
         add_friends = (Button) findViewById(R.id.btn_add_friends);
         finito = (ImageButton) findViewById(R.id.imageButton);
         nome_evento = (EditText) findViewById(R.id.etxt_nome_evento);
+        container_friends = (TextView) findViewById(R.id.txt_container_friends);
 
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
             requestMyAppFacebookFriends(session);
         } else {
-            Toast.makeText(getApplicationContext(),"session is not opened" , Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "session is not opened", Toast.LENGTH_LONG).show();
         }
 
         updateView();
@@ -83,11 +79,11 @@ public class CreaEventoActivity extends Activity {
                 //GraphUser user = friends.get(0);
                 //Log.e("TEST", Integer.toString(friends.size()) );
 
-                Log.e("TEST", Integer.toString(friends.size()) );
+                Log.e("TEST", Integer.toString(friends.size()));
                 friendsList = new ArrayList<Friends>();
-                for (int i=0; i< friends.size(); i++){
+                for (int i = 0; i < friends.size(); i++) {
                     GraphUser user = friends.get(i);
-                    Friends friend = new Friends(user.getId(),user.getName(),false);
+                    Friends friend = new Friends(user.getId(), user.getName(), false);
                     friendsList.add(friend);
                 }
             }
@@ -99,7 +95,7 @@ public class CreaEventoActivity extends Activity {
         Request request = Request.newGraphPathRequest(session, "me/friends", null);
 
         Set<String> fields = new HashSet<String>();
-        String[] requiredFields = new String[] { "id", "name", "picture"};
+        String[] requiredFields = new String[]{"id", "name", "picture"};
         fields.addAll(Arrays.asList(requiredFields));
 
         Bundle parameters = request.getParameters();
@@ -119,12 +115,12 @@ public class CreaEventoActivity extends Activity {
     MyCustomAdapter dataAdapter = null;//////////////////////////////////////////////
     ArrayList<Friends> friendsList;
 
-    private void updateView(){
+    private void updateView() {
 
         add_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                if (friends != null && friendsList != null){
+                if (friends != null && friendsList != null) {
                     dialog_open();
                 } else {
                     Toast.makeText(getApplicationContext(), "Waiting for FriendsList", Toast.LENGTH_LONG).show();
@@ -138,7 +134,7 @@ public class CreaEventoActivity extends Activity {
         });
     }
 
-    private void dialog_open(){
+    private void dialog_open() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom);
         dialog.setTitle("Aggiungi amici");
@@ -151,16 +147,12 @@ public class CreaEventoActivity extends Activity {
         listView.setAdapter(dataAdapter);
 
 
-
-
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
                 Friends friends1 = (Friends) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Clicked on Row: " + friends1.getName(),
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Clicked on Row: " + friends1.getName(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -170,20 +162,15 @@ public class CreaEventoActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                StringBuffer responseText = new StringBuffer();
-                responseText.append("The following were selected...\n");
+                container_friends.append("");
 
                 ArrayList<Friends> friendList = dataAdapter.friendList;
-                for(int i=0;i<friendList.size();i++){
+                for (int i = 0; i < friendList.size(); i++) {
                     Friends friends1 = friendList.get(i);
-                    if(friends1.isSelected()){
-                        responseText.append("\n" + friends1.getName());
+                    if (friends1.isSelected()) {
+                        container_friends.append("\n" + friends1.getName());
                     }
                 }
-
-                Toast.makeText(getApplicationContext(),
-                        responseText, Toast.LENGTH_LONG).show();
-
             }
         });
 
@@ -215,89 +202,56 @@ public class CreaEventoActivity extends Activity {
     }
 
 
-private class MyCustomAdapter extends ArrayAdapter<Friends> {
+    private class MyCustomAdapter extends ArrayAdapter<Friends> {
 
-    private ArrayList<Friends> friendList;
+        private ArrayList<Friends> friendList;
 
-    public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<Friends> friendList) {
-        super(context, textViewResourceId, friendList);
-        this.friendList = new ArrayList<Friends>();
-        this.friendList.addAll(friendList);
-    }
-
-    private class ViewHolder {
-        TextView code;
-        CheckBox name;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder = null;
-        Log.e("ConvertView", String.valueOf(position));
-
-        if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater)getSystemService(
-                    Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.fb_friends, null);
-
-            holder = new ViewHolder();
-            holder.code = (TextView) convertView.findViewById(R.id.code);
-            holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
-            convertView.setTag(holder);
-
-            holder.name.setOnClickListener( new View.OnClickListener() {
-                public void onClick(View v) {
-                    CheckBox cb = (CheckBox) v ;
-                    Friends friends1 = (Friends) cb.getTag();
-                    Toast.makeText(getApplicationContext(),
-                            "Clicked on Checkbox: " + cb.getText() +
-                                    " is " + cb.isChecked(),
-                            Toast.LENGTH_LONG).show();
-                    friends1.setSelected(cb.isChecked());
-                }
-            });
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
+        public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<Friends> friendList) {
+            super(context, textViewResourceId, friendList);
+            this.friendList = new ArrayList<Friends>();
+            this.friendList.addAll(friendList);
         }
 
-        Friends friends1 = friendList.get(position);
-        holder.code.setText(" (" +  friends1.getCode() + ")");
-        holder.name.setText(friends1.getName());
-        holder.name.setChecked(friends1.isSelected());
-        holder.name.setTag(friends1);
+        private class ViewHolder {
+            CheckBox name;
+            ImageView foto_profilo;
+        }
 
-        return convertView;
 
-    }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-}
+            ViewHolder holder = null;
 
-/*    private void checkButtonClick() {
-        Button myButton = (Button) findViewById(R.id.findSelected);
-        myButton.setOnClickListener(new OnClickListener() {
+            if (convertView == null) {
+                LayoutInflater vi = (LayoutInflater) getSystemService(
+                        Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.fb_friends, null);
 
-            @Override
-            public void onClick(View v) {
+                holder = new ViewHolder();
+                holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
+                holder.foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
+                convertView.setTag(holder);
 
-                StringBuffer responseText = new StringBuffer();
-                responseText.append("The following were selected...\n");
-
-                ArrayList<Friends> friendList = dataAdapter.countryList;
-                for(int i=0;i<friendList.size();i++){
-                    Friends country = friendList.get(i);
-                    if(country.isSelected()){
-                        responseText.append("\n" + country.getName());
+                holder.name.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v;
+                        Friends friends1 = (Friends) cb.getTag();
+                        //Toast.makeText(getApplicationContext(), "Clicked on Checkbox: " + cb.getText() + " is " + cb.isChecked(), Toast.LENGTH_LONG).show();
+                        friends1.setSelected(cb.isChecked());
                     }
-                }
-
-                Toast.makeText(getApplicationContext(),
-                        responseText, Toast.LENGTH_LONG).show();
-
+                });
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
-        });
 
-    }*/
+            Friends friends1 = friendList.get(position);
+            holder.name.setText("" + friends1.getName());
+            holder.name.setChecked(friends1.isSelected());
+            holder.name.setTag(friends1);
+            holder.foto_profilo.setImageBitmap(friends1.foto);
+            return convertView;
 
+        }
+    }
 }

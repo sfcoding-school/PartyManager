@@ -10,18 +10,20 @@
         android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:text="CheckBox" />
+        android:text="CheckBox"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/img_profilo"
+        android:layout_marginLeft="25dp" />
 
-    <TextView
-        android:id="@+id/code"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkBox1"
-        android:layout_alignBottom="@+id/checkBox1"
-        android:layout_toRightOf="@+id/checkBox1"
-        android:text="TextView" />
+        android:id="@+id/img_profilo"
+        android:background="@drawable/com_facebook_profile_default_icon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
