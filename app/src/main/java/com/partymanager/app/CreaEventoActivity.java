@@ -1,8 +1,10 @@
 package com.partymanager.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,6 +47,10 @@ public class CreaEventoActivity extends Activity {
     ImageButton finito;
     EditText nome_evento;
     TextView container_friends;
+    ArrayList<Friends> friendList;
+    MyCustomAdapter dataAdapter = null;
+    ArrayList<Friends> friendsList;
+    List<GraphUser> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +72,6 @@ public class CreaEventoActivity extends Activity {
         updateView();
     }
 
-    List<GraphUser> friends;
-
     private void requestMyAppFacebookFriends(Session session) {
         Request friendsRequest = createRequest(session);
         friendsRequest.setCallback(new Request.Callback() {
@@ -76,10 +80,6 @@ public class CreaEventoActivity extends Activity {
             public void onCompleted(Response response) {
                 friends = getResults(response);
 
-                //GraphUser user = friends.get(0);
-                //Log.e("TEST", Integer.toString(friends.size()) );
-
-                Log.e("TEST", Integer.toString(friends.size()));
                 friendsList = new ArrayList<Friends>();
                 for (int i = 0; i < friends.size(); i++) {
                     GraphUser user = friends.get(i);
@@ -112,9 +112,6 @@ public class CreaEventoActivity extends Activity {
         return data.castToListOf(GraphUser.class);
     }
 
-    MyCustomAdapter dataAdapter = null;//////////////////////////////////////////////
-    ArrayList<Friends> friendsList;
-
     private void updateView() {
 
         add_friends.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +126,11 @@ public class CreaEventoActivity extends Activity {
         });
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
+                if ("".equals(nome_evento.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), "Devi inserire un nome per l'evento", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -146,13 +147,12 @@ public class CreaEventoActivity extends Activity {
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
 
-
+        //Event Listener
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // When clicked, show a toast with the TextView text
                 Friends friends1 = (Friends) parent.getItemAtPosition(position);
-                //Toast.makeText(getApplicationContext(), "Clicked on Row: " + friends1.getName(), Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -162,16 +162,21 @@ public class CreaEventoActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                container_friends.append("");
+                container_friends.setText("");
 
-                ArrayList<Friends> friendList = dataAdapter.friendList;
+                friendList = dataAdapter.friendList;
                 for (int i = 0; i < friendList.size(); i++) {
                     Friends friends1 = friendList.get(i);
-                    if (friends1.isSelected()) {
+                    if (friends1.isSelected() && i == 0) {
                         container_friends.append("\n" + friends1.getName());
                     }
+                    if (friends1.isSelected() && i > 0) {
+                        container_friends.append(", " + friends1.getName());
+                    }
                 }
+                dialog.dismiss();
             }
+
         });
 
         dialog.show();
@@ -197,7 +202,27 @@ public class CreaEventoActivity extends Activity {
     }
 
     public void onBackPressed() {
-        finish();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
+        alertDialogBuilder.setMessage("Eliminare nuovo evento?");
+
+        // set positive button: Yes message
+        alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                CreaEventoActivity.this.finish();
+            }
+        });
+
+        // set negative button: No message
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // cancel the alert box and put a Toast to the user
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
         return;
     }
 
@@ -237,7 +262,6 @@ public class CreaEventoActivity extends Activity {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v;
                         Friends friends1 = (Friends) cb.getTag();
-                        //Toast.makeText(getApplicationContext(), "Clicked on Checkbox: " + cb.getText() + " is " + cb.isChecked(), Toast.LENGTH_LONG).show();
                         friends1.setSelected(cb.isChecked());
                     }
                 });
@@ -246,7 +270,7 @@ public class CreaEventoActivity extends Activity {
             }
 
             Friends friends1 = friendList.get(position);
-            holder.name.setText("" + friends1.getName());
+            holder.name.setText(friends1.getName());
             holder.name.setChecked(friends1.isSelected());
             holder.name.setTag(friends1);
             holder.foto_profilo.setImageBitmap(friends1.foto);
