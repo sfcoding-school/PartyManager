@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,27 +50,34 @@ public class CreaEventoActivity extends Activity {
     MyCustomAdapter dataAdapter = null;
     ArrayList<Friends> friendsList;
     List<GraphUser> friends;
+    List<Friends> finali = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_evento);
 
+        //SET LAYOUT
         add_friends = (Button) findViewById(R.id.btn_add_friends);
         finito = (ImageButton) findViewById(R.id.imageButton);
         nome_evento = (EditText) findViewById(R.id.etxt_nome_evento);
         container_friends = (TextView) findViewById(R.id.txt_container_friends);
 
+        //Controllo sessione FB
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
+            //se c'è la sessione richiedo subito la lista amici
             requestMyAppFacebookFriends(session);
         } else {
             Toast.makeText(getApplicationContext(), "session is not opened", Toast.LENGTH_LONG).show();
         }
 
+        finali = new ArrayList<Friends>();
+
         updateView();
     }
 
+    //Richiesta amici FB
     private void requestMyAppFacebookFriends(Session session) {
         Request friendsRequest = createRequest(session);
         friendsRequest.setCallback(new Request.Callback() {
@@ -111,6 +117,7 @@ public class CreaEventoActivity extends Activity {
         GraphObjectList<GraphObject> data = multiResult.getData();
         return data.castToListOf(GraphUser.class);
     }
+    //FINE Richiesta amici FB
 
     private void updateView() {
 
@@ -128,6 +135,7 @@ public class CreaEventoActivity extends Activity {
             public void onClick(View view) {
                 if ("".equals(nome_evento.getText().toString())) {
                     Toast.makeText(getApplicationContext(), "Devi inserire un nome per l'evento", Toast.LENGTH_LONG).show();
+
                 } else {
                     Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
                 }
@@ -135,24 +143,25 @@ public class CreaEventoActivity extends Activity {
         });
     }
 
+    //Dialog Aggiunta amici
     private void dialog_open() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom);
         dialog.setTitle("Aggiungi amici");
 
-
         // set the custom dialog components - text, image and button
         dataAdapter = new MyCustomAdapter(this, R.layout.fb_friends, friendsList);
         ListView listView = (ListView) dialog.findViewById(R.id.listView1);
+
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
+        friendList = dataAdapter.friendList;
 
         //Event Listener
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Friends friends1 = (Friends) parent.getItemAtPosition(position);
-
             }
         });
 
@@ -162,16 +171,20 @@ public class CreaEventoActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                //Aggiungo gli amici scelti all'activity e alla lista "finali"
                 container_friends.setText("");
-
-                friendList = dataAdapter.friendList;
+                finali.clear();
+                Boolean first = true;
                 for (int i = 0; i < friendList.size(); i++) {
                     Friends friends1 = friendList.get(i);
-                    if (friends1.isSelected() && i == 0) {
-                        container_friends.append("\n" + friends1.getName());
-                    }
-                    if (friends1.isSelected() && i > 0) {
+
+                    if (friends1.isSelected() && !first) {
                         container_friends.append(", " + friends1.getName());
+                        finali.add(friends1);
+                    } else if (first && friends1.isSelected()) {
+                        container_friends.append(friends1.getName());
+                        first = false;
+                        finali.add(friends1);
                     }
                 }
                 dialog.dismiss();
@@ -201,6 +214,7 @@ public class CreaEventoActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Click pulsante indietro
     public void onBackPressed() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
         alertDialogBuilder.setMessage("Eliminare nuovo evento?");
@@ -226,7 +240,7 @@ public class CreaEventoActivity extends Activity {
         return;
     }
 
-
+    //Adapert per ListView
     private class MyCustomAdapter extends ArrayAdapter<Friends> {
 
         private ArrayList<Friends> friendList;
