@@ -42,10 +42,11 @@ import java.util.Set;
 
 public class CreaEventoActivity extends Activity {
 
-    Button add_friends;
     ImageButton finito;
     EditText nome_evento;
     TextView container_friends;
+    ListView listView;
+
     ArrayList<Friends> friendList;
     MyCustomAdapter dataAdapter = null;
     ArrayList<Friends> friendsList;
@@ -58,10 +59,10 @@ public class CreaEventoActivity extends Activity {
         setContentView(R.layout.activity_crea_evento);
 
         //SET LAYOUT
-        add_friends = (Button) findViewById(R.id.btn_add_friends);
         finito = (ImageButton) findViewById(R.id.imageButton);
         nome_evento = (EditText) findViewById(R.id.etxt_nome_evento);
         container_friends = (TextView) findViewById(R.id.txt_container_friends);
+        listView = (ListView) findViewById(R.id.listView1);
 
         //Controllo sessione FB
         Session session = Session.getActiveSession();
@@ -92,6 +93,12 @@ public class CreaEventoActivity extends Activity {
                     Friends friend = new Friends(user.getId(), user.getName(), false);
                     friendsList.add(friend);
                 }
+                /////////////
+                dataAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, friendsList);
+                // Assign adapter to ListView
+                listView.setAdapter(dataAdapter);
+                friendList = dataAdapter.friendList;
+                /////////
             }
         });
         friendsRequest.executeAsync();
@@ -121,7 +128,15 @@ public class CreaEventoActivity extends Activity {
 
     private void updateView() {
 
-        add_friends.setOnClickListener(new View.OnClickListener() {
+        //Event Listener
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Friends friends1 = (Friends) parent.getItemAtPosition(position);
+            }
+        });
+
+/*        add_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
                 if (friends != null && friendsList != null) {
@@ -130,7 +145,7 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Waiting for FriendsList", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        });*/
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if ("".equals(nome_evento.getText().toString())) {
@@ -144,7 +159,7 @@ public class CreaEventoActivity extends Activity {
     }
 
     //Dialog Aggiunta amici
-    private void dialog_open() {
+    /*private void dialog_open() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom);
         dialog.setTitle("Aggiungi amici");
@@ -193,9 +208,9 @@ public class CreaEventoActivity extends Activity {
         });
 
         dialog.show();
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.crea_evento, menu);
@@ -212,7 +227,7 @@ public class CreaEventoActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     //Click pulsante indietro
     public void onBackPressed() {
@@ -229,7 +244,6 @@ public class CreaEventoActivity extends Activity {
         // set negative button: No message
         alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // cancel the alert box and put a Toast to the user
                 dialog.cancel();
             }
         });
@@ -240,7 +254,7 @@ public class CreaEventoActivity extends Activity {
         return;
     }
 
-    //Adapert per ListView
+    //Adapter per ListView
     private class MyCustomAdapter extends ArrayAdapter<Friends> {
 
         private ArrayList<Friends> friendList;
@@ -277,6 +291,7 @@ public class CreaEventoActivity extends Activity {
                         CheckBox cb = (CheckBox) v;
                         Friends friends1 = (Friends) cb.getTag();
                         friends1.setSelected(cb.isChecked());
+                        add_friend_to_activity();
                     }
                 });
             } else {
@@ -291,5 +306,25 @@ public class CreaEventoActivity extends Activity {
             return convertView;
 
         }
+
+        private void add_friend_to_activity(){
+            //Aggiungo gli amici scelti all'activity e alla lista "finali"
+            container_friends.setText("");
+            finali.clear();
+            Boolean first = true;
+            for (int i = 0; i < friendList.size(); i++) {
+                Friends friends1 = friendList.get(i);
+
+                if (friends1.isSelected() && !first) {
+                    container_friends.append(", " + friends1.getName());
+                    finali.add(friends1);
+                } else if (first && friends1.isSelected()) {
+                    container_friends.append(friends1.getName());
+                    first = false;
+                    finali.add(friends1);
+                }
+            }
+        }
+
     }
 }

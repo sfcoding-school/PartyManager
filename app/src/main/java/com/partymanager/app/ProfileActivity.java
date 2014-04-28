@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -77,7 +76,7 @@ public class ProfileActivity extends Activity {
         }
 
         //Inizializzazione componenti layout
-        setContentView(R.layout.activity_main_activity3);
+        setContentView(R.layout.activity_profilo);
         buttonLoginLogout = (Button) findViewById(R.id.buttonLoginLogout);
         textInstructionsOrLink = (TextView) findViewById(R.id.instructionsOrLink);
         foto_profilo = (ImageView) findViewById(R.id.foto_profilo);

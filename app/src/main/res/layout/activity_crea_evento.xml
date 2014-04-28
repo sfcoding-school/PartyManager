@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textSize="25dp"
         android:id="@+id/textView"
-        android:layout_alignBottom="@+id/etxt_nome_evento"
+        android:layout_below="@+id/imageButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -23,24 +23,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/etxt_nome_evento"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="54dp"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignRight="@+id/listView1"
+        android:layout_alignEnd="@+id/listView1"
         android:layout_toRightOf="@+id/textView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ Aggiungi amici"
-        android:id="@+id/btn_add_friends"
-        android:layout_marginTop="49dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_container_friends"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/etxt_nome_evento"
         android:layout_centerHorizontal="true" />
 
     <ImageButton
@@ -51,5 +43,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/etxt_nome_evento"
         android:layout_alignEnd="@+id/etxt_nome_evento" />
+
+    <ListView android:id="@+id/listView1" android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/txt_container_friends" />
 
 </RelativeLayout>
