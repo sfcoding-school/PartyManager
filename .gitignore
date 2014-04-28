@@ -36,4 +36,4 @@ proguard/
 *~
 
 #facebook
-libs/facebook/build
+libs/facebook/build/

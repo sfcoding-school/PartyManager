@@ -15,6 +15,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.ProgressBar;
 
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -72,6 +74,7 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Controllo se esiste già una sessione FB attiva
         Session session = Session.getActiveSession();
@@ -172,6 +175,7 @@ public class MainActivity extends Activity
         actionBar.setTitle(mTitle);
     }
 
+    public static boolean progressBarVisible = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,7 +183,10 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
+
             getMenuInflater().inflate(R.menu.main, menu);
+            MenuItem prova = menu.findItem(R.id.progressBarSmall);
+            prova.setVisible(progressBarVisible);
             restoreActionBar();
             return true;
         }

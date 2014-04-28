@@ -5,9 +5,11 @@
         android:title="@string/new_event"
         android:orderInCategory="100"
         android:showAsAction="never" />
-    <item android:id="@+id/action_example"
+    <!--
+        <item android:id="@+id/action_example"
         android:title="@string/action_example"
         android:showAsAction="withText|ifRoom" />
+    -->
     <item android:id="@+id/profile"
         android:title="@string/btn_sett_profile"
         android:orderInCategory="100"
@@ -16,4 +18,12 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+
+
+    <item android:id="@+id/progressBarSmall"
+        android:actionLayout="@layout/progressbar_small"
+        android:menuCategory="container"
+        android:showAsAction="always">
+    </item>
+
 </menu>

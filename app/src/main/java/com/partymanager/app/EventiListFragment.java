@@ -1,16 +1,20 @@
 package com.partymanager.app;
 
+import android.content.Context;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.partymanager.R;
 import com.partymanager.app.dummy.*;
@@ -48,6 +52,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static ProgressBar progressBarLarge;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -79,6 +85,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+
     public EventiListFragment() {
     }
 
@@ -92,91 +99,20 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         }
 
 
-
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DatiEventi.ITEMS);
+       // ProgressBar progressBarLarge = (ProgressBar) getActivity().findViewById(R.id.eventProgressBarLarge);
+        //ProgressBar progressBarSmall = (ProgressBar) getActivity().findViewById(R.id.progressBarSmall);
 
-        downloadEvent(10);
+        //progressBarLarge.setVisibility(View.VISIBLE);
+       // DataProvide.getEvent(getActivity(), progressBarLarge, progressBarSmall);
+
+        //MainActivity.progressBarVisible = false;
+
 
     }
 
-    private void downloadEvent(final int id) {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/getMyEvent");
-
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(id)));
-                    //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    //Execute HTTP Post Request
-                    HttpResponse response = httpclient.execute(httppost);
-                    String json_string = EntityUtils.toString(response.getEntity());
-
-
-                    //JSONObject myObject = new JSONObject(response);
-                    //Log.i("DATI EVENTI", "risposta... " + response.toString());
-
-
-                    return json_string;
-
-                } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                    //mDisplay.append("error");
-                    return "error";
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    String error = e.toString();
-                    //Log.i(TAG,"error "+error);
-                    //mDisplay.append("error");
-                    return "error";
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String json_string) {
-                try {
-                    saveJsonToCache(json_string);
-                    JSONObject jsonRis = new JSONObject(json_string);
-                    JSONArray jsonArray= jsonRis.getJSONArray("results");
-                    for (int i=0;i<jsonArray.length();i++){
-                        DatiEventi.addItem(new DatiEventi.Evento(String.valueOf(i),jsonArray.getJSONObject(i).getString("event")));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.execute(null, null, null);
-    }
-
-    private void saveJsonToCache(final String json_string) {
-        new AsyncTask<Void,Void,Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-                ObjectOutput out = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getApplication().getCacheDir(),"")+"cacheListEvent.json"));
-                out.writeObject( json_string );
-                out.close();
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    String error = e.toString();
-                    //Log.i(TAG,"error "+error);
-                    //mDisplay.append("error");
-
-                }
-                return null;
-            }
-        }.execute(null, null, null);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -190,8 +126,16 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+
+
+        DataProvide.getEvent(getActivity());
+        //progressBarLarge.setVisibility(View.INVISIBLE);
+        //getActivity().invalidateOptionsMenu();
+
         return view;
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
