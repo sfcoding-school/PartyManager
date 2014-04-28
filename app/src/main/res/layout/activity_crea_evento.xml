@@ -13,40 +13,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:id="@+id/textView"
-        android:layout_below="@+id/imageButton"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etxt_nome_evento"
-        android:layout_alignTop="@+id/textView"
-        android:layout_alignRight="@+id/listView1"
-        android:layout_alignEnd="@+id/listView1"
-        android:layout_toRightOf="@+id/textView" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_container_friends"
-        android:layout_below="@+id/etxt_nome_evento"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
     <ImageButton
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/imageButton"
         android:background="@drawable/checkmark"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/etxt_nome_evento"
-        android:layout_alignEnd="@+id/etxt_nome_evento" />
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignRight="@+id/inputSearch"
+        android:layout_alignEnd="@+id/inputSearch" />
+
+    <!-- Editext for Search -->
+    <EditText android:id="@+id/inputSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ricerca amici.."
+        android:inputType="textVisiblePassword"
+        android:layout_marginTop="15dp"
+        android:visibility="visible"
+        android:layout_below="@+id/txt_container_friends"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ListView android:id="@+id/listView1" android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/txt_container_friends" />
+        android:visibility="visible"
+        android:layout_below="@+id/inputSearch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_creaEvento"
+        android:indeterminate="false"
+        android:layout_below="@+id/inputSearch"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="125dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etxt_nome_evento"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_above="@+id/txt_container_friends" />
 
 </RelativeLayout>

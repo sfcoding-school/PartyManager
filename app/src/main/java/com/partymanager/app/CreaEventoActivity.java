@@ -2,26 +2,27 @@ package com.partymanager.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,10 +43,13 @@ import java.util.Set;
 
 public class CreaEventoActivity extends Activity {
 
+    //Layout Elements
     ImageButton finito;
     EditText nome_evento;
     TextView container_friends;
     ListView listView;
+    EditText inputSearch;
+    ProgressBar pb;
 
     ArrayList<Friends> friendList;
     MyCustomAdapter dataAdapter = null;
@@ -62,13 +66,24 @@ public class CreaEventoActivity extends Activity {
         finito = (ImageButton) findViewById(R.id.imageButton);
         nome_evento = (EditText) findViewById(R.id.etxt_nome_evento);
         container_friends = (TextView) findViewById(R.id.txt_container_friends);
+        container_friends.setText("");
         listView = (ListView) findViewById(R.id.listView1);
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
+        pb = (ProgressBar) findViewById(R.id.progressBar_creaEvento);
+        pb.setVisibility(ProgressBar.VISIBLE);
 
         //Controllo sessione FB
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
             //se c'è la sessione richiedo subito la lista amici
-            requestMyAppFacebookFriends(session);
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                requestMyAppFacebookFriends(session);
+            } else {
+                Toast.makeText(getApplicationContext(), "Connessione assente", Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "session is not opened", Toast.LENGTH_LONG).show();
         }
@@ -93,12 +108,14 @@ public class CreaEventoActivity extends Activity {
                     Friends friend = new Friends(user.getId(), user.getName(), false);
                     friendsList.add(friend);
                 }
-                /////////////
+
+                pb.setVisibility(ProgressBar.INVISIBLE);
+
                 dataAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, friendsList);
                 // Assign adapter to ListView
                 listView.setAdapter(dataAdapter);
                 friendList = dataAdapter.friendList;
-                /////////
+
             }
         });
         friendsRequest.executeAsync();
@@ -136,16 +153,38 @@ public class CreaEventoActivity extends Activity {
             }
         });
 
-/*        add_friends.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        inputSearch.addTextChangedListener(new TextWatcher() {
 
-                if (friends != null && friendsList != null) {
-                    dialog_open();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Waiting for FriendsList", Toast.LENGTH_LONG).show();
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                int textlength = cs.length();
+                ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
+                for (int i = 0; i < friendList.size(); i++) {
+                    Friends friends1 = friendList.get(i);
+                    if (textlength <= friends1.getName().length()) {
+                        if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+                            tempArrayList.add(friends1);
+                        }
+                    }
                 }
+                MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
+                listView.setAdapter(mAdapter);
             }
-        });*/
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if ("".equals(nome_evento.getText().toString())) {
@@ -157,77 +196,6 @@ public class CreaEventoActivity extends Activity {
             }
         });
     }
-
-    //Dialog Aggiunta amici
-    /*private void dialog_open() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.custom);
-        dialog.setTitle("Aggiungi amici");
-
-        // set the custom dialog components - text, image and button
-        dataAdapter = new MyCustomAdapter(this, R.layout.fb_friends, friendsList);
-        ListView listView = (ListView) dialog.findViewById(R.id.listView1);
-
-        // Assign adapter to ListView
-        listView.setAdapter(dataAdapter);
-        friendList = dataAdapter.friendList;
-
-        //Event Listener
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Friends friends1 = (Friends) parent.getItemAtPosition(position);
-            }
-        });
-
-        Button myButton = (Button) dialog.findViewById(R.id.findSelected);
-        myButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                //Aggiungo gli amici scelti all'activity e alla lista "finali"
-                container_friends.setText("");
-                finali.clear();
-                Boolean first = true;
-                for (int i = 0; i < friendList.size(); i++) {
-                    Friends friends1 = friendList.get(i);
-
-                    if (friends1.isSelected() && !first) {
-                        container_friends.append(", " + friends1.getName());
-                        finali.add(friends1);
-                    } else if (first && friends1.isSelected()) {
-                        container_friends.append(friends1.getName());
-                        first = false;
-                        finali.add(friends1);
-                    }
-                }
-                dialog.dismiss();
-            }
-
-        });
-
-        dialog.show();
-    }*/
-
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.crea_evento, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
     //Click pulsante indietro
     public void onBackPressed() {
@@ -291,7 +259,18 @@ public class CreaEventoActivity extends Activity {
                         CheckBox cb = (CheckBox) v;
                         Friends friends1 = (Friends) cb.getTag();
                         friends1.setSelected(cb.isChecked());
-                        add_friend_to_activity();
+
+                        if (cb.isChecked()) {
+                            if (container_friends.getText().length() == 0)
+                                container_friends.setText(friends1.getName());
+                            else {
+                                container_friends.append(", " + friends1.getName());
+                            }
+                            finali.add(friends1);
+                        } else {
+                            delete_friend_to_activity(friends1.getName());
+                        }
+                        inputSearch.setText("");
                     }
                 });
             } else {
@@ -303,28 +282,29 @@ public class CreaEventoActivity extends Activity {
             holder.name.setChecked(friends1.isSelected());
             holder.name.setTag(friends1);
             holder.foto_profilo.setImageBitmap(friends1.foto);
-            return convertView;
 
+            return convertView;
         }
 
-        private void add_friend_to_activity(){
-            //Aggiungo gli amici scelti all'activity e alla lista "finali"
+        //Aggiungo gli amici scelti all'activity e alla lista "finali"
+        private void delete_friend_to_activity(String toDelete) {
             container_friends.setText("");
-            finali.clear();
-            Boolean first = true;
-            for (int i = 0; i < friendList.size(); i++) {
-                Friends friends1 = friendList.get(i);
+            Friends friends1 = null;
 
-                if (friends1.isSelected() && !first) {
-                    container_friends.append(", " + friends1.getName());
-                    finali.add(friends1);
-                } else if (first && friends1.isSelected()) {
+            for (int i = 0; i < finali.size(); i++) {
+                friends1 = finali.get(i);
+                if (friends1.getName().equals(toDelete)) {
+                    finali.remove(i);
+                }
+            }
+            for (int i = 0; i < finali.size(); i++) {
+                friends1 = finali.get(i);
+                if (i == 0) {
                     container_friends.append(friends1.getName());
-                    first = false;
-                    finali.add(friends1);
+                } else {
+                    container_friends.append(", " + friends1.getName());
                 }
             }
         }
-
     }
 }
