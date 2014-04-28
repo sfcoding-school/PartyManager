@@ -53,6 +53,9 @@ public class DatiEventi {
         addItem(new Evento("3", "Item 3"));
         */
     }
+    public static void removeAll(){
+        ITEMS.removeAll(ITEMS);
+    }
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
