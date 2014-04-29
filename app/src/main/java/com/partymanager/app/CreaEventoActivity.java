@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -35,8 +37,18 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.partymanager.R;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -60,6 +72,7 @@ public class CreaEventoActivity extends Activity {
     List<Friends> finali = null;
     NetworkInfo networkInfo;
     ArrayList<String> id_toSend;
+    public final String REG_ID = "reg_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,20 +175,22 @@ public class CreaEventoActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                if ((networkInfo != null && networkInfo.isConnected()) || !friendList.isEmpty()) {
+                if ((networkInfo != null && networkInfo.isConnected())) {
 
                     // When user changed the Text
                     int textlength = cs.length();
                     ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
-                    for (Friends friends1 : friendList) {
-                        if (textlength <= friends1.getName().length()) {
-                            if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
-                                tempArrayList.add(friends1);
+                    if (friendList != null && friendList.size() > 0) {
+                        for (Friends friends1 : friendList) {
+                            if (textlength <= friends1.getName().length()) {
+                                if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+                                    tempArrayList.add(friends1);
+                                }
                             }
                         }
+                        MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
+                        listView.setAdapter(mAdapter);
                     }
-                    MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
-                    listView.setAdapter(mAdapter);
                 }
             }
 
@@ -212,9 +227,59 @@ public class CreaEventoActivity extends Activity {
                     //JSONArray mJSONArray = new JSONArray(Arrays.asList(id_toSend));
                     JSONArray jsArray = new JSONArray(id_toSend);
                     Log.e("TESTJSON: ", jsArray.toString());
+                    final SharedPreferences prefs = getPreferences();
+                    String registrationId = prefs.getString(REG_ID, "");
+                    if (registrationId.isEmpty()) {
+                        Log.e("DEBUG ID: ", "problema");
+                    } else {
+                        Log.e("DEBUG: ", "sendNewEvent");
+                        sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
+                    }
                 }
             }
         });
+    }
+
+    private SharedPreferences getPreferences() {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the regID in your app is up to you.
+        return getSharedPreferences(ProfileActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
+    }
+
+    private void sendNewEvent(final String name, final String ID_FB, final String List) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... args) {
+                Log.e("CreaEvento-sendToServer: ", "entrato");
+                // Create a new HttpClient and Post Header
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/addEvent");
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                    nameValuePairs.add(new BasicNameValuePair("name", name));
+                    nameValuePairs.add(new BasicNameValuePair("userList", List));
+                    nameValuePairs.add(new BasicNameValuePair("admin", ID_FB));
+                    //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
+                    Log.e("CreaEvento-sendToServer: ", name + " " + List + " " + ID_FB);
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    //Execute HTTP Post Request
+                    HttpResponse response = httpclient.execute(httppost);
+                    String ris = EntityUtils.toString(response.getEntity());
+
+                    Log.e("CreaEvento-sendToServer: ", ris);
+                } catch (ClientProtocolException e) {
+                    Log.e("CreaEvento-sendToServer: ", "catch 1");
+                } catch (IOException e) {
+                    String error = e.toString();
+                    Log.e("CreaEvento-sendToServer: ", "catch 2 " + error);
+                }
+                return null;
+            }
+        }.execute();
     }
 
     //Click pulsante indietro
@@ -300,7 +365,6 @@ public class CreaEventoActivity extends Activity {
             holder.name.setChecked(friends1.isSelected());
             holder.name.setTag(friends1);
             holder.foto_profilo.setImageBitmap(friends1.foto);
-
             return convertView;
         }
 

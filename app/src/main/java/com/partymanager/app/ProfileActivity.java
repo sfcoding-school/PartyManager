@@ -30,20 +30,9 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
 import com.partymanager.gcm.Helper_Notifiche;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,10 +43,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProfileActivity extends Activity {
 
@@ -66,14 +52,13 @@ public class ProfileActivity extends Activity {
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     private static ImageView foto_profilo = null;
     private int view_profilo = 0;
-    public static final String REG_USERNAME = "";
-    public static final String REG_ID = "";
+    public final String REG_USERNAME = "reg_username";
+    public final String REG_ID = "reg_id";
     private boolean mExternalStorageAvailable = false;
     private boolean mExternalStorageWriteable = false;
     private String name;
     private String username;
     private String id_fb;
-
 
 
     @Override
@@ -87,7 +72,6 @@ public class ProfileActivity extends Activity {
             dato1 = datipassati.getString("chiave");
             view_profilo = Integer.parseInt(dato1);
         }
-
 
 
         //controllo possibilità di accesso/scrittura ExternaleStorage
@@ -202,7 +186,7 @@ public class ProfileActivity extends Activity {
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
                             Log.e("Profile prima di invio: ", user.getUsername() + " " + user.getId());
-                            Helper_Notifiche.registerInBackground(gcm, getApplicationContext(),  user.getId(), user.getUsername());
+                            Helper_Notifiche.registerInBackground(gcm, getApplicationContext(), user.getId(), user.getUsername());
                         }
                     }
                 });
@@ -244,11 +228,12 @@ public class ProfileActivity extends Activity {
                         if (user != null) {
                             getFacebookProfilePicture(user.getId());
                             textInstructionsOrLink.setText(user.getName());
+
                             SharedPreferences prefs = getPreferences();
                             SharedPreferences.Editor editor = prefs.edit();
-                            username = user.getName();
+                            username = user.getName().toString();
                             editor.putString(REG_USERNAME, username);
-                            id_fb = user.getId();
+                            id_fb = user.getId().toString();
                             editor.putString(REG_ID, id_fb);
                             editor.commit();
                         }
@@ -379,7 +364,6 @@ public class ProfileActivity extends Activity {
         view_profilo = 0;
         finish();
     }
-
 
 
 }

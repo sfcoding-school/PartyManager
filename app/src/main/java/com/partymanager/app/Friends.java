@@ -29,18 +29,15 @@ public class Friends {
     public String getCode() {
         return code;
     }
-    public void setCode(String code) {
-        this.code = code;
-    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-    public Bitmap getFoto() {
-        return foto;
-    }
+
     public void setFoto(Bitmap fotot) {
         this.foto = fotot;
     }
@@ -48,16 +45,16 @@ public class Friends {
     public boolean isSelected() {
         return selected;
     }
+
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
-    private void getFacebookProfilePicture(){
-        new AsyncTask<Void, Void, Bitmap>()
-        {
+    private void getFacebookProfilePicture() {
+        new AsyncTask<Void, Void, Bitmap>() {
             @Override
-            protected Bitmap doInBackground(Void... args){
-                URL imageURL = null;
+            protected Bitmap doInBackground(Void... args) {
+                URL imageURL;
                 Bitmap bitmap = null;
                 try {
                     imageURL = new URL("https://graph.facebook.com/" + code + "/picture?type=small");
@@ -71,9 +68,9 @@ public class Friends {
             }
 
             @Override
-            protected void onPostExecute(Bitmap bitmap){
+            protected void onPostExecute(Bitmap bitmap) {
                 // safety check
-                if (bitmap != null){
+                if (bitmap != null) {
                     setFoto(bitmap);
                 }
             }
