@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.partymanager.R;
@@ -63,13 +64,13 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ListView listView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private EventAdapter eAdapter;
 
     // TODO: Rename and change types of parameters
     public static EventiListFragment newInstance() {
@@ -100,8 +101,13 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
 
         // TODO: Change Adapter to display your content
+        eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
+        DataProvide.getEvent(getActivity());
+
+        /*
         mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DatiEventi.ITEMS);
+        */
        // ProgressBar progressBarLarge = (ProgressBar) getActivity().findViewById(R.id.eventProgressBarLarge);
         //ProgressBar progressBarSmall = (ProgressBar) getActivity().findViewById(R.id.progressBarSmall);
 
@@ -120,13 +126,15 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         View view = inflater.inflate(R.layout.fragment_eventilist, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        listView = (ListView) view.findViewById(R.id.eventList);
+        //((AdapterView<ListAdapter>) mListView).setAdapter(eAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
 
 
+
+        listView.setAdapter(eAdapter);
 
         DataProvide.getEvent(getActivity());
         //progressBarLarge.setVisibility(View.INVISIBLE);
@@ -172,7 +180,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
+        View emptyView = listView.getEmptyView();
 
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);

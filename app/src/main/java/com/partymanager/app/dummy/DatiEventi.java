@@ -2,8 +2,10 @@ package com.partymanager.app.dummy;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.partymanager.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,6 +22,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +40,12 @@ public class DatiEventi {
     /**
      * An array of sample (dummy) items.
      */
-    public static List<Evento> ITEMS = new ArrayList<Evento>();
+    public static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, Evento> ITEM_MAP = new HashMap<String, Evento>();
+    //public static Map<String, Evento> ITEM_MAP = new HashMap<String, Evento>();
 
 
     static {
@@ -59,7 +63,7 @@ public class DatiEventi {
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+        //ITEM_MAP.put(item.id, item);
     }
 
     /**
@@ -67,16 +71,20 @@ public class DatiEventi {
      */
     public static class Evento {
         public String id;
-        public String content;
+        public String name;
+        public String details;
+        public GregorianCalendar date;
 
-        public Evento(String id, String content) {
+        public Evento (String id, String name, String details, GregorianCalendar date) {
             this.id = id;
-            this.content = content;
+            this.name = name;
+            this.details = details;
+            this.date = date;
         }
 
         @Override
         public String toString() {
-            return content;
+            return name;
         }
     }
 }

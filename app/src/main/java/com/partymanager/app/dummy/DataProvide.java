@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -167,7 +169,12 @@ public class DataProvide {
             JSONObject jsonRis = new JSONObject(json_string);
             JSONArray jsonArray= jsonRis.getJSONArray("results");
             for (int i=0;i<jsonArray.length();i++){
-                DatiEventi.addItem(new DatiEventi.Evento(String.valueOf(i),jsonArray.getJSONObject(i).getString("event")));
+                DatiEventi.addItem(new DatiEventi.Evento(
+                        String.valueOf(i),
+                        jsonArray.getJSONObject(i).getString("event"),
+                        "content",
+                         new GregorianCalendar(2014, 3, 23)
+                ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
