@@ -30,7 +30,20 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
+import com.partymanager.gcm.Helper_Notifiche;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,21 +54,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProfileActivity extends Activity {
-    private static final String URL_PREFIX_FRIENDS = "https://graph.facebook.com/me/friends?access_token=";
 
     private TextView textInstructionsOrLink;
     private Button buttonLoginLogout;
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     private static ImageView foto_profilo = null;
     private int view_profilo = 0;
-    public static final String IMAGE_PROFILE = "";
     public static final String REG_USERNAME = "";
-    public String url;
+    public static final String REG_ID = "";
     private boolean mExternalStorageAvailable = false;
     private boolean mExternalStorageWriteable = false;
+    private String name;
+    private String username;
+    private String id_fb;
+
 
 
     @Override
@@ -64,11 +82,16 @@ public class ProfileActivity extends Activity {
 
         //Passaggio dati tra activity per click Profilo
         Bundle datipassati = getIntent().getExtras();
-        String dato1 = "non ha funzionato";
+        String dato1;
         if (datipassati != null) {
             dato1 = datipassati.getString("chiave");
             view_profilo = Integer.parseInt(dato1);
         }
+
+
+
+        //controllo possibilità di accesso/scrittura ExternaleStorage
+        checkExternalMedia();
 
         //Controllo KEY HASH per connessione FB
         try {
@@ -109,6 +132,7 @@ public class ProfileActivity extends Activity {
             }
         }
 
+
         updateView();
     }
 
@@ -140,7 +164,8 @@ public class ProfileActivity extends Activity {
     private void updateView() {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
-            //textInstructionsOrLink.setText(URL_PREFIX_FRIENDS + session.getAccessToken());
+            final Context context = getApplicationContext();
+
             buttonLoginLogout.setText("Logout");
             foto_profilo.setVisibility(View.VISIBLE);
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
@@ -150,17 +175,44 @@ public class ProfileActivity extends Activity {
             });
 
             if (view_profilo == 0) {
+                /*
+                //Notifiche
+                context = getApplicationContext();
+
+                // Check device for Play Services APK.
+                if (checkPlayServices()) {
+                    gcm = GoogleCloudMessaging.getInstance(this);
+                    regid = getRegistrationId(context);
+
+                    if (regid.isEmpty()) {
+                        registerInBackground();
+                    }else{
+                        Log.i(TAG,"regid "+regid);
+                        //mDisplay.append("reg_id: "+regid);
+                    }
+                }else{
+                    Log.i(TAG, "No valid Google Play Services APK found.");
+                }
+                */
+
+                final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            Log.e("Profile prima di invio: ", user.getUsername() + " " + user.getId());
+                            Helper_Notifiche.registerInBackground(gcm, getApplicationContext(),  user.getId(), user.getUsername());
+                        }
+                    }
+                });
+
+
                 Intent newact = new Intent(this, MainActivity.class);
                 startActivity(newact);
             } else {
 
-                final SharedPreferences prefs = getGCMPreferences(getApplicationContext());
-                String registrationId = prefs.getString(REG_USERNAME, "");
-                if (!registrationId.isEmpty()) {
-                    textInstructionsOrLink.setText(registrationId);
-                }
-
-                checkExternalMedia();
+                textInstructionsOrLink.setText(username);
                 if (mExternalStorageAvailable) {
 
                     File sdCard = Environment.getExternalStorageDirectory();
@@ -185,20 +237,24 @@ public class ProfileActivity extends Activity {
                     }
 
                 }
-
-                // Request user data and show the results
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
-                            // Display the parsed user info
-                            textInstructionsOrLink.setText(buildUserInfoDisplay(user));
+                            getFacebookProfilePicture(user.getId());
+                            textInstructionsOrLink.setText(user.getName());
+                            SharedPreferences prefs = getPreferences();
+                            SharedPreferences.Editor editor = prefs.edit();
+                            username = user.getName();
+                            editor.putString(REG_USERNAME, username);
+                            id_fb = user.getId();
+                            editor.putString(REG_ID, id_fb);
+                            editor.commit();
                         }
                     }
                 });
             }
-
         } else {
             foto_profilo.setVisibility(View.INVISIBLE);
             textInstructionsOrLink.setText(R.string.instruction);
@@ -211,24 +267,18 @@ public class ProfileActivity extends Activity {
         }
     }
 
-    private String buildUserInfoDisplay(GraphUser user) {
-        String userInfo = user.getName();
-        getFacebookProfilePicture(user.getId(), user.getName());
-        return userInfo;
-    }
-
-    private SharedPreferences getGCMPreferences(Context context) {
+    private SharedPreferences getPreferences() {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
         return getSharedPreferences(ProfileActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 
-    private void getFacebookProfilePicture(final String userID, final String username) {
+    private void getFacebookProfilePicture(final String userID) {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... args) {
-                URL imageURL = null;
+                URL imageURL;
                 Bitmap bitmap = null;
                 try {
                     imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
@@ -245,7 +295,6 @@ public class ProfileActivity extends Activity {
             protected void onPostExecute(Bitmap bitmap) {
                 // safety check
                 if (bitmap != null) {
-                    checkExternalMedia();
                     if (mExternalStorageAvailable && mExternalStorageWriteable) {
                         saveWallpaper(bitmap);
                     }
@@ -311,6 +360,7 @@ public class ProfileActivity extends Activity {
 
     private void onClickLogout() {
         view_profilo = 0;
+        foto_profilo.setVisibility(View.INVISIBLE);
         Session session = Session.getActiveSession();
         if (!session.isClosed()) {
             session.closeAndClearTokenInformation();
@@ -328,7 +378,8 @@ public class ProfileActivity extends Activity {
     public void onBackPressed() {
         view_profilo = 0;
         finish();
-        return;
     }
+
+
 
 }

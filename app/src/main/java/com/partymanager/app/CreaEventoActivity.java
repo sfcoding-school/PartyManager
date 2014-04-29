@@ -35,6 +35,8 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.partymanager.R;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -56,6 +58,8 @@ public class CreaEventoActivity extends Activity {
     ArrayList<Friends> friendsList;
     List<GraphUser> friends;
     List<Friends> finali = null;
+    NetworkInfo networkInfo;
+    ArrayList<String> id_toSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,20 +76,22 @@ public class CreaEventoActivity extends Activity {
         pb = (ProgressBar) findViewById(R.id.progressBar_creaEvento);
         pb.setVisibility(ProgressBar.VISIBLE);
 
+        //Per controllo internet
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+
         //Controllo sessione FB
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
             //se c'è la sessione richiedo subito la lista amici
-            ConnectivityManager connMgr = (ConnectivityManager)
-                    getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
                 requestMyAppFacebookFriends(session);
             } else {
                 Toast.makeText(getApplicationContext(), "Connessione assente", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getApplicationContext(), "session is not opened", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Problema sessione FB", Toast.LENGTH_LONG).show();
         }
 
         finali = new ArrayList<Friends>();
@@ -103,8 +109,7 @@ public class CreaEventoActivity extends Activity {
                 friends = getResults(response);
 
                 friendsList = new ArrayList<Friends>();
-                for (int i = 0; i < friends.size(); i++) {
-                    GraphUser user = friends.get(i);
+                for (GraphUser user : friends) {
                     Friends friend = new Friends(user.getId(), user.getName(), false);
                     friendsList.add(friend);
                 }
@@ -149,7 +154,7 @@ public class CreaEventoActivity extends Activity {
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Friends friends1 = (Friends) parent.getItemAtPosition(position);
+                //Friends friends1 = (Friends) parent.getItemAtPosition(position);
             }
         });
 
@@ -157,19 +162,21 @@ public class CreaEventoActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // When user changed the Text
-                int textlength = cs.length();
-                ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
-                for (int i = 0; i < friendList.size(); i++) {
-                    Friends friends1 = friendList.get(i);
-                    if (textlength <= friends1.getName().length()) {
-                        if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
-                            tempArrayList.add(friends1);
+                if ((networkInfo != null && networkInfo.isConnected()) || !friendList.isEmpty()) {
+
+                    // When user changed the Text
+                    int textlength = cs.length();
+                    ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
+                    for (Friends friends1 : friendList) {
+                        if (textlength <= friends1.getName().length()) {
+                            if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+                                tempArrayList.add(friends1);
+                            }
                         }
                     }
+                    MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
+                    listView.setAdapter(mAdapter);
                 }
-                MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
-                listView.setAdapter(mAdapter);
             }
 
             @Override
@@ -187,11 +194,24 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if ("".equals(nome_evento.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Devi inserire un nome per l'evento", Toast.LENGTH_LONG).show();
-
+                if ("".equals(nome_evento.getText().toString()) || finali.isEmpty()) {
+                    StringBuilder output = new StringBuilder();
+                    if ("".equals(nome_evento.getText().toString())) {
+                        output.append("Devi inserire un nome per l'evento.");
+                    }
+                    if (finali.isEmpty()) {
+                        if (output.length() != 0)
+                            output.append("\n");
+                        output.append("Devi inserire almeno un amico");
+                    }
+                    Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
+                    id_toSend = new ArrayList<String>();
+                    for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
+                    //JSONArray mJSONArray = new JSONArray(Arrays.asList(id_toSend));
+                    JSONArray jsArray = new JSONArray(id_toSend);
+                    Log.e("TESTJSON: ", jsArray.toString());
                 }
             }
         });
@@ -218,8 +238,6 @@ public class CreaEventoActivity extends Activity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
-        return;
     }
 
     //Adapter per ListView
@@ -242,7 +260,7 @@ public class CreaEventoActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            ViewHolder holder = null;
+            ViewHolder holder;
 
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(
@@ -289,7 +307,7 @@ public class CreaEventoActivity extends Activity {
         //Aggiungo gli amici scelti all'activity e alla lista "finali"
         private void delete_friend_to_activity(String toDelete) {
             container_friends.setText("");
-            Friends friends1 = null;
+            Friends friends1;
 
             for (int i = 0; i < finali.size(); i++) {
                 friends1 = finali.get(i);
@@ -297,6 +315,7 @@ public class CreaEventoActivity extends Activity {
                     finali.remove(i);
                 }
             }
+
             for (int i = 0; i < finali.size(); i++) {
                 friends1 = finali.get(i);
                 if (i == 0) {
