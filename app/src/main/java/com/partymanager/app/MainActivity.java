@@ -164,13 +164,21 @@ public class MainActivity extends Activity
             return true;
         }
         if (id == R.id.Nuovo_evento) {
-            //usare startActivityForResult
-            //Intent newact = new Intent(this, CreaEventoActivity.class);
-            //startActivity(newact);
             Intent intent = new Intent(MainActivity.this, CreaEventoActivity.class);
-            startActivityForResult(intent, 0); // Activity is started with requestCode 2
+            startActivityForResult(intent, 0);
             return true;
         }
+        //DEBUG ONLY
+        if (id == R.id.evento) {
+            FragmentManager fragmentManager = getFragmentManager();
+            Fragment fragment = Evento.newInstance("niente", "Prova Evento 1");
+            mTitle = "prova evento";
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+            return true;
+        }
+        //FINE TEST ZONE
         return super.onOptionsItemSelected(item);
     }
 
@@ -181,10 +189,17 @@ public class MainActivity extends Activity
 
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 0) {
-            if(data != null){
+            if (data != null) {
                 String ListFriends = data.getStringExtra("listfriend");
                 String nome_evento = data.getStringExtra("nome_evento");
                 Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                Fragment fragment = Evento.newInstance(ListFriends, nome_evento);
+                mTitle = nome_evento;
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
             }
         }
 

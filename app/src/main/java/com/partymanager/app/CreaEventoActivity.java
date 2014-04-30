@@ -249,7 +249,6 @@ public class CreaEventoActivity extends Activity {
     }
 
     ProgressDialog progressDialog;
-    Boolean done = false;
 
     private void sendNewEvent(final String name, final String ID_FB, final String List) {
 
@@ -384,10 +383,69 @@ public class CreaEventoActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            /*
+            Log.e("DEBUG: ", Integer.toString(position));
             ViewHolder holder;
 
             if (convertView == null) {
+                holder = new ViewHolder();
+                if(position == 0){
+                    LayoutInflater vi = (LayoutInflater) getSystemService(
+                            Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = vi.inflate(R.layout.fb_friends2, null);
+                } else {
+                    LayoutInflater vi = (LayoutInflater) getSystemService(
+                            Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = vi.inflate(R.layout.fb_friends, null);
+
+
+                    holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
+                    holder.foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
+                    convertView.setTag(holder);
+
+                    holder.name.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            CheckBox cb = (CheckBox) v;
+                            Friends friends1 = (Friends) cb.getTag();
+                            friends1.setSelected(cb.isChecked());
+
+                            if (cb.isChecked()) {
+                                if (container_friends.getText().length() == 0)
+                                    container_friends.setText(friends1.getName());
+                                else {
+                                    container_friends.append(", " + friends1.getName());
+                                }
+                                finali.add(friends1);
+                            } else {
+                                delete_friend_to_activity(friends1.getName());
+                            }
+                            inputSearch.setText("");
+                        }
+                    });
+                }
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            if(position != 0) {
+
+                if(holder !=  null) {
+                    Friends friends1 = friendList.get(position - 1);
+                    holder.name.setText(friends1.getName());
+                    holder.name.setChecked(friends1.isSelected());
+                    holder.name.setTag(friends1);
+                    holder.foto_profilo.setImageBitmap(friends1.foto);
+                } else {
+                    Log.e("holder == null: ", Integer.toString(position));
+                }
+            }
+            return convertView;*/
+
+            ViewHolder holder;
+
+
+            if (convertView == null) {
+
                 LayoutInflater vi = (LayoutInflater) getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.fb_friends, null);
@@ -416,6 +474,7 @@ public class CreaEventoActivity extends Activity {
                         inputSearch.setText("");
                     }
                 });
+
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }

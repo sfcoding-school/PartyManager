@@ -144,7 +144,6 @@ public class ProfileActivity extends Activity {
         Session.saveSession(session, outState);
     }
 
-    @SuppressWarnings("deprecation")
     private void updateView() {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
@@ -241,7 +240,7 @@ public class ProfileActivity extends Activity {
                 });
             }
         } else {
-            foto_profilo.setVisibility(View.INVISIBLE);
+            foto_profilo.setVisibility(View.GONE);
             textInstructionsOrLink.setText(R.string.instruction);
             buttonLoginLogout.setText("Login");
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
@@ -345,7 +344,6 @@ public class ProfileActivity extends Activity {
 
     private void onClickLogout() {
         view_profilo = 0;
-        foto_profilo.setVisibility(View.INVISIBLE);
         Session session = Session.getActiveSession();
         if (!session.isClosed()) {
             session.closeAndClearTokenInformation();
