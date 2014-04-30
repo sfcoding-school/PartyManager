@@ -56,7 +56,6 @@ public class ProfileActivity extends Activity {
     public final String REG_ID = "reg_id";
     private boolean mExternalStorageAvailable = false;
     private boolean mExternalStorageWriteable = false;
-    private String name;
     private String username;
     private String id_fb;
 
@@ -145,10 +144,10 @@ public class ProfileActivity extends Activity {
         Session.saveSession(session, outState);
     }
 
+    @SuppressWarnings("deprecation")
     private void updateView() {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
-            final Context context = getApplicationContext();
 
             buttonLoginLogout.setText("Logout");
             foto_profilo.setVisibility(View.VISIBLE);
@@ -195,8 +194,9 @@ public class ProfileActivity extends Activity {
                 Intent newact = new Intent(this, MainActivity.class);
                 startActivity(newact);
             } else {
-
-                textInstructionsOrLink.setText(username);
+                final SharedPreferences prefs = getPreferences();
+                String username_pref = prefs.getString(REG_USERNAME, "");
+                textInstructionsOrLink.setText(username_pref);
                 if (mExternalStorageAvailable) {
 
                     File sdCard = Environment.getExternalStorageDirectory();
@@ -231,9 +231,9 @@ public class ProfileActivity extends Activity {
 
                             SharedPreferences prefs = getPreferences();
                             SharedPreferences.Editor editor = prefs.edit();
-                            username = user.getName().toString();
+                            username = user.getName();
                             editor.putString(REG_USERNAME, username);
-                            id_fb = user.getId().toString();
+                            id_fb = user.getId();
                             editor.putString(REG_ID, id_fb);
                             editor.commit();
                         }

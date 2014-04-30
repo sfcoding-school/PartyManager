@@ -15,13 +15,11 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
 
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
 
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -41,22 +39,17 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         if (checkPlayServices()) {
-        //Controllo se esiste già una sessione FB attiva
-        Session session = Session.getActiveSession();
-        if (session == null) {
+            //Controllo se esiste già una sessione FB attiva
+            Session session = Session.getActiveSession();
             if (session == null) {
                 session = new Session(this);
+                Session.setActiveSession(session);
+                if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                    session.openForRead(new Session.OpenRequest(this));
+                }
             }
-            Session.setActiveSession(session);
-            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                session.openForRead(new Session.OpenRequest(this));
-            }
-        }
 
-            if (session != null && session.isOpened()) {
-                Log.e("DEBUG: ", " NO intent");
-            } else {
-                Log.e("DEBUG: ", "intent");
+            if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
             }
@@ -112,8 +105,8 @@ public class MainActivity extends Activity
     }
 
 
-    public void onSectionAttached(int number) {
-        /*
+    /*public void onSectionAttached(int number) {
+
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
@@ -125,14 +118,16 @@ public class MainActivity extends Activity
                 mTitle = getString(R.string.title_section3);
                 break;
         }
-        */
-    }
+
+    }*/
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        if (actionBar != null) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
     public static boolean progressBarVisible = false;
@@ -169,11 +164,30 @@ public class MainActivity extends Activity
             return true;
         }
         if (id == R.id.Nuovo_evento) {
-            Intent newact = new Intent(this, CreaEventoActivity.class);
-            startActivity(newact);
+            //usare startActivityForResult
+            //Intent newact = new Intent(this, CreaEventoActivity.class);
+            //startActivity(newact);
+            Intent intent = new Intent(MainActivity.this, CreaEventoActivity.class);
+            startActivityForResult(intent, 0); // Activity is started with requestCode 2
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Call Back method  to get the Message form other Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 0) {
+            if(data != null){
+                String ListFriends = data.getStringExtra("listfriend");
+                String nome_evento = data.getStringExtra("nome_evento");
+                Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento);
+            }
+        }
+
     }
 
     public boolean checkPlayServices() {

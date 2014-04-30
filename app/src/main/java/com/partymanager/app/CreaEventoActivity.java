@@ -2,8 +2,10 @@ package com.partymanager.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -224,7 +227,6 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
                     id_toSend = new ArrayList<String>();
                     for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
-                    //JSONArray mJSONArray = new JSONArray(Arrays.asList(id_toSend));
                     JSONArray jsArray = new JSONArray(id_toSend);
                     Log.e("TESTJSON: ", jsArray.toString());
                     final SharedPreferences prefs = getPreferences();
@@ -232,7 +234,6 @@ public class CreaEventoActivity extends Activity {
                     if (registrationId.isEmpty()) {
                         Log.e("DEBUG ID: ", "problema");
                     } else {
-                        Log.e("DEBUG: ", "sendNewEvent");
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
                     }
                 }
@@ -247,10 +248,15 @@ public class CreaEventoActivity extends Activity {
                 Context.MODE_PRIVATE);
     }
 
+    ProgressDialog progressDialog;
+    Boolean done = false;
+
     private void sendNewEvent(final String name, final String ID_FB, final String List) {
-        new AsyncTask<Void, Void, Void>() {
+
+        new AsyncTask<Void, Void, String>() {
             @Override
-            protected Void doInBackground(Void... args) {
+            protected String doInBackground(Void... args) {
+                String ris = null;
                 Log.e("CreaEvento-sendToServer: ", "entrato");
                 // Create a new HttpClient and Post Header
                 HttpClient httpclient = new DefaultHttpClient();
@@ -268,7 +274,7 @@ public class CreaEventoActivity extends Activity {
 
                     //Execute HTTP Post Request
                     HttpResponse response = httpclient.execute(httppost);
-                    String ris = EntityUtils.toString(response.getEntity());
+                    ris = EntityUtils.toString(response.getEntity());
 
                     Log.e("CreaEvento-sendToServer: ", ris);
                 } catch (ClientProtocolException e) {
@@ -277,9 +283,63 @@ public class CreaEventoActivity extends Activity {
                     String error = e.toString();
                     Log.e("CreaEvento-sendToServer: ", "catch 2 " + error);
                 }
-                return null;
+                return ris;
             }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    if (!result.equals("fatto")) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
+                        alertDialogBuilder.setMessage("Problema nella creazione dell'evento.");
+
+                        // set positive button: Yes message
+                        alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                closeActivity(List, name); //DA CANCELLARE SOLO PER TEST
+                            }
+                        });
+
+                        // set negative button: No message
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    } else {
+                        closeActivity(List, name);
+                    }
+                }
+            }
+
+            @Override
+            protected void onPreExecute() {
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
+                progressDialog = new ProgressDialog(CreaEventoActivity.this);
+                progressDialog.setMessage("Creazione Evento");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+
         }.execute();
+    }
+
+    private void closeActivity(String List, String nome_evento) {
+        Intent intent = new Intent();
+        intent.putExtra("listfriend", List);
+        intent.putExtra("nome_evento", nome_evento);
+        setResult(0, intent);
+
+        finish();
     }
 
     //Click pulsante indietro

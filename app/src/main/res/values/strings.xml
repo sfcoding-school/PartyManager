@@ -2,13 +2,15 @@
 <resources>
 
     <string name="app_name">PartyManager</string>
-    <string name="title_section0">Eventi</string>
-    <string name="title_section1">Archivio</string>
-    <string name="title_section2">Setting</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Barra Laterale -->
+    <string name="title_section0">Eventi</string>
+    <string name="title_section1">Archivio</string>
+    <string name="title_section2">Impostazioni</string>
 
     <!-- Menù -->
     <string name="action_settings">Impostazioni</string>
