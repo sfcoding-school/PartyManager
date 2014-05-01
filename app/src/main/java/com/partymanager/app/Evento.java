@@ -100,11 +100,18 @@ public class Evento extends Fragment {
                     } else {
                         if (currentFirstVisibleItem > mLastFirstVisibleItem) {
 
-                            prova.setVisibility(View.VISIBLE);
+                            //prova.setVisibility(View.VISIBLE);
+                            if (prova.getVisibility() != View.GONE) {
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());
+                                anim.setDuration(500);
+                                anim.setFillAfter(false);
+                                prova.startAnimation(anim);
+                                prova.setVisibility(View.GONE);
+                            }
 
                             Log.i("a", "scrolling verso giu...");
                         } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                            if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
+                            /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());
                                 anim.setDuration(500);
                                 anim.setFillAfter(false);
@@ -112,6 +119,13 @@ public class Evento extends Fragment {
                                 prova.setVisibility(View.GONE);
                             }
                             if (currentLAstVisibileItem <= 11) {
+                                prova.setVisibility(View.VISIBLE);
+                            }*/
+                            if (prova.getVisibility() != View.VISIBLE) {
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, -prova.getHeight(), 0);
+                                anim.setDuration(100);
+                                anim.setFillAfter(false);
+                                prova.startAnimation(anim);
                                 prova.setVisibility(View.VISIBLE);
                             }
                             Log.i("a", "scrolling verso su...");
