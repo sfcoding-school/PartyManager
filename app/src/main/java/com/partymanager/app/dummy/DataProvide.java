@@ -3,6 +3,7 @@ package com.partymanager.app.dummy;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.partymanager.app.EventiListFragment;
@@ -38,10 +39,10 @@ public class DataProvide {
 
 
 
-    public static void getEvent (Context context){
+    public static void getEvent (Context context, String facebookId){
 
         loadJson("eventi", context);
-        downloadEvent(20,context);
+        downloadEvent(facebookId,context);
     }
 
 
@@ -104,7 +105,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadEvent(final int id,final Context context ) {
+    private static void downloadEvent(final String id,final Context context ) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -123,14 +124,14 @@ public class DataProvide {
                 try {
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(id)));
+                    nameValuePairs.add(new BasicNameValuePair("idFacebook", id));
                     //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     //Execute HTTP Post Request
                     HttpResponse response = httpclient.execute(httppost);
                     String json_string = EntityUtils.toString(response.getEntity());
-
+                    Log.e("DATA_PROVIDE", json_string);
 
                     //JSONObject myObject = new JSONObject(response);
                     //Log.i("DATI EVENTI", "risposta... " + response.toString());
@@ -145,7 +146,7 @@ public class DataProvide {
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     String error = e.toString();
-                    //Log.i(TAG,"error "+error);
+                    Log.e("DATA_PROVIDE", error);
                     //mDisplay.append("error");
                     return "error";
                 }
@@ -170,8 +171,8 @@ public class DataProvide {
             JSONArray jsonArray= jsonRis.getJSONArray("results");
             for (int i=0;i<jsonArray.length();i++){
                 DatiEventi.addItem(new DatiEventi.Evento(
-                        String.valueOf(i),
-                        jsonArray.getJSONObject(i).getString("event"),
+                        jsonArray.getJSONObject(i).getString("id_evento"),
+                        jsonArray.getJSONObject(i).getString("nome_evento"),
                         "content",
                          new GregorianCalendar(2014, 3, 23)
                 ));

@@ -37,6 +37,7 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -54,19 +55,21 @@ public class MainActivity extends Activity
             if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
+                finish();
+            }else {
+                //Fine controllo sessione
+
+
+
+                mNavigationDrawerFragment = (NavigationDrawerFragment)
+                        getFragmentManager().findFragmentById(R.id.navigation_drawer);
+                //mTitle = getTitle();
+
+                // Set up the drawer.
+                mNavigationDrawerFragment.setUp(
+                        R.id.navigation_drawer,
+                        (DrawerLayout) findViewById(R.id.drawer_layout));
             }
-            //Fine controllo sessione
-
-
-            mNavigationDrawerFragment = (NavigationDrawerFragment)
-                    getFragmentManager().findFragmentById(R.id.navigation_drawer);
-            //mTitle = getTitle();
-
-            // Set up the drawer.
-            mNavigationDrawerFragment.setUp(
-                    R.id.navigation_drawer,
-                    (DrawerLayout) findViewById(R.id.drawer_layout));
-
 /*
 
         if (savedInstanceState == null) {

@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.partymanager.R;
 import com.partymanager.app.dummy.*;
+import com.partymanager.app.helper.helperFacebook;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -102,8 +103,10 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
         // TODO: Change Adapter to display your content
         eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
-        DataProvide.getEvent(getActivity());
 
+        String idFacebbok = helperFacebook.getFacebookId(getActivity());
+        if (idFacebbok!= null)
+            DataProvide.getEvent(getActivity(), idFacebbok);
         /*
         mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DatiEventi.ITEMS);
@@ -136,7 +139,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
         listView.setAdapter(eAdapter);
 
-        DataProvide.getEvent(getActivity());
+
         //progressBarLarge.setVisibility(View.INVISIBLE);
         //getActivity().invalidateOptionsMenu();
 
@@ -148,6 +151,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         /*
         try {
             mListener = (OnFragmentInteractionListener) activity;
