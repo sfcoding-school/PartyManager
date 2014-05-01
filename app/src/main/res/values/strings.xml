@@ -27,4 +27,9 @@
     <string name="title_activity_crea_evento">Crea Evento </string>
     <string name="nome_evento">Nome evento</string>
 
+    <!-- Fragment Evento -->
+    <string name="luogo">Luogo</string>
+    <string name="quando">Quando</string>
+    <string name="dove_vediamo">Dove ci vediamo</string>
+
 </resources>
