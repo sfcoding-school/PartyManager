@@ -173,7 +173,7 @@ public class MainActivity extends Activity
         //DEBUG ONLY
         if (id == R.id.evento) {
             FragmentManager fragmentManager = getFragmentManager();
-            Fragment fragment = Evento.newInstance("niente", "Prova Evento 1");
+            Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
             mTitle = "prova evento";
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
@@ -197,7 +197,7 @@ public class MainActivity extends Activity
                 Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
-                Fragment fragment = Evento.newInstance(ListFriends, nome_evento);
+                Fragment fragment = Evento.newInstance(ListFriends, nome_evento, "id");
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)

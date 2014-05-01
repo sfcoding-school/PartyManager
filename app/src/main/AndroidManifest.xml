@@ -67,7 +67,8 @@
         </activity>
         <activity
             android:name="com.partymanager.app.CreaEventoActivity"
-            android:label="@string/title_activity_crea_evento" >
+            android:label="@string/title_activity_crea_evento"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

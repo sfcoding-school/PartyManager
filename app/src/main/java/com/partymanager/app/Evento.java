@@ -3,7 +3,6 @@ package com.partymanager.app;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,17 +19,20 @@ import com.partymanager.R;
 public class Evento extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+    private String mParam1; //Lista amici
+    private String mParam2; //nome evento
+    private String mParam3; //id eventop
     private ImageButton bnt_friends;
 
 
-    public static Evento newInstance(String param1, String param2) {
+    public static Evento newInstance(String param1, String param2, String param3) {
         Evento fragment = new Evento();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,8 +48,9 @@ public class Evento extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
 
-            Log.e("Evento TEST: ", mParam1 + " " + mParam2);
+            //Log.e("Evento TEST: ", mParam1 + " " + mParam2);
         }
 
     }
@@ -58,7 +61,6 @@ public class Evento extends Fragment {
     String[] values = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"};
     int mLastFirstVisibleItem = 0;
     int mLastLastVisibleItem = 0;
-
     //END TEST
 
     @Override
@@ -71,6 +73,7 @@ public class Evento extends Fragment {
         if (actionBar != null) {
             actionBar.setTitle(mParam2);
         }
+
         //TEST
         prova = view.findViewById(R.id.stickyheader);
         prova.setVisibility(View.VISIBLE);
@@ -157,9 +160,6 @@ public class Evento extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        // Refresh the state of the +1 button each time the activity receives focus.
-
     }
 
     @Override
@@ -177,5 +177,4 @@ public class Evento extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 }

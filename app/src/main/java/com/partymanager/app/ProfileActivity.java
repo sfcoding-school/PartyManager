@@ -58,6 +58,8 @@ public class ProfileActivity extends Activity {
     private boolean mExternalStorageWriteable = false;
     private String username;
     private String id_fb;
+    SharedPreferences prefs;
+    Session session;
 
 
     @Override
@@ -72,7 +74,7 @@ public class ProfileActivity extends Activity {
             view_profilo = Integer.parseInt(dato1);
         }
 
-
+        prefs = getPreferences();
         //controllo possibilità di accesso/scrittura ExternaleStorage
         checkExternalMedia();
 
@@ -101,7 +103,7 @@ public class ProfileActivity extends Activity {
         //Controllo sessione FB
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
-        Session session = Session.getActiveSession();
+        session = Session.getActiveSession();
         if (session == null) {
             if (savedInstanceState != null) {
                 session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
@@ -157,25 +159,6 @@ public class ProfileActivity extends Activity {
             });
 
             if (view_profilo == 0) {
-                /*
-                //Notifiche
-                context = getApplicationContext();
-
-                // Check device for Play Services APK.
-                if (checkPlayServices()) {
-                    gcm = GoogleCloudMessaging.getInstance(this);
-                    regid = getRegistrationId(context);
-
-                    if (regid.isEmpty()) {
-                        registerInBackground();
-                    }else{
-                        Log.i(TAG,"regid "+regid);
-                        //mDisplay.append("reg_id: "+regid);
-                    }
-                }else{
-                    Log.i(TAG, "No valid Google Play Services APK found.");
-                }
-                */
 
                 final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
@@ -183,7 +166,7 @@ public class ProfileActivity extends Activity {
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
-                            Log.e("Profile prima di invio: ", user.getUsername() + " " + user.getId());
+                            savePreferences(user.getUsername(), user.getId());
                             Helper_Notifiche.registerInBackground(gcm, getApplicationContext(), user.getId(), user.getUsername());
                         }
                     }
@@ -193,7 +176,7 @@ public class ProfileActivity extends Activity {
                 Intent newact = new Intent(this, MainActivity.class);
                 startActivity(newact);
             } else {
-                final SharedPreferences prefs = getPreferences();
+
                 String username_pref = prefs.getString(REG_USERNAME, "");
                 textInstructionsOrLink.setText(username_pref);
                 if (mExternalStorageAvailable) {
@@ -227,14 +210,9 @@ public class ProfileActivity extends Activity {
                         if (user != null) {
                             getFacebookProfilePicture(user.getId());
                             textInstructionsOrLink.setText(user.getName());
-
-                            SharedPreferences prefs = getPreferences();
-                            SharedPreferences.Editor editor = prefs.edit();
                             username = user.getName();
-                            editor.putString(REG_USERNAME, username);
                             id_fb = user.getId();
-                            editor.putString(REG_ID, id_fb);
-                            editor.commit();
+                            savePreferences(username, id_fb);
                         }
                     }
                 });
@@ -256,6 +234,13 @@ public class ProfileActivity extends Activity {
         // how you store the regID in your app is up to you.
         return getSharedPreferences(ProfileActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
+    }
+
+    private void savePreferences(String username_t, String id_fb_t){
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(REG_USERNAME, username_t);
+        editor.putString(REG_ID, id_fb_t);
+        editor.commit();
     }
 
     private void getFacebookProfilePicture(final String userID) {
@@ -360,8 +345,28 @@ public class ProfileActivity extends Activity {
     @Override
     public void onBackPressed() {
         view_profilo = 0;
-        finish();
+        if (session != null && session.isOpened())
+            finish();
+
     }
-
-
 }
+
+ /*
+                //Notifiche
+                context = getApplicationContext();
+
+                // Check device for Play Services APK.
+                if (checkPlayServices()) {
+                    gcm = GoogleCloudMessaging.getInstance(this);
+                    regid = getRegistrationId(context);
+
+                    if (regid.isEmpty()) {
+                        registerInBackground();
+                    }else{
+                        Log.i(TAG,"regid "+regid);
+                        //mDisplay.append("reg_id: "+regid);
+                    }
+                }else{
+                    Log.i(TAG, "No valid Google Play Services APK found.");
+                }
+                */

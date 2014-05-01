@@ -212,7 +212,7 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if ("".equals(nome_evento.getText().toString()) || finali.isEmpty()) {
+                if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
                         output.append("Devi inserire un nome per l'evento.");
@@ -224,7 +224,6 @@ public class CreaEventoActivity extends Activity {
                     }
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "click check", Toast.LENGTH_LONG).show();
                     id_toSend = new ArrayList<String>();
                     for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
                     JSONArray jsArray = new JSONArray(id_toSend);
@@ -232,7 +231,7 @@ public class CreaEventoActivity extends Activity {
                     final SharedPreferences prefs = getPreferences();
                     String registrationId = prefs.getString(REG_ID, "");
                     if (registrationId.isEmpty()) {
-                        Log.e("DEBUG ID: ", "problema");
+                        Log.e("DEBUG ID: ", "problema REG_ID vuoto");
                     } else {
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
                     }
@@ -267,7 +266,6 @@ public class CreaEventoActivity extends Activity {
                     nameValuePairs.add(new BasicNameValuePair("name", name));
                     nameValuePairs.add(new BasicNameValuePair("userList", List));
                     nameValuePairs.add(new BasicNameValuePair("admin", ID_FB));
-                    //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
                     Log.e("CreaEvento-sendToServer: ", name + " " + List + " " + ID_FB);
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -296,7 +294,7 @@ public class CreaEventoActivity extends Activity {
                         // set positive button: Yes message
                         alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                closeActivity(List, name); //DA CANCELLARE SOLO PER TEST
+                                dialog.cancel();
                             }
                         });
 
@@ -383,66 +381,8 @@ public class CreaEventoActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            /*
-            Log.e("DEBUG: ", Integer.toString(position));
-            ViewHolder holder;
-
-            if (convertView == null) {
-                holder = new ViewHolder();
-                if(position == 0){
-                    LayoutInflater vi = (LayoutInflater) getSystemService(
-                            Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = vi.inflate(R.layout.fb_friends2, null);
-                } else {
-                    LayoutInflater vi = (LayoutInflater) getSystemService(
-                            Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = vi.inflate(R.layout.fb_friends, null);
-
-
-                    holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
-                    holder.foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
-                    convertView.setTag(holder);
-
-                    holder.name.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            CheckBox cb = (CheckBox) v;
-                            Friends friends1 = (Friends) cb.getTag();
-                            friends1.setSelected(cb.isChecked());
-
-                            if (cb.isChecked()) {
-                                if (container_friends.getText().length() == 0)
-                                    container_friends.setText(friends1.getName());
-                                else {
-                                    container_friends.append(", " + friends1.getName());
-                                }
-                                finali.add(friends1);
-                            } else {
-                                delete_friend_to_activity(friends1.getName());
-                            }
-                            inputSearch.setText("");
-                        }
-                    });
-                }
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            if(position != 0) {
-
-                if(holder !=  null) {
-                    Friends friends1 = friendList.get(position - 1);
-                    holder.name.setText(friends1.getName());
-                    holder.name.setChecked(friends1.isSelected());
-                    holder.name.setTag(friends1);
-                    holder.foto_profilo.setImageBitmap(friends1.foto);
-                } else {
-                    Log.e("holder == null: ", Integer.toString(position));
-                }
-            }
-            return convertView;*/
 
             ViewHolder holder;
-
 
             if (convertView == null) {
 
