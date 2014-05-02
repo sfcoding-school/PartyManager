@@ -1,6 +1,8 @@
 package com.partymanager.app;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,13 +12,19 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.partymanager.R;
 
 import com.partymanager.app.dummy.AttributiAdapter;
 import com.partymanager.app.dummy.DataProvide;
 import com.partymanager.app.dummy.DatiAttributi;
+import com.partymanager.app.dummy.DatiEventi;
 import com.partymanager.app.dummy.DummyContent;
+import com.partymanager.app.dummy.EventAdapter;
+import com.partymanager.app.helper.helperFacebook;
 
 /**
  * A fragment representing a list of Items.
@@ -52,12 +60,12 @@ public class provaFragment extends Fragment implements AbsListView.OnItemClickLi
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static provaFragment newInstance(String param1, String param2) {
+    public static provaFragment newInstance(/*String param1, String param2*/) {
         provaFragment fragment = new provaFragment();
-        Bundle args = new Bundle();
+      /*  Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
@@ -67,7 +75,10 @@ public class provaFragment extends Fragment implements AbsListView.OnItemClickLi
      */
     public provaFragment() {
     }
-    AttributiAdapter aAdapter;
+
+    //EventAdapter eAdapter;
+    AttributiAdapter eAdapter;
+    ListView listView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,29 +87,42 @@ public class provaFragment extends Fragment implements AbsListView.OnItemClickLi
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+       // DataProvide.getAttributi(getActivity(), "1");
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                R.layout.attributi,R.id.txt_domanda, DummyContent.ITEMS);
-        aAdapter = new AttributiAdapter(getActivity(), DatiAttributi.ITEMS);
 
-        //if (mParam3 != null)
+
+        eAdapter = new AttributiAdapter(getActivity(), DatiAttributi.ITEMS);
         DataProvide.getAttributi(getActivity(), "1");
+
+        /*
+        eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
+
+        String idFacebbok = helperFacebook.getFacebookId(getActivity());
+        if (idFacebbok!= null)
+            DataProvide.getEvent(getActivity(), idFacebbok);
+        */
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_prova_list, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_eventilist_list2_prova, container, false);
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        View Prova = view.findViewById(R.id.stickyheader);
-        Prova.setVisibility(view.GONE);
-        mListView.setAdapter(mAdapter);
+        listView = (ListView) view.findViewById(R.id.eventList);
+        //((AdapterView<ListAdapter>) mListView).setAdapter(eAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
+
+        //per il debug
+        listView.setDivider(new ColorDrawable(Color.parseColor("#455600")));//divider gradient color can also be set
+        listView.setDividerHeight(5);
+
+        listView.setAdapter(eAdapter);
+
+
+        // Set the adapter
+        Toast.makeText(getActivity(), "sono in Evento", Toast.LENGTH_LONG).show();
 
         return view;
     }
@@ -117,7 +141,6 @@ public class provaFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 

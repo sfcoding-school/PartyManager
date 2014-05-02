@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.partymanager.R;
 import com.partymanager.app.dummy.AttributiAdapter;
@@ -97,7 +98,6 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener{
 
         listView = (ListView) view.findViewById(R.id.listview_attributi);
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
-
 
 
         // Assign adapter to ListView

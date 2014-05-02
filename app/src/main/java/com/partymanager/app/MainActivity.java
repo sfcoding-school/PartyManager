@@ -176,7 +176,7 @@ public class MainActivity extends Activity
         if (id == R.id.evento) {
             FragmentManager fragmentManager = getFragmentManager();
             //Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
-            Fragment fragment = provaFragment.newInstance("niente", "Prova Evento 1");
+            Fragment fragment = provaFragment.newInstance();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();

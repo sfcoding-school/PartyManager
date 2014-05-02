@@ -36,7 +36,6 @@ public class DatiAttributi {
 
     public static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
 
-
     static{
 
     }

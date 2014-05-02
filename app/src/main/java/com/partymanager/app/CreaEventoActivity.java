@@ -273,7 +273,7 @@ public class CreaEventoActivity extends Activity {
                     HttpResponse response = httpclient.execute(httppost);
                     ris = EntityUtils.toString(response.getEntity());
 
-                    Log.e("CreaEvento-sendToServer: ", ris);
+                    Log.e("CreaEvento-sendToServer-Risposta: ", ris);
                 } catch (ClientProtocolException e) {
                     Log.e("CreaEvento-sendToServer: ", "catch 1");
                 } catch (IOException e) {
