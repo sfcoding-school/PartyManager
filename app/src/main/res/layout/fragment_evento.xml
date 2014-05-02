@@ -1,21 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.partymanager.app.Evento">
 
-    <ListView
-        android:id="@+id/listview"
-        android:layout_height="match_parent"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_below="@+id/stickyheader"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent">
 
-    <include
-        layout="@layout/riepilogo_evento"
-        android:id="@+id/stickyheader"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp" />
+        <ListView
+            android:id="@+id/listview_attributi"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/stickyheader"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+        <include
+            layout="@layout/riepilogo_evento"
+            android:id="@+id/stickyheader"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp" />
+
+    </RelativeLayout>
+</FrameLayout>

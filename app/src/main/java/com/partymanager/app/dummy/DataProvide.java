@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.partymanager.app.EventiListFragment;
+import com.partymanager.app.Evento;
 import com.partymanager.app.MainActivity;
 
 import org.apache.http.HttpResponse;
@@ -45,6 +46,11 @@ public class DataProvide {
         downloadEvent(facebookId,context);
     }
 
+    public static void getAttributi (Context context, String eventoId){
+
+        loadJson("attributi", context);
+        downloadAttributi(eventoId, context);
+    }
 
     private static void loadJson(final String name,final Context context){
         new AsyncTask<Void, Void, String>() {
@@ -75,7 +81,10 @@ public class DataProvide {
             @Override
             protected void onPostExecute(String json_string) {
                 if (json_string!="error") {
-                    loadIntoEventiAdapter(json_string);
+                    if (name.equals("eventi"))
+                        loadIntoEventiAdapter(json_string);
+                    if (name.equals("attributi"))
+                        loadIntoAttributiAdapter(json_string);
                 }
             }
 
@@ -164,6 +173,56 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
+    private static void downloadAttributi(final String id,final Context context ) {
+        new AsyncTask<Void, Void, String>() {
+
+            /*@Override
+            protected void onPreExecute() {
+                Evento.progressBarVisible = true;
+                ((Activity) context).invalidateOptionsMenu();
+
+            }*/
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/getAttributi");
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                    nameValuePairs.add(new BasicNameValuePair("idEvento", id));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    //Execute HTTP Post Request
+                    HttpResponse response = httpclient.execute(httppost);
+                    String json_string = EntityUtils.toString(response.getEntity());
+                    Log.e("DATA_PROVIDE", json_string);
+
+                    return json_string;
+
+                } catch (ClientProtocolException e) {
+                    // TODO Auto-generated catch block
+                    //mDisplay.append("error");
+                    return "error";
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    String error = e.toString();
+                    Log.e("DATA_PROVIDE", error);
+                    //mDisplay.append("error");
+                    return "error";
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String json_string) {
+                saveJson(json_string, "attributi", context);
+                loadIntoAttributiAdapter(json_string);
+            }
+        }.execute(null, null, null);
+    }
+
     private static void loadIntoEventiAdapter(String json_string){
         DatiEventi.removeAll();
         try {
@@ -179,6 +238,24 @@ public class DataProvide {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+    private static void loadIntoAttributiAdapter(String json_string){
+        DatiAttributi.removeAll();
+        try {
+            JSONObject jsonRis = new JSONObject(json_string);
+            JSONArray jsonArray= jsonRis.getJSONArray("results");
+            for (int i=0;i<jsonArray.length();i++){
+                DatiAttributi.addItem(new DatiAttributi.Attributo(
+                        jsonArray.getJSONObject(i).getString("id_attributo"),
+                        jsonArray.getJSONObject(i).getString("domanda"),
+                        jsonArray.getJSONObject(i).getString("risposta"),
+                        jsonArray.getJSONObject(i).getString("template")
+                ));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("DEBUG ATTRIBUTI DOWNLOAD: ", "catch JSONException " + e);
         }
     }
 }

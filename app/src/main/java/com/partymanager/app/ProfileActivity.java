@@ -1,6 +1,7 @@
 package com.partymanager.app;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,6 +67,9 @@ public class ProfileActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getActionBar().hide();
 
         //Passaggio dati tra activity per click Profilo
         Bundle datipassati = getIntent().getExtras();
@@ -329,6 +334,9 @@ public class ProfileActivity extends Activity {
 
     private void onClickLogout() {
         view_profilo = 0;
+        foto_profilo.setVisibility(View.GONE);
+        textInstructionsOrLink.setText(R.string.instruction);
+        savePreferences("", "");
         Session session = Session.getActiveSession();
         if (!session.isClosed()) {
             session.closeAndClearTokenInformation();

@@ -110,7 +110,6 @@ public class Helper_Notifiche {
             nameValuePairs.add(new BasicNameValuePair("idCell", regid));
             nameValuePairs.add(new BasicNameValuePair("idFacebook", ID_FB));
             nameValuePairs.add(new BasicNameValuePair("username", Username));
-            //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             //Execute HTTP Post Request
@@ -118,7 +117,7 @@ public class Helper_Notifiche {
             String ris = EntityUtils.toString(response.getEntity());
 
 
-            Log.e(TAG, "risposta server: " + ris);
+            Log.e(TAG, "risposta server registrazione: " + ris);
 
             //mDisplay.append(response.toString());
         } catch (ClientProtocolException e) {

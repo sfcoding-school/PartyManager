@@ -10,20 +10,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.app.dummy.AttributiAdapter;
+import com.partymanager.app.dummy.DataProvide;
+import com.partymanager.app.dummy.DatiAttributi;
+import com.partymanager.app.dummy.DatiEventi;
+import com.partymanager.app.dummy.EventAdapter;
+import com.partymanager.app.helper.helperFacebook;
 
-public class Evento extends Fragment {
+public class Evento extends Fragment implements AbsListView.OnItemClickListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_PARAM3 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     private String mParam1; //Lista amici
     private String mParam2; //nome evento
-    private String mParam3; //id eventop
+    private String mParam3; //id evento
     private ImageButton bnt_friends;
 
 
@@ -34,13 +42,16 @@ public class Evento extends Fragment {
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
+
+
+
         return fragment;
     }
 
     public Evento() {
 
     }
-
+    AttributiAdapter aAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +61,13 @@ public class Evento extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
             mParam3 = getArguments().getString(ARG_PARAM3);
 
-            //Log.e("Evento TEST: ", mParam1 + " " + mParam2);
+            Log.e("Evento TEST: ", mParam1 + " " + mParam2 + " " + mParam3);
         }
+
+        aAdapter = new AttributiAdapter (getActivity(), DatiAttributi.ITEMS);
+
+        //if (mParam3 != null)
+        DataProvide.getAttributi(getActivity(), "1");
 
     }
 
@@ -67,26 +83,26 @@ public class Evento extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_evento, container, false);
+        View view = inflater.inflate(R.layout.fragment_evento, container, false);
 
+/*
         ActionBar actionBar = getActivity().getActionBar();
         if (actionBar != null) {
             actionBar.setTitle(mParam2);
         }
-
+*/
         //TEST
         prova = view.findViewById(R.id.stickyheader);
-        prova.setVisibility(View.VISIBLE);
-        listView = (ListView) view.findViewById(R.id.listview);
+        prova.setVisibility(View.INVISIBLE);
+
+        listView = (ListView) view.findViewById(R.id.listview_attributi);
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
 
         // Assign adapter to ListView
-        listView.setAdapter(adapter);
-
+        listView.setAdapter(aAdapter);
+/*
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -124,6 +140,7 @@ public class Evento extends Fragment {
                             if (currentLAstVisibileItem <= 11) {
                                 prova.setVisibility(View.VISIBLE);
                             }*/
+                            /*
                             if (prova.getVisibility() != View.VISIBLE) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, -prova.getHeight(), 0);
                                 anim.setDuration(100);
@@ -152,16 +169,16 @@ public class Evento extends Fragment {
             }
         });
         //END TEST
-
+        */
         return view;
     }
 
-
+/*
     @Override
     public void onResume() {
         super.onResume();
     }
-
+*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -176,5 +193,10 @@ public class Evento extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 }

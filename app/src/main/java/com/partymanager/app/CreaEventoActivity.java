@@ -277,8 +277,7 @@ public class CreaEventoActivity extends Activity {
                 } catch (ClientProtocolException e) {
                     Log.e("CreaEvento-sendToServer: ", "catch 1");
                 } catch (IOException e) {
-                    String error = e.toString();
-                    Log.e("CreaEvento-sendToServer: ", "catch 2 " + error);
+                    Log.e("CreaEvento-sendToServer: ", "catch 2 ");
                 }
                 return ris;
             }
@@ -287,7 +286,7 @@ public class CreaEventoActivity extends Activity {
             protected void onPostExecute(String result) {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                    if (!result.equals("fatto")) {
+                    if (!isInteger(result)) {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
                         alertDialogBuilder.setMessage("Problema nella creazione dell'evento.");
 
@@ -308,9 +307,18 @@ public class CreaEventoActivity extends Activity {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
                     } else {
-                        closeActivity(List, name);
+                        closeActivity(List, name, result);
                     }
                 }
+            }
+
+            private boolean isInteger(String s) {
+                try {
+                    Integer.parseInt(s);
+                } catch(NumberFormatException e) {
+                    return false;
+                }
+                return true;
             }
 
             @Override
@@ -330,10 +338,11 @@ public class CreaEventoActivity extends Activity {
         }.execute();
     }
 
-    private void closeActivity(String List, String nome_evento) {
+    private void closeActivity(String List, String nome_evento, String id_evento) {
         Intent intent = new Intent();
         intent.putExtra("listfriend", List);
         intent.putExtra("nome_evento", nome_evento);
+        intent.putExtra("id_evento", id_evento);
         setResult(0, intent);
 
         finish();

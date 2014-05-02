@@ -55,8 +55,7 @@ public class MainActivity extends Activity
             if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
-                finish();
-            }else {
+            }
                 //Fine controllo sessione
 
 
@@ -69,7 +68,7 @@ public class MainActivity extends Activity
                 mNavigationDrawerFragment.setUp(
                         R.id.navigation_drawer,
                         (DrawerLayout) findViewById(R.id.drawer_layout));
-            }
+
 /*
 
         if (savedInstanceState == null) {
@@ -139,7 +138,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if ( mNavigationDrawerFragment!= null && !mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -176,8 +175,8 @@ public class MainActivity extends Activity
         //DEBUG ONLY
         if (id == R.id.evento) {
             FragmentManager fragmentManager = getFragmentManager();
-            Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
-            mTitle = "prova evento";
+            //Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
+            Fragment fragment = provaFragment.newInstance("niente", "Prova Evento 1");
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
@@ -197,10 +196,11 @@ public class MainActivity extends Activity
             if (data != null) {
                 String ListFriends = data.getStringExtra("listfriend");
                 String nome_evento = data.getStringExtra("nome_evento");
-                Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento);
+                String id_evento = data.getStringExtra("id_evento");
+                Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento + " " + id_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
-                Fragment fragment = Evento.newInstance(ListFriends, nome_evento, "id");
+                Fragment fragment = Evento.newInstance(ListFriends, nome_evento, id_evento);
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)

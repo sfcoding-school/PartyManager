@@ -1,42 +1,22 @@
 package com.partymanager.app;
 
-import android.content.Context;
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.partymanager.R;
-import com.partymanager.app.dummy.*;
-import com.partymanager.app.helper.helperFacebook;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.partymanager.app.dummy.AttributiAdapter;
+import com.partymanager.app.dummy.DataProvide;
+import com.partymanager.app.dummy.DatiAttributi;
+import com.partymanager.app.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -44,17 +24,15 @@ import java.util.List;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p />
- * Activities containing this fragment MUST implement the callback
+ * Activities containing this fragment MUST implement the
  * interface.
  */
-public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class provaFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private static ProgressBar progressBarLarge;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,21 +43,21 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     /**
      * The fragment's ListView/GridView.
      */
-    private ListView listView;
+    private AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private EventAdapter eAdapter;
+    private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static EventiListFragment newInstance() {
-        EventiListFragment fragment = new EventiListFragment();
-        //Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        //fragment.setArguments(args);
+    public static provaFragment newInstance(String param1, String param2) {
+        provaFragment fragment = new provaFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -87,10 +65,9 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-
-    public EventiListFragment() {
+    public provaFragment() {
     }
-
+    AttributiAdapter aAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,66 +77,41 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
         // TODO: Change Adapter to display your content
-        eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
+        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+                R.layout.attributi,R.id.txt_domanda, DummyContent.ITEMS);
+        aAdapter = new AttributiAdapter(getActivity(), DatiAttributi.ITEMS);
 
-        String idFacebbok = helperFacebook.getFacebookId(getActivity());
-        if (idFacebbok!= null)
-            DataProvide.getEvent(getActivity(), idFacebbok);
-        /*
-        mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DatiEventi.ITEMS);
-        */
-       // ProgressBar progressBarLarge = (ProgressBar) getActivity().findViewById(R.id.eventProgressBarLarge);
-        //ProgressBar progressBarSmall = (ProgressBar) getActivity().findViewById(R.id.progressBarSmall);
-
-        //progressBarLarge.setVisibility(View.VISIBLE);
-       // DataProvide.getEvent(getActivity(), progressBarLarge, progressBarSmall);
-
-        //MainActivity.progressBarVisible = false;
-
-
+        //if (mParam3 != null)
+        DataProvide.getAttributi(getActivity(), "1");
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_eventilist_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_prova_list, container, false);
 
         // Set the adapter
-        listView = (ListView) view.findViewById(R.id.eventList);
-        //((AdapterView<ListAdapter>) mListView).setAdapter(eAdapter);
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        View Prova = view.findViewById(R.id.stickyheader);
+        Prova.setVisibility(view.GONE);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        listView.setOnItemClickListener(this);
-
-
-
-        listView.setAdapter(eAdapter);
-
-
-        //progressBarLarge.setVisibility(View.INVISIBLE);
-        //getActivity().invalidateOptionsMenu();
+        mListView.setOnItemClickListener(this);
 
         return view;
     }
 
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        /*
-        try {
+        /*try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                 + " must implement OnFragmentInteractionListener");
-        }
-        */
+        }*/
     }
 
     @Override
@@ -174,7 +126,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DatiEventi.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -184,7 +136,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-        View emptyView = listView.getEmptyView();
+        View emptyView = mListView.getEmptyView();
 
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
