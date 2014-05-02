@@ -11,10 +11,13 @@ import com.partymanager.app.*;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -46,11 +49,11 @@ public class GcmIntentService extends IntentService {
                  */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                Log.e(Helper_Notifiche.TAG, "Send error: " + extras.toString());
+                //sendNotification("Send error: " + extras.toString());
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
+                Log.e(Helper_Notifiche.TAG, "Deleted messages on server: " + extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
@@ -65,9 +68,16 @@ public class GcmIntentService extends IntentService {
                         }
                     }
                     */
-                Log.i(Helper_Notifiche.TAG, "Completed work @ " + SystemClock.elapsedRealtime());
+               // Log.i(Helper_Notifiche.TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification("Received: " + extras.getString("prova"));
+                String s = extras.getString("type").toString();
+                if (s.equals("newEvent")) {
+                    sendNotification("Nuovo Evento", extras.getString("admin")+" ti ha invitato a " + extras.getString("name"));
+                }else if (s.equals("test")){
+                    sendNotification("TEST", extras.getString("msg"));
+                    Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
+                }
+                //sendNotification("Received: " + extras.getString("prova"));
                 Log.i(Helper_Notifiche.TAG, "Received: " + extras.toString());
             }
         }
@@ -78,7 +88,7 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(String title, String msg) {
 
 
         mNotificationManager = (NotificationManager)
@@ -87,13 +97,19 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
+        //Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.common_signin_btn_icon_dark)
-                        .setContentTitle("GCM Notification")
+                        .setContentTitle(title)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
-                        .setContentText(msg);
+
+                        .setContentText(msg)
+                        .setDefaults(android.app.Notification.DEFAULT_ALL)
+                        //.setSound(alarmSound);
+                        ;
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

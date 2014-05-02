@@ -23,7 +23,7 @@ public class Friends {
         this.code = code;
         this.name = name;
         this.selected = selected;
-        getFacebookProfilePicture();
+        //getFacebookProfilePicture();
     }
 
     public String getCode() {
