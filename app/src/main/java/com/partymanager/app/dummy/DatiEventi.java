@@ -1,5 +1,6 @@
 package com.partymanager.app.dummy;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -59,6 +60,13 @@ public class DatiEventi {
     }
     public static void removeAll(){
         ITEMS.removeAll(ITEMS);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    public static EventAdapter init(Context context, String id) {
+        eAdapter = new EventAdapter(context, DatiEventi.ITEMS);
+        DataProvide.getEvent(context, id);
+        return eAdapter;
     }
 
     public static void addItem(Evento item) {

@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ProgressBar;
 
-import com.partymanager.app.EventiListFragment;
-import com.partymanager.app.Evento;
 import com.partymanager.app.MainActivity;
 import com.partymanager.app.helper.HelperDataParser;
 
@@ -32,7 +29,6 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -43,20 +39,19 @@ import java.util.Locale;
 public class DataProvide {
 
 
-
-    public static void getEvent (Context context, String facebookId){
+    public static void getEvent(Context context, String facebookId) {
 
         loadJson("eventi", context);
         downloadEvent(facebookId,context);
     }
 
-    public static void getAttributi (Context context, String eventoId){
+    public static void getAttributi(Context context, String eventoId) {
 
         loadJson("attributi", context);
         downloadAttributi(eventoId, context);
     }
 
-    private static void loadJson(final String name,final Context context){
+    private static void loadJson(final String name, final Context context) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -84,7 +79,7 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(String json_string) {
-                if (json_string!="error") {
+                if (json_string != "error") {
                     if (name.equals("eventi"))
                         loadIntoEventiAdapter(json_string);
                     if (name.equals("attributi"))
@@ -96,7 +91,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void saveJson(final String json_string, final String name, final Context context){
+    private static void saveJson(final String json_string, final String name, final Context context) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -118,7 +113,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadEvent(final String id,final Context context ) {
+    private static void downloadEvent(final String id, final Context context) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -180,7 +175,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadAttributi(final String id,final Context context ) {
+    private static void downloadAttributi(final String id, final Context context) {
         new AsyncTask<Void, Void, String>() {
 
             /*@Override
@@ -230,12 +225,12 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void loadIntoEventiAdapter(String json_string){
+    private static void loadIntoEventiAdapter(String json_string) {
         DatiEventi.removeAll();
         try {
             JSONObject jsonRis = new JSONObject(json_string);
-            JSONArray jsonArray= jsonRis.getJSONArray("results");
-            for (int i=0;i<jsonArray.length();i++){
+            JSONArray jsonArray = jsonRis.getJSONArray("results");
+            for (int i = 0; i < jsonArray.length(); i++) {
                 String date = jsonArray.getJSONObject(i).getString("data");
                 GregorianCalendar gregCalendar = null;
                 if (date != "null"){
@@ -246,18 +241,20 @@ public class DataProvide {
                         jsonArray.getJSONObject(i).getString("nome_evento"),
                         "content",
                         gregCalendar
+
                 ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    private static void loadIntoAttributiAdapter(String json_string){
+
+    private static void loadIntoAttributiAdapter(String json_string) {
         DatiAttributi.removeAll();
         try {
             JSONObject jsonRis = new JSONObject(json_string);
-            JSONArray jsonArray= jsonRis.getJSONArray("results");
-            for (int i=0;i<jsonArray.length();i++){
+            JSONArray jsonArray = jsonRis.getJSONArray("results");
+            for (int i = 0; i < jsonArray.length(); i++) {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),

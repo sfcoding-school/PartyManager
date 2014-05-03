@@ -31,5 +31,10 @@
     <string name="luogo">Luogo</string>
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
+    <string-array name="spinner_list">
+        <item>Data</item>
+        <item>Luogo</item>
+        <item>Personalizzata</item>
+    </string-array>
 
 </resources>
