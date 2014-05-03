@@ -17,7 +17,6 @@ import com.facebook.SessionState;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.partymanager.R;
-import com.partymanager.app.EventiListFragment;
 
 
 public class MainActivity extends Activity
@@ -31,10 +30,12 @@ public class MainActivity extends Activity
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private FragmentManager fragmentManager;
+
+    private boolean  noMenuActionBar = false;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    public static CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,7 @@ public class MainActivity extends Activity
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, fragment, "main")
                 .commit();
     }
 
@@ -146,8 +147,11 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-
-            getMenuInflater().inflate(R.menu.main, menu);
+            if (!noMenuActionBar) {
+                getMenuInflater().inflate(R.menu.main, menu);
+            }else{
+                getMenuInflater().inflate(R.menu.main_no_menu, menu);
+            }
             MenuItem prova = menu.findItem(R.id.progressBarSmall);
             prova.setVisible(progressBarVisible);
             restoreActionBar();
@@ -231,11 +235,26 @@ public class MainActivity extends Activity
     @Override
     public void onFragmentInteraction(String id, String name){
         mTitle = name;
-        invalidateOptionsMenu();
+        noMenuActionBar = true;
         Fragment fragment = Evento.newInstance(null, null, id);
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, fragment, String.valueOf(mTitle))
+                .addToBackStack("evento")
                 .commit();
 
+        fragmentManager.addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    public void onBackStackChanged() {
+                        if (fragmentManager.getBackStackEntryCount()==0 || fragmentManager.getBackStackEntryAt(0).getName() != "evento"){
+                            noMenuActionBar = false;
+                        }
+                        invalidateOptionsMenu();
+                    }
+
+                }
+        );
+
     }
+
+
 }

@@ -154,6 +154,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        setHasOptionsMenu(true);
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -163,11 +164,21 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
     }
 
+
     @Override
         public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Set title
+        MainActivity.mTitle = "Eventi";
+
+    }
+
 
 
     @Override
