@@ -5,14 +5,19 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.partymanager.R;
 
@@ -36,6 +41,8 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     View riepilogo;
     int mLastFirstVisibleItem = 0;
     int mLastLastVisibleItem = 0;
+    Button btn_Domanda;
+    Button btn_sino;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,10 +73,8 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             Log.e("Evento TEST: ", mParam1 + " " + mParam2 + " " + mParam3);
         }
 
-        eAdapter = DatiAttributi.init(getActivity(), "1");
+        eAdapter = DatiAttributi.init(getActivity(), mParam3);
     }
-
-    Spinner domanda;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,13 +84,40 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         listView = (ListView) view.findViewById(R.id.eventList);
         listView.setOnItemClickListener(this);
         listView.setAdapter(eAdapter);
-
-        domanda = (Spinner) view.findViewById(R.id.spinner);
-        domanda.setPrompt("Nuova Domanda");
-
+        btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
+        btn_sino = (Button) view.findViewById(R.id.btn_sino);
         riepilogo = view.findViewById(R.id.stickyheader);
-
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
+
+        btn_Domanda.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                changeAlpha(btn_Domanda);
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), btn_Domanda);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(getActivity(), "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        return true;
+                    }
+                });
+
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu popupMenu) {
+                        changeAlpha(btn_Domanda);
+                    }
+                });
+
+                popup.show();
+            }
+        });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
@@ -153,7 +185,22 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             }
         });
 
+        btn_sino.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                changeAlpha(btn_sino);
+            }
+        });
+
         return view;
+    }
+
+    private void changeAlpha(Button btn){
+        float alpha = btn.getAlpha();
+        if (Float.compare(alpha, (float) 0.7) == 0){
+            btn.setAlpha((float) 0.9);
+        } else {
+            btn.setAlpha((float) 0.7); }
+
     }
 
     @Override
