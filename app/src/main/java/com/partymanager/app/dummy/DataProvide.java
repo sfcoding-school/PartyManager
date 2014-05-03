@@ -42,7 +42,7 @@ public class DataProvide {
 
     public static void getEvent (Context context, String facebookId){
 
-        loadJson("eventi", context);
+        //loadJson("eventi", context);
         downloadEvent(facebookId,context);
     }
 
@@ -126,7 +126,10 @@ public class DataProvide {
 
             @Override
             protected String doInBackground(Void... params) {
-
+                /*
+                for (int i=0;i<100000;i++){
+                    int p = i*3+10;
+                }*/
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/getMyEvent");
 
@@ -163,7 +166,7 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(String json_string) {
-                saveJson(json_string, "eventi", context);
+                //saveJson(json_string, "eventi", context);
                 loadIntoEventiAdapter(json_string);
 
                 MainActivity.progressBarVisible = false;

@@ -41,7 +41,7 @@ public class DatiEventi {
      * An array of sample (dummy) items.
      */
     public static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
-
+    public static EventAdapter eAdapter;
     /**
      * A map of sample (dummy) items, by ID.
      */
@@ -63,6 +63,7 @@ public class DatiEventi {
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
+        eAdapter.notifyDataSetChanged();
         //ITEM_MAP.put(item.id, item);
     }
 
