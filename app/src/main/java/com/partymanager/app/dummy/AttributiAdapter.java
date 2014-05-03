@@ -9,10 +9,7 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by Ulisse on 5/2/14.
@@ -21,8 +18,6 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
     public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo) {
         super(context, R.layout.attributi, Attributo);
-
-
     }
 
     @Override
@@ -34,20 +29,12 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi, parent, false);
         }
 
-        // Lookup view for data population
         TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);
         TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
-
-
-        //TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-
-        // Populate the data into the template view using the data object
-
 
         name.setText(attr.domanda);
         details.setText(attr.risposta);
 
-        // Return the completed view to render on screen
         return convertView;
     }
 }

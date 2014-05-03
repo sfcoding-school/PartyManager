@@ -87,42 +87,18 @@ public class provaFragment extends Fragment implements AbsListView.OnItemClickLi
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-       // DataProvide.getAttributi(getActivity(), "1");
-        // TODO: Change Adapter to display your content
 
-
-        eAdapter = new AttributiAdapter(getActivity(), DatiAttributi.ITEMS);
-        DataProvide.getAttributi(getActivity(), "1");
-
-        /*
-        eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
-
-        String idFacebbok = helperFacebook.getFacebookId(getActivity());
-        if (idFacebbok!= null)
-            DataProvide.getEvent(getActivity(), idFacebbok);
-        */
+        eAdapter = DatiAttributi.init(getActivity(), "1");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eventilist_list2_prova, container, false);
-        // Set the adapter
+
         listView = (ListView) view.findViewById(R.id.eventList);
-        //((AdapterView<ListAdapter>) mListView).setAdapter(eAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
         listView.setOnItemClickListener(this);
-
-        //per il debug
-        listView.setDivider(new ColorDrawable(Color.parseColor("#455600")));//divider gradient color can also be set
-        listView.setDividerHeight(5);
-
         listView.setAdapter(eAdapter);
-
-
-        // Set the adapter
-        Toast.makeText(getActivity(), "sono in Evento", Toast.LENGTH_LONG).show();
 
         return view;
     }
