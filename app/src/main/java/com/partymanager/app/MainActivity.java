@@ -17,10 +17,11 @@ import com.facebook.SessionState;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.partymanager.R;
+import com.partymanager.app.EventiListFragment;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, EventiListFragment.OnFragmentInteractionListener{
 
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
+    private FragmentManager fragmentManager;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -37,6 +39,8 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fragmentManager = getFragmentManager();
 
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -85,7 +89,7 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
+
         //FragmentTransaction fTransaction =
         Fragment fragment = null;
         switch (position) {
@@ -174,7 +178,6 @@ public class MainActivity extends Activity
         }
         //DEBUG ONLY
         if (id == R.id.evento) {
-            FragmentManager fragmentManager = getFragmentManager();
             //Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
             Fragment fragment = provaFragment.newInstance();
             fragmentManager.beginTransaction()
@@ -225,4 +228,14 @@ public class MainActivity extends Activity
         return true;
     }
 
+    @Override
+    public void onFragmentInteraction(String id, String name){
+        mTitle = name;
+        invalidateOptionsMenu();
+        Fragment fragment = Evento.newInstance(null, null, id);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+
+    }
 }

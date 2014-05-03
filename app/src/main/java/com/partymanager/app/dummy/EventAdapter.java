@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.app.helper.HelperDataParser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,12 +54,18 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
 
         // Populate the data into the template view using the data object
 
-
         name.setText(evento.name);
         details.setText(evento.details);
-        giornoN.setText(dfgiornoN.format(evento.date.getTime()));
-        giornoS.setText(dfgiornoS.format(evento.date.getTime()));
-        mese.setText(dfMese.format(evento.date.getTime()));
+
+        if (evento.date != null) {
+            giornoN.setText(HelperDataParser.getGiornoLettere(evento.date));
+            giornoS.setText(HelperDataParser.getGiornoLettere(evento.date));
+            mese.setText(HelperDataParser.getMese(evento.date));
+        }else{
+            giornoN.setText("");
+            giornoS.setText("");
+            mese.setText("");
+        }
 
         // Return the completed view to render on screen
         return convertView;

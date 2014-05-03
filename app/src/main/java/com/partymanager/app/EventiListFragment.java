@@ -151,19 +151,17 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        /*
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                 + " must implement OnFragmentInteractionListener");
         }
-        */
+
     }
 
     @Override
-    public void onDetach() {
+        public void onDetach() {
         super.onDetach();
         mListener = null;
     }
@@ -174,7 +172,9 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DatiEventi.ITEMS.get(position).id);
+            String idEvento = Integer.toString(DatiEventi.ITEMS.get(position).id);
+            String name = DatiEventi.ITEMS.get(position).name;
+            mListener.onFragmentInteraction(idEvento, name);
         }
     }
 
@@ -201,9 +201,9 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     * "http://developer.android.com/training/basics/fragments/communicating.html"
     * >Communicating with Other Fragments</a> for more information.
     */
-    public interface OnFragmentInteractionListener {
+    public static interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(String id, String name);
     }
 
 }

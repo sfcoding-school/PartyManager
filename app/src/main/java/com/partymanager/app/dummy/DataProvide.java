@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import com.partymanager.app.EventiListFragment;
 import com.partymanager.app.Evento;
 import com.partymanager.app.MainActivity;
+import com.partymanager.app.helper.HelperDataParser;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -28,10 +29,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by luca on 4/26/14.
@@ -42,7 +46,7 @@ public class DataProvide {
 
     public static void getEvent (Context context, String facebookId){
 
-        //loadJson("eventi", context);
+        loadJson("eventi", context);
         downloadEvent(facebookId,context);
     }
 
@@ -166,7 +170,7 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(String json_string) {
-                //saveJson(json_string, "eventi", context);
+                saveJson(json_string, "eventi", context);
                 loadIntoEventiAdapter(json_string);
 
                 MainActivity.progressBarVisible = false;
@@ -232,11 +236,16 @@ public class DataProvide {
             JSONObject jsonRis = new JSONObject(json_string);
             JSONArray jsonArray= jsonRis.getJSONArray("results");
             for (int i=0;i<jsonArray.length();i++){
+                String date = jsonArray.getJSONObject(i).getString("data");
+                GregorianCalendar gregCalendar = null;
+                if (date != "null"){
+                    gregCalendar = HelperDataParser.getCalFromString(date);
+                }
                 DatiEventi.addItem(new DatiEventi.Evento(
-                        jsonArray.getJSONObject(i).getString("id_evento"),
+                        jsonArray.getJSONObject(i).getInt("id_evento"),
                         jsonArray.getJSONObject(i).getString("nome_evento"),
                         "content",
-                         new GregorianCalendar(2014, 3, 23)
+                        gregCalendar
                 ));
             }
         } catch (JSONException e) {

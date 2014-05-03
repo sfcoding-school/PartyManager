@@ -71,12 +71,12 @@ public class DatiEventi {
      * A dummy item representing a piece of content.
      */
     public static class Evento {
-        public String id;
+        public int id;
         public String name;
         public String details;
         public GregorianCalendar date;
 
-        public Evento (String id, String name, String details, GregorianCalendar date) {
+        public Evento (int id, String name, String details, GregorianCalendar date) {
             this.id = id;
             this.name = name;
             this.details = details;
