@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -21,6 +22,9 @@ import com.partymanager.R;
 import com.partymanager.app.dummy.AttributiAdapter;
 import com.partymanager.app.dummy.DatiAttributi;
 import com.partymanager.app.dummy.DummyContent;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Evento extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -80,7 +84,14 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
 
         listView = (ListView) view.findViewById(R.id.eventList);
         listView.setOnItemClickListener(this);
-        listView.setAdapter(eAdapter);
+
+        //TEST
+        String [] my_array = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, my_array);
+        listView.setAdapter(adapter);
+        //TEST
+
+        //listView.setAdapter(eAdapter);
         btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
         btn_sino = (Button) view.findViewById(R.id.btn_sino);
         riepilogo = view.findViewById(R.id.stickyheader);
@@ -120,13 +131,9 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
 
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int first, int vible, int total) {
-
-                Log.e("a", "scrolling stopped...");
+/*                if (scrollState == 0)
+                    Log.i("a", "scrolling stopped...");
+>>>>>>> 2d0219f2479f15f80c5e990046ecf27f1a2a5b00
 
                 if (view.getId() == listView.getId()) {
 
@@ -145,9 +152,56 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                                 riepilogo.setVisibility(View.GONE);
                             }
 
+<<<<<<< HEAD
 
                         } else if (first < mLastFirstVisibleItem) {
                             Log.e("a", "scrolling verso su...");
+=======
+                            Log.i("a", "scrolling verso giu...");
+                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+
+
+                            if (riepilogo.getVisibility() != View.VISIBLE) {
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
+                                anim.setDuration(100);
+                                anim.setFillAfter(false);
+                                riepilogo.startAnimation(anim);
+                                riepilogo.setVisibility(View.VISIBLE);
+                            }
+                            Log.i("a", "scrolling verso su...");
+                        }
+                    }
+
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                    mLastLastVisibleItem = currentLAstVisibileItem;
+
+                }*/
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if (absListView.getId() == listView.getId()) {
+                    final int currentFirstVisibleItem = firstVisibleItem;
+                    final int currentLAstVisibileItem = listView.getLastVisiblePosition();
+                    if (currentFirstVisibleItem == 1) {
+                        riepilogo.setVisibility(View.VISIBLE);
+
+                    } else {
+                        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+
+                            //prova.setVisibility(View.VISIBLE);
+                            if (riepilogo.getVisibility() != View.GONE) {
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -riepilogo.getHeight());
+                                anim.setDuration(500);
+                                anim.setFillAfter(false);
+                                riepilogo.startAnimation(anim);
+                                riepilogo.setVisibility(View.GONE);
+                            }
+
+                            Log.i("a", "scrolling verso giu...");
+                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
 
                             if (riepilogo.getVisibility() != View.VISIBLE) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
@@ -159,12 +213,14 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                         }
                     }
 
-                    mLastFirstVisibleItem = first;
-                    mLastLastVisibleItem = first+vible;
+                    mLastFirstVisibleItem = firstVisibleItem;
+                    mLastLastVisibleItem = firstVisibleItem+visibleItemCount;
 
                 }
+
             }
         });
+
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -222,3 +278,14 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     }
 
 }
+                            /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());
+                                anim.setDuration(500);
+                                anim.setFillAfter(false);
+                                prova.startAnimation(anim);
+                                prova.setVisibility(View.GONE);
+                            }
+                            if (currentLAstVisibileItem <= 11) {
+                                prova.setVisibility(View.VISIBLE);
+                            }*/
+

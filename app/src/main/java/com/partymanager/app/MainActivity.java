@@ -186,16 +186,7 @@ public class MainActivity extends Activity
             startActivityForResult(intent, 0);
             return true;
         }
-        //DEBUG ONLY
-        if (id == R.id.evento) {
-            //Fragment fragment = Evento.newInstance("niente", "Prova Evento 1", "id");
-            Fragment fragment = Evento.newInstance(null, null, null);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit();
-            return true;
-        }
-        //FINE TEST ZONE
+
         return super.onOptionsItemSelected(item);
     }
 

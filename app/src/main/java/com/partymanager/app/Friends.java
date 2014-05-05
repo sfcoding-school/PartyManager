@@ -16,13 +16,15 @@ public class Friends {
     String code = null;
     String name = null;
     boolean selected = false;
+    boolean appInstalled;
     Bitmap foto;
 
-    public Friends(String code, String name, boolean selected) {
+    public Friends(String code, String name, boolean selected, boolean appI) {
         super();
         this.code = code;
         this.name = name;
         this.selected = selected;
+        this.appInstalled = appI;
         //getFacebookProfilePicture();
     }
 
