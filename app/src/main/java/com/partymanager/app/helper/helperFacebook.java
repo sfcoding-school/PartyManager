@@ -11,6 +11,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.widget.WebDialog;
+import com.partymanager.app.CreaEventoActivity;
 import com.partymanager.app.Friends;
 import com.partymanager.app.ProfileActivity;
 
@@ -98,7 +99,7 @@ public class helperFacebook {
                     }
 
                 }).build();
-        return requestsDialog;
+        return  requestsDialog;
     }
 
 }

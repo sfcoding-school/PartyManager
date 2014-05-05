@@ -2,6 +2,7 @@ package com.partymanager.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -239,15 +241,16 @@ public class CreaEventoActivity extends Activity {
                         Log.e("TESTJSON: ", id_to_invite.toString());
 
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
-
-                        // ?????
-                        WebDialog test = helperFacebook.inviteFriends(getApplicationContext(), id_to_invite.toString());
-                        //test.show();
-                        Log.e("TESTJSON: ", test.toString());
+                        sendInviti(id_to_invite.toString());
                     }
                 }
             }
         });
+    }
+
+    private void sendInviti(String temp){
+        WebDialog f  = helperFacebook.inviteFriends(this, temp);
+        f.show();
     }
 
     private SharedPreferences getPreferences() {
