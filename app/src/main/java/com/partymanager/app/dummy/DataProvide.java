@@ -178,12 +178,12 @@ public class DataProvide {
     private static void downloadAttributi(final String id, final Context context) {
         new AsyncTask<Void, Void, String>() {
 
-            /*@Override
+            @Override
             protected void onPreExecute() {
-                Evento.progressBarVisible = true;
+                MainActivity.progressBarVisible = true;
                 ((Activity) context).invalidateOptionsMenu();
 
-            }*/
+            }
 
             @Override
             protected String doInBackground(Void... params) {
@@ -221,6 +221,9 @@ public class DataProvide {
             protected void onPostExecute(String json_string) {
                 saveJson(json_string, "attributi", context);
                 loadIntoAttributiAdapter(json_string);
+
+                MainActivity.progressBarVisible = false;
+                ((Activity) context).invalidateOptionsMenu();
             }
         }.execute(null, null, null);
     }
@@ -251,6 +254,7 @@ public class DataProvide {
 
     private static void loadIntoAttributiAdapter(String json_string) {
         DatiAttributi.removeAll();
+        //campo template: data, luogoI, luogoE
         try {
             JSONObject jsonRis = new JSONObject(json_string);
             JSONArray jsonArray = jsonRis.getJSONArray("results");
