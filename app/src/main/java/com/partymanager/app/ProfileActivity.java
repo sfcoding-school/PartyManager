@@ -1,7 +1,6 @@
 package com.partymanager.app;
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -241,7 +240,7 @@ public class ProfileActivity extends Activity {
                 Context.MODE_PRIVATE);
     }
 
-    private void savePreferences(String username_t, String id_fb_t){
+    private void savePreferences(String username_t, String id_fb_t) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(REG_USERNAME, username_t);
         editor.putString(REG_ID, id_fb_t);

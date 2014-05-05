@@ -1,8 +1,8 @@
 package com.partymanager.app;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,12 +15,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.partymanager.R;
-
 import com.partymanager.app.dummy.AttributiAdapter;
 import com.partymanager.app.dummy.DatiAttributi;
 import com.partymanager.app.dummy.DummyContent;
@@ -194,13 +191,13 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         return view;
     }
 
-    private void changeAlpha(Button btn){
+    private void changeAlpha(Button btn) {
         float alpha = btn.getAlpha();
-        if (Float.compare(alpha, (float) 0.7) == 0){
+        if (Float.compare(alpha, (float) 0.7) == 0) {
             btn.setAlpha((float) 0.9);
         } else {
-            btn.setAlpha((float) 0.7); }
-
+            btn.setAlpha((float) 0.7);
+        }
     }
 
     @Override
