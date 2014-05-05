@@ -3,8 +3,14 @@ package com.partymanager.app.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
 import com.partymanager.app.Friends;
 import com.partymanager.app.ProfileActivity;
 
@@ -50,4 +56,50 @@ public class helperFacebook {
             }
         }
     }
+
+
+    public static void inviteFriends(final Context context, String friendsTo){
+
+        Bundle parameters = new Bundle();
+        parameters.putString("to", friendsTo);
+        parameters.putString( "message", "Use my app!");
+
+        WebDialog requestsDialog = (
+                new WebDialog.RequestsDialogBuilder(context,
+                        Session.getActiveSession(),
+                        parameters))
+                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+
+                    @Override
+                    public void onComplete(Bundle values,
+                                           FacebookException error) {
+                        if (error != null) {
+                            if (error instanceof FacebookOperationCanceledException) {
+                                Toast.makeText(context,
+                                        "Request cancelled",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context,
+                                        "Network Error",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            final String requestId = values.getString("request");
+                            if (requestId != null) {
+                                Toast.makeText(context,
+                                        "Request sent",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context,
+                                        "Request cancelled",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                }).build();
+        requestsDialog.show();
+    }
+
 }
+

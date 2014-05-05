@@ -11,9 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.android.Facebook;
+import com.facebook.widget.WebDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.partymanager.R;
@@ -60,6 +65,8 @@ public class MainActivity extends Activity
             if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
+            }else{
+                Log.e("FACEBOOK-SDK", session.getAccessToken());
             }
                 //Fine controllo sessione
 
@@ -82,8 +89,6 @@ public class MainActivity extends Activity
         }
 */
             //mDisplay = (TextView) findViewById(R.id.pp);
-
-
         }
     }
 
@@ -112,6 +117,7 @@ public class MainActivity extends Activity
                 .replace(R.id.container, fragment, "main")
                 .commit();
     }
+
 
 
     /*public void onSectionAttached(int number) {
