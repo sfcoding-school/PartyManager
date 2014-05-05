@@ -15,12 +15,6 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
-    <item android:id="@+id/evento"
-        android:title="DEBUG: EVENTO"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-
     <item android:id="@+id/progressBarSmall"
         android:actionLayout="@layout/progressbar_small"
         android:menuCategory="container"

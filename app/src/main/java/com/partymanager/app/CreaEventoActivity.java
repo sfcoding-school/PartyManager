@@ -123,10 +123,14 @@ public class CreaEventoActivity extends Activity {
             @Override
             public void onCompleted(Response response) {
                 friends = getResults(response);
-
                 friendsList = new ArrayList<Friends>();
+
                 for (GraphUser user : friends) {
-                    Friends friend = new Friends(user.getId(), user.getName(), false);
+                    Boolean install = false;
+                    if (user.getProperty("installed") != null && user.getProperty("installed").equals("true"))
+                        install = true;
+
+                    Friends friend = new Friends(user.getId(), user.getName(), false, install);
                     friendsList.add(friend);
                 }
 
@@ -146,7 +150,7 @@ public class CreaEventoActivity extends Activity {
         Request request = Request.newGraphPathRequest(session, "me/friends", null);
 
         Set<String> fields = new HashSet<String>();
-        String[] requiredFields = new String[]{"id", "name", "picture"};
+        String[] requiredFields = new String[]{"id", "name", "installed"};
         fields.addAll(Arrays.asList(requiredFields));
 
         Bundle parameters = request.getParameters();
