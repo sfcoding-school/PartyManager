@@ -15,17 +15,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,7 +31,10 @@ import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.WebDialog;
 import com.partymanager.R;
+import com.partymanager.app.dummy.FbFriendsAdapter;
+import com.partymanager.app.helper.helperFacebook;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -69,13 +65,14 @@ public class CreaEventoActivity extends Activity {
     ProgressBar pb;
 
     ArrayList<Friends> friendList;
-    MyCustomAdapter dataAdapter = null;
+    FbFriendsAdapter dataAdapter = null;
     ArrayList<Friends> friendsList;
     List<GraphUser> friends;
     List<Friends> finali = null;
     NetworkInfo networkInfo;
     ArrayList<String> id_toSend;
     public final String REG_ID = "reg_id";
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +89,7 @@ public class CreaEventoActivity extends Activity {
         pb = (ProgressBar) findViewById(R.id.progressBar_creaEvento);
         pb.setVisibility(ProgressBar.VISIBLE);
 
-        //Per controllo internet
+        //setto networkInfo per controllo accesso a internet
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connMgr.getActiveNetworkInfo();
@@ -100,7 +97,7 @@ public class CreaEventoActivity extends Activity {
         //Controllo sessione FB
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
-            //se c'è la sessione richiedo subito la lista amici
+            //se c'è la sessione e internet accessibile richiedo subito la lista amici
             if (networkInfo != null && networkInfo.isConnected()) {
                 requestMyAppFacebookFriends(session);
             } else {
@@ -109,8 +106,6 @@ public class CreaEventoActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "Problema sessione FB", Toast.LENGTH_LONG).show();
         }
-
-        finali = new ArrayList<Friends>();
 
         updateView();
     }
@@ -126,8 +121,9 @@ public class CreaEventoActivity extends Activity {
                 friendsList = new ArrayList<Friends>();
 
                 for (GraphUser user : friends) {
+                    //controllo chi ha l'app installata
                     Boolean install = false;
-                    if (user.getProperty("installed") != null && user.getProperty("installed").toString().equals("true")){
+                    if (user.getProperty("installed") != null && user.getProperty("installed").toString().equals("true")) {
                         install = true;
                     }
 
@@ -137,8 +133,7 @@ public class CreaEventoActivity extends Activity {
 
                 pb.setVisibility(ProgressBar.INVISIBLE);
 
-                dataAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, friendsList);
-                // Assign adapter to ListView
+                dataAdapter = new FbFriendsAdapter(CreaEventoActivity.this, container_friends, inputSearch, R.layout.fb_friends, friendsList);
                 listView.setAdapter(dataAdapter);
                 friendList = dataAdapter.friendList;
 
@@ -171,34 +166,24 @@ public class CreaEventoActivity extends Activity {
 
     private void updateView() {
 
-        //Event Listener
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                //Friends friends1 = (Friends) parent.getItemAtPosition(position);
-            }
-        });
-
+        //Listener EditText per ricerca amici
         inputSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                if ((networkInfo != null && networkInfo.isConnected())) {
 
-                    // When user changed the Text
-                    int textlength = cs.length();
-                    ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
-                    if (friendList != null && friendList.size() > 0) {
-                        for (Friends friends1 : friendList) {
-                            if (textlength <= friends1.getName().length()) {
-                                if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
-                                    tempArrayList.add(friends1);
-                                }
+                int textlength = cs.length();
+                ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
+                if (friendList != null && friendList.size() > 0) {
+                    for (Friends friends1 : friendList) {
+                        if (textlength <= friends1.getName().length()) {
+                            if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+                                tempArrayList.add(friends1);
                             }
                         }
-                        MyCustomAdapter mAdapter = new MyCustomAdapter(CreaEventoActivity.this, R.layout.fb_friends, tempArrayList);
-                        listView.setAdapter(mAdapter);
                     }
+                    dataAdapter = new FbFriendsAdapter(CreaEventoActivity.this, container_friends, inputSearch, R.layout.fb_friends, tempArrayList);
+                    listView.setAdapter(dataAdapter);
                 }
             }
 
@@ -206,7 +191,6 @@ public class CreaEventoActivity extends Activity {
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
                                           int arg3) {
                 // TODO Auto-generated method stub
-
             }
 
             @Override
@@ -217,6 +201,7 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                finali = dataAdapter.getFinali();
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
@@ -230,15 +215,35 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
                     id_toSend = new ArrayList<String>();
-                    for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
+                    StringBuilder id_to_invite = new StringBuilder();
+                    for (Friends aFinali : finali){
+                        if (aFinali.getAppInstalled()){
+                            id_toSend.add(aFinali.getCode());
+                        } else {
+                            String temp = aFinali.getCode();
+                            if (id_to_invite.length() != 0)
+                                temp = ", " + temp;
+
+                            id_to_invite.append(temp);
+                        }
+                    }
+                    //for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
                     JSONArray jsArray = new JSONArray(id_toSend);
-                    Log.e("TESTJSON: ", jsArray.toString());
+
                     final SharedPreferences prefs = getPreferences();
                     String registrationId = prefs.getString(REG_ID, "");
                     if (registrationId.isEmpty()) {
                         Log.e("DEBUG ID: ", "problema REG_ID vuoto");
                     } else {
+                        Log.e("TESTJSON: ", jsArray.toString());
+                        Log.e("TESTJSON: ", id_to_invite.toString());
+
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
+
+                        // ?????
+                        WebDialog test = helperFacebook.inviteFriends(getApplicationContext(), id_to_invite.toString());
+                        //test.show();
+                        Log.e("TESTJSON: ", test.toString());
                     }
                 }
             }
@@ -246,13 +251,9 @@ public class CreaEventoActivity extends Activity {
     }
 
     private SharedPreferences getPreferences() {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
         return getSharedPreferences(ProfileActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
-
-    ProgressDialog progressDialog;
 
     private void sendNewEvent(final String name, final String ID_FB, final String List) {
 
@@ -320,7 +321,7 @@ public class CreaEventoActivity extends Activity {
             private boolean isInteger(String s) {
                 try {
                     Integer.parseInt(s);
-                } catch(NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     return false;
                 }
                 return true;
@@ -331,8 +332,9 @@ public class CreaEventoActivity extends Activity {
                 InputMethodManager inputManager = (InputMethodManager)
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                if (getCurrentFocus() != null)
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
 
                 progressDialog = new ProgressDialog(CreaEventoActivity.this);
                 progressDialog.setMessage("Creazione Evento");
@@ -374,99 +376,5 @@ public class CreaEventoActivity extends Activity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    //Adapter per ListView
-    private class MyCustomAdapter extends ArrayAdapter<Friends> {
-
-        private ArrayList<Friends> friendList;
-
-        public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<Friends> friendList) {
-            super(context, textViewResourceId, friendList);
-            this.friendList = new ArrayList<Friends>();
-            this.friendList.addAll(friendList);
-        }
-
-        private class ViewHolder {
-            CheckBox name;
-            ImageView foto_profilo;
-            TextView installed;
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder;
-
-            if (convertView == null) {
-
-                LayoutInflater vi = (LayoutInflater) getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
-                convertView = vi.inflate(R.layout.fb_friends, null);
-
-                holder = new ViewHolder();
-                holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
-                holder.foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
-                holder.installed = (TextView) convertView.findViewById(R.id.txt_installed);
-                holder.installed.setVisibility(convertView.GONE);
-
-                convertView.setTag(holder);
-
-                holder.name.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v;
-                        Friends friends1 = (Friends) cb.getTag();
-                        friends1.setSelected(cb.isChecked());
-
-                        if (cb.isChecked()) {
-                            if (container_friends.getText().length() == 0)
-                                container_friends.setText(friends1.getName());
-                            else {
-                                container_friends.append(", " + friends1.getName());
-                            }
-                            finali.add(friends1);
-                        } else {
-                            delete_friend_to_activity(friends1.getName());
-                        }
-                        inputSearch.setText("");
-                    }
-                });
-
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            Friends friends1 = friendList.get(position);
-            holder.name.setText(friends1.getName());
-            holder.name.setChecked(friends1.isSelected());
-            if (friends1.appInstalled)
-                holder.installed.setVisibility(convertView.VISIBLE);
-            holder.name.setTag(friends1);
-            holder.foto_profilo.setImageBitmap(friends1.foto);
-            return convertView;
-        }
-
-        //Aggiungo gli amici scelti all'activity e alla lista "finali"
-        private void delete_friend_to_activity(String toDelete) {
-            container_friends.setText("");
-            Friends friends1;
-
-            for (int i = 0; i < finali.size(); i++) {
-                friends1 = finali.get(i);
-                if (friends1.getName().equals(toDelete)) {
-                    finali.remove(i);
-                }
-            }
-
-            for (int i = 0; i < finali.size(); i++) {
-                friends1 = finali.get(i);
-                if (i == 0) {
-                    container_friends.append(friends1.getName());
-                } else {
-                    container_friends.append(", " + friends1.getName());
-                }
-            }
-        }
     }
 }

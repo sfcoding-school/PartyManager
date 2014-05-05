@@ -26,28 +26,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
-/**
- * Created by luca on 4/26/14.
- */
 public class DataProvide {
 
 
     public static void getEvent(Context context, String facebookId) {
 
         loadJson("eventi", context);
-        downloadEvent(facebookId,context);
+        downloadEvent(facebookId, context);
     }
 
     public static void getAttributi(Context context, String eventoId) {
 
-        loadJson("attributi", context);
+        loadJson("attributi_" + eventoId, context);
         downloadAttributi(eventoId, context);
     }
 
@@ -70,19 +64,17 @@ public class DataProvide {
 
                 } catch (IOException e) {
                     String error = e.toString();
-                    //Log.i(TAG,"error "+error);
-                    //mDisplay.append("error");
-
+                    Log.e("DATA_PROVIDE", error);
                     return "error";
                 }
             }
 
             @Override
             protected void onPostExecute(String json_string) {
-                if (json_string != "error") {
+                if (!json_string.equals("error")) {
                     if (name.equals("eventi"))
                         loadIntoEventiAdapter(json_string);
-                    if (name.equals("attributi"))
+                    else
                         loadIntoAttributiAdapter(json_string);
                 }
             }
@@ -102,10 +94,8 @@ public class DataProvide {
                     fos.close();
 
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     String error = e.toString();
-                    //Log.i(TAG,"error "+error);
-                    //mDisplay.append("error");
+                    Log.e("DATA_PROVIDE", error);
                 }
                 return null;
             }
@@ -120,7 +110,6 @@ public class DataProvide {
             protected void onPreExecute() {
                 MainActivity.progressBarVisible = true;
                 ((Activity) context).invalidateOptionsMenu();
-
             }
 
             @Override
@@ -142,23 +131,15 @@ public class DataProvide {
                     //Execute HTTP Post Request
                     HttpResponse response = httpclient.execute(httppost);
                     String json_string = EntityUtils.toString(response.getEntity());
-                    Log.e("DATA_PROVIDE", json_string);
-
-                    //JSONObject myObject = new JSONObject(response);
-                    //Log.i("DATI EVENTI", "risposta... " + response.toString());
-
+                    //Log.e("DATA_PROVIDE", json_string);
 
                     return json_string;
 
                 } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                    //mDisplay.append("error");
                     return "error";
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     String error = e.toString();
                     Log.e("DATA_PROVIDE", error);
-                    //mDisplay.append("error");
                     return "error";
                 }
             }
@@ -200,26 +181,22 @@ public class DataProvide {
                     //Execute HTTP Post Request
                     HttpResponse response = httpclient.execute(httppost);
                     String json_string = EntityUtils.toString(response.getEntity());
-                    Log.e("DATA_PROVIDE", json_string);
+                    //Log.e("DATA_PROVIDE", json_string);
 
                     return json_string;
 
                 } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                    //mDisplay.append("error");
                     return "error";
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     String error = e.toString();
                     Log.e("DATA_PROVIDE", error);
-                    //mDisplay.append("error");
                     return "error";
                 }
             }
 
             @Override
             protected void onPostExecute(String json_string) {
-                saveJson(json_string, "attributi", context);
+                saveJson(json_string, "attributi_" + id, context);
                 loadIntoAttributiAdapter(json_string);
 
                 MainActivity.progressBarVisible = false;
@@ -236,7 +213,7 @@ public class DataProvide {
             for (int i = 0; i < jsonArray.length(); i++) {
                 String date = jsonArray.getJSONObject(i).getString("data");
                 GregorianCalendar gregCalendar = null;
-                if (date != "null"){
+                if (!date.equals("null")) {
                     gregCalendar = HelperDataParser.getCalFromString(date);
                 }
                 DatiEventi.addItem(new DatiEventi.Evento(

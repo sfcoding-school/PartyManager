@@ -58,7 +58,7 @@ public class helperFacebook {
     }
 
 
-    public static void inviteFriends(final Context context, String friendsTo){
+    public static WebDialog inviteFriends(final Context context, String friendsTo){
 
         Bundle parameters = new Bundle();
         parameters.putString("to", friendsTo);
@@ -98,7 +98,7 @@ public class helperFacebook {
                     }
 
                 }).build();
-        requestsDialog.show();
+        return requestsDialog;
     }
 
 }

@@ -11,9 +11,6 @@ import com.partymanager.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ulisse on 5/2/14.
- */
 public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
     public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo) {
