@@ -120,18 +120,22 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
 
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                if (scrollState == 0)
-                    Log.i("a", "scrolling stopped...");
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int first, int vible, int total) {
+
+                Log.e("a", "scrolling stopped...");
 
                 if (view.getId() == listView.getId()) {
-                    final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
-                    final int currentLAstVisibileItem = listView.getLastVisiblePosition();
-                    if (currentFirstVisibleItem == 1) {
+
+                    if (first == 1) {
                         riepilogo.setVisibility(View.VISIBLE);
 
                     } else {
-                        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-
+                        if (first > mLastFirstVisibleItem) {
+                            Log.e("a", "scrolling verso giu...");
                             //prova.setVisibility(View.VISIBLE);
                             if (riepilogo.getVisibility() != View.GONE) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -riepilogo.getHeight());
@@ -141,18 +145,9 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                                 riepilogo.setVisibility(View.GONE);
                             }
 
-                            Log.i("a", "scrolling verso giu...");
-                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                            /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());
-                                anim.setDuration(500);
-                                anim.setFillAfter(false);
-                                prova.startAnimation(anim);
-                                prova.setVisibility(View.GONE);
-                            }
-                            if (currentLAstVisibileItem <= 11) {
-                                prova.setVisibility(View.VISIBLE);
-                            }*/
+
+                        } else if (first < mLastFirstVisibleItem) {
+                            Log.e("a", "scrolling verso su...");
 
                             if (riepilogo.getVisibility() != View.VISIBLE) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
@@ -161,18 +156,13 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                                 riepilogo.startAnimation(anim);
                                 riepilogo.setVisibility(View.VISIBLE);
                             }
-                            Log.i("a", "scrolling verso su...");
                         }
                     }
 
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                    mLastLastVisibleItem = currentLAstVisibileItem;
+                    mLastFirstVisibleItem = first;
+                    mLastLastVisibleItem = first+vible;
 
                 }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
             }
         });
 
