@@ -127,8 +127,9 @@ public class CreaEventoActivity extends Activity {
 
                 for (GraphUser user : friends) {
                     Boolean install = false;
-                    if (user.getProperty("installed") != null && user.getProperty("installed").equals("true"))
+                    if (user.getProperty("installed") != null && user.getProperty("installed").toString().equals("true")){
                         install = true;
+                    }
 
                     Friends friend = new Friends(user.getId(), user.getName(), false, install);
                     friendsList.add(friend);
@@ -389,6 +390,7 @@ public class CreaEventoActivity extends Activity {
         private class ViewHolder {
             CheckBox name;
             ImageView foto_profilo;
+            TextView installed;
         }
 
 
@@ -406,6 +408,9 @@ public class CreaEventoActivity extends Activity {
                 holder = new ViewHolder();
                 holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
                 holder.foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
+                holder.installed = (TextView) convertView.findViewById(R.id.txt_installed);
+                holder.installed.setVisibility(convertView.GONE);
+
                 convertView.setTag(holder);
 
                 holder.name.setOnClickListener(new View.OnClickListener() {
@@ -435,6 +440,8 @@ public class CreaEventoActivity extends Activity {
             Friends friends1 = friendList.get(position);
             holder.name.setText(friends1.getName());
             holder.name.setChecked(friends1.isSelected());
+            if (friends1.appInstalled)
+                holder.installed.setVisibility(convertView.VISIBLE);
             holder.name.setTag(friends1);
             holder.foto_profilo.setImageBitmap(friends1.foto);
             return convertView;

@@ -178,43 +178,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
 
-                if (absListView.getId() == listView.getId()) {
-                    final int currentFirstVisibleItem = firstVisibleItem;
-                    final int currentLAstVisibileItem = listView.getLastVisiblePosition();
-                    if (currentFirstVisibleItem == 1) {
-                        riepilogo.setVisibility(View.VISIBLE);
 
-                    } else {
-                        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-
-                            //prova.setVisibility(View.VISIBLE);
-                            if (riepilogo.getVisibility() != View.GONE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -riepilogo.getHeight());
-                                anim.setDuration(500);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.GONE);
-                            }
-
-                            Log.i("a", "scrolling verso giu...");
-                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-
-
-                            if (riepilogo.getVisibility() != View.VISIBLE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
-                                anim.setDuration(100);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.VISIBLE);
-                            }
-                            Log.i("a", "scrolling verso su...");
-                        }
-                    }
-
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                    mLastLastVisibleItem = currentLAstVisibileItem;
-
-                }
 
             }//fine OnScroll
 
