@@ -3,8 +3,11 @@ package com.partymanager.app.utility;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -13,6 +16,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.partymanager.R;
+
+import java.util.Calendar;
 
 public class EventDialog {
 
@@ -39,6 +44,8 @@ public class EventDialog {
         //orario.setIs24HourView(true);
 
         //dialog.setCancelable(false); //toglie anche il click onBack
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.setCanceledOnTouchOutside(false);
     }
 
@@ -54,8 +61,16 @@ public class EventDialog {
 
             @Override
             public void onClick(View v) {
-                String data = Integer.toString(date.getDayOfMonth()) + "/" +  Integer.toString(date.getMonth() + 1) + "/" +  Integer.toString(date.getYear());
+                //String data = Integer.toString(date.getDayOfMonth()) + "/" +  Integer.toString(date.getMonth() + 1) + "/" +  Integer.toString(date.getYear());
 
+                Time today = new Time(Time.getCurrentTimezone());
+                today.setToNow();
+
+
+
+                DatePickerDialog dialog = new DatePickerDialog(context,
+                        new mDateSetListener(), today.year, today.month, today.monthDay);
+                dialog.show();
 
                     }
                 });
@@ -102,6 +117,22 @@ public class EventDialog {
         });
 
         return dialog;
+    }
+
+    class mDateSetListener implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stub
+            // getCalender();
+            int mYear = year;
+            int mMonth = monthOfYear;
+            int mDay = dayOfMonth;
+            Log.e("testDAta", Integer.toString(year) + " " +Integer.toString(monthOfYear) + " " +Integer.toString(dayOfMonth)  );
+
+
+        }
     }
 
 }
