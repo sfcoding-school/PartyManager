@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
@@ -155,96 +156,51 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             }
         });
 
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-/*                if (scrollState == 0)
-                    Log.i("a", "scrolling stopped...");
->>>>>>> 2d0219f2479f15f80c5e990046ecf27f1a2a5b00
-
-                if (view.getId() == listView.getId()) {
-
-                    if (first == 1) {
-                        riepilogo.setVisibility(View.VISIBLE);
-
-                    } else {
-                        if (first > mLastFirstVisibleItem) {
-                            Log.e("a", "scrolling verso giu...");
-                            //prova.setVisibility(View.VISIBLE);
-                            if (riepilogo.getVisibility() != View.GONE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -riepilogo.getHeight());
-                                anim.setDuration(500);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.GONE);
-                            }
-
-<<<<<<< HEAD
-
-                        } else if (first < mLastFirstVisibleItem) {
-                            Log.e("a", "scrolling verso su...");
-=======
-                            Log.i("a", "scrolling verso giu...");
-                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-
-
-                            if (riepilogo.getVisibility() != View.VISIBLE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
-                                anim.setDuration(100);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.VISIBLE);
-                            }
-                            Log.i("a", "scrolling verso su...");
-                        }
-                    }
-
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                    mLastLastVisibleItem = currentLAstVisibileItem;
-
-                }*/
-            }
-
+            int lastVisible = 0;
+            int firstVisible = 0;
+            boolean animation = true;
             @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                TranslateAnimation anim = null;
+                if (scrollState == SCROLL_STATE_TOUCH_SCROLL){
+                    firstVisible = view.getFirstVisiblePosition();
+                    if (view.getFirstVisiblePosition() > lastVisible){
+                        if (animation) {
+                            animation = false;
+                            anim = new TranslateAnimation(0, 0, 0, -360);
+                            //riepilogo.setVisibility(View.GONE);
+                            //FirstItem = view.getFirstVisiblePosition();
+                            //itemFirst = view.getChildAt(FirstItem);
+                            anim.setDuration(500);
+                            anim.setFillAfter(true);
+                            riepilogo.startAnimation(anim);
+                        }
+                    }else{
+                        if (animation){
+                            animation = false;
+                            anim = new TranslateAnimation(0, 0, -360, 0);
+                            anim.setDuration(500);
+                            anim.setFillAfter(true);
+                            riepilogo.startAnimation(anim);
 
-                if (absListView.getId() == listView.getId()) {
-                    final int currentFirstVisibleItem = firstVisibleItem;
-                    final int currentLAstVisibileItem = listView.getLastVisiblePosition();
-                    if (currentFirstVisibleItem == 1) {
-                        riepilogo.setVisibility(View.VISIBLE);
-
-                    } else {
-                        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-
-                            //prova.setVisibility(View.VISIBLE);
-                            if (riepilogo.getVisibility() != View.GONE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -riepilogo.getHeight());
-                                anim.setDuration(500);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.GONE);
-                            }
-
-                            Log.i("a", "scrolling verso giu...");
-                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-
-                            if (riepilogo.getVisibility() != View.VISIBLE) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, -riepilogo.getHeight(), 0);
-                                anim.setDuration(100);
-                                anim.setFillAfter(false);
-                                riepilogo.startAnimation(anim);
-                                riepilogo.setVisibility(View.VISIBLE);
-                            }
                         }
                     }
-
-                    mLastFirstVisibleItem = firstVisibleItem;
-                    mLastLastVisibleItem = firstVisibleItem + visibleItemCount;
+                    lastVisible = firstVisible;
+                }
+                else if (scrollState == SCROLL_STATE_IDLE){
+                   animation = true;
                 }
 
+
+        }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                
             }
         });
 
