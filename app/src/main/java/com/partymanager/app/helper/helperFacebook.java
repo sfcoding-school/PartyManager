@@ -11,6 +11,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.widget.WebDialog;
+import com.partymanager.app.CreaEventoActivity;
 import com.partymanager.app.Friends;
 import com.partymanager.app.ProfileActivity;
 
@@ -58,7 +59,7 @@ public class helperFacebook {
     }
 
 
-    public static void inviteFriends(final Context context, String friendsTo){
+    public static WebDialog inviteFriends(final Context context, String friendsTo){
 
         Bundle parameters = new Bundle();
         parameters.putString("to", friendsTo);
@@ -98,7 +99,7 @@ public class helperFacebook {
                     }
 
                 }).build();
-        requestsDialog.show();
+        return  requestsDialog;
     }
 
 }

@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by ulisse on 24/04/14.
- */
 public class Friends {
 
     String code = null;
@@ -25,7 +22,7 @@ public class Friends {
         this.name = name;
         this.selected = selected;
         this.appInstalled = appI;
-        //getFacebookProfilePicture();
+        getFacebookProfilePicture();
     }
 
     public String getCode() {
@@ -34,6 +31,12 @@ public class Friends {
 
     public String getName() {
         return name;
+    }
+
+    public Boolean getAppInstalled(){return appInstalled; }
+
+    public Bitmap getFoto(){
+        return foto;
     }
 
     public void setName(String name) {
