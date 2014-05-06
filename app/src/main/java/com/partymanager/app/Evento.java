@@ -1,6 +1,7 @@
 package com.partymanager.app;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.partymanager.R;
 import com.partymanager.app.dummy.AttributiAdapter;
 import com.partymanager.app.dummy.DatiAttributi;
 import com.partymanager.app.dummy.DummyContent;
+import com.partymanager.app.utility.EventDialog;
 
 public class Evento extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -74,6 +76,24 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         eAdapter = DatiAttributi.init(getActivity(), mParam3);
     }
 
+    private void prova(){
+        EventDialog a = new EventDialog(getActivity());
+        Dialog aa = a.date();
+        aa.show();
+    }
+
+    private void prova2(){
+        EventDialog a = new EventDialog(getActivity());
+        Dialog aa = a.luogo();
+        aa.show();
+    }
+
+    private void prova3(){
+        EventDialog a = new EventDialog(getActivity());
+        Dialog aa = a.personalizzata();
+        aa.show();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,6 +128,17 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         Toast.makeText(getActivity(), "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        //TEST
+
+                        if (item.getTitle().equals("Data"))
+                            prova();
+                        if (item.getTitle().equals("Luogo"))
+                            prova2();
+                        if (item.getTitle().equals("Personalizzata"))
+                            prova3();
+
+                        //END TEST
 
                         return true;
                     }
