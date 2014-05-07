@@ -1,6 +1,4 @@
-package com.partymanager.app.helper;
-
-import android.util.Log;
+package com.partymanager.helper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

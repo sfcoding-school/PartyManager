@@ -1,4 +1,4 @@
-package com.partymanager.app;
+package com.partymanager.activity;
 
 
 import android.app.Activity;

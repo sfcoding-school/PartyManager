@@ -1,8 +1,7 @@
-package com.partymanager.app;
+package com.partymanager.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,8 +33,9 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
-import com.partymanager.app.dummy.FbFriendsAdapter;
-import com.partymanager.app.helper.helperFacebook;
+import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Friends;
+import com.partymanager.helper.HelperFacebook;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -249,7 +248,7 @@ public class CreaEventoActivity extends Activity {
     }
 
     private void sendInviti(String temp){
-        WebDialog f  = helperFacebook.inviteFriends(this, temp);
+        WebDialog f  = HelperFacebook.inviteFriends(this, temp);
         f.show();
     }
 

@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.partymanager.gcm.GcmIntentService;
-
 /**
  * Created by luca on 4/9/14.
  */

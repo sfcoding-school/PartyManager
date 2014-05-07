@@ -1,4 +1,4 @@
-package com.partymanager.app;
+package com.partymanager.activity.fragment;
 
 import android.app.Activity;
 import android.net.Uri;

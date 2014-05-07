@@ -1,42 +1,20 @@
-package com.partymanager.app;
+package com.partymanager.activity.fragment;
 
-import android.content.Context;
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.partymanager.R;
-import com.partymanager.app.dummy.*;
-import com.partymanager.app.helper.helperFacebook;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.partymanager.activity.MainActivity;
+import com.partymanager.data.*;
+import com.partymanager.helper.HelperFacebook;
 
 /**
  * A fragment representing a list of Items.
@@ -106,7 +84,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         /*
         eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
         DatiEventi.eAdapter = eAdapter; */
-        String idFacebbok = helperFacebook.getFacebookId(getActivity());
+        String idFacebbok = HelperFacebook.getFacebookId(getActivity());
         if (idFacebbok!= null)
             eAdapter = DatiEventi.init(getActivity(), idFacebbok);
 
@@ -129,7 +107,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_eventilist_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_eventi, container, false);
 
         // Set the adapter
         listView = (ListView) view.findViewById(R.id.eventList);

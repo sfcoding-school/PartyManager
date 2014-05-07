@@ -1,8 +1,8 @@
-package com.partymanager.app.helper;
+package com.partymanager.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,35 +10,14 @@ import android.widget.Toast;
 import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
-import com.partymanager.app.CreaEventoActivity;
-import com.partymanager.app.Friends;
-import com.partymanager.app.ProfileActivity;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import com.partymanager.activity.ProfileActivity;
 
 /**
  * Created by luca on 5/1/14.
  */
-public class helperFacebook {
+public class HelperFacebook {
 
     private static String facebookId;
 
@@ -58,6 +37,29 @@ public class helperFacebook {
         }
     }
 
+    private static Session session = null;
+
+    public static Session getSession(Activity activity){
+        if (session == null){
+            session = Session.getActiveSession();
+            if (session == null) {
+                session = new Session(activity);
+                Session.setActiveSession(session);
+                if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                    session.openForRead(new Session.OpenRequest(activity));
+                }
+            }
+
+        }
+        return session;
+    }
+
+    public static String getToken(Activity activity){
+        Session session = getSession(activity);
+        String token = session.getAccessToken();
+        Log.e("TOKEN - getToken", token);
+        return token;
+    }
 
     public static WebDialog inviteFriends(final Context context, String friendsTo){
 

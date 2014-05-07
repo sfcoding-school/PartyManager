@@ -1,11 +1,6 @@
-package com.partymanager.app.helper;
+package com.partymanager.helper;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
-
-import com.partymanager.app.MainActivity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

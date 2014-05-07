@@ -7,4 +7,4 @@
     android:dividerHeight="0dp"
     android:background="#ffffffff"
     android:textColor="#000000"
-    tools:context="com.partymanager.app.NavigationDrawerFragment" />
+    tools:context="com.partymanager.activity.fragment.NavigationDrawerFragment" />

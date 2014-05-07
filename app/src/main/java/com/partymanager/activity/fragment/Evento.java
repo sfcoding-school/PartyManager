@@ -1,7 +1,6 @@
-package com.partymanager.app;
+package com.partymanager.activity.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,25 +8,20 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.partymanager.R;
-import com.partymanager.app.dummy.AttributiAdapter;
-import com.partymanager.app.dummy.DatiAttributi;
-import com.partymanager.app.dummy.DummyContent;
-import com.partymanager.app.utility.EventDialog;
+import com.partymanager.data.AttributiAdapter;
+import com.partymanager.data.DatiAttributi;
+import com.partymanager.activity.EventDialog;
 
 import java.util.ArrayList;
 
@@ -104,21 +98,21 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         riepilogo = view.findViewById(R.id.stickyheader);
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
-        quando_data= (TextView) view.findViewById(R.id.txt_data);
-        quando_ora= (TextView) view.findViewById(R.id.txt_orario);
-        dove= (TextView) view.findViewById(R.id.txt_dove_vediamo);
+        quando_data = (TextView) view.findViewById(R.id.txt_data);
+        quando_ora = (TextView) view.findViewById(R.id.txt_orario);
+        dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
         //check template - Da spostare da qui
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
-        for (DatiAttributi.Attributo temp: prova){
-            if (temp.template.equals("data")){
+        for (DatiAttributi.Attributo temp : prova) {
+            if (temp.template.equals("data")) {
                 quando_data.setText(temp.risposta);
             }
-            if (temp.template.equals("luogoE")){
+            if (temp.template.equals("luogoE")) {
                 luogo.setText(temp.risposta);
             }
-            if (temp.template.equals("luogoI")){
+            if (temp.template.equals("luogoI")) {
                 dove.setText(temp.risposta);
             }
         }
@@ -189,12 +183,10 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-               Log.e("listview click", "hai cliccato l'elemento " + Integer.toString(arg2 +1) );
+                Log.e("listview click", "hai cliccato l'elemento " + Integer.toString(arg2 + 1));
 
             }
         });
-
-
 
         return view;
     }
@@ -224,14 +216,12 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         super.onDetach();
     }
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -242,11 +232,11 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     private Handler dialogMsgHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            String ris ="";
+            String ris = "";
             if (msg != null) {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
-                switch (who){
+                switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
                         Log.e("handlerTEST-DATA: ", ris);
@@ -269,15 +259,17 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
-                        String ris2 = msg.getData().getString("pers-r");
+                        String ris2 = "";
                         Log.e("handlerTEST-PERS: ", ris);
+                        if (close){
+                            ris2 = msg.getData().getString("pers-r");
+                        }
                         DatiAttributi.addItem(new DatiAttributi.Attributo("1", ris, ris2, "luogoI", close));
                         break;
                 }
             }
         }
     };
-
 }
                             /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());

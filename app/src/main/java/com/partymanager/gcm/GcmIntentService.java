@@ -6,20 +6,15 @@ package com.partymanager.gcm;
 
 import com.partymanager.R;
 
-import com.partymanager.app.*;
-
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.partymanager.activity.MainActivity;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 

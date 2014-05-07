@@ -1,13 +1,13 @@
-package com.partymanager.app.dummy;
+package com.partymanager.helper;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.partymanager.app.MainActivity;
-import com.partymanager.app.helper.HelperConnessione;
-import com.partymanager.app.helper.HelperDataParser;
+import com.partymanager.activity.MainActivity;
+import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiEventi;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -35,9 +35,9 @@ public class DataProvide {
 
 
     public static void getEvent(Context context,String facebookId) {
-
+        String token = HelperFacebook.getToken((Activity) context);
         loadJson("eventi", context);
-        downloadEvent(facebookId, MainActivity.token, context);
+        downloadEvent(facebookId, token, context);
     }
 
     public static void getAttributi(Context context, String eventoId) {

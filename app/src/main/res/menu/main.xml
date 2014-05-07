@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.partymanager.app.MainActivity" >
+    tools:context="com.partymanager.activity.MainActivity" >
     <item android:id="@+id/Nuovo_evento"
         android:title="@string/new_event"
         android:orderInCategory="100"

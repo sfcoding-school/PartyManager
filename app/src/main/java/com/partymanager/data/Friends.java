@@ -1,9 +1,8 @@
-package com.partymanager.app;
+package com.partymanager.data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.widget.ImageView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

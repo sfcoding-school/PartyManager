@@ -1,4 +1,4 @@
-package com.partymanager.app;
+package com.partymanager.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,21 +11,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.android.Facebook;
-import com.facebook.widget.WebDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.partymanager.R;
+import com.partymanager.activity.fragment.Archivio;
+import com.partymanager.activity.fragment.EventiListFragment;
+import com.partymanager.activity.fragment.Evento;
+import com.partymanager.activity.fragment.NavigationDrawerFragment;
+import com.partymanager.activity.fragment.Setting;
+import com.partymanager.helper.HelperFacebook;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, EventiListFragment.OnFragmentInteractionListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, EventiListFragment.OnFragmentInteractionListener {
 
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -42,8 +42,6 @@ public class MainActivity extends Activity
      */
     public static CharSequence mTitle;
 
-    public static String token;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,22 +53,14 @@ public class MainActivity extends Activity
 
         if (checkPlayServices()) {
             //Controllo se esiste già una sessione FB attiva
-            Session session = Session.getActiveSession();
-            if (session == null) {
-                session = new Session(this);
-                Session.setActiveSession(session);
-                if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                    session.openForRead(new Session.OpenRequest(this));
-                }
-            }
+            Session session = HelperFacebook.getSession(this);
 
             if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
             }else{
-                token = session.getAccessToken();
-                Log.e("TOKEN", token);
 
+                HelperFacebook.getToken(this);
             }
                 //Fine controllo sessione
 

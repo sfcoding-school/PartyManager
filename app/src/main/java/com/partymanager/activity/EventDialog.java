@@ -1,4 +1,4 @@
-package com.partymanager.app.utility;
+package com.partymanager.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -58,7 +58,7 @@ public class EventDialog {
 
             @Override
             public void onClick(View v) {
-                String temp = Integer.toString( date.getDayOfMonth()) + "/" +  Integer.toString( date.getMonth() + 1) + "/" +Integer.toString( date.getYear());
+                String temp = Integer.toString(date.getDayOfMonth()) + "/" + Integer.toString(date.getMonth() + 1) + "/" + Integer.toString(date.getYear());
                 Log.e("DATASCELTA: ", temp);
 
                 //TEST
@@ -94,7 +94,7 @@ public class EventDialog {
 
             @Override
             public void onClick(View v) {
-                String temp = Integer.toString(orario.getCurrentHour() ) + ":" +  Integer.toString( orario.getCurrentMinute());
+                String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
                 //TEST
@@ -130,7 +130,7 @@ public class EventDialog {
 
             @Override
             public void onClick(View v) {
-                String temp = Integer.toString(orario.getCurrentHour() ) + ":" +  Integer.toString( orario.getCurrentMinute());
+                String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
                 //TEST
@@ -168,15 +168,17 @@ public class EventDialog {
             public void onClick(View v) {
                 Log.e("LUOGOSCELTO: ", risposta.getText().toString());
 
-                //TEST
-                Message m = new Message();
-                Bundle b = new Bundle();
-                b.putInt("who", 4);
-                b.putBoolean("close", chiusura.isChecked());
-                b.putString("luogo", risposta.getText().toString()); // for example
-                m.setData(b);
+                if (!risposta.getText().toString().equals("")) {
+                    //TEST
+                    Message m = new Message();
+                    Bundle b = new Bundle();
+                    b.putInt("who", 4);
+                    b.putBoolean("close", chiusura.isChecked());
+                    b.putString("luogo", risposta.getText().toString()); // for example
+                    m.setData(b);
 
-                mResponseHandler.sendMessage(m);
+                    mResponseHandler.sendMessage(m);
+                }
                 //END TEST
 
                 dialog.dismiss();
@@ -207,16 +209,18 @@ public class EventDialog {
                 Log.e("PERSONALIZZATA-DOMANDA: ", alto.getText().toString());
                 Log.e("PERSONALIZZATA-RISPOSTA: ", risposta.getText().toString());
 
-                //TEST
-                Message m = new Message();
-                Bundle b = new Bundle();
-                b.putInt("who", 5);
-                b.putBoolean("close", chiusura.isChecked());
-                b.putString("pers-d", alto.getText().toString());
-                b.putString("pers-r", risposta.getText().toString());
-                m.setData(b);
+                if (!alto.getText().toString().equals("")) {
+                    //TEST
+                    Message m = new Message();
+                    Bundle b = new Bundle();
+                    b.putInt("who", 5);
+                    b.putBoolean("close", chiusura.isChecked());
+                    b.putString("pers-d", alto.getText().toString());
+                    b.putString("pers-r", risposta.getText().toString());
+                    m.setData(b);
 
-                mResponseHandler.sendMessage(m);
+                    mResponseHandler.sendMessage(m);
+                }
                 //END TEST
 
                 dialog.dismiss();

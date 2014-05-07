@@ -1,4 +1,4 @@
-package com.partymanager.app.dummy;
+package com.partymanager.data;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.partymanager.R;
-import com.partymanager.app.Friends;
 
 import java.util.ArrayList;
 import java.util.List;

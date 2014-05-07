@@ -1,6 +1,5 @@
 package com.partymanager.gcm;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -8,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.partymanager.app.MainActivity;
+import com.partymanager.activity.MainActivity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
