@@ -53,6 +53,11 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     TextView quando_ora;
     TextView dove;
 
+    private static final int DIALOG_DATA = 1;
+    private static final int DIALOG_ORARIO_E = 2;
+    private static final int DIALOG_ORARIO_I = 3;
+    private static final int DIALOG_LUOGO = 4;
+    private static final int DIALOG_PERSONALLIZATA = 5;
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,6 +108,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         quando_ora= (TextView) view.findViewById(R.id.txt_orario);
         dove= (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
+        //check template - Da spostare da qui
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
         for (DatiAttributi.Attributo temp: prova){
@@ -116,14 +122,15 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                 dove.setText(temp.risposta);
             }
         }
+        //fine check template
 
         //TEST
-        String[] my_array = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, my_array);
-        listView.setAdapter(adapter);
+        //String[] my_array = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, my_array);
+        //listView.setAdapter(adapter);
         //TEST
 
-        //listView.setAdapter(eAdapter);
+        listView.setAdapter(eAdapter);
 
         btn_Domanda.setOnClickListener(new View.OnClickListener() {
 
@@ -139,11 +146,15 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        if (item.getTitle().equals("Data"))
+                        if (item.getItemId() == R.id.one)  /*item.getTitle().equals("Data Evento")*/
                             eventDialog.date().show();
-                        if (item.getTitle().equals("Luogo"))
+                        if (item.getItemId() == R.id.two)
+                            eventDialog.orarioE().show();
+                        if (item.getItemId() == R.id.three)
+                            eventDialog.orarioI().show();
+                        if (item.getItemId() == R.id.four)
                             eventDialog.luogo().show();
-                        if (item.getTitle().equals("Personalizzata"))
+                        if (item.getItemId() == R.id.five)
                             eventDialog.personalizzata().show();
 
                         return true;
@@ -188,15 +199,6 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         return view;
     }
 
-    private Handler dialogMsgHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg != null) {
-               String prova = msg.getData().getString("what");
-               Log.e("handlerTEST: ", prova);
-            }
-        }
-    };
     private void changeAlpha(Button btn) {
         float alpha = btn.getAlpha();
         if (Float.compare(alpha, (float) 0.7) == 0) {
@@ -236,6 +238,46 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }
+
+    private Handler dialogMsgHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String ris ="";
+            if (msg != null) {
+                int who = msg.getData().getInt("who");
+                boolean close = msg.getData().getBoolean("close");
+                switch (who){
+                    case DIALOG_DATA:
+                        ris = msg.getData().getString("data");
+                        Log.e("handlerTEST-DATA: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Data Evento", ris, "data", close));
+                        break;
+                    case DIALOG_ORARIO_E:
+                        ris = msg.getData().getString("orario");
+                        Log.e("handlerTEST-ORARIO-E: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Orario Evento", ris, null, close));
+                        break;
+                    case DIALOG_ORARIO_I:
+                        ris = msg.getData().getString("orario");
+                        Log.e("handlerTEST-ORARIO-I: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Orario Incontro", ris, null, close));
+                        break;
+                    case DIALOG_LUOGO:
+                        ris = msg.getData().getString("luogo");
+                        Log.e("handlerTEST-LUOGO: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Luogo Evento", ris, "luogoE", close));
+                        break;
+                    case DIALOG_PERSONALLIZATA:
+                        ris = msg.getData().getString("pers-d");
+                        String ris2 = msg.getData().getString("pers-r");
+                        Log.e("handlerTEST-PERS: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", ris, ris2, "luogoI", close));
+                        break;
+                }
+            }
+        }
+    };
+
 }
                             /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());

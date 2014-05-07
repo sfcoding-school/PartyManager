@@ -1,21 +1,17 @@
 package com.partymanager.app.utility;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.format.DateFormat;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.partymanager.R;
 
@@ -25,10 +21,11 @@ public class EventDialog {
     Dialog dialog;
     EditText alto;
     EditText risposta;
-    EditText date;
+    DatePicker date;
     Button close;
     CheckBox chiusura;
-    EditText orario;
+    TimePicker orario;
+
     private Handler mResponseHandler;
 
     public EventDialog(Context context, Handler reponseHandler) {
@@ -39,66 +36,109 @@ public class EventDialog {
         dialog.setContentView(R.layout.dialog_domande);
         alto = (EditText) dialog.findViewById(R.id.editText2);
         risposta = (EditText) dialog.findViewById(R.id.editText_risposta);
-        date = (EditText) dialog.findViewById(R.id.edt_data_evento);
+        date = (DatePicker) dialog.findViewById(R.id.datePicker);
         chiusura = (CheckBox) dialog.findViewById(R.id.cb_chiusura);
         close = (Button) dialog.findViewById(R.id.btn_close);
-        orario = (EditText) dialog.findViewById(R.id.edt_orario_evento);
+        orario = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-
-        //dialog.setCancelable(false); //toglie anche il click onBack
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(false);
     }
 
     public Dialog date() {
 
-        dialog.setTitle("Scegli una data");
+        dialog.setTitle("Scegli una data per l'Evento");
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
         date.setVisibility(View.VISIBLE);
-        orario.setVisibility(View.VISIBLE);
-
-        date.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Time today = new Time(Time.getCurrentTimezone());
-                today.setToNow();
-                DatePickerDialog dialog = new DatePickerDialog(context,
-                        new mDateSetListener(), today.year, today.month, today.monthDay);
-                dialog.show();
-
-            }
-        });
-
-        orario.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Time today = new Time(Time.getCurrentTimezone());
-                today.setToNow();
-                TimePickerDialog dialog = new TimePickerDialog(context,
-                        new mHourSetListener(), today.hour, today.minute, DateFormat.is24HourFormat(context));
-                dialog.show();
-
-            }
-        });
+        orario.setVisibility(View.GONE);
 
         close.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Log.e("DATASCELTA: ", date.getText().toString());
-                Log.e("ORARIOSCELTO: ", orario.getText().toString());
+                String temp = Integer.toString( date.getDayOfMonth()) + "/" +  Integer.toString( date.getMonth() + 1) + "/" +Integer.toString( date.getYear());
+                Log.e("DATASCELTA: ", temp);
 
                 //TEST
                 Message m = new Message();
                 Bundle b = new Bundle();
-                b.putString("what", date.getText().toString()); // for example
+                b.putInt("who", 1);
+                b.putBoolean("close", chiusura.isChecked());
+                b.putString("data", temp); // for example
+                m.setData(b);
+
+                mResponseHandler.sendMessage(m);
+                //END TEST
+
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
+    }
+
+    public Dialog orarioE() {
+
+        dialog.setTitle("Orario Evento");
+
+        alto.setVisibility(View.GONE);
+        risposta.setVisibility(View.GONE);
+        date.setVisibility(View.GONE);
+        orario.setVisibility(View.VISIBLE);
+
+        orario.setIs24HourView(true);
+
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String temp = Integer.toString(orario.getCurrentHour() ) + ":" +  Integer.toString( orario.getCurrentMinute());
+                Log.e("ORARIOSCELTO: ", temp);
+
+                //TEST
+                Message m = new Message();
+                Bundle b = new Bundle();
+                b.putInt("who", 2);
+                b.putBoolean("close", chiusura.isChecked());
+                b.putString("orario", temp); // for example
+                m.setData(b);
+
+                mResponseHandler.sendMessage(m);
+                //END TEST
+
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
+    }
+
+    public Dialog orarioI() {
+
+        dialog.setTitle("Orario Incontro");
+
+        alto.setVisibility(View.GONE);
+        risposta.setVisibility(View.GONE);
+        date.setVisibility(View.GONE);
+        orario.setVisibility(View.VISIBLE);
+
+        orario.setIs24HourView(true);
+
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String temp = Integer.toString(orario.getCurrentHour() ) + ":" +  Integer.toString( orario.getCurrentMinute());
+                Log.e("ORARIOSCELTO: ", temp);
+
+                //TEST
+                Message m = new Message();
+                Bundle b = new Bundle();
+                b.putInt("who", 3);
+                b.putBoolean("close", chiusura.isChecked());
+                b.putString("orario", temp); // for example
                 m.setData(b);
 
                 mResponseHandler.sendMessage(m);
@@ -114,6 +154,7 @@ public class EventDialog {
     public Dialog luogo() {
         dialog.setTitle("Scegli una luogo");
 
+        risposta.setText("");
         risposta.setHint("Scrivi qui il luogo");
 
         alto.setVisibility(View.GONE);
@@ -126,6 +167,18 @@ public class EventDialog {
             @Override
             public void onClick(View v) {
                 Log.e("LUOGOSCELTO: ", risposta.getText().toString());
+
+                //TEST
+                Message m = new Message();
+                Bundle b = new Bundle();
+                b.putInt("who", 4);
+                b.putBoolean("close", chiusura.isChecked());
+                b.putString("luogo", risposta.getText().toString()); // for example
+                m.setData(b);
+
+                mResponseHandler.sendMessage(m);
+                //END TEST
+
                 dialog.dismiss();
             }
         });
@@ -142,6 +195,8 @@ public class EventDialog {
 
         dialog.setTitle("Personalizzata");
 
+        alto.setText("");
+        risposta.setText("");
         alto.setHint("Scrivi una domanda");
         risposta.setHint("Scrivi qui la tua risposta");
 
@@ -151,31 +206,23 @@ public class EventDialog {
             public void onClick(View v) {
                 Log.e("PERSONALIZZATA-DOMANDA: ", alto.getText().toString());
                 Log.e("PERSONALIZZATA-RISPOSTA: ", risposta.getText().toString());
+
+                //TEST
+                Message m = new Message();
+                Bundle b = new Bundle();
+                b.putInt("who", 5);
+                b.putBoolean("close", chiusura.isChecked());
+                b.putString("pers-d", alto.getText().toString());
+                b.putString("pers-r", risposta.getText().toString());
+                m.setData(b);
+
+                mResponseHandler.sendMessage(m);
+                //END TEST
+
                 dialog.dismiss();
             }
         });
 
         return dialog;
-    }
-
-    class mDateSetListener implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            //Log.e("testDAta", Integer.toString(year) + " " + Integer.toString(monthOfYear) + " " + Integer.toString(dayOfMonth));
-
-            date.setText(Integer.toString(dayOfMonth) + "/" + Integer.toString(monthOfYear + 1) + "/" + Integer.toString(year));
-        }
-    }
-
-    class mHourSetListener implements TimePickerDialog.OnTimeSetListener {
-
-        @Override
-        public void onTimeSet(android.widget.TimePicker view,
-                              int hourOfDay, int minute) {
-            //Log.e("", "" + hourOfDay + ":" + minute);
-            orario.setText("" + hourOfDay + ":" + minute);
-        }
     }
 }

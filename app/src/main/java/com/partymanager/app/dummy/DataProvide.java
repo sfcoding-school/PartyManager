@@ -240,7 +240,7 @@ public class DataProvide {
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
                         jsonArray.getJSONObject(i).getString("risposta"),
-                        jsonArray.getJSONObject(i).getString("template")
+                        jsonArray.getJSONObject(i).getString("template"), false
                 ));
             }
         } catch (JSONException e) {

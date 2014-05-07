@@ -2,14 +2,22 @@
 
     <item
         androclass:id="@+id/one"
-        androclass:title="Data"/>
+        androclass:title="Data Evento"/>
 
     <item
         androclass:id="@+id/two"
-        androclass:title="Luogo"/>
+        androclass:title="Ora Evento"/>
 
     <item
         androclass:id="@+id/three"
+        androclass:title="Ora Incontro"/>
+
+    <item
+        androclass:id="@+id/four"
+        androclass:title="Luogo"/>
+
+    <item
+        androclass:id="@+id/five"
         androclass:title="Personalizzata"/>
 
 </menu>  
