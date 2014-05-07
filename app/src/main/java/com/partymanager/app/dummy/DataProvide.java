@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.partymanager.app.MainActivity;
+import com.partymanager.app.helper.HelperConnessione;
 import com.partymanager.app.helper.HelperDataParser;
 
 import org.apache.http.HttpResponse;
@@ -33,10 +34,10 @@ import java.util.List;
 public class DataProvide {
 
 
-    public static void getEvent(Context context, String facebookId) {
+    public static void getEvent(Context context,String facebookId) {
 
         loadJson("eventi", context);
-        downloadEvent(facebookId, context);
+        downloadEvent(facebookId, MainActivity.token, context);
     }
 
     public static void getAttributi(Context context, String eventoId) {
@@ -103,7 +104,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadEvent(final String id, final Context context) {
+    private static void downloadEvent(final String id, final String token, final Context context) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -114,38 +115,23 @@ public class DataProvide {
 
             @Override
             protected String doInBackground(Void... params) {
-                /*
-                for (int i=0;i<100000;i++){
-                    int p = i*3+10;
-                }*/
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/getMyEvent");
+                String[] name = {"idFacebook"};
+                String[] param = {id};
+                String json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
+                Log.e("DATA_PROVIDE", json_string);
+                if (json_string.equals("fallito"))
+                    if(HelperConnessione.login(id,token)){
+                        json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
+                        Log.e("DATA_PROVIDE", json_string);
+                    }
 
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("idFacebook", id));
-                    //nameValuePairs.add(new BasicNameValuePair("stringdata", "AndDev is Cool!"));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                return json_string;
 
-                    //Execute HTTP Post Request
-                    HttpResponse response = httpclient.execute(httppost);
-                    String json_string = EntityUtils.toString(response.getEntity());
-                    //Log.e("DATA_PROVIDE", json_string);
-
-                    return json_string;
-
-                } catch (ClientProtocolException e) {
-                    return "error";
-                } catch (IOException e) {
-                    String error = e.toString();
-                    Log.e("DATA_PROVIDE", error);
-                    return "error";
-                }
             }
 
             @Override
             protected void onPostExecute(String json_string) {
+
                 saveJson(json_string, "eventi", context);
                 loadIntoEventiAdapter(json_string);
 

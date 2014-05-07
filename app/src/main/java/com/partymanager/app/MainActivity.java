@@ -42,6 +42,8 @@ public class MainActivity extends Activity
      */
     public static CharSequence mTitle;
 
+    public static String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,9 @@ public class MainActivity extends Activity
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
             }else{
-                Log.e("FACEBOOK-SDK", session.getAccessToken());
+                token = session.getAccessToken();
+                Log.e("TOKEN", token);
+
             }
                 //Fine controllo sessione
 

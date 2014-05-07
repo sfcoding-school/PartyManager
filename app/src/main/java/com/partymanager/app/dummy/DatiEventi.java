@@ -65,6 +65,7 @@ public class DatiEventi {
 
     public static EventAdapter init(Context context, String id) {
         eAdapter = new EventAdapter(context, DatiEventi.ITEMS);
+
         DataProvide.getEvent(context, id);
         return eAdapter;
     }

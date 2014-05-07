@@ -169,7 +169,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                
+
             }
         });
 
