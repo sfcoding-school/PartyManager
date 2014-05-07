@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -81,7 +83,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             //Log.e("Evento TEST: ", mParam1 + " " + mParam2 + " " + mParam3);
         }
 
-        eventDialog = new EventDialog(getActivity());
+        eventDialog = new EventDialog(getActivity(), dialogMsgHandler);
         eAdapter = DatiAttributi.init(getActivity(), mParam3);
     }
 
@@ -181,9 +183,20 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             }
         });
 
+
+
         return view;
     }
 
+    private Handler dialogMsgHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg != null) {
+               String prova = msg.getData().getString("what");
+               Log.e("handlerTEST: ", prova);
+            }
+        }
+    };
     private void changeAlpha(Button btn) {
         float alpha = btn.getAlpha();
         if (Float.compare(alpha, (float) 0.7) == 0) {
@@ -208,6 +221,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     public void onDetach() {
         super.onDetach();
     }
+
 
 
     @Override
