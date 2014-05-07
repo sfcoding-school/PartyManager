@@ -3,6 +3,7 @@ package com.partymanager.app;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -55,7 +56,7 @@ public class Friends {
         this.selected = selected;
     }
 
-    private void getFacebookProfilePicture() {
+   private void getFacebookProfilePicture() {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... args) {
@@ -81,6 +82,8 @@ public class Friends {
             }
         }.execute();
     }
+
+
 
 }
 

@@ -121,7 +121,6 @@ public class ProfileActivity extends Activity {
             }
         }
 
-
         updateView();
     }
 
@@ -212,6 +211,7 @@ public class ProfileActivity extends Activity {
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
+
                             getFacebookProfilePicture(user.getId());
                             textInstructionsOrLink.setText(user.getName());
                             username = user.getName();

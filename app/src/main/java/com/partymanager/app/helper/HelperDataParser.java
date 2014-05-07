@@ -1,5 +1,7 @@
 package com.partymanager.app.helper;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +30,7 @@ public class HelperDataParser {
         return dfgiornoN.format(cal.getTime());
     }
 
-    public static GregorianCalendar getCalFromString (String data){;
+    public static GregorianCalendar getCalFromString (String data){
         dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
         try {
             Date dateTime = dateFormat.parse(data);

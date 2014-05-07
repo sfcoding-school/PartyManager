@@ -37,12 +37,14 @@ public class DatiAttributi {
         public String domanda;
         public String risposta;
         public String template;
+        public Boolean close;
 
-        public Attributo(String id, String domanda, String risposta, String template) {
+        public Attributo(String id, String domanda, String risposta, String template, Boolean close) {
             this.id = id;
             this.domanda = domanda;
             this.risposta = risposta;
             this.template = template;
+            this.close = close;
         }
 
         @Override

@@ -96,6 +96,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             holder.installed.setVisibility(convertView.GONE);
         holder.name.setTag(friends1);
         holder.foto_profilo.setImageBitmap(friends1.getFoto());
+
         return convertView;
     }
 
