@@ -22,10 +22,11 @@ import com.partymanager.R;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.activity.EventDialog;
+import com.partymanager.data.DatiEventi;
 
 import java.util.ArrayList;
 
-public class Evento extends Fragment implements AbsListView.OnItemClickListener {
+public class Evento extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -50,8 +51,9 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
     private static final int DIALOG_ORARIO_I = 3;
-    private static final int DIALOG_LUOGO = 4;
+    private static final int DIALOG_LUOGO_I = 4;
     private static final int DIALOG_PERSONALLIZATA = 5;
+    private static final int DIALOG_LUOGO_E = 6;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,7 +84,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             //Log.e("Evento TEST: ", mParam1 + " " + mParam2 + " " + mParam3);
         }
 
-        eventDialog = new EventDialog(getActivity(), dialogMsgHandler);
+        eventDialog = new EventDialog(getActivity(), dialogMsgHandler, mParam3);
         eAdapter = DatiAttributi.init(getActivity(), mParam3);
     }
 
@@ -92,7 +94,6 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         View view = inflater.inflate(R.layout.fragment_evento, container, false);
 
         listView = (ListView) view.findViewById(R.id.eventList);
-        listView.setOnItemClickListener(this);
         btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
         btn_sino = (Button) view.findViewById(R.id.btn_sino);
         riepilogo = view.findViewById(R.id.stickyheader);
@@ -102,7 +103,8 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
-        //check template - Da spostare da qui
+        //check template - Da spostare da qui // può dare nullPointerException se ancora nn ha finito la listview
+        /*
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
         for (DatiAttributi.Attributo temp : prova) {
@@ -115,7 +117,7 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
             if (temp.template.equals("luogoI")) {
                 dove.setText(temp.risposta);
             }
-        }
+        }*/
         //fine check template
 
         //TEST
@@ -147,9 +149,11 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                         if (item.getItemId() == R.id.three)
                             eventDialog.orarioI().show();
                         if (item.getItemId() == R.id.four)
-                            eventDialog.luogo().show();
+                            eventDialog.luogoI().show();
                         if (item.getItemId() == R.id.five)
                             eventDialog.personalizzata().show();
+                        if (item.getItemId() == R.id.six)
+                            eventDialog.luogoE().show();
 
                         return true;
                     }
@@ -216,15 +220,6 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
         super.onDetach();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
-    }
-
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }
@@ -240,22 +235,24 @@ public class Evento extends Fragment implements AbsListView.OnItemClickListener 
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
                         Log.e("handlerTEST-DATA: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Data Evento", ris, "data", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Data Evento", ris, "data", close));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
                         Log.e("handlerTEST-ORARIO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Orario Evento", ris, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Orario Evento", ris, null, close));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
                         Log.e("handlerTEST-ORARIO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Orario Incontro", ris, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Orario Incontro", ris, null, close));
                         break;
-                    case DIALOG_LUOGO:
+                    case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
                         Log.e("handlerTEST-LUOGO: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "Luogo Evento", ris, "luogoE", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Luogo incontro", ris, "luogoI", close));
+                        break;
+                    case DIALOG_LUOGO_E:
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");

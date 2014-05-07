@@ -1,7 +1,9 @@
 package com.partymanager.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +15,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.google.android.gms.analytics.ExceptionParser;
 import com.partymanager.R;
+import com.partymanager.data.DatiAttributi;
+import com.partymanager.helper.HelperConnessione;
 
 public class EventDialog {
 
@@ -26,11 +31,19 @@ public class EventDialog {
     CheckBox chiusura;
     TimePicker orario;
 
+    private String idEvento;
+    private static final int DIALOG_DATA = 1;
+    private static final int DIALOG_ORARIO_E = 2;
+    private static final int DIALOG_ORARIO_I = 3;
+    private static final int DIALOG_LUOGO_I = 4;
+    private static final int DIALOG_PERSONALLIZATA = 5;
+    private static final int DIALOG_LUOGO_E = 6;
     private Handler mResponseHandler;
 
-    public EventDialog(Context context, Handler reponseHandler) {
+    public EventDialog(Context context, Handler reponseHandler, String idEvento) {
         this.context = context;
         this.mResponseHandler = reponseHandler;
+        this.idEvento = idEvento;
 
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_domande);
@@ -144,6 +157,7 @@ public class EventDialog {
                 mResponseHandler.sendMessage(m);
                 //END TEST
 
+
                 dialog.dismiss();
             }
         });
@@ -151,8 +165,8 @@ public class EventDialog {
         return dialog;
     }
 
-    public Dialog luogo() {
-        dialog.setTitle("Scegli una luogo");
+    public Dialog luogoE() {
+        dialog.setTitle("Luogo Evento");
 
         risposta.setText("");
         risposta.setHint("Scrivi qui il luogo");
@@ -166,20 +180,50 @@ public class EventDialog {
 
             @Override
             public void onClick(View v) {
-                Log.e("LUOGOSCELTO: ", risposta.getText().toString());
+                Log.e("LUOGOSCELTO-E: ", risposta.getText().toString());
 
                 if (!risposta.getText().toString().equals("")) {
-                    //TEST
+
+                    /*
                     Message m = new Message();
                     Bundle b = new Bundle();
                     b.putInt("who", 4);
                     b.putBoolean("close", chiusura.isChecked());
                     b.putString("luogo", risposta.getText().toString()); // for example
                     m.setData(b);
-
                     mResponseHandler.sendMessage(m);
+                    */
+                    addDomanda(4, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
+
+
                 }
-                //END TEST
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
+    }
+
+    public Dialog luogoI() {
+        dialog.setTitle("Luogo Incontro");
+
+        risposta.setText("");
+        risposta.setHint("Scrivi qui il luogo");
+
+        alto.setVisibility(View.GONE);
+        risposta.setVisibility(View.VISIBLE);
+        date.setVisibility(View.GONE);
+        orario.setVisibility(View.GONE);
+
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.e("LUOGOSCELTO-I: ", risposta.getText().toString());
+
+                if (!risposta.getText().toString().equals("")) {
+                    addDomanda(4, "Luogo Incontro", idEvento, "luogoI", risposta.getText().toString());
+                }
 
                 dialog.dismiss();
             }
@@ -228,5 +272,69 @@ public class EventDialog {
         });
 
         return dialog;
+    }
+
+    private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String[] name = {"domanda", "idEvento", "template", "risposta"};
+                String[] param = {domanda, idEvento, template, risposta};
+
+                Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
+
+                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/addDomanda", name, param);
+
+                Log.e("addDomanda-ris: ", ris);
+
+                return ris;
+
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+                if (isInteger(ris)) {
+                    Message m = new Message();
+                    Bundle b = new Bundle();
+                    switch (who) {
+                        case DIALOG_DATA:
+                            break;
+                        case DIALOG_ORARIO_E:
+                            break;
+                        case DIALOG_ORARIO_I:
+                            break;
+                        case DIALOG_LUOGO_I:
+                            b.putInt("who", 4);
+                            b.putBoolean("close", chiusura.isChecked());
+                            b.putString("luogo", risposta); // for example
+                            m.setData(b);
+                            break;
+                        case DIALOG_LUOGO_E:
+                            b.putInt("who", 6);
+                            b.putBoolean("close", chiusura.isChecked());
+                            b.putString("luogo", risposta); // for example
+                            m.setData(b);
+                            break;
+                        case DIALOG_PERSONALLIZATA:
+                            break;
+                    }
+                    mResponseHandler.sendMessage(m);
+                }
+            }
+        }.execute(null, null, null);
+    }
+
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }

@@ -14,7 +14,11 @@
 
     <item
         androclass:id="@+id/four"
-        androclass:title="Luogo"/>
+        androclass:title="Luogo Incontro"/>
+
+    <item
+        androclass:id="@+id/six"
+        androclass:title="Luogo Evento"/>
 
     <item
         androclass:id="@+id/five"
