@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,9 +21,6 @@ import com.partymanager.R;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.activity.EventDialog;
-import com.partymanager.data.DatiEventi;
-
-import java.util.ArrayList;
 
 public class Evento extends Fragment {
 
@@ -54,6 +50,7 @@ public class Evento extends Fragment {
     private static final int DIALOG_LUOGO_I = 4;
     private static final int DIALOG_PERSONALLIZATA = 5;
     private static final int DIALOG_LUOGO_E = 6;
+    private static final int DIALOG_SINO = 7;
 
     private OnFragmentInteractionListener mListener;
 
@@ -178,7 +175,7 @@ public class Evento extends Fragment {
 
         btn_sino.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                changeAlpha(btn_sino);
+                eventDialog.domanda_chiusa().show();
             }
         });
 
@@ -189,6 +186,21 @@ public class Evento extends Fragment {
                                     long arg3) {
                 Log.e("listview click", "hai cliccato l'elemento " + Integer.toString(arg2 + 1));
 
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+
+                Log.e("long clicked","pos: " + pos);
+                PopupMenu popup = new PopupMenu(getActivity(), arg1);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
+                popup.show();
+
+                return true;
             }
         });
 
@@ -231,6 +243,7 @@ public class Evento extends Fragment {
             if (msg != null) {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
+                String ris2;
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
@@ -259,12 +272,18 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
-                        String ris2 = "";
+                        ris2 = "";
                         Log.e("handler-PERS: ", ris);
                         if (close){
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", ris, ris2, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, ris, ris2, null, close));
+                        break;
+                    case DIALOG_SINO:
+                        ris = msg.getData().getString("domanda");
+                        ris2 = "1 voto: 100% SI";
+                        Log.e("handler-SINO: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, ris, ris2, null, false));
                         break;
                 }
             }

@@ -38,6 +38,7 @@ public class EventDialog {
     private static final int DIALOG_LUOGO_I = 4;
     private static final int DIALOG_PERSONALLIZATA = 5;
     private static final int DIALOG_LUOGO_E = 6;
+    private static final int DIALOG_SINO = 7;
     private Handler mResponseHandler;
     ProgressDialog progressDialog;
 
@@ -224,6 +225,32 @@ public class EventDialog {
         return dialog;
     }
 
+    public Dialog domanda_chiusa() {
+    dialog.setTitle("Domanda SI/NO");
+
+    alto.setVisibility(View.VISIBLE);
+    risposta.setVisibility(View.GONE);
+    date.setVisibility(View.GONE);
+    orario.setVisibility(View.GONE);
+
+    chiusura.setVisibility(View.GONE);
+    alto.setHint("Scrivi qui la domanda");
+
+    close.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            Log.e("SINO: ", alto.getText().toString());
+
+            addDomanda(7, alto.getText().toString(), idEvento, null, "si");
+            dialog.dismiss();
+        }
+    });
+
+    return dialog;
+}
+
 
     private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
@@ -290,8 +317,12 @@ public class EventDialog {
                             break;
                         case DIALOG_PERSONALLIZATA:
                             b.putInt("who", 5);
-                            b.putString("pers-d", alto.getText().toString());
+                            b.putString("pers-d", domanda);
                             b.putString("pers-r", risposta);
+                            break;
+                        case DIALOG_SINO:
+                            b.putInt("who", 7);
+                            b.putString("domanda", domanda);
                             break;
                     }
                     b.putBoolean("close", chiusura.isChecked());
