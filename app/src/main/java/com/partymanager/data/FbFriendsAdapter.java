@@ -94,7 +94,14 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         else
             holder.installed.setVisibility(convertView.GONE);
         holder.name.setTag(friends1);
-        holder.foto_profilo.setImageBitmap(friends1.getFoto());
+
+        //Gestione foto profilo nella listview
+        holder.foto_profilo.setImageBitmap(null);
+        holder.foto_profilo.setBackground(context.getResources().getDrawable(R.drawable.com_facebook_profile_default_icon));
+        if (friends1.foto != null) {
+            holder.foto_profilo.setBackground(null);
+            holder.foto_profilo.setImageBitmap(friends1.getFoto());
+        }
 
         return convertView;
     }

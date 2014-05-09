@@ -14,7 +14,7 @@ public class Friends {
     String name = null;
     boolean selected = false;
     boolean appInstalled;
-    Bitmap foto;
+    Bitmap foto = null;
 
     public Friends(String code, String name, boolean selected, boolean appI) {
         super();

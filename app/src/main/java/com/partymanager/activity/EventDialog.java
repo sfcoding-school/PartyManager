@@ -2,6 +2,7 @@ package com.partymanager.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,15 +10,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.google.android.gms.analytics.ExceptionParser;
 import com.partymanager.R;
-import com.partymanager.data.DatiAttributi;
 import com.partymanager.helper.HelperConnessione;
 
 public class EventDialog {
@@ -39,6 +39,7 @@ public class EventDialog {
     private static final int DIALOG_PERSONALLIZATA = 5;
     private static final int DIALOG_LUOGO_E = 6;
     private Handler mResponseHandler;
+    ProgressDialog progressDialog;
 
     public EventDialog(Context context, Handler reponseHandler, String idEvento) {
         this.context = context;
@@ -74,16 +75,7 @@ public class EventDialog {
                 String temp = Integer.toString(date.getDayOfMonth()) + "/" + Integer.toString(date.getMonth() + 1) + "/" + Integer.toString(date.getYear());
                 Log.e("DATASCELTA: ", temp);
 
-                //TEST
-                Message m = new Message();
-                Bundle b = new Bundle();
-                b.putInt("who", 1);
-                b.putBoolean("close", chiusura.isChecked());
-                b.putString("data", temp); // for example
-                m.setData(b);
-
-                mResponseHandler.sendMessage(m);
-                //END TEST
+                addDomanda(1, "Data Evento", idEvento, "data", temp);
 
                 dialog.dismiss();
             }
@@ -110,17 +102,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                //TEST
-                Message m = new Message();
-                Bundle b = new Bundle();
-                b.putInt("who", 2);
-                b.putBoolean("close", chiusura.isChecked());
-                b.putString("orario", temp); // for example
-                m.setData(b);
-
-                mResponseHandler.sendMessage(m);
-                //END TEST
-
+                addDomanda(2, "Orario Evento", idEvento, "orarioE", temp);
                 dialog.dismiss();
             }
         });
@@ -146,18 +128,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                //TEST
-                Message m = new Message();
-                Bundle b = new Bundle();
-                b.putInt("who", 3);
-                b.putBoolean("close", chiusura.isChecked());
-                b.putString("orario", temp); // for example
-                m.setData(b);
-
-                mResponseHandler.sendMessage(m);
-                //END TEST
-
-
+                addDomanda(3, "Orario Incontro", idEvento, "orarioI", temp);
                 dialog.dismiss();
             }
         });
@@ -183,19 +154,7 @@ public class EventDialog {
                 Log.e("LUOGOSCELTO-E: ", risposta.getText().toString());
 
                 if (!risposta.getText().toString().equals("")) {
-
-                    /*
-                    Message m = new Message();
-                    Bundle b = new Bundle();
-                    b.putInt("who", 4);
-                    b.putBoolean("close", chiusura.isChecked());
-                    b.putString("luogo", risposta.getText().toString()); // for example
-                    m.setData(b);
-                    mResponseHandler.sendMessage(m);
-                    */
                     addDomanda(4, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
-
-
                 }
                 dialog.dismiss();
             }
@@ -254,31 +213,35 @@ public class EventDialog {
                 Log.e("PERSONALIZZATA-RISPOSTA: ", risposta.getText().toString());
 
                 if (!alto.getText().toString().equals("")) {
-                    //TEST
-                    Message m = new Message();
-                    Bundle b = new Bundle();
-                    b.putInt("who", 5);
-                    b.putBoolean("close", chiusura.isChecked());
-                    b.putString("pers-d", alto.getText().toString());
-                    b.putString("pers-r", risposta.getText().toString());
-                    m.setData(b);
-
-                    mResponseHandler.sendMessage(m);
+                    addDomanda(5, alto.getText().toString(), idEvento, null, risposta.getText().toString());
                 }
-                //END TEST
 
                 dialog.dismiss();
+
             }
         });
 
         return dialog;
     }
 
+
     private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected void onPreExecute() {
+
+                InputMethodManager inputManager = (InputMethodManager)
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                if (((Activity) context).getCurrentFocus() != null)
+                    inputManager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Creazione Domanda");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
             }
 
             @Override
@@ -298,31 +261,41 @@ public class EventDialog {
 
             @Override
             protected void onPostExecute(String ris) {
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+
                 if (isInteger(ris)) {
                     Message m = new Message();
                     Bundle b = new Bundle();
                     switch (who) {
                         case DIALOG_DATA:
+                            b.putInt("who", 1);
+                            b.putString("data", risposta);
                             break;
                         case DIALOG_ORARIO_E:
+                            b.putInt("who", 2);
+                            b.putString("orario", risposta);
                             break;
                         case DIALOG_ORARIO_I:
+                            b.putInt("who", 3);
+                            b.putString("orario", risposta);
                             break;
                         case DIALOG_LUOGO_I:
                             b.putInt("who", 4);
-                            b.putBoolean("close", chiusura.isChecked());
-                            b.putString("luogo", risposta); // for example
-                            m.setData(b);
+                            b.putString("luogo", risposta);
                             break;
                         case DIALOG_LUOGO_E:
                             b.putInt("who", 6);
-                            b.putBoolean("close", chiusura.isChecked());
-                            b.putString("luogo", risposta); // for example
-                            m.setData(b);
+                            b.putString("luogo", risposta);
                             break;
                         case DIALOG_PERSONALLIZATA:
+                            b.putInt("who", 5);
+                            b.putString("pers-d", alto.getText().toString());
+                            b.putString("pers-r", risposta);
                             break;
                     }
+                    b.putBoolean("close", chiusura.isChecked());
+                    m.setData(b);
                     mResponseHandler.sendMessage(m);
                 }
             }

@@ -227,41 +227,44 @@ public class Evento extends Fragment {
     private Handler dialogMsgHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            String ris = "";
+            String ris;
             if (msg != null) {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
-                        Log.e("handlerTEST-DATA: ", ris);
+                        Log.e("handler-DATA: ", ris);
                         DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Data Evento", ris, "data", close));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        Log.e("handlerTEST-ORARIO-E: ", ris);
+                        Log.e("handler-ORARIO-E: ", ris);
                         DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Orario Evento", ris, null, close));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        Log.e("handlerTEST-ORARIO-I: ", ris);
+                        Log.e("handler-ORARIO-I: ", ris);
                         DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Orario Incontro", ris, null, close));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        Log.e("handlerTEST-LUOGO: ", ris);
+                        Log.e("handler-LUOGO-I: ", ris);
                         DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Luogo incontro", ris, "luogoI", close));
                         break;
                     case DIALOG_LUOGO_E:
+                        ris = msg.getData().getString("luogo");
+                        Log.e("handler-LUOGO-E: ", ris);
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(mParam3, "Luogo Evento", ris, "luogoE", close));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
                         String ris2 = "";
-                        Log.e("handlerTEST-PERS: ", ris);
+                        Log.e("handler-PERS: ", ris);
                         if (close){
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", ris, ris2, "luogoI", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("1", ris, ris2, null, close));
                         break;
                 }
             }
