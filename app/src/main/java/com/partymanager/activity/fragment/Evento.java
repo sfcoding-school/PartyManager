@@ -117,12 +117,6 @@ public class Evento extends Fragment {
         }*/
         //fine check template
 
-        //TEST
-        //String[] my_array = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, my_array);
-        //listView.setAdapter(adapter);
-        //TEST
-
         listView.setAdapter(eAdapter);
 
         btn_Domanda.setOnClickListener(new View.OnClickListener() {
@@ -196,10 +190,8 @@ public class Evento extends Fragment {
 
                 Log.e("long clicked","pos: " + pos);
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
-                //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
                 popup.show();
-
                 return true;
             }
         });

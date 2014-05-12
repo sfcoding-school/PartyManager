@@ -103,7 +103,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                addDomanda(2, "Orario Evento", idEvento, "orarioE", temp);
+                addDomanda(2, "Orario Evento", idEvento, "oraE", temp);
                 dialog.dismiss();
             }
         });
@@ -129,7 +129,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                addDomanda(3, "Orario Incontro", idEvento, "orarioI", temp);
+                addDomanda(3, "Orario Incontro", idEvento, "oraI", temp);
                 dialog.dismiss();
             }
         });
@@ -236,21 +236,21 @@ public class EventDialog {
     chiusura.setVisibility(View.GONE);
     alto.setHint("Scrivi qui la domanda");
 
-    close.setOnClickListener(new View.OnClickListener() {
+        close.setOnClickListener(new View.OnClickListener() {
 
-        @Override
-        public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-            Log.e("SINO: ", alto.getText().toString());
-
-            addDomanda(7, alto.getText().toString(), idEvento, null, "si");
-            dialog.dismiss();
-        }
-    });
+                Log.e("SI/NO: ", alto.getText().toString());
+                if (!alto.getText().toString().equals("")) {
+                    addDomanda(7, alto.getText().toString(), idEvento, null, "si");
+                    dialog.dismiss();
+                }
+            }
+        });
 
     return dialog;
 }
-
 
     private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
@@ -273,8 +273,14 @@ public class EventDialog {
 
             @Override
             protected String doInBackground(Void... params) {
-                String[] name = {"domanda", "idEvento", "template", "risposta"};
-                String[] param = {domanda, idEvento, template, risposta};
+                String[] name = {"domanda", "idEvento", "template", "risposta", "chiusa"};
+                String chiusa = "0";
+                /*
+                if sono admin
+                if cb.is selected
+                chiusa = "1;
+                 */
+                String[] param = {domanda, idEvento, template, risposta, chiusa};
 
                 Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
 

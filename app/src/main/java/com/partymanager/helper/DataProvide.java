@@ -35,7 +35,7 @@ public class DataProvide {
 
 
     public static void getEvent(Context context,String facebookId) {
-        String token = HelperFacebook.getToken((Activity) context);
+        String token = HelperFacebook.getToken();
         loadJson("eventi", context);
         downloadEvent(facebookId, token, context);
     }
@@ -120,7 +120,7 @@ public class DataProvide {
                 String json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
                 Log.e("DATA_PROVIDE", json_string);
                 if (json_string.equals("fallito"))
-                    if(HelperConnessione.login(id,token)){
+                    if(HelperConnessione.login()){
                         json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
                         Log.e("DATA_PROVIDE", json_string);
                     }

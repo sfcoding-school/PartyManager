@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -42,10 +43,13 @@ public class MainActivity extends Activity
      */
     public static CharSequence mTitle;
 
+    private static Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mContext = getApplicationContext();
         fragmentManager = getFragmentManager();
 
         setContentView(R.layout.activity_main);
@@ -60,7 +64,7 @@ public class MainActivity extends Activity
                 startActivity(newact);
             }else{
 
-                HelperFacebook.getToken(this);
+                HelperFacebook.getToken();
             }
                 //Fine controllo sessione
 
@@ -84,6 +88,10 @@ public class MainActivity extends Activity
 */
             //mDisplay = (TextView) findViewById(R.id.pp);
         }
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 
     @Override
@@ -245,7 +253,7 @@ public class MainActivity extends Activity
         fragmentManager.addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
-                        if (fragmentManager.getBackStackEntryCount()==0 || fragmentManager.getBackStackEntryAt(0).getName() != "evento"){
+                        if (fragmentManager.getBackStackEntryCount()==0 || !fragmentManager.getBackStackEntryAt(0).getName().equals("evento")){
                             noMenuActionBar = false;
                         }
                         invalidateOptionsMenu();

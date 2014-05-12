@@ -12,7 +12,9 @@ import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
+import com.partymanager.gcm.Helper_Notifiche;
 
 /**
  * Created by luca on 5/1/14.
@@ -20,8 +22,9 @@ import com.partymanager.activity.ProfileActivity;
 public class HelperFacebook {
 
     private static String facebookId;
+    private static Context context = MainActivity.getContext();
 
-    public static String getFacebookId(Context context){
+    public static String getFacebookId(){
         if (facebookId != null)
             return facebookId;
         else{
@@ -49,13 +52,12 @@ public class HelperFacebook {
                     session.openForRead(new Session.OpenRequest(activity));
                 }
             }
-
         }
         return session;
     }
 
-    public static String getToken(Activity activity){
-        Session session = getSession(activity);
+    public static String getToken(){
+        Session session = getSession((Activity)context);
         String token = session.getAccessToken();
         Log.e("TOKEN - getToken", token);
         return token;

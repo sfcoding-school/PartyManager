@@ -84,7 +84,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         /*
         eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
         DatiEventi.eAdapter = eAdapter; */
-        String idFacebbok = HelperFacebook.getFacebookId(getActivity());
+        String idFacebbok = HelperFacebook.getFacebookId();
         if (idFacebbok!= null)
             eAdapter = DatiEventi.init(getActivity(), idFacebbok);
 
