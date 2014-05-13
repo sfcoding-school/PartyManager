@@ -86,6 +86,11 @@ public class HelperConnessione {
             String test_ritorno = EntityUtils.toString(response.getEntity());
             Log.e("httpGetConnection-Ris: ", test_ritorno);
 
+            if(EntityUtils.toString(response.getEntity()).equals("session error")){
+                login();
+                return httpGetConnection(url);
+            }
+
             return EntityUtils.toString(response.getEntity());
 
         } catch (ClientProtocolException e) {

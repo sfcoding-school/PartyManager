@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.activity.MainActivity;
+import com.partymanager.helper.HelperConnessione;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -93,10 +94,15 @@ public class Helper_Notifiche {
         }.execute(null, null, null);
     }
 
-    private static void sendRegistrationIdToBackend(String regid, String ID_FB, String Username) {
+    private static void sendRegistrationIdToBackend(String regid, String ID_FB, String username) {
         // TODO Auto-generated method stub
-        Log.i(TAG, "sendRegistrationIdToBackend");
+        Log.e(TAG, "sendRegistrationIdToBackend");
         // Create a new HttpClient and Post Header
+        String[] name = {"idCell", "idFacebook", "username"};
+        String[] param = {regid, ID_FB, username};
+        String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/regUser", name, param);
+        Log.e(TAG, "sendRegistrationIdToBackend, "+ ris);
+        /*
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/regUser");
 
@@ -126,6 +132,8 @@ public class Helper_Notifiche {
             Log.i(TAG,"error "+error);
             //mDisplay.append("error");
         }
+        */
+
     }
 
     private static void storeRegistrationId(Context context, String regId) {

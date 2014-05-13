@@ -22,13 +22,13 @@ import com.partymanager.gcm.Helper_Notifiche;
 public class HelperFacebook {
 
     private static String facebookId;
-    private static Context context = MainActivity.getContext();
+    private static Activity activity = MainActivity.getActivity();
 
     public static String getFacebookId(){
         if (facebookId != null)
             return facebookId;
         else{
-            SharedPreferences prefs = context.getSharedPreferences(ProfileActivity.class.getSimpleName(),context.MODE_PRIVATE);
+            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(),activity.MODE_PRIVATE);
             String id = prefs.getString("reg_id","");
             if (id.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "id facebook not found.");
@@ -57,7 +57,7 @@ public class HelperFacebook {
     }
 
     public static String getToken(){
-        Session session = getSession((Activity)context);
+        Session session = getSession(activity);
         String token = session.getAccessToken();
         Log.e("TOKEN - getToken", token);
         return token;

@@ -115,16 +115,19 @@ public class DataProvide {
 
             @Override
             protected String doInBackground(Void... params) {
+                /*
                 String[] name = {"idFacebook"};
                 String[] param = {id};
-                String json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
+                */
+                String json_string = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event");
                 Log.e("DATA_PROVIDE", json_string);
+                /*
                 if (json_string.equals("fallito"))
                     if(HelperConnessione.login()){
                         json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
                         Log.e("DATA_PROVIDE", json_string);
                     }
-
+                */
                 return json_string;
 
             }

@@ -43,13 +43,13 @@ public class MainActivity extends Activity
      */
     public static CharSequence mTitle;
 
-    private static Context mContext;
+    private static Activity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mContext = getApplicationContext();
+        mContext = this;
         fragmentManager = getFragmentManager();
 
         setContentView(R.layout.activity_main);
@@ -90,7 +90,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public static Context getContext(){
+    public static Activity getActivity(){
         return mContext;
     }
 
