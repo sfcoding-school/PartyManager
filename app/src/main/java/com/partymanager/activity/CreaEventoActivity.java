@@ -35,6 +35,7 @@ import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.data.FbFriendsAdapter;
 import com.partymanager.data.Friends;
+import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 import org.apache.http.HttpResponse;
@@ -191,12 +192,10 @@ public class CreaEventoActivity extends Activity {
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
                                           int arg3) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
@@ -228,19 +227,19 @@ public class CreaEventoActivity extends Activity {
                             id_to_invite.append(temp);
                         }
                     }
-                    //for (Friends aFinali : finali) id_toSend.add(aFinali.getCode());
                     JSONArray jsArray = new JSONArray(id_toSend);
 
                     final SharedPreferences prefs = getPreferences();
                     String registrationId = prefs.getString(REG_ID, "");
+
                     if (registrationId.isEmpty()) {
-                        Log.e("DEBUG ID: ", "problema REG_ID vuoto");
+                        Log.e(getLocalClassName(), "problema REG_ID vuoto");
                     } else {
                         Log.e("TESTJSON: ", jsArray.toString());
-                        Log.e("TESTJSON: ", id_to_invite.toString());
 
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
-                        sendInviti(id_to_invite.toString());
+                        if (id_to_invite.length() > 0)
+                            sendInviti(id_to_invite.toString());
                     }
                 }
             }
@@ -263,30 +262,12 @@ public class CreaEventoActivity extends Activity {
             @Override
             protected String doInBackground(Void... args) {
                 String ris = null;
-                Log.e("CreaEvento-sendToServer: ", "entrato");
-                // Create a new HttpClient and Post Header
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/addEvent");
 
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("name", name));
-                    nameValuePairs.add(new BasicNameValuePair("userList", List));
-                    nameValuePairs.add(new BasicNameValuePair("admin", ID_FB));
-                    Log.e("CreaEvento-sendToServer: ", name + " " + List + " " + ID_FB);
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                String url = "http://androidpartymanager.herokuapp.com/event";
+                ris = HelperConnessione.httpPostConnection(url, new String[]{"name", "userList", "admin"}, new String[]{name, List, ID_FB});
 
-                    //Execute HTTP Post Request
-                    HttpResponse response = httpclient.execute(httppost);
-                    ris = EntityUtils.toString(response.getEntity());
+                Log.e("CreaEventoActivity-sendNewEvent: ", ris);
 
-                    Log.e("CreaEvento-sendToServer-Risposta: ", ris);
-                } catch (ClientProtocolException e) {
-                    Log.e("CreaEvento-sendToServer: ", "catch 1");
-                } catch (IOException e) {
-                    Log.e("CreaEvento-sendToServer: ", "catch 2 ");
-                }
                 return ris;
             }
 

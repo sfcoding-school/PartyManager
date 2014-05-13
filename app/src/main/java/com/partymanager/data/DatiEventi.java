@@ -62,12 +62,16 @@ public class DatiEventi {
         public String name;
         public String details;
         public GregorianCalendar date;
+        public String admin;
+        public int numUtenti;
 
-        public Evento (int id, String name, String details, GregorianCalendar date) {
+        public Evento (int id, String name, String details, GregorianCalendar date, String admin, int n) {
             this.id = id;
             this.name = name;
             this.details = details;
             this.date = date;
+            this.admin = admin;
+            this.numUtenti = n;
         }
 
         @Override

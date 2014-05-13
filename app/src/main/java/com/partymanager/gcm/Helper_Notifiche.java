@@ -11,53 +11,30 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.helper.HelperConnessione;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by ulisse on 29/04/14.
- */
 public class Helper_Notifiche {
     /*NOTIFICHE*/
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
     public static final String TAG = "PM-NOTIFICHE";
     static String SENDER_ID = "924450140207";
 
-    //TextView mDisplay;
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
-
     static String regid;
     /*NOTIFICHE*/
 
 
-
     /*FUNZIONI UTILI NOTIFICHE*/
-    public static void registerInBackground(final GoogleCloudMessaging gcm, final Context context, final String id_facebook, final String username_facebook) {
-        //final GoogleCloudMessaging gcm = new GoogleCloudMessaging();
-        new AsyncTask<Void, Void, String>() {
+    public static void registerInBackground(final GoogleCloudMessaging gcm, final Context context, final String username) {
+
+        new AsyncTask<String, Void, String>() {
             @Override
-            protected String doInBackground(Void... params) {
+            protected String doInBackground(String... strings) {
                 Log.i(TAG, "registerInBackground start..");
-                String msg = "";
+                String msg;
                 try {
 
-                    //regid = "prova_regid";
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
@@ -66,7 +43,10 @@ public class Helper_Notifiche {
                     // The request to your server should be authenticated if your app
                     // is using accounts.
 
-                    sendRegistrationIdToBackend(regid, id_facebook, username_facebook);
+                    String[] name = {"idCell", "username"};
+                    String[] param = {regid, username};
+                    String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/user", name, param);
+                    Log.e(TAG, "sendRegistrationIdToBackend-ris: " + ris);
 
                     // For this demo: we don't need to send it because the device
                     // will send upstream messages to a server that echo back the
@@ -85,55 +65,10 @@ public class Helper_Notifiche {
                 return msg;
             }
 
-
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(TAG, (msg + "\n"));
-                //mDisplay.append(msg + "\n");
             }
-        }.execute(null, null, null);
-    }
-
-    private static void sendRegistrationIdToBackend(String regid, String ID_FB, String username) {
-        // TODO Auto-generated method stub
-        Log.e(TAG, "sendRegistrationIdToBackend");
-        // Create a new HttpClient and Post Header
-        String[] name = {"idCell", "idFacebook", "username"};
-        String[] param = {regid, ID_FB, username};
-        String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/regUser", name, param);
-        Log.e(TAG, "sendRegistrationIdToBackend, "+ ris);
-        /*
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/regUser");
-
-        try {
-            // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            Log.e("regid: ", regid);
-            nameValuePairs.add(new BasicNameValuePair("idCell", regid));
-            nameValuePairs.add(new BasicNameValuePair("idFacebook", ID_FB));
-            nameValuePairs.add(new BasicNameValuePair("username", Username));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-            //Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            String ris = EntityUtils.toString(response.getEntity());
-
-
-            Log.e(TAG, "risposta server registrazione: " + ris);
-
-            //mDisplay.append(response.toString());
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            //mDisplay.append("error");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            String error = e.toString();
-            Log.i(TAG,"error "+error);
-            //mDisplay.append("error");
-        }
-        */
-
+        }.execute();
     }
 
     private static void storeRegistrationId(Context context, String regId) {

@@ -63,7 +63,6 @@ public class MainActivity extends Activity
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
             }else{
-
                 HelperFacebook.getToken();
             }
                 //Fine controllo sessione
@@ -190,7 +189,7 @@ public class MainActivity extends Activity
         }
 
         if (id == R.id.debug) {
-            Fragment fragment = Evento.newInstance(null, null, "1");
+            Fragment fragment = Evento.newInstance(null, null, "1", null);
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, String.valueOf(mTitle))
                     .addToBackStack("evento")
@@ -215,7 +214,7 @@ public class MainActivity extends Activity
                 Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento + " " + id_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
-                Fragment fragment = Evento.newInstance(ListFriends, nome_evento, id_evento);
+                Fragment fragment = Evento.newInstance(null, null, null, null);
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
@@ -241,10 +240,10 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onFragmentInteraction(String id, String name){
+    public void onFragmentInteraction(String id, String name, String admin, String num){
         mTitle = name;
         noMenuActionBar = true;
-        Fragment fragment = Evento.newInstance(null, null, id);
+        Fragment fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, String.valueOf(mTitle))
                 .addToBackStack("evento")

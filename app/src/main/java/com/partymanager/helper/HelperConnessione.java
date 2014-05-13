@@ -1,6 +1,5 @@
 package com.partymanager.helper;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -57,10 +56,13 @@ public class HelperConnessione {
 
             HttpResponse response = httpclient.execute(httppost);
 
-            //return EntityUtils.toString(response.getEntity());
-            if(EntityUtils.toString(response.getEntity()).equals("session error")){
+            String temp = EntityUtils.toString(response.getEntity());
+
+            if(temp.equals("session error")){
                 login();
                 httpPostConnection(url, name, param);
+            } else {
+                return temp;
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -86,12 +88,12 @@ public class HelperConnessione {
             String test_ritorno = EntityUtils.toString(response.getEntity());
             Log.e("httpGetConnection-Ris: ", test_ritorno);
 
-            if(EntityUtils.toString(response.getEntity()).equals("session error")){
+            if(test_ritorno.equals("session error")){
                 login();
                 return httpGetConnection(url);
             }
 
-            return EntityUtils.toString(response.getEntity());
+            return test_ritorno;
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();

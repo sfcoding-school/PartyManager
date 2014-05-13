@@ -280,11 +280,11 @@ public class EventDialog {
                 if cb.is selected
                 chiusa = "1;
                  */
-                String[] param = {domanda, idEvento, template, risposta, chiusa};
+                String[] param = {domanda, template, risposta, chiusa};
 
                 Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
 
-                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/addDomanda", name, param);
+                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/attr/" + idEvento, name, param);
 
                 Log.e("addDomanda-ris: ", ris);
 

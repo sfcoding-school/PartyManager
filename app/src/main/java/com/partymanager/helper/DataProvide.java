@@ -158,29 +158,8 @@ public class DataProvide {
             @Override
             protected String doInBackground(Void... params) {
 
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("http://androidpartymanager.herokuapp.com/getAttributi");
-
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("idEvento", id));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    //Execute HTTP Post Request
-                    HttpResponse response = httpclient.execute(httppost);
-                    String json_string = EntityUtils.toString(response.getEntity());
-                    //Log.e("DATA_PROVIDE", json_string);
-
-                    return json_string;
-
-                } catch (ClientProtocolException e) {
-                    return "error";
-                } catch (IOException e) {
-                    String error = e.toString();
-                    Log.e("DATA_PROVIDE", error);
-                    return "error";
-                }
+               String ris = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/attr/" + id);
+                return ris;
             }
 
             @Override
@@ -209,8 +188,9 @@ public class DataProvide {
                         jsonArray.getJSONObject(i).getInt("id_evento"),
                         jsonArray.getJSONObject(i).getString("nome_evento"),
                         "content",
-                        gregCalendar
-
+                        gregCalendar,
+                        jsonArray.getJSONObject(i).getString("admin"),
+                        jsonArray.getJSONObject(i).getInt("num_utenti")
                 ));
             }
         } catch (JSONException e) {
@@ -228,8 +208,9 @@ public class DataProvide {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
-                        jsonArray.getJSONObject(i).getString("risposta"),
-                        jsonArray.getJSONObject(i).getString("template"), false
+                        null,
+                        jsonArray.getJSONObject(i).getString("template"),
+                        Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa"))
                 ));
             }
         } catch (JSONException e) {

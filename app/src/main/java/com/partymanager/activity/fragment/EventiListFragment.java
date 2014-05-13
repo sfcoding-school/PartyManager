@@ -3,6 +3,7 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +17,13 @@ import com.partymanager.activity.MainActivity;
 import com.partymanager.data.*;
 import com.partymanager.helper.HelperFacebook;
 
-/**
- * A fragment representing a list of Items.
- * <p />
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p />
- * Activities containing this fragment MUST implement the callback
- * interface.
- */
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private static ProgressBar progressBarLarge;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -51,7 +40,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      */
     private EventAdapter eAdapter;
 
-    // TODO: Rename and change types of parameters
     public static EventiListFragment newInstance() {
         EventiListFragment fragment = new EventiListFragment();
         //Bundle args = new Bundle();
@@ -78,15 +66,14 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
-        // TODO: Change Adapter to display your content
-
         /*
         eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
         DatiEventi.eAdapter = eAdapter; */
-        String idFacebbok = HelperFacebook.getFacebookId();
-        if (idFacebbok!= null)
-            eAdapter = DatiEventi.init(getActivity(), idFacebbok);
+        String idFacebook = HelperFacebook.getFacebookId();
+        if (idFacebook!= null)
+            eAdapter = DatiEventi.init(getActivity(), idFacebook);
+        else
+            Log.e("id_FB: ", "id fb null on " + this.getActivity().getLocalClassName());
 
         /*
         mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
@@ -166,7 +153,9 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             // fragment is attached to one) that an item has been selected.
             String idEvento = Integer.toString(DatiEventi.ITEMS.get(position).id);
             String name = DatiEventi.ITEMS.get(position).name;
-            mListener.onFragmentInteraction(idEvento, name);
+            String admin = DatiEventi.ITEMS.get(position).admin;
+            String numU = Integer.toString(DatiEventi.ITEMS.get(position).numUtenti);
+            mListener.onFragmentInteraction(idEvento, name, admin, numU);
         }
     }
 
@@ -194,8 +183,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     * >Communicating with Other Fragments</a> for more information.
     */
     public static interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id, String name);
+        public void onFragmentInteraction(String id, String name, String admin, String numU);
     }
 
 }

@@ -3,6 +3,7 @@ package com.partymanager.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -13,9 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -79,8 +78,6 @@ public class ProfileActivity extends Activity {
         }
 
         prefs = getPreferences();
-        //controllo possibilità di accesso/scrittura ExternaleStorage
-        checkExternalMedia();
 
         //Controllo KEY HASH per connessione FB
         try {
@@ -150,11 +147,12 @@ public class ProfileActivity extends Activity {
     }
 
     private void updateView() {
-        final Session session = Session.getActiveSession();
+        session = Session.getActiveSession();
         if (session.isOpened()) {
 
             buttonLoginLogout.setText("Logout");
             foto_profilo.setVisibility(View.VISIBLE);
+            textInstructionsOrLink.setText("");
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     onClickLogout();
@@ -164,48 +162,28 @@ public class ProfileActivity extends Activity {
             if (view_profilo == 0) {
 
                 final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
                             savePreferences(user.getUsername(), user.getId());
-                            Helper_Notifiche.registerInBackground(gcm, getApplicationContext(), user.getId(), user.getUsername());
+
+                            Helper_Notifiche.registerInBackground(gcm, getApplicationContext(), user.getUsername());
+
+                            Intent newact = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(newact);
                         }
                     }
                 });
-
-
-                Intent newact = new Intent(this, MainActivity.class);
-                startActivity(newact);
             } else {
 
                 String username_pref = prefs.getString(REG_USERNAME, "");
                 textInstructionsOrLink.setText(username_pref);
-                if (mExternalStorageAvailable) {
 
-                    File sdCard = Environment.getExternalStorageDirectory();
-                    File directory = new File(sdCard.getAbsolutePath() + "/PartyManager");
-                    File file = new File(directory, "foto_profilo.jpg");
-                    FileInputStream streamIn = null;
+                loadImageFromStorage();
 
-                    try {
-                        streamIn = new FileInputStream(file);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    if (streamIn != null) {
-                        Bitmap bitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-                        foto_profilo.setImageBitmap(bitmap);
-
-                        try {
-                            streamIn.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
                     @Override
@@ -231,6 +209,37 @@ public class ProfileActivity extends Activity {
                 }
             });
         }
+    }
+
+    private void loadImageFromStorage() {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        try {
+            File f = new File(directory, "profile.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            foto_profilo.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String saveToInternalSorage(Bitmap bitmapImage) {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile.jpg");
+
+        FileOutputStream fos;
+        try {
+
+            fos = new FileOutputStream(mypath);
+
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
     }
 
     private SharedPreferences getPreferences() {
@@ -266,58 +275,15 @@ public class ProfileActivity extends Activity {
 
             @Override
             protected void onPostExecute(Bitmap bitmap) {
-                // safety check
                 if (bitmap != null) {
-                    if (mExternalStorageAvailable && mExternalStorageWriteable) {
-                        saveWallpaper(bitmap);
-                    }
-
+                    saveToInternalSorage(bitmap);
                     foto_profilo.setImageBitmap(bitmap);
-                }
-            }
-
-            private void saveWallpaper(Bitmap finalBitmap) {
-                String root = Environment.getExternalStorageDirectory().toString();
-                File myDir = new File(root + "/PartyManager");
-                myDir.mkdirs();
-
-                String fname = "foto_profilo.jpg";
-                File file = new File(myDir, fname);
-                if (file.exists()) file.delete();
-                try {
-                    FileOutputStream out = new FileOutputStream(file);
-                    finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    out.flush();
-                    out.close();
-
-                } catch (Exception e) {
-                    Log.e("CATCH: ", "saveWallpaper");
                 }
             }
 
         }.execute();
 
     }
-
-    private void checkExternalMedia() {
-
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // Can read and write the media
-            mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // Can only read the media
-            mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            // Can't read or write
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
-        }
-
-        //Log.e("DEBUG: ", "External Media: readable=" + mExternalStorageAvailable + " writable=" + mExternalStorageWriteable);
-    }
-
 
     private void onClickLogin() {
         Session session = Session.getActiveSession();
@@ -332,7 +298,6 @@ public class ProfileActivity extends Activity {
     }
 
     private void onClickLogout() {
-        view_profilo = 0;
         foto_profilo.setVisibility(View.GONE);
         textInstructionsOrLink.setText(R.string.instruction);
         savePreferences("", "");
@@ -351,10 +316,8 @@ public class ProfileActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        view_profilo = 0;
         if (session != null && session.isOpened())
             finish();
-
     }
 }
 
