@@ -59,8 +59,7 @@ public class EventDialog {
         close = (Button) dialog.findViewById(R.id.btn_close);
         orario = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-        Log.e("check admin: ",HelperFacebook.getFacebookId() + " " +  adminEvento);
-        if (HelperFacebook.getFacebookId().equals(adminEvento)){
+        if (HelperFacebook.getFacebookId().equals(adminEvento)) {
             chiusura.setVisibility(View.GONE);
         }
 
@@ -234,15 +233,15 @@ public class EventDialog {
     }
 
     public Dialog domanda_chiusa() {
-    dialog.setTitle("Domanda SI/NO");
+        dialog.setTitle("Domanda SI/NO");
 
-    alto.setVisibility(View.VISIBLE);
-    risposta.setVisibility(View.GONE);
-    date.setVisibility(View.GONE);
-    orario.setVisibility(View.GONE);
+        alto.setVisibility(View.VISIBLE);
+        risposta.setVisibility(View.GONE);
+        date.setVisibility(View.GONE);
+        orario.setVisibility(View.GONE);
 
-    chiusura.setVisibility(View.GONE);
-    alto.setHint("Scrivi qui la domanda");
+        chiusura.setVisibility(View.GONE);
+        alto.setHint("Scrivi qui la domanda");
 
         close.setOnClickListener(new View.OnClickListener() {
 
@@ -257,8 +256,8 @@ public class EventDialog {
             }
         });
 
-    return dialog;
-}
+        return dialog;
+    }
 
     private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
@@ -281,23 +280,22 @@ public class EventDialog {
 
             @Override
             protected String doInBackground(Void... params) {
-                String[] name = {"domanda", "template", "risposta", "chiusa"};
-                String chiusa = "0";
-                /*
-                if sono admin
-                if cb.is selected
-                chiusa = "1;
-                 */
-                String[] param = {domanda, template, risposta, chiusa};
 
-                //Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
+                String chiusa = "0";
+                String[] name, param;
+                if (template.equals("")) {
+                    name = new String[]{"domanda", "risposta", "chiusa"};
+                    param = new String[]{domanda, risposta, chiusa};
+                } else {
+                    name = new String[]{"domanda", "template", "risposta", "chiusa"};
+                    param = new String[]{domanda, template, risposta, chiusa};
+                }
 
                 String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/attr/" + idEvento, name, param);
 
                 Log.e("addDomanda-ris: ", ris);
 
                 return ris;
-
             }
 
             @Override
