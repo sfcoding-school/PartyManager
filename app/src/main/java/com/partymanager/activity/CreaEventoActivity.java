@@ -265,31 +265,30 @@ public class CreaEventoActivity extends Activity {
 
             @Override
             protected void onPostExecute(String result) {
-                if (progressDialog.isShowing()) {
+                if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                    if (!isInteger(result)) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
-                        alertDialogBuilder.setMessage("Problema nella creazione dell'evento.");
+                if (!isInteger(result)) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
+                    alertDialogBuilder.setMessage("Problema nella creazione dell'evento.");
 
-                        // set positive button: Yes message
-                        alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    // set positive button: Yes message
+                    alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
-                        // set negative button: No message
-                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    // set negative button: No message
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    } else {
-                        closeActivity(List, name, result);
-                    }
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    closeActivity(List, name, result);
                 }
             }
 

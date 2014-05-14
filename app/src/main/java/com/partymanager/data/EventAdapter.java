@@ -14,10 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Created by luca on 4/28/14.
- */
-
 public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
 
     SimpleDateFormat dfgiornoN;

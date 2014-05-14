@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -189,7 +188,7 @@ public class MainActivity extends Activity
         }
 
         if (id == R.id.debug) {
-            Fragment fragment = Evento.newInstance(null, null, "1", null);
+            Fragment fragment = Evento.newInstance(null, null, null, null);
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, String.valueOf(mTitle))
                     .addToBackStack("evento")

@@ -22,12 +22,14 @@ import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.activity.EventDialog;
 
+import java.util.ArrayList;
+
 public class Evento extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
-    private static final String ARG_PARAM4 = "param3";
+    private static final String ARG_PARAM4 = "param4";
 
     private String idEvento;
     private String nomeEvento;
@@ -41,10 +43,10 @@ public class Evento extends Fragment {
     Button btn_Domanda;
     Button btn_sino;
     EventDialog eventDialog;
-    TextView luogo;
-    TextView quando_data;
+    static TextView luogo;
+    static TextView quando_data;
     TextView quando_ora;
-    TextView dove;
+    static TextView dove;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -58,6 +60,8 @@ public class Evento extends Fragment {
 
     public static Evento newInstance(String param1, String param2, String param3, String param4) {
         Evento fragment = new Evento();
+
+        Log.e("Evento newInstance: ", param1 + " " + param2 + " " + param3 + " " + param4);
 
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -82,11 +86,28 @@ public class Evento extends Fragment {
             adminEvento = getArguments().getString(ARG_PARAM3);
             numUtenti = getArguments().getString(ARG_PARAM4);
 
-            //Log.e("Evento TEST: ", mParam1 + " " + mParam2 + " " + mParam3);
+            Log.e("Evento onCreate: ", idEvento + " " + nomeEvento + " " + adminEvento + " " + numUtenti);
         }
 
-        eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento);
+        eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento);
+    }
+
+    public static void checkTemplate(){
+        ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
+
+        for (DatiAttributi.Attributo temp : prova) {
+            Log.e("checkTEmplate-TEST: ", temp.id + " " + temp.domanda + " " + temp.risposta + " " + temp.template + " " + temp.close);
+            if (temp.template.equals("data")) {
+                quando_data.setText(temp.risposta);
+            }
+            if (temp.template.equals("luogoE")) {
+                luogo.setText(temp.risposta);
+            }
+            if (temp.template.equals("luogoI")) {
+                dove.setText(temp.risposta);
+            }
+        }
     }
 
     @Override
@@ -104,22 +125,7 @@ public class Evento extends Fragment {
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
-        //check template - Da spostare da qui // può dare nullPointerException se ancora nn ha finito la listview
-        /*
-        ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
-        for (DatiAttributi.Attributo temp : prova) {
-            if (temp.template.equals("data")) {
-                quando_data.setText(temp.risposta);
-            }
-            if (temp.template.equals("luogoE")) {
-                luogo.setText(temp.risposta);
-            }
-            if (temp.template.equals("luogoI")) {
-                dove.setText(temp.risposta);
-            }
-        }*/
-        //fine check template
 
         listView.setAdapter(eAdapter);
 

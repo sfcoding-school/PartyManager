@@ -6,9 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-/**
- * Created by luca on 5/3/14.
- */
 public class HelperDataParser {
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);

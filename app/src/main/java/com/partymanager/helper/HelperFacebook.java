@@ -14,11 +14,7 @@ import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
-import com.partymanager.gcm.Helper_Notifiche;
 
-/**
- * Created by luca on 5/1/14.
- */
 public class HelperFacebook {
 
     private static String facebookId;

@@ -54,8 +54,6 @@ public class ProfileActivity extends Activity {
     private int view_profilo = 0;
     public final String REG_USERNAME = "reg_username";
     public final String REG_ID = "reg_id";
-    private boolean mExternalStorageAvailable = false;
-    private boolean mExternalStorageWriteable = false;
     private String username;
     private String id_fb;
     SharedPreferences prefs;

@@ -7,13 +7,6 @@ import com.partymanager.helper.DataProvide;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
-
 public class DatiEventi {
 
     /**
@@ -41,10 +34,10 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static EventAdapter init(Context context, String id) {
+    public static EventAdapter init(Context context) {
         eAdapter = new EventAdapter(context, DatiEventi.ITEMS);
 
-        DataProvide.getEvent(context, id);
+        DataProvide.getEvent(context);
         return eAdapter;
     }
 

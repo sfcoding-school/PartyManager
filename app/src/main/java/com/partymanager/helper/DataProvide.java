@@ -6,18 +6,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.partymanager.activity.MainActivity;
+import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,17 +19,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class DataProvide {
 
 
-    public static void getEvent(Context context,String facebookId) {
-        String token = HelperFacebook.getToken();
+    public static void getEvent(Context context) {
         loadJson("eventi", context);
-        downloadEvent(facebookId, token, context);
+        downloadEvent(context);
     }
 
     public static void getAttributi(Context context, String eventoId) {
@@ -104,7 +93,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadEvent(final String id, final String token, final Context context) {
+    private static void downloadEvent(final Context context) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -115,21 +104,11 @@ public class DataProvide {
 
             @Override
             protected String doInBackground(Void... params) {
-                /*
-                String[] name = {"idFacebook"};
-                String[] param = {id};
-                */
                 String json_string = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event");
-                Log.e("DATA_PROVIDE", json_string);
-                /*
-                if (json_string.equals("fallito"))
-                    if(HelperConnessione.login()){
-                        json_string = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/getMyEvent", name , param);
-                        Log.e("DATA_PROVIDE", json_string);
-                    }
-                */
-                return json_string;
 
+                Log.e("DATA_PROVIDE", json_string);
+
+                return json_string;
             }
 
             @Override
@@ -157,9 +136,7 @@ public class DataProvide {
 
             @Override
             protected String doInBackground(Void... params) {
-
-               String ris = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/attr/" + id);
-                return ris;
+                return HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/attr/" + id);
             }
 
             @Override
@@ -169,6 +146,8 @@ public class DataProvide {
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
+
+                Evento.checkTemplate();
             }
         }.execute(null, null, null);
     }
@@ -213,9 +192,10 @@ public class DataProvide {
                         Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa"))
                 ));
             }
+            Evento.checkTemplate();
         } catch (JSONException e) {
-            e.printStackTrace();
             Log.e("DEBUG ATTRIBUTI DOWNLOAD: ", "catch JSONException " + e);
         }
+
     }
 }

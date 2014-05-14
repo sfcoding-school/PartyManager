@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 
 import com.partymanager.R;
 import com.partymanager.helper.HelperConnessione;
+import com.partymanager.helper.HelperFacebook;
 
 public class EventDialog {
 
@@ -41,11 +42,13 @@ public class EventDialog {
     private static final int DIALOG_SINO = 7;
     private Handler mResponseHandler;
     ProgressDialog progressDialog;
+    private String adminEvento;
 
-    public EventDialog(Context context, Handler reponseHandler, String idEvento) {
+    public EventDialog(Context context, Handler reponseHandler, String idEvento, String adminEvento) {
         this.context = context;
         this.mResponseHandler = reponseHandler;
         this.idEvento = idEvento;
+        this.adminEvento = adminEvento;
 
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_domande);
@@ -55,6 +58,11 @@ public class EventDialog {
         chiusura = (CheckBox) dialog.findViewById(R.id.cb_chiusura);
         close = (Button) dialog.findViewById(R.id.btn_close);
         orario = (TimePicker) dialog.findViewById(R.id.timePicker);
+
+        Log.e("check admin: ",HelperFacebook.getFacebookId() + " " +  adminEvento);
+        if (HelperFacebook.getFacebookId().equals(adminEvento)){
+            chiusura.setVisibility(View.GONE);
+        }
 
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(false);
@@ -214,7 +222,7 @@ public class EventDialog {
                 Log.e("PERSONALIZZATA-RISPOSTA: ", risposta.getText().toString());
 
                 if (!alto.getText().toString().equals("")) {
-                    addDomanda(5, alto.getText().toString(), idEvento, null, risposta.getText().toString());
+                    addDomanda(5, alto.getText().toString(), idEvento, "", risposta.getText().toString());
                 }
 
                 dialog.dismiss();
@@ -273,7 +281,7 @@ public class EventDialog {
 
             @Override
             protected String doInBackground(Void... params) {
-                String[] name = {"domanda", "idEvento", "template", "risposta", "chiusa"};
+                String[] name = {"domanda", "template", "risposta", "chiusa"};
                 String chiusa = "0";
                 /*
                 if sono admin
@@ -282,7 +290,7 @@ public class EventDialog {
                  */
                 String[] param = {domanda, template, risposta, chiusa};
 
-                Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
+                //Log.e("doinB inviati: ", domanda + " " + idEvento + " " + template + " " + risposta);
 
                 String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/attr/" + idEvento, name, param);
 

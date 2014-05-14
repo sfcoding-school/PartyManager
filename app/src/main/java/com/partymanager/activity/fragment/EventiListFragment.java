@@ -11,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.*;
@@ -71,7 +70,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         DatiEventi.eAdapter = eAdapter; */
         String idFacebook = HelperFacebook.getFacebookId();
         if (idFacebook!= null)
-            eAdapter = DatiEventi.init(getActivity(), idFacebook);
+            eAdapter = DatiEventi.init(getActivity());
         else
             Log.e("id_FB: ", "id fb null on " + this.getActivity().getLocalClassName());
 
@@ -163,14 +162,14 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * The default content for this Fragment has a TextView that is shown when
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
-     */
+
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = listView.getEmptyView();
 
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
-    }
+    }*/
 
     /**
     * This interface must be implemented by activities that contain this

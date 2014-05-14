@@ -65,11 +65,11 @@ public class HelperConnessione {
                 return temp;
             }
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-IOException: ", e.toString() );
         }
         return "error";
     }
@@ -96,11 +96,11 @@ public class HelperConnessione {
             return test_ritorno;
 
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-IOException: ", e.toString() );
         }
         return "error";
     }
@@ -122,11 +122,11 @@ public class HelperConnessione {
             return EntityUtils.toString(response.getEntity());
 
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-IOException: ", e.toString() );
         }
         return "error";
     }
@@ -142,11 +142,11 @@ public class HelperConnessione {
             return EntityUtils.toString(response.getEntity());
 
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("HelperConnessione-IOException: ", e.toString() );
         }
         return "error";
     }
