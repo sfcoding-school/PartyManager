@@ -1,6 +1,9 @@
 package com.partymanager.data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +28,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
     private TextView container_friends;
     private EditText inputSearch;
     private static List<Friends> finali = null;
+    private FbFriendsAdapter adapter;
 
     public FbFriendsAdapter(Context context, TextView cointaner, EditText inputSearch, int textViewResourceId, ArrayList<Friends> friendList) {
         super(context, textViewResourceId, friendList);
@@ -32,6 +39,10 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         this.inputSearch = inputSearch;
         if (finali == null)
             finali = new ArrayList<Friends>();
+    }
+
+    public void setAdapter(FbFriendsAdapter adapter) {
+        this.adapter = adapter;
     }
 
     private class ViewHolder {
@@ -101,6 +112,8 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         if (friends1.foto != null) {
             holder.foto_profilo.setBackground(null);
             holder.foto_profilo.setImageBitmap(friends1.getFoto());
+        } else {
+            getFacebookProfilePicture(friends1);
         }
 
         return convertView;
@@ -127,4 +140,37 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             }
         }
     }
+
+    public void getFacebookProfilePicture(final Friends friends) {
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... args) {
+                Bitmap bitmap = friends.getFoto();
+                if (bitmap == null) {
+                    URL imageURL;
+
+                    try {
+                        imageURL = new URL("https://graph.facebook.com/" + friends.getCode() + "/picture?type=small");
+                        bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                if (bitmap != null) {
+                    friends.setFoto(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }.execute();
+    }
+
 }

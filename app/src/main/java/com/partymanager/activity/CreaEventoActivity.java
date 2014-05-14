@@ -38,18 +38,8 @@ import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -137,6 +127,7 @@ public class CreaEventoActivity extends Activity {
 
                 dataAdapter = new FbFriendsAdapter(CreaEventoActivity.this, container_friends, inputSearch, R.layout.fb_friends, friendsList);
                 listView.setAdapter(dataAdapter);
+                dataAdapter.setAdapter(dataAdapter);
                 friendList = dataAdapter.friendList;
 
             }
@@ -186,6 +177,7 @@ public class CreaEventoActivity extends Activity {
                     }
                     dataAdapter = new FbFriendsAdapter(CreaEventoActivity.this, container_friends, inputSearch, R.layout.fb_friends, tempArrayList);
                     listView.setAdapter(dataAdapter);
+                    dataAdapter.setAdapter(dataAdapter);
                 }
             }
 
@@ -216,8 +208,8 @@ public class CreaEventoActivity extends Activity {
                 } else {
                     id_toSend = new ArrayList<String>();
                     StringBuilder id_to_invite = new StringBuilder();
-                    for (Friends aFinali : finali){
-                        if (aFinali.getAppInstalled()){
+                    for (Friends aFinali : finali) {
+                        if (aFinali.getAppInstalled()) {
                             id_toSend.add(aFinali.getCode());
                         } else {
                             String temp = aFinali.getCode();
@@ -246,8 +238,8 @@ public class CreaEventoActivity extends Activity {
         });
     }
 
-    private void sendInviti(String temp){
-        WebDialog f  = HelperFacebook.inviteFriends(this, temp);
+    private void sendInviti(String temp) {
+        WebDialog f = HelperFacebook.inviteFriends(this, temp);
         f.show();
     }
 
@@ -261,12 +253,12 @@ public class CreaEventoActivity extends Activity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... args) {
-                String ris = null;
+                String ris;
 
                 String url = "http://androidpartymanager.herokuapp.com/event";
                 ris = HelperConnessione.httpPostConnection(url, new String[]{"name", "userList", "admin"}, new String[]{name, List, ID_FB});
 
-                Log.e("CreaEventoActivity-sendNewEvent: ", ris);
+                Log.e("CreaEventoActivity-sendNewEvent-ris: ", ris);
 
                 return ris;
             }
