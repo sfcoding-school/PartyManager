@@ -1,9 +1,5 @@
 package com.partymanager.gcm;
 
-/**
- * Created by luca on 4/9/14.
- */
-
 import com.partymanager.R;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -105,7 +101,7 @@ public class GcmIntentService extends IntentService {
                         .setDefaults(android.app.Notification.DEFAULT_ALL)
                         //.setSound(alarmSound);
                         ;
-
+        mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 

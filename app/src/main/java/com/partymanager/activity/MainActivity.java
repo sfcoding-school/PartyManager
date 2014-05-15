@@ -20,7 +20,7 @@ import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.NavigationDrawerFragment;
-import com.partymanager.activity.fragment.Setting;
+import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.helper.HelperFacebook;
 
 
@@ -108,10 +108,11 @@ public class MainActivity extends Activity
                 mTitle = getString(R.string.title_section1);
                 break;
             case 2:
-                fragment = Setting.newInstance();
+               fragment = new  PrefsFragment();
                 mTitle = getString(R.string.title_section2);
                 break;
         }
+
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "main")
