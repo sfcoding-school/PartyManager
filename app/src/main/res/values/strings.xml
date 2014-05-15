@@ -31,6 +31,7 @@
     <string name="luogo">Luogo</string>
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
+
     <string-array name="spinner_list">
         <item>Data</item>
         <item>Luogo</item>
@@ -38,5 +39,7 @@
     </string-array>
 
     <string name="daDEf">[Da definire]</string>
+    <string name="title_activity_main_activity2">MainActivity2</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

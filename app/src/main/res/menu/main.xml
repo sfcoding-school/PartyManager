@@ -10,10 +10,7 @@
         android:title="@string/action_example"
         android:showAsAction="withText|ifRoom" />
     -->
-    <item android:id="@+id/profile"
-        android:title="@string/btn_sett_profile"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+
 
     <item android:id="@+id/debug"
         android:title="DEBUG: EVENTO"

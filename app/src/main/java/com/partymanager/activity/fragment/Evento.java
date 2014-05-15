@@ -18,9 +18,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.activity.EventDialog;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
-import com.partymanager.activity.EventDialog;
 
 import java.util.ArrayList;
 
@@ -291,6 +291,9 @@ public class Evento extends Fragment {
             }
         }
     };
+
+
+
 }
                             /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
                                 TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());

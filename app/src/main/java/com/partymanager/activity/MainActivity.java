@@ -7,10 +7,17 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -19,30 +26,27 @@ import com.partymanager.R;
 import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
-import com.partymanager.activity.fragment.NavigationDrawerFragment;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.helper.HelperFacebook;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, EventiListFragment.OnFragmentInteractionListener {
+        implements EventiListFragment.OnFragmentInteractionListener {
 
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private FragmentManager fragmentManager;
 
-    private boolean  noMenuActionBar = false;
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    private boolean noMenuActionBar = false;
+
     public static CharSequence mTitle;
 
     private static Activity mContext;
+    RelativeLayout leftRL;
+    DrawerLayout drawerLayout;
+    ListView mDrawerListView;
+    ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,13 @@ public class MainActivity extends Activity
         mContext = this;
         fragmentManager = getFragmentManager();
 
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_nav_drawer_custom);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        setNavigationDrawer();
+
+        setUp();
 
         if (checkPlayServices()) {
             //Controllo se esiste già una sessione FB attiva
@@ -61,44 +70,98 @@ public class MainActivity extends Activity
             if (!session.isOpened()) {
                 Intent newact = new Intent(this, ProfileActivity.class);
                 startActivity(newact);
-            }else{
+            } else {
                 HelperFacebook.getToken();
+                changeFragment(0);
             }
-                //Fine controllo sessione
-
-
-
-                mNavigationDrawerFragment = (NavigationDrawerFragment)
-                        getFragmentManager().findFragmentById(R.id.navigation_drawer);
-                //mTitle = getTitle();
-
-                // Set up the drawer.
-                mNavigationDrawerFragment.setUp(
-                        R.id.navigation_drawer,
-                        (DrawerLayout) findViewById(R.id.drawer_layout));
-
-/*
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment()).commit();
-        }
-*/
-            //mDisplay = (TextView) findViewById(R.id.pp);
         }
     }
 
-    public static Activity getActivity(){
-        return mContext;
+    private void setNavigationDrawer() {
+        leftRL = (RelativeLayout) findViewById(R.id.whatYouWantInLeftDrawer);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mDrawerListView = (ListView) findViewById(R.id.left_expandableListView);
+        ListView bottomListview = (ListView) findViewById(R.id.bottom_listview);
+
+        bottomListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
+                        newact.putExtra("chiave", "1");
+                        startActivity(newact);
+                        break;
+                    case 1:
+                        changeFragment(2);
+                        break;
+                }
+            }
+        });
+        bottomListview.setAdapter(new ArrayAdapter<String>(
+                getActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                new String[]{
+                        "Profilo",
+                        "Impostazioni",
+                }
+        ));
+
+
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                changeFragment(position);
+            }
+        });
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                getActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_2,
+                android.R.id.text1,
+                new String[]{
+                        getString(R.string.title_section0),
+                        getString(R.string.title_section1),
+                }
+        ));
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+    private void setUp() {
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        //FragmentTransaction fTransaction =
-        Fragment fragment = null;
-        switch (position) {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        mDrawerToggle = new ActionBarDrawerToggle(
+                getActivity(),                    /* host Activity */
+                drawerLayout,                    /* DrawerLayout object */
+                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+        };
+
+        drawerLayout.setDrawerListener(mDrawerToggle);
+    }
+    Fragment fragment;
+    private void changeFragment(int pos) {
+        fragment = null;
+        switch (pos) {
             case 0:
                 fragment = EventiListFragment.newInstance();
                 mTitle = getString(R.string.title_section0);
@@ -108,7 +171,7 @@ public class MainActivity extends Activity
                 mTitle = getString(R.string.title_section1);
                 break;
             case 2:
-               fragment = new  PrefsFragment();
+                fragment = new PrefsFragment();
                 mTitle = getString(R.string.title_section2);
                 break;
         }
@@ -117,25 +180,12 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "main")
                 .commit();
+        drawerLayout.closeDrawer(leftRL);
     }
 
-
-
-    /*public void onSectionAttached(int number) {
-
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-
-    }*/
+    public static Activity getActivity() {
+        return mContext;
+    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -150,21 +200,15 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if ( mNavigationDrawerFragment!= null && !mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            if (!noMenuActionBar) {
-                getMenuInflater().inflate(R.menu.main, menu);
-            }else{
-                getMenuInflater().inflate(R.menu.main_no_menu, menu);
-            }
-            MenuItem prova = menu.findItem(R.id.progressBarSmall);
-            prova.setVisible(progressBarVisible);
-            restoreActionBar();
-            return true;
+        if (!noMenuActionBar) {
+            getMenuInflater().inflate(R.menu.main, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.main_no_menu, menu);
         }
-        return super.onCreateOptionsMenu(menu);
+        MenuItem prova = menu.findItem(R.id.progressBarSmall);
+        prova.setVisible(progressBarVisible);
+        restoreActionBar();
+        return true;
     }
 
     @Override
@@ -173,15 +217,7 @@ public class MainActivity extends Activity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (id == R.id.profile) {
-            Intent newact = new Intent(this, ProfileActivity.class);
-            newact.putExtra("chiave", "1");
-            startActivity(newact);
-            return true;
-        }
+
         if (id == R.id.Nuovo_evento) {
             Intent intent = new Intent(MainActivity.this, CreaEventoActivity.class);
             startActivityForResult(intent, 0);
@@ -195,6 +231,13 @@ public class MainActivity extends Activity
                     .addToBackStack("evento")
                     .commit();
             return true;
+        }
+
+        if (mDrawerToggle.onOptionsItemSelected(item) && !drawerLayout.isDrawerOpen(leftRL)) {
+            drawerLayout.openDrawer(leftRL);
+        }
+        if (mDrawerToggle.onOptionsItemSelected(item) && drawerLayout.isDrawerOpen(leftRL)) {
+            drawerLayout.closeDrawer(leftRL);
         }
 
         return super.onOptionsItemSelected(item);
@@ -240,7 +283,7 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onFragmentInteraction(String id, String name, String admin, String num){
+    public void onFragmentInteraction(String id, String name, String admin, String num) {
         mTitle = name;
         noMenuActionBar = true;
         Fragment fragment = Evento.newInstance(id, name, admin, num);
@@ -252,7 +295,7 @@ public class MainActivity extends Activity
         fragmentManager.addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
-                        if (fragmentManager.getBackStackEntryCount()==0 || !fragmentManager.getBackStackEntryAt(0).getName().equals("evento")){
+                        if (fragmentManager.getBackStackEntryCount() == 0 || !fragmentManager.getBackStackEntryAt(0).getName().equals("evento")) {
                             noMenuActionBar = false;
                         }
                         invalidateOptionsMenu();
@@ -262,6 +305,4 @@ public class MainActivity extends Activity
         );
 
     }
-
-
 }
