@@ -187,9 +187,11 @@ public class DataProvide {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
-                        null,
+                        jsonArray.getJSONObject(i).getString("risposta"),
                         jsonArray.getJSONObject(i).getString("template"),
-                        Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa"))
+                        Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa")),
+                        jsonArray.getJSONObject(i).getInt("numd"),
+                        jsonArray.getJSONObject(i).getInt("numr")
                 ));
             }
             Evento.checkTemplate();

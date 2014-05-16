@@ -137,7 +137,7 @@ public class MainActivity extends Activity
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
+                this,                    /* host Activity */
                 drawerLayout,                    /* DrawerLayout object */
                 R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
@@ -158,9 +158,16 @@ public class MainActivity extends Activity
 
         drawerLayout.setDrawerListener(mDrawerToggle);
     }
-    Fragment fragment;
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
     private void changeFragment(int pos) {
-        fragment = null;
+        Fragment fragment = null;
         switch (pos) {
             case 0:
                 fragment = EventiListFragment.newInstance();
@@ -235,11 +242,12 @@ public class MainActivity extends Activity
 
         if (mDrawerToggle.onOptionsItemSelected(item) && !drawerLayout.isDrawerOpen(leftRL)) {
             drawerLayout.openDrawer(leftRL);
+            return true;
         }
         if (mDrawerToggle.onOptionsItemSelected(item) && drawerLayout.isDrawerOpen(leftRL)) {
             drawerLayout.closeDrawer(leftRL);
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

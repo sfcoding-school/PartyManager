@@ -250,27 +250,27 @@ public class Evento extends Fragment {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
                         Log.e("handler-DATA: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Data Evento", ris, "data", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Data Evento", ris, "data", close, 1,1));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
                         Log.e("handler-ORARIO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Evento", ris, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Evento", ris, null, close, 1,1));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
                         Log.e("handler-ORARIO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Incontro", ris, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Incontro", ris, null, close, 1,1));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
                         Log.e("handler-LUOGO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo incontro", ris, "luogoI", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo incontro", ris, "luogoI", close, 1,1));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
                         Log.e("handler-LUOGO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo Evento", ris, "luogoE", close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo Evento", ris, "luogoE", close, 1,1));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
@@ -279,13 +279,13 @@ public class Evento extends Fragment {
                         if (close){
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, close));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, close, 1,1));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
                         ris2 = "1 voto: 100% SI";
                         Log.e("handler-SINO: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, false));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, false, 1,1));
                         break;
                 }
             }
