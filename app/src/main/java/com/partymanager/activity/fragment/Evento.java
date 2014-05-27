@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -86,14 +88,14 @@ public class Evento extends Fragment {
             adminEvento = getArguments().getString(ARG_PARAM3);
             numUtenti = getArguments().getString(ARG_PARAM4);
 
-            Log.e("Evento onCreate: ", idEvento + " " + nomeEvento + " " + adminEvento + " " + numUtenti);
+            //Log.e("Evento onCreate: ", idEvento + " " + nomeEvento + " " + adminEvento + " " + numUtenti);
         }
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento);
     }
 
-    public static void checkTemplate(){
+    public static void checkTemplate() {
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
         for (DatiAttributi.Attributo temp : prova) {
@@ -110,6 +112,8 @@ public class Evento extends Fragment {
         }
     }
 
+    int mLastFirstVisibleItem = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -125,7 +129,14 @@ public class Evento extends Fragment {
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
+        final View a = view.findViewById(R.id.circle);
 
+        a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("TESTCIRCLE", "clicckato");
+            }
+        });
 
         listView.setAdapter(eAdapter);
 
@@ -198,7 +209,7 @@ public class Evento extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
 
-                Log.e("long clicked","pos: " + pos);
+                Log.e("long clicked", "pos: " + pos);
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
                 popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
                 popup.show();
@@ -206,8 +217,43 @@ public class Evento extends Fragment {
             }
         });
 
+        animation = false;
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem > mLastFirstVisibleItem) {
+                    if (!animation) {
+                        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * a.getWidth());
+                        anim.setDuration(500);
+                        anim.setFillAfter(true);
+                        a.startAnimation(anim);
+                        animation = true;
+                    }
+
+                }
+                if (firstVisibleItem < mLastFirstVisibleItem) {
+                    if (animation) {
+                        TranslateAnimation anim = new TranslateAnimation(0, 0, +2 * a.getWidth(), 0);
+                        anim.setDuration(500);
+                        anim.setFillAfter(true);
+                        a.startAnimation(anim);
+                        animation = false;
+                    }
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+            }
+        });
+
+
         return view;
     }
+
+    boolean animation;
 
     private void changeAlpha(Button btn) {
         float alpha = btn.getAlpha();
@@ -250,48 +296,47 @@ public class Evento extends Fragment {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
                         Log.e("handler-DATA: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Data Evento", ris, "data", close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Data Evento", ris, "data", close, 1, 1));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
                         Log.e("handler-ORARIO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Evento", ris, null, close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Evento", ris, null, close, 1, 1));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
                         Log.e("handler-ORARIO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Incontro", ris, null, close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Incontro", ris, null, close, 1, 1));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
                         Log.e("handler-LUOGO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo incontro", ris, "luogoI", close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo incontro", ris, "luogoI", close, 1, 1));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
                         Log.e("handler-LUOGO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo Evento", ris, "luogoE", close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo Evento", ris, "luogoE", close, 1, 1));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
                         ris2 = "";
                         Log.e("handler-PERS: ", ris);
-                        if (close){
+                        if (close) {
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, close, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, close, 1, 1));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
                         ris2 = "1 voto: 100% SI";
                         Log.e("handler-SINO: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, false, 1,1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, false, 1, 1));
                         break;
                 }
             }
         }
     };
-
 
 
 }
