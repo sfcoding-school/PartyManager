@@ -272,14 +272,7 @@ public class CreaEventoActivity extends Activity {
                     alertDialogBuilder.setMessage("Problema nella creazione dell'evento.");
 
                     // set positive button: Yes message
-                    alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    // set negative button: No message
-                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setPositiveButton("Chiudi", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }

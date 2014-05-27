@@ -142,6 +142,8 @@ public class DataProvide {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+
         }
     }
 
@@ -163,6 +165,8 @@ public class DataProvide {
             Evento.checkTemplate();
         } catch (JSONException e) {
             Log.e("DEBUG ATTRIBUTI DOWNLOAD: ", "catch JSONException " + e);
+        } catch (NullPointerException e){
+
         }
     }
 
@@ -207,10 +211,11 @@ public class DataProvide {
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(jsonString.getBytes());
             fos.close();
-
         } catch (IOException e) {
             String error = e.toString();
             Log.e("DATA_PROVIDE", error);
+        } catch (NullPointerException e){
+
         }
     }
 

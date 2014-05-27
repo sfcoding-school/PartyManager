@@ -33,9 +33,13 @@
     <string name="dove_vediamo">Dove ci vediamo</string>
 
     <string-array name="spinner_list">
-        <item>Data</item>
-        <item>Luogo</item>
         <item>Personalizzata</item>
+        <item>Luogo Incontro</item>
+        <item>Luogo Evento</item>
+        <item>Data</item>
+        <item>Orario Incontro</item>
+        <item>Orario Evento</item>
+        <item>Domanda Chiusa</item>
     </string-array>
 
     <string name="daDEf">[Da definire]</string>

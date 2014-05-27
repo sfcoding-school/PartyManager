@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/stickyheader" />
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/eventList"
@@ -62,7 +62,7 @@
                 android:background="#ff000000"
                 android:alpha="0.9"
                 android:textColor="#ffffffff"/>
-        </LinearLayout>
+        </LinearLayout> -->
 
         <View
             android:id="@+id/circle"

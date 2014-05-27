@@ -120,8 +120,8 @@ public class Evento extends Fragment {
         View view = inflater.inflate(R.layout.fragment_evento, container, false);
 
         listView = (ListView) view.findViewById(R.id.eventList);
-        btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
-        btn_sino = (Button) view.findViewById(R.id.btn_sino);
+        //btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
+        //btn_sino = (Button) view.findViewById(R.id.btn_sino);
         riepilogo = view.findViewById(R.id.stickyheader);
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
@@ -129,18 +129,19 @@ public class Evento extends Fragment {
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
-        final View a = view.findViewById(R.id.circle);
+        final View add_domanda = view.findViewById(R.id.circle);
 
-        a.setOnClickListener(new View.OnClickListener() {
+        add_domanda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("TESTCIRCLE", "clicckato");
+                //eventDialog.personalizzata().show();
+                eventDialog.returnD().show();
             }
         });
 
         listView.setAdapter(eAdapter);
 
-        btn_Domanda.setOnClickListener(new View.OnClickListener() {
+     /*   btn_Domanda.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -153,8 +154,8 @@ public class Evento extends Fragment {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-
-                        if (item.getItemId() == R.id.one)  /*item.getTitle().equals("Data Evento")*/
+/*
+                        if (item.getItemId() == R.id.one)
                             eventDialog.date().show();
                         if (item.getItemId() == R.id.two)
                             eventDialog.orarioE().show();
@@ -167,7 +168,7 @@ public class Evento extends Fragment {
                         if (item.getItemId() == R.id.six)
                             eventDialog.luogoE().show();
 
-                        return true;
+                        return true;*//*
                     }
                 });
 
@@ -180,7 +181,7 @@ public class Evento extends Fragment {
 
                 popup.show();
             }
-        });
+        });*/
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -188,11 +189,11 @@ public class Evento extends Fragment {
             }
         });
 
-        btn_sino.setOnClickListener(new View.OnClickListener() {
+        /*btn_sino.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 eventDialog.domanda_chiusa().show();
             }
-        });
+        });*/
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -228,20 +229,20 @@ public class Evento extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem > mLastFirstVisibleItem) {
                     if (!animation) {
-                        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * a.getWidth());
+                        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * add_domanda.getWidth());
                         anim.setDuration(500);
                         anim.setFillAfter(true);
-                        a.startAnimation(anim);
+                        add_domanda.startAnimation(anim);
                         animation = true;
                     }
 
                 }
                 if (firstVisibleItem < mLastFirstVisibleItem) {
                     if (animation) {
-                        TranslateAnimation anim = new TranslateAnimation(0, 0, +2 * a.getWidth(), 0);
+                        TranslateAnimation anim = new TranslateAnimation(0, 0, +2 * add_domanda.getWidth(), 0);
                         anim.setDuration(500);
                         anim.setFillAfter(true);
-                        a.startAnimation(anim);
+                        add_domanda.startAnimation(anim);
                         animation = false;
                     }
                 }
