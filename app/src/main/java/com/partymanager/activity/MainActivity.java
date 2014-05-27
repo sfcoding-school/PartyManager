@@ -7,6 +7,8 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,12 +29,16 @@ import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
+import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiEventi;
+import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperFacebook;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
-
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -48,9 +54,33 @@ public class MainActivity extends Activity
     ListView mDrawerListView;
     ActionBarDrawerToggle mDrawerToggle;
 
+    public static Handler handlerService = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handlerService = new Handler() {
+            @Override
+            public void handleMessage (Message msg) {
+                Log.e("SERVICEHANDLER", "arrivato il messaggio " + msg.toString());
+                Bundle b = msg.getData();
+                String type = b.getString("type");
+                if (type.equals("newEvent")){
+                    if (fragmentManager.findFragmentByTag("Eventi").isVisible()) {
+                        DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
+                    }
+
+
+
+                }else if (type.equals("newAttr")){
+                    if (fragmentManager.findFragmentByTag("Evento").isVisible()) {
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("id","doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
+                    }
+
+                }
+            }
+        };
 
         mContext = this;
         fragmentManager = getFragmentManager();
@@ -62,7 +92,11 @@ public class MainActivity extends Activity
         setNavigationDrawer();
 
         setUp();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         if (checkPlayServices()) {
             //Controllo se esiste già una sessione FB attiva
             Session session = HelperFacebook.getSession(this);
@@ -127,6 +161,8 @@ public class MainActivity extends Activity
         ));
     }
 
+
+
     private void setUp() {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -185,7 +221,7 @@ public class MainActivity extends Activity
 
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, "main")
+                .replace(R.id.container, fragment, mTitle.toString())
                 .commit();
         drawerLayout.closeDrawer(leftRL);
     }
@@ -296,7 +332,7 @@ public class MainActivity extends Activity
         noMenuActionBar = true;
         Fragment fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, String.valueOf(mTitle))
+                .replace(R.id.container, fragment, "Evento")
                 .addToBackStack("evento")
                 .commit();
 
@@ -311,6 +347,8 @@ public class MainActivity extends Activity
 
                 }
         );
+
+
 
     }
 }

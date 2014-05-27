@@ -4,6 +4,7 @@ import com.partymanager.R;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.activity.MainActivity;
+import com.partymanager.helper.DataProvide;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -11,8 +12,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -48,27 +53,60 @@ public class GcmIntentService extends IntentService {
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                    /*
-                	for (int i=0; i<5; i++) {
-                        Log.i(TAG, "Working... " + (i+1)
-                                + "/5 @ " + SystemClock.elapsedRealtime());
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                        }
-                    }
-                    */
-               // Log.i(Helper_Notifiche.TAG, "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
+
                 String s = extras.getString("type").toString();
                 if (s.equals("newEvent")) {
-                    sendNotification("Nuovo Evento", extras.getString("admin")+" ti ha invitato a " + extras.getString("name"));
+                    sendNotification("Nuovo Evento", extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"));
+
+                    try {
+                        JSONObject element = new JSONObject();
+                        element.put("id_evento", extras.getInt("id_evento"));
+                        element.put("nome_evento", extras.getString("nome_evento"));
+                        element.put("data", "");
+                        element.put("admin", extras.getString("admin"));
+                        element.put("num_utenti", extras.getInt("num_utenti"));
+
+                        DataProvide.addElementJson(element, "eventi", getApplicationContext());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else if (s.equals("newAttr")){
+                    sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
+
+                    try {
+                        JSONObject element = new JSONObject();
+                        element.put("id_attributo", extras.getInt("id_attributo"));
+                        element.put("domanda", extras.getString("domanda"));
+                        element.put("risposta", extras.getString("risposta"));
+                        element.put("template", extras.getString("template"));
+                        element.put("chiusa", extras.getBoolean("chiusa"));
+                        element.put("numd", extras.getInt("numd"));
+                        element.put("numr", extras.getInt("numr"));
+
+                        DataProvide.addElementJson(element,"attributi"+extras.getInt("idEvento") ,getApplicationContext());
+
+                    }catch (JSONException e ){
+                        e.printStackTrace();
+                    }
+
                 }else if (s.equals("test")){
-                    sendNotification("TEST", extras.getString("msg"));
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
+
+                    sendNotification("TEST", extras.getString("msg"));
+
+                    Message m = new Message();
+                    m.setData(extras);
+                    MainActivity.handlerService.sendMessage(m);
                 }
-                //sendNotification("Received: " + extras.getString("prova"));
+
+                if (MainActivity.handlerService != null) {
+                    Message m = new Message();
+                    m.setData(extras);
+                    MainActivity.handlerService.sendMessage(m);
+                }
+
                 Log.i(Helper_Notifiche.TAG, "Received: " + extras.toString());
             }
         }
@@ -80,8 +118,6 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String title, String msg) {
-
-
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -104,6 +140,5 @@ public class GcmIntentService extends IntentService {
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
     }
 }

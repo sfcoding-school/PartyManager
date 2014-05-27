@@ -3,6 +3,7 @@ package com.partymanager.data;
 import android.content.Context;
 
 import com.partymanager.helper.DataProvide;
+import com.partymanager.helper.HelperDataParser;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -58,13 +59,13 @@ public class DatiEventi {
         public String admin;
         public int numUtenti;
 
-        public Evento (int id, String name, String details, GregorianCalendar date, String admin, int n) {
+        public Evento (int id, String name, String details, String date, String admin, int numUtenti) {
             this.id = id;
             this.name = name;
             this.details = details;
-            this.date = date;
+            this.date = HelperDataParser.getCalFromString(date);
             this.admin = admin;
-            this.numUtenti = n;
+            this.numUtenti = numUtenti;
         }
 
         @Override

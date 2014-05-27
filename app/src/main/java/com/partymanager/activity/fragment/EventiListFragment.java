@@ -3,6 +3,8 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.*;
+import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperFacebook;
 
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
@@ -39,12 +42,10 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      */
     private EventAdapter eAdapter;
 
+
     public static EventiListFragment newInstance() {
+
         EventiListFragment fragment = new EventiListFragment();
-        //Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        //fragment.setArguments(args);
         return fragment;
     }
 
@@ -113,7 +114,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -127,7 +132,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         }
 
     }
-
 
     @Override
         public void onDetach() {
