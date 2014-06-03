@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,11 +33,7 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
@@ -62,22 +60,18 @@ public class MainActivity extends Activity
 
         handlerService = new Handler() {
             @Override
-            public void handleMessage (Message msg) {
+            public void handleMessage(Message msg) {
                 Log.e("SERVICEHANDLER", "arrivato il messaggio " + msg.toString());
                 Bundle b = msg.getData();
                 String type = b.getString("type");
-                if (type.equals("newEvent")){
+                if (type.equals("newEvent")) {
                     if (fragmentManager.findFragmentByTag("Eventi").isVisible()) {
                         DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
                     }
-
-
-
-                }else if (type.equals("newAttr")){
+                } else if (type.equals("newAttr")) {
                     if (fragmentManager.findFragmentByTag("Evento").isVisible()) {
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("id","doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
                     }
-
                 }
             }
         };
@@ -130,6 +124,20 @@ public class MainActivity extends Activity
                     case 1:
                         changeFragment(2);
                         break;
+                    case 2:
+                        Intent Email = new Intent(Intent.ACTION_SEND);
+                        PackageInfo pInfo = null;
+                        try {
+                            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                        } catch (PackageManager.NameNotFoundException e) {
+                           Log.e("Drawer", "errore sendmail versione applicazione");
+                        }
+                        Email.setType("text/email");
+                        Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
+                        Email.putExtra(Intent.EXTRA_SUBJECT, "Party Manager (" + pInfo.versionName + ") Feedback");
+                        Email.putExtra(Intent.EXTRA_TEXT, "Scrivi qui il tuo Feedback");
+                        startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                        break;
                 }
             }
         });
@@ -140,6 +148,7 @@ public class MainActivity extends Activity
                 new String[]{
                         "Profilo",
                         "Impostazioni",
+                        "Invia Feedback"
                 }
         ));
 
@@ -160,8 +169,6 @@ public class MainActivity extends Activity
                 }
         ));
     }
-
-
 
     private void setUp() {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -347,7 +354,6 @@ public class MainActivity extends Activity
 
                 }
         );
-
 
 
     }

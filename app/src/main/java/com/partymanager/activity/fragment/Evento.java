@@ -1,19 +1,22 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 
@@ -38,12 +42,11 @@ public class Evento extends Fragment {
     private String adminEvento;
     private String numUtenti;
     private ImageButton bnt_friends;
+    boolean animation;
 
     AttributiAdapter eAdapter;
     ListView listView;
     View riepilogo;
-    Button btn_Domanda;
-    Button btn_sino;
     EventDialog eventDialog;
     static TextView luogo;
     static TextView quando_data;
@@ -134,54 +137,11 @@ public class Evento extends Fragment {
         add_domanda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //eventDialog.personalizzata().show();
                 eventDialog.returnD().show();
             }
         });
 
         listView.setAdapter(eAdapter);
-
-     /*   btn_Domanda.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                changeAlpha(btn_Domanda);
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getActivity(), btn_Domanda);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-/*
-                        if (item.getItemId() == R.id.one)
-                            eventDialog.date().show();
-                        if (item.getItemId() == R.id.two)
-                            eventDialog.orarioE().show();
-                        if (item.getItemId() == R.id.three)
-                            eventDialog.orarioI().show();
-                        if (item.getItemId() == R.id.four)
-                            eventDialog.luogoI().show();
-                        if (item.getItemId() == R.id.five)
-                            eventDialog.personalizzata().show();
-                        if (item.getItemId() == R.id.six)
-                            eventDialog.luogoE().show();
-
-                        return true;*//*
-                    }
-                });
-
-                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-                    @Override
-                    public void onDismiss(PopupMenu popupMenu) {
-                        changeAlpha(btn_Domanda);
-                    }
-                });
-
-                popup.show();
-            }
-        });*/
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -189,19 +149,31 @@ public class Evento extends Fragment {
             }
         });
 
-        /*btn_sino.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                eventDialog.domanda_chiusa().show();
-            }
-        });*/
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-                Log.e("listview click", "hai cliccato l'elemento " + Integer.toString(arg2 + 1));
+                // custom dialog
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_risposte);
 
+                TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
+                text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
+
+                ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
+
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       Log.e("Dialog-Risposte", "hai cliccato send");
+                    }
+                });
+
+                EditText nuova_risposta = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
+                nuova_risposta.setHint("Scrivi qui la tua risposta");
+                dialog.show();
             }
         });
 
@@ -250,19 +222,13 @@ public class Evento extends Fragment {
             }
         });
 
+        //SOLO PER TEST
+        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "prova", "", "", false, 0, 0));
+        eAdapter.notifyDataSetChanged();
+        //FINE TEST
+
 
         return view;
-    }
-
-    boolean animation;
-
-    private void changeAlpha(Button btn) {
-        float alpha = btn.getAlpha();
-        if (Float.compare(alpha, (float) 0.7) == 0) {
-            btn.setAlpha((float) 0.9);
-        } else {
-            btn.setAlpha((float) 0.7);
-        }
     }
 
     @Override

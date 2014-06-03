@@ -117,7 +117,8 @@ public class DataProvide {
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
                 saveJson(jsonArray, "attributi_" + id, context);
-                loadIntoAttributiAdapter(jsonArray);
+
+                //loadIntoAttributiAdapter(jsonArray); //SOLO PER TEST DA RIMETTERE
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
