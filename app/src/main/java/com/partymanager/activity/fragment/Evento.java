@@ -247,6 +247,14 @@ public class Evento extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        DatiAttributi.removeAll();
+        eAdapter.notifyDataSetChanged();
+    }
+
+
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }

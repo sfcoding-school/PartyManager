@@ -11,16 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.partymanager.R;
-import com.partymanager.helper.HelperDataParser;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 
 public class DrawerAdapter extends ArrayAdapter<String> {
 
     private LayoutInflater mInflater;
-
     private String[] mStrings;
     private TypedArray mIcons;
     private Boolean alto;
@@ -30,7 +24,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
     public DrawerAdapter(Context ctx, int viewResourceId, String[] strings, TypedArray icons, Boolean alto) {
         super(ctx, viewResourceId, strings);
 
-        this.mInflater = (LayoutInflater)ctx.getSystemService(
+        this.mInflater = (LayoutInflater) ctx.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
 
         this.mStrings = strings;
@@ -44,10 +38,10 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
         convertView = mInflater.inflate(mViewResourceId, null);
 
-        ImageView iv = (ImageView)convertView.findViewById(R.id.imgV_drawer_line);
+        ImageView iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
         iv.setImageDrawable(mIcons.getDrawable(position));
 
-        TextView tv = (TextView)convertView.findViewById(R.id.txt_drawer_line);
+        TextView tv = (TextView) convertView.findViewById(R.id.txt_drawer_line);
         tv.setText(mStrings[position]);
         tv.setTextColor(Color.BLACK);
         if (!alto) {
@@ -58,5 +52,4 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
         return convertView;
     }
-
 }

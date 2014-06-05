@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -131,11 +130,11 @@ public class MainActivity extends Activity
                         try {
                             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                         } catch (PackageManager.NameNotFoundException e) {
-                           Log.e("Drawer", "errore sendmail versione applicazione");
+                            Log.e("Drawer", "errore sendmail versione applicazione");
                         }
                         Email.setType("text/email");
                         Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
-                        Email.putExtra(Intent.EXTRA_SUBJECT, "Party Manager (" + pInfo.versionName + ") Feedback");
+                        Email.putExtra(Intent.EXTRA_SUBJECT, "Party Manager (" + (pInfo != null ? pInfo.versionName : null) + ") Feedback");
                         Email.putExtra(Intent.EXTRA_TEXT, "Scrivi qui il tuo Feedback");
                         startActivity(Intent.createChooser(Email, "Send Feedback:"));
                         break;
@@ -196,9 +195,10 @@ public class MainActivity extends Activity
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
