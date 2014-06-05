@@ -12,6 +12,7 @@ import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
+import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
 
@@ -63,9 +64,10 @@ public class HelperFacebook {
 
         Bundle parameters = new Bundle();
         parameters.putString("to", friendsTo);
-        parameters.putString( "message", "Use my app!");
+        parameters.putString( "message", String.valueOf(R.string.msgWebDialog));
 
-        WebDialog requestsDialog = (
+        //Ritorno il WEBDialog
+        return (
                 new WebDialog.RequestsDialogBuilder(context,
                         Session.getActiveSession(),
                         parameters))
@@ -77,29 +79,28 @@ public class HelperFacebook {
                         if (error != null) {
                             if (error instanceof FacebookOperationCanceledException) {
                                 Toast.makeText(context,
-                                        "Request cancelled",
+                                        String.valueOf(R.string.rqstCancelled),
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context,
-                                        "Network Error",
+                                        String.valueOf(R.string.ntwError),
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             final String requestId = values.getString("request");
                             if (requestId != null) {
                                 Toast.makeText(context,
-                                        "Request sent",
+                                        String.valueOf(R.string.rqstSend),
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context,
-                                        "Request cancelled",
+                                        String.valueOf(R.string.rqstCancelled),
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
 
                 }).build();
-        return  requestsDialog;
     }
 
 }

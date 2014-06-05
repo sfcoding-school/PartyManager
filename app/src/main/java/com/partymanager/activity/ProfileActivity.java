@@ -77,7 +77,7 @@ public class ProfileActivity extends Activity {
 
         prefs = getPreferences();
 
-        //Controllo KEY HASH per connessione FB
+        /*Controllo KEY HASH per connessione FB
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.partymanager", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -92,7 +92,7 @@ public class ProfileActivity extends Activity {
         } catch (NoSuchAlgorithmException e) {
             Toast.makeText(getApplicationContext(), "error2 - ProfileActivity", Toast.LENGTH_LONG).show();
         }
-
+        */
         //Inizializzazione componenti layout
         setContentView(R.layout.activity_profilo);
         buttonLoginLogout = (Button) findViewById(R.id.buttonLoginLogout);

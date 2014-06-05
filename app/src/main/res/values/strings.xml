@@ -4,66 +4,100 @@
     <string name="app_name">PartyManager</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello Archivio</string>
 
-    <!-- Barra Laterale -->
     <string name="title_section0">Eventi</string>
     <string name="title_section1">Archivio</string>
     <string name="title_section2">Impostazioni</string>
 
-    <!-- Menù -->
     <string name="action_settings">Impostazioni</string>
-    <string name="btn_sett_profile">Profilo</string>
     <string name="new_event">Nuovo Evento</string>
 
-    <!-- Activity Profilo e FB -->
-    <string name="app_id">401068586702319</string>
-    <string name="title_activity_main_activity3">Profilo</string>
-    <string name="instruction">Per poter utilizzare l\'applicazione bisogna accedere tramite facebook.
-        Fai click sul tasto sotto per accedere</string>
+    <string name="txtMail">Scrivi qui il tuo Feedback</string>
+    <string name="mailSubject">Party Manager Feedback</string>
 
-    <!-- Activity crea evento -->
-    <string name="title_activity_crea_evento">Crea Evento </string>
-    <string name="nome_evento">Nome evento</string>
+    <editor-fold defaultstate="collapsed" desc="EventDialog">
+        <string name="dataE">Scegli una data per l\'Evento</string>
+        <string name="orarioE">Orario Evento</string>
+        <string name="orarioI">Orario Incontro</string>
+        <string name="luogoE">Luogo Evento</string>
+        <string name="luogoEHint">Scrivi qui il luogo</string>
+        <string name="luogoI">Luogo Incontro</string>
+        <string name="pers">Personalizzata</string>
+        <string name="persDH">Scrivi una domanda</string>
+        <string name="persRH">Scrivi qui la tua risposta</string>
+        <string name="dmndChiusa">Domanda SI/NO</string>
+        <string name="creazDom">Creazione Domanda</string>
+        <string name="problInsDom">Problema nell\'inserimento nuova domanda</string>
+    </editor-fold>
 
-    <!-- Fragment Evento -->
-    <string name="luogo">Luogo</string>
-    <string name="quando">Quando</string>
-    <string name="dove_vediamo">Dove ci vediamo</string>
+    <editor-fold defaultstate="collapsed" desc="CreaEventoActivity">
+        <string name="delEvento">Eliminare nuovo evento?</string>
+        <string name="creazioneEvento">Creazione Evento</string>
+        <string name="errCreazEvento">Problema nella creazione dell\'evento</string>
+        <string name="chiudi">Chiudi</string>
+        <string name="insrtNameE">Devi inserire un nome per l\'evento</string>
+        <string name="insrtAE">Devi inserire almeno un amico</string>
+        <string name="connAssente">Connessione assente</string>
+        <string name="errFB">Problema sessione FB</string>
+    </editor-fold>
 
-    <string-array name="spinner_list">
-        <item>Personalizzata</item>
-        <item>Luogo Incontro</item>
-        <item>Luogo Evento</item>
-        <item>Data</item>
-        <item>Orario Incontro</item>
-        <item>Orario Evento</item>
-        <item>Domanda Chiusa</item>
-    </string-array>
+    <editor-fold defaultstate="collapsed" desc="Activity Profilo e FB">
+        <string name="app_id">401068586702319</string>
+        <string name="title_activity_main_activity3">Profilo</string>
+        <string name="instruction">Per poter utilizzare l\'applicazione bisogna accedere tramite facebook.
+            Fai click sul tasto sotto per accedere</string>
+    </editor-fold>
 
-    <string name="daDEf">[Da definire]</string>
-    <string name="title_activity_main_activity2">MainActivity2</string>
-    <string name="hello_world">Hello world!</string>
+    <editor-fold defaultstate="collapsed" desc="Fragment Evento">
+        <string name="title_activity_crea_evento">Crea Evento </string>
+        <string name="nome_evento">Nome evento</string>
 
-    <string-array name="list_names">
-        <item>Profilo</item>
-        <item>Impostazioni</item>
-        <item>Feedback</item>
-    </string-array>
-    <array name="list_icons">
-        <item>@drawable/com_facebook_inverse_icon</item>
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/sym_action_email</item>
-    </array>
+        <string name="luogo">Luogo</string>
+        <string name="quando">Quando</string>
+        <string name="dove_vediamo">Dove ci vediamo</string>
 
-    <string-array name="list_names2">
-        <item>Eventi</item>
-        <item>Archivio</item>
-    </string-array>
-    <array name="list_icons2">
-        <item>@drawable/ic_stat_partymanagernotificationicon</item>
-        <item>@android:drawable/sym_contact_card</item>
-    </array>
+        <string-array name="spinner_list">
+            <item>Personalizzata</item>
+            <item>Luogo Incontro</item>
+            <item>Luogo Evento</item>
+            <item>Data</item>
+            <item>Orario Incontro</item>
+            <item>Orario Evento</item>
+            <item>Domanda Chiusa</item>
+        </string-array>
 
+        <string name="daDEf">[Da definire]</string>
+        <string name="title_activity_main_activity2">MainActivity2</string>
+        <string name="hello_world">Hello world!</string>
+    </editor-fold>
+
+    <editor-fold defaultstate="collapsed" desc="Drawer">
+        <string-array name="list_names">
+            <item>Profilo</item>
+            <item>Impostazioni</item>
+            <item>Feedback</item>
+        </string-array>
+        <array name="list_icons">
+            <item>@drawable/com_facebook_inverse_icon</item>
+            <item>@android:drawable/ic_menu_preferences</item>
+            <item>@android:drawable/sym_action_email</item>
+        </array>
+
+        <string-array name="list_names2">
+            <item>Eventi</item>
+            <item>Archivio</item>
+        </string-array>
+        <array name="list_icons2">
+            <item>@drawable/ic_stat_partymanagernotificationicon</item>
+            <item>@android:drawable/sym_contact_card</item>
+        </array>
+    </editor-fold>
+
+    <editor-fold defaultstate="collapsed" desc="HelperFacebook">
+        <string name="msgWebDialog">Scarica l\'app PartyManager</string>
+        <string name="rqstCancelled">Richiesta cancellata</string>
+        <string name="ntwError">Errore connessione</string>
+        <string name="rqstSend">Richiesta inviata</string>
+    </editor-fold>
 </resources>

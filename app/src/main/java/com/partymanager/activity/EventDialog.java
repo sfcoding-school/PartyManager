@@ -113,7 +113,7 @@ public class EventDialog {
 
     public void date() {
 
-        dialog.setTitle("Scegli una data per l'Evento");
+        dialog.setTitle(R.string.dataE);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -138,7 +138,7 @@ public class EventDialog {
 
     public void orarioE() {
 
-        dialog.setTitle("Orario Evento");
+        dialog.setTitle(R.string.orarioE);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -164,7 +164,7 @@ public class EventDialog {
 
     public void orarioI() {
 
-        dialog.setTitle("Orario Incontro");
+        dialog.setTitle(R.string.orarioI);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -189,10 +189,10 @@ public class EventDialog {
     }
 
     public void luogoE() {
-        dialog.setTitle("Luogo Evento");
+        dialog.setTitle(R.string.luogoE);
 
         risposta.setText("");
-        risposta.setHint("Scrivi qui il luogo");
+        risposta.setHint(R.string.luogoEHint);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.VISIBLE);
@@ -216,10 +216,10 @@ public class EventDialog {
     }
 
     public void luogoI() {
-        dialog.setTitle("Luogo Incontro");
+        dialog.setTitle(R.string.luogoI);
 
         risposta.setText("");
-        risposta.setHint("Scrivi qui il luogo");
+        risposta.setHint(R.string.luogoEHint);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.VISIBLE);
@@ -250,12 +250,12 @@ public class EventDialog {
         date.setVisibility(View.GONE);
         orario.setVisibility(View.GONE);
 
-        dialog.setTitle("Personalizzata");
+        dialog.setTitle(R.string.pers);
 
         alto.setText("");
         risposta.setText("");
-        alto.setHint("Scrivi una domanda");
-        risposta.setHint("Scrivi qui la tua risposta");
+        alto.setHint(R.string.persDH);
+        risposta.setHint(R.string.persRH);
 
         close.setOnClickListener(new View.OnClickListener() {
 
@@ -277,7 +277,7 @@ public class EventDialog {
     }
 
     public void domanda_chiusa() {
-        dialog.setTitle("Domanda SI/NO");
+        dialog.setTitle(R.string.dmndChiusa);
 
         alto.setVisibility(View.VISIBLE);
         risposta.setVisibility(View.GONE);
@@ -285,7 +285,7 @@ public class EventDialog {
         orario.setVisibility(View.GONE);
 
         chiusura.setVisibility(View.GONE);
-        alto.setHint("Scrivi qui la domanda");
+        alto.setHint(R.string.persDH);
 
         close.setOnClickListener(new View.OnClickListener() {
 
@@ -317,7 +317,7 @@ public class EventDialog {
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
                 progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("Creazione Domanda");
+                progressDialog.setMessage(String.valueOf(R.string.creazDom));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
             }
@@ -386,10 +386,10 @@ public class EventDialog {
                     mResponseHandler.sendMessage(m);
                 } else  {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage("Problema nell'inserimento nuova domanda");
+                    alertDialogBuilder.setMessage(R.string.problInsDom);
 
                     // set positive button: Yes message
-                    alertDialogBuilder.setPositiveButton("Chiudi", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setPositiveButton(R.string.chiudi, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }

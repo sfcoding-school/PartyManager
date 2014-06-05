@@ -134,8 +134,8 @@ public class MainActivity extends Activity
                         }
                         Email.setType("text/email");
                         Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
-                        Email.putExtra(Intent.EXTRA_SUBJECT, "Party Manager (" + (pInfo != null ? pInfo.versionName : null) + ") Feedback");
-                        Email.putExtra(Intent.EXTRA_TEXT, "Scrivi qui il tuo Feedback");
+                        Email.putExtra(Intent.EXTRA_SUBJECT, R.string.mailSubject +  " (" + (pInfo != null ? pInfo.versionName : null) + ")");
+                        Email.putExtra(Intent.EXTRA_TEXT, R.string.txtMail);
                         startActivity(Intent.createChooser(Email, "Send Feedback:"));
                         break;
                 }
@@ -149,19 +149,6 @@ public class MainActivity extends Activity
                 getResources().obtainTypedArray(R.array.list_icons),
                 false
         ));
-
-       /*
-        bottomListview.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new String[]{
-                        "Profilo",
-                        "Impostazioni",
-                        "Feedback"
-                }
-        ));
-        */
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -177,18 +164,6 @@ public class MainActivity extends Activity
                 getResources().obtainTypedArray(R.array.list_icons2),
                 true
         ));
-
-        /*
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_2,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section0),
-                        getString(R.string.title_section1),
-                }
-        ));
-        */
     }
 
     private void setUp() {

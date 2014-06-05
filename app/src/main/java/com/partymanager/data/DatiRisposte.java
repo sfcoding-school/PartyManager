@@ -1,10 +1,5 @@
 
-
 package com.partymanager.data;
-
-import android.content.Context;
-
-import com.partymanager.helper.DataProvide;
 
 import java.util.ArrayList;
 
