@@ -33,6 +33,7 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DrawerAdapter;
 import com.partymanager.helper.HelperFacebook;
 
 public class MainActivity extends Activity
@@ -141,6 +142,16 @@ public class MainActivity extends Activity
                 }
             }
         });
+
+        bottomListview.setAdapter(new DrawerAdapter(
+                getActionBar().getThemedContext(),
+                R.layout.drawer_line,
+                getResources().getStringArray(R.array.list_names),
+                getResources().obtainTypedArray(R.array.list_icons),
+                false
+        ));
+
+       /*
         bottomListview.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
@@ -148,10 +159,10 @@ public class MainActivity extends Activity
                 new String[]{
                         "Profilo",
                         "Impostazioni",
-                        "Invia Feedback"
+                        "Feedback"
                 }
         ));
-
+        */
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -159,6 +170,16 @@ public class MainActivity extends Activity
                 changeFragment(position);
             }
         });
+
+        mDrawerListView.setAdapter(new DrawerAdapter(
+                getActionBar().getThemedContext(),
+                R.layout.drawer_line,
+                getResources().getStringArray(R.array.list_names2),
+                getResources().obtainTypedArray(R.array.list_icons2),
+                true
+        ));
+
+        /*
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_2,
@@ -168,6 +189,7 @@ public class MainActivity extends Activity
                         getString(R.string.title_section1),
                 }
         ));
+        */
     }
 
     private void setUp() {

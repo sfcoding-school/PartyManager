@@ -46,4 +46,24 @@
     <string name="title_activity_main_activity2">MainActivity2</string>
     <string name="hello_world">Hello world!</string>
 
+    <string-array name="list_names">
+        <item>Profilo</item>
+        <item>Impostazioni</item>
+        <item>Feedback</item>
+    </string-array>
+    <array name="list_icons">
+        <item>@drawable/com_facebook_inverse_icon</item>
+        <item>@android:drawable/ic_menu_preferences</item>
+        <item>@android:drawable/sym_action_email</item>
+    </array>
+
+    <string-array name="list_names2">
+        <item>Eventi</item>
+        <item>Archivio</item>
+    </string-array>
+    <array name="list_icons2">
+        <item>@drawable/ic_stat_partymanagernotificationicon</item>
+        <item>@android:drawable/sym_contact_card</item>
+    </array>
+
 </resources>
