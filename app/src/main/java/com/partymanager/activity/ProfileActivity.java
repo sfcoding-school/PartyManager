@@ -12,6 +12,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
@@ -179,7 +180,7 @@ public class ProfileActivity extends Activity {
 
                 String username_pref = prefs.getString(REG_USERNAME, "");
                 textInstructionsOrLink.setText(username_pref);
-
+                textInstructionsOrLink.setTextColor(Color.WHITE);
                 loadImageFromStorage();
 
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
@@ -190,6 +191,7 @@ public class ProfileActivity extends Activity {
 
                             getFacebookProfilePicture(user.getId());
                             textInstructionsOrLink.setText(user.getName());
+                            textInstructionsOrLink.setTextColor(Color.WHITE);
                             username = user.getName();
                             id_fb = user.getId();
                             savePreferences(username, id_fb);

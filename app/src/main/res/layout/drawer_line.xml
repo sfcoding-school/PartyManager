@@ -15,7 +15,7 @@
             android:layout_height="30dp"
             android:id="@+id/imgV_drawer_line"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp" />
+            android:layout_marginLeft="5dp" />
 
         <TextView
             android:layout_width="wrap_content"

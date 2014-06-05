@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -39,19 +40,14 @@ public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     private FragmentManager fragmentManager;
-
     private boolean noMenuActionBar = false;
-
     public static CharSequence mTitle;
-
     private static Activity mContext;
     RelativeLayout leftRL;
     DrawerLayout drawerLayout;
     ListView mDrawerListView;
     ActionBarDrawerToggle mDrawerToggle;
-
     public static Handler handlerService = null;
 
     @Override
@@ -111,6 +107,13 @@ public class MainActivity extends Activity
 
         mDrawerListView = (ListView) findViewById(R.id.left_expandableListView);
         ListView bottomListview = (ListView) findViewById(R.id.bottom_listview);
+
+        TextView txt_version = (TextView) findViewById(R.id.txt_version);
+        try {
+            txt_version.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("Drawer", "errore txt_version versione applicazione");
+        }
 
         bottomListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
