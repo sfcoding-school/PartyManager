@@ -72,6 +72,7 @@ public class GcmIntentService extends IntentService {
                     }
 
                 } else if (s.equals("newAttr")) {
+
                     sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
 
                     try {
@@ -90,7 +91,24 @@ public class GcmIntentService extends IntentService {
                         e.printStackTrace();
                     }
 
-                } else if (s.equals("test")) {
+                }else if (s.equals("newRis")) {
+                    sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                    if (extras.getBoolean("agg")) {
+
+                    } else {
+
+                    }
+
+                }else if (s.equals("risp")){
+                        sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                        //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                        if (extras.getBoolean("agg")){
+
+                        }else{
+
+                        }
+                }else if (s.equals("test")){
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
 
                     sendNotification("TEST", extras.getString("msg"));
