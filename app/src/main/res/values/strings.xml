@@ -49,7 +49,6 @@
     <!--Fragment Evento-->
     <string name="title_activity_crea_evento">Crea Evento </string>
     <string name="nome_evento">Nome evento</string>
-
     <string name="luogo">Luogo</string>
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
@@ -70,21 +69,21 @@
 
     <!--Drawer-->
     <string-array name="list_names">
-        <item>Profilo</item>
         <item>Impostazioni</item>
         <item>Feedback</item>
     </string-array>
     <array name="list_icons">
-        <item>@drawable/com_facebook_inverse_icon</item>
         <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/sym_action_email</item>
+        <item>@android:drawable/ic_dialog_email</item>
     </array>
 
     <string-array name="list_names2">
+        <item>Profilo</item>
         <item>Eventi</item>
         <item>Archivio</item>
     </string-array>
     <array name="list_icons2">
+        <item>@drawable/com_facebook_inverse_icon</item>
         <item>@drawable/ic_stat_partymanagernotificationicon</item>
         <item>@android:drawable/sym_contact_card</item>
     </array>

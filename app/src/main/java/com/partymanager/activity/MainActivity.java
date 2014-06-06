@@ -120,14 +120,9 @@ public class MainActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
-                        newact.putExtra("chiave", "1");
-                        startActivity(newact);
-                        break;
-                    case 1:
                         changeFragment(2);
                         break;
-                    case 2:
+                    case 1:
                         Intent Email = new Intent(Intent.ACTION_SEND);
                         PackageInfo pInfo = null;
                         try {
@@ -156,9 +151,16 @@ public class MainActivity extends Activity
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                changeFragment(position);
+               if (position == 0) {
+                   Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
+                   newact.putExtra("chiave", "1");
+                   startActivity(newact);
+               } else {
+                changeFragment(position-1); }
             }
         });
+
+        mDrawerListView.setDivider(null);
 
         mDrawerListView.setAdapter(new DrawerAdapter(
                 getActionBar().getThemedContext(),

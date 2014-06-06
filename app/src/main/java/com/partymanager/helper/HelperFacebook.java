@@ -64,7 +64,7 @@ public class HelperFacebook {
 
         Bundle parameters = new Bundle();
         parameters.putString("to", friendsTo);
-        parameters.putString( "message", String.valueOf(R.string.msgWebDialog));
+        parameters.putString( "message", context.getString(R.string.msgWebDialog));
 
         //Ritorno il WEBDialog
         return (
@@ -79,22 +79,22 @@ public class HelperFacebook {
                         if (error != null) {
                             if (error instanceof FacebookOperationCanceledException) {
                                 Toast.makeText(context,
-                                        String.valueOf(R.string.rqstCancelled),
+                                        context.getString(R.string.rqstCancelled),
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context,
-                                        String.valueOf(R.string.ntwError),
+                                        context.getString(R.string.ntwError),
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             final String requestId = values.getString("request");
                             if (requestId != null) {
                                 Toast.makeText(context,
-                                        String.valueOf(R.string.rqstSend),
+                                        context.getString(R.string.rqstSend),
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context,
-                                        String.valueOf(R.string.rqstCancelled),
+                                        context.getString(R.string.rqstCancelled),
                                         Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -304,7 +304,7 @@ public class CreaEventoActivity extends Activity {
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
                 progressDialog = new ProgressDialog(CreaEventoActivity.this);
-                progressDialog.setMessage(String.valueOf(R.string.creazioneEvento));
+                progressDialog.setMessage(getApplicationContext().getString(R.string.creazioneEvento));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
             }

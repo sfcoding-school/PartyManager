@@ -317,7 +317,7 @@ public class EventDialog {
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
                 progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage(String.valueOf(R.string.creazDom));
+                progressDialog.setMessage(context.getString(R.string.creazDom));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
             }
