@@ -28,7 +28,6 @@ public class DrawerAdapter extends ArrayAdapter<String> {
     private TypedArray mIcons;
     private Boolean alto;
     public final String REG_USERNAME = "reg_username";
-    private ImageView iv;
     private int mViewResourceId;
 
     public DrawerAdapter(Context ctx, int viewResourceId, String[] strings, TypedArray icons, Boolean alto) {
@@ -48,7 +47,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
         convertView = mInflater.inflate(mViewResourceId, null);
 
-        iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
+        ImageView iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
         iv.setImageDrawable(mIcons.getDrawable(position));
 
         TextView tv = (TextView) convertView.findViewById(R.id.txt_drawer_line);
@@ -88,8 +87,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         try {
             File f = new File(directory, "profilelarge.jpg");
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            return b;
+            return BitmapFactory.decodeStream(new FileInputStream(f));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -53,7 +53,7 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
-                String s = extras.getString("type").toString();
+                String s = extras.getString("type");
                 if (s.equals("newEvent")) {
                     sendNotification("Nuovo Evento", extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"));
 
