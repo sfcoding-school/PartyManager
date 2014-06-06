@@ -71,31 +71,31 @@ public class EventDialog {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(false);
 
-        sp  =(Spinner) dialog.findViewById(R.id.spinner);
+        sp = (Spinner) dialog.findViewById(R.id.spinner);
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (arg2 == 0){
+                if (arg2 == 0) {
                     personalizzata();
                 }
-                if (arg2 == 1 ){
+                if (arg2 == 1) {
                     luogoI();
                 }
-                if (arg2 == 2){
+                if (arg2 == 2) {
                     luogoE();
                 }
-                if (arg2 == 3 ){
+                if (arg2 == 3) {
                     date();
                 }
-                if (arg2 == 4 ){
+                if (arg2 == 4) {
                     orarioI();
                 }
-                if (arg2 == 5){
+                if (arg2 == 5) {
                     orarioE();
                 }
-                if (arg2 == 6 ) {
+                if (arg2 == 6) {
                     domanda_chiusa();
                 }
             }
@@ -105,15 +105,15 @@ public class EventDialog {
         });
     }
 
-    public Dialog returnD(){
+    public Dialog returnD() {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         return dialog;
     }
 
     public void date() {
 
-        dialog.setTitle("Scegli una data per l'Evento");
+        dialog.setTitle(R.string.dataE);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -138,7 +138,7 @@ public class EventDialog {
 
     public void orarioE() {
 
-        dialog.setTitle("Orario Evento");
+        dialog.setTitle(R.string.orarioE);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -164,7 +164,7 @@ public class EventDialog {
 
     public void orarioI() {
 
-        dialog.setTitle("Orario Incontro");
+        dialog.setTitle(R.string.orarioI);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.GONE);
@@ -185,14 +185,14 @@ public class EventDialog {
             }
         });
 
-       // return dialog;
+        // return dialog;
     }
 
     public void luogoE() {
-        dialog.setTitle("Luogo Evento");
+        dialog.setTitle(R.string.luogoE);
 
         risposta.setText("");
-        risposta.setHint("Scrivi qui il luogo");
+        risposta.setHint(R.string.luogoEHint);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.VISIBLE);
@@ -216,10 +216,10 @@ public class EventDialog {
     }
 
     public void luogoI() {
-        dialog.setTitle("Luogo Incontro");
+        dialog.setTitle(R.string.luogoI);
 
         risposta.setText("");
-        risposta.setHint("Scrivi qui il luogo");
+        risposta.setHint(R.string.luogoEHint);
 
         alto.setVisibility(View.GONE);
         risposta.setVisibility(View.VISIBLE);
@@ -250,12 +250,12 @@ public class EventDialog {
         date.setVisibility(View.GONE);
         orario.setVisibility(View.GONE);
 
-        dialog.setTitle("Personalizzata");
+        dialog.setTitle(R.string.pers);
 
         alto.setText("");
         risposta.setText("");
-        alto.setHint("Scrivi una domanda");
-        risposta.setHint("Scrivi qui la tua risposta");
+        alto.setHint(R.string.persDH);
+        risposta.setHint(R.string.persRH);
 
         close.setOnClickListener(new View.OnClickListener() {
 
@@ -273,11 +273,11 @@ public class EventDialog {
             }
         });
 
-       // return dialog;
+        // return dialog;
     }
 
     public void domanda_chiusa() {
-        dialog.setTitle("Domanda SI/NO");
+        dialog.setTitle(R.string.dmndChiusa);
 
         alto.setVisibility(View.VISIBLE);
         risposta.setVisibility(View.GONE);
@@ -285,7 +285,7 @@ public class EventDialog {
         orario.setVisibility(View.GONE);
 
         chiusura.setVisibility(View.GONE);
-        alto.setHint("Scrivi qui la domanda");
+        alto.setHint(R.string.persDH);
 
         close.setOnClickListener(new View.OnClickListener() {
 
@@ -317,7 +317,7 @@ public class EventDialog {
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
                 progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("Creazione Domanda");
+                progressDialog.setMessage(context.getString(R.string.creazDom));
                 progressDialog.setCancelable(false);
                 progressDialog.show();
             }
@@ -384,12 +384,12 @@ public class EventDialog {
                     b.putBoolean("close", chiusura.isChecked());
                     m.setData(b);
                     mResponseHandler.sendMessage(m);
-                } else  {
+                } else {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage("Problema nell'inserimento nuova domanda");
+                    alertDialogBuilder.setMessage(R.string.problInsDom);
 
                     // set positive button: Yes message
-                    alertDialogBuilder.setPositiveButton("Chiudi", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setPositiveButton(R.string.chiudi, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }

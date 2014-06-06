@@ -39,12 +39,12 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
 
-                return loadJsonFromFile(name,context);
+                return loadJsonFromFile(name, context);
             }
 
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
-                if (jsonArray!=null) {
+                if (jsonArray != null) {
                     if (name.equals("eventi"))
                         loadIntoEventiAdapter(jsonArray);
                     else
@@ -117,7 +117,8 @@ public class DataProvide {
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
                 saveJson(jsonArray, "attributi_" + id, context);
-                loadIntoAttributiAdapter(jsonArray);
+
+                //loadIntoAttributiAdapter(jsonArray); //SOLO PER TEST DA RIMETTERE
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
@@ -141,9 +142,9 @@ public class DataProvide {
                 ));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-
+            Log.e("DataProdive", "JSONException loadIntoEventiAdapter: " + e);
+        } catch (NullPointerException e) {
+            Log.e("DataProdive", "NullPointerException loadIntoEventiAdapter: " + e);
         }
     }
 
@@ -164,28 +165,28 @@ public class DataProvide {
             }
             Evento.checkTemplate();
         } catch (JSONException e) {
-            Log.e("DEBUG ATTRIBUTI DOWNLOAD: ", "catch JSONException " + e);
-        } catch (NullPointerException e){
-
+            Log.e("DataProdive", "JSONException loadIntoAttributiAdapter: " + e);
+        } catch (NullPointerException e) {
+            Log.e("DataProdive", "NullPointerException loadIntoAttributiAdapter: " + e);
         }
     }
 
 
-    public static void addElementJson (final JSONObject element, final String jsonName, final Context context){
+    public static void addElementJson(final JSONObject element, final String jsonName, final Context context) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
 
-                JSONArray jsonArray = loadJsonFromFile(jsonName,context);
+                JSONArray jsonArray = loadJsonFromFile(jsonName, context);
                 jsonArray = jsonArray.put(element);
-                saveJsonToFile(jsonArray, jsonName,context);
+                saveJsonToFile(jsonArray, jsonName, context);
                 return null;
             }
 
         }.execute(null, null, null);
     }
 
-    private static synchronized JSONArray loadJsonFromFile(String fileName, Context context){
+    private static synchronized JSONArray loadJsonFromFile(String fileName, Context context) {
         try {
             FileInputStream fis = context.openFileInput(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fis);
@@ -205,25 +206,24 @@ public class DataProvide {
         }
     }
 
-    private static synchronized void saveJsonToFile (JSONArray jsonArray, String fileName, Context context){
+    private static synchronized void saveJsonToFile(JSONArray jsonArray, String fileName, Context context) {
         try {
             String jsonString = jsonArray.toString();
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(jsonString.getBytes());
             fos.close();
         } catch (IOException e) {
-            String error = e.toString();
-            Log.e("DATA_PROVIDE", error);
-        } catch (NullPointerException e){
-
+            Log.e("DataProdive", "IOException saveJsonToFile: " + e);
+        } catch (NullPointerException e) {
+            Log.e("DataProdive", "NullPointerException saveJsonToFile: " + e);
         }
     }
 
-    private static JSONArray stringToJsonArray (String jsonString){
-        try{
+    private static JSONArray stringToJsonArray(String jsonString) {
+        try {
             JSONObject jsonRis = new JSONObject(jsonString);
             return jsonRis.getJSONArray("results");
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }

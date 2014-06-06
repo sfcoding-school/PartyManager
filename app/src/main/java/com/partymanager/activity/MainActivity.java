@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,9 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,29 +33,21 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.helper.DataProvide;
+import com.partymanager.data.DrawerAdapter;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     private FragmentManager fragmentManager;
-
     private boolean noMenuActionBar = false;
-
     public static CharSequence mTitle;
-
     private static Activity mContext;
     RelativeLayout leftRL;
     DrawerLayout drawerLayout;
     ListView mDrawerListView;
     ActionBarDrawerToggle mDrawerToggle;
-
     public static Handler handlerService = null;
 
     @Override
@@ -62,22 +56,18 @@ public class MainActivity extends Activity
 
         handlerService = new Handler() {
             @Override
-            public void handleMessage (Message msg) {
+            public void handleMessage(Message msg) {
                 Log.e("SERVICEHANDLER", "arrivato il messaggio " + msg.toString());
                 Bundle b = msg.getData();
                 String type = b.getString("type");
-                if (type.equals("newEvent")){
+                if (type.equals("newEvent")) {
                     if (fragmentManager.findFragmentByTag("Eventi").isVisible()) {
                         DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
                     }
-
-
-
-                }else if (type.equals("newAttr")){
+                } else if (type.equals("newAttr")) {
                     if (fragmentManager.findFragmentByTag("Evento").isVisible()) {
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("id","doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
                     }
-
                 }
             }
         };
@@ -118,58 +108,78 @@ public class MainActivity extends Activity
         mDrawerListView = (ListView) findViewById(R.id.left_expandableListView);
         ListView bottomListview = (ListView) findViewById(R.id.bottom_listview);
 
+        TextView txt_version = (TextView) findViewById(R.id.txt_version);
+        try {
+            txt_version.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("Drawer", "errore txt_version versione applicazione");
+        }
+
         bottomListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
-                        newact.putExtra("chiave", "1");
-                        startActivity(newact);
+                        changeFragment(2);
                         break;
                     case 1:
-                        changeFragment(2);
+                        Intent Email = new Intent(Intent.ACTION_SEND);
+                        PackageInfo pInfo = null;
+                        try {
+                            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e("Drawer", "errore sendmail versione applicazione");
+                        }
+                        Email.setType("text/email");
+                        Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
+                        Email.putExtra(Intent.EXTRA_SUBJECT, R.string.mailSubject + " (" + (pInfo != null ? pInfo.versionName : null) + ")");
+                        Email.putExtra(Intent.EXTRA_TEXT, R.string.txtMail);
+                        startActivity(Intent.createChooser(Email, "Send Feedback:"));
                         break;
                 }
             }
         });
-        bottomListview.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new String[]{
-                        "Profilo",
-                        "Impostazioni",
-                }
-        ));
 
+        bottomListview.setAdapter(new DrawerAdapter(
+                getActionBar().getThemedContext(),
+                R.layout.drawer_line,
+                getResources().getStringArray(R.array.list_names),
+                getResources().obtainTypedArray(R.array.list_icons),
+                false
+        ));
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                changeFragment(position);
+                if (position == 0) {
+                    Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
+                    newact.putExtra("chiave", "1");
+                    startActivity(newact);
+                } else {
+                    changeFragment(position - 1);
+                }
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+
+        mDrawerListView.setDivider(null);
+
+        mDrawerListView.setAdapter(new DrawerAdapter(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_2,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section0),
-                        getString(R.string.title_section1),
-                }
+                R.layout.drawer_line,
+                getResources().getStringArray(R.array.list_names2),
+                getResources().obtainTypedArray(R.array.list_icons2),
+                true
         ));
     }
-
-
 
     private void setUp() {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -347,7 +357,6 @@ public class MainActivity extends Activity
 
                 }
         );
-
 
 
     }

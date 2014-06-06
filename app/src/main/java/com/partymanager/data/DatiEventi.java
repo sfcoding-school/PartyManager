@@ -15,6 +15,7 @@ public class DatiEventi {
      */
     public static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
     public static EventAdapter eAdapter;
+
     /**
      * A map of sample (dummy) items, by ID.
      */
@@ -30,7 +31,8 @@ public class DatiEventi {
         addItem(new Evento("3", "Item 3"));
         */
     }
-    public static void removeAll(){
+
+    public static void removeAll() {
         ITEMS.removeAll(ITEMS);
         eAdapter.notifyDataSetChanged();
     }
@@ -59,7 +61,7 @@ public class DatiEventi {
         public String admin;
         public int numUtenti;
 
-        public Evento (int id, String name, String details, String date, String admin, int numUtenti) {
+        public Evento(int id, String name, String details, String date, String admin, int numUtenti) {
             this.id = id;
             this.name = name;
             this.details = details;

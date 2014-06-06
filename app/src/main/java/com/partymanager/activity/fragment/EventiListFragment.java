@@ -1,10 +1,8 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +11,11 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
-import com.partymanager.data.*;
-import com.partymanager.helper.DataProvide;
+import com.partymanager.data.DatiEventi;
+import com.partymanager.data.EventAdapter;
 import com.partymanager.helper.HelperFacebook;
 
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
@@ -70,7 +69,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         eAdapter = new EventAdapter (getActivity(), DatiEventi.ITEMS);
         DatiEventi.eAdapter = eAdapter; */
         String idFacebook = HelperFacebook.getFacebookId();
-        if (idFacebook!= null)
+        if (idFacebook != null)
             eAdapter = DatiEventi.init(getActivity());
         else
             Log.e("id_FB: ", "id fb null on " + this.getActivity().getLocalClassName());
@@ -79,11 +78,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         mAdapter = new ArrayAdapter<DatiEventi.Evento>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DatiEventi.ITEMS);
         */
-       // ProgressBar progressBarLarge = (ProgressBar) getActivity().findViewById(R.id.eventProgressBarLarge);
+        // ProgressBar progressBarLarge = (ProgressBar) getActivity().findViewById(R.id.eventProgressBarLarge);
         //ProgressBar progressBarSmall = (ProgressBar) getActivity().findViewById(R.id.progressBarSmall);
 
         //progressBarLarge.setVisibility(View.VISIBLE);
-       // DataProvide.getEvent(getActivity(), progressBarLarge, progressBarSmall);
+        // DataProvide.getEvent(getActivity(), progressBarLarge, progressBarSmall);
 
         //MainActivity.progressBarVisible = false;
 
@@ -102,7 +101,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
         // Set OnItemClickListener so we can be notified on item clicks
         listView.setOnItemClickListener(this);
-
 
 
         listView.setAdapter(eAdapter);
@@ -128,13 +126,13 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
 
     }
 
     @Override
-        public void onDetach() {
+    public void onDetach() {
         super.onDetach();
         mListener = null;
     }
@@ -146,7 +144,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         MainActivity.mTitle = "Eventi";
 
     }
-
 
 
     @Override
@@ -167,24 +164,24 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
 
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = listView.getEmptyView();
+     public void setEmptyText(CharSequence emptyText) {
+     View emptyView = listView.getEmptyView();
 
-        if (emptyText instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }*/
+     if (emptyText instanceof TextView) {
+     ((TextView) emptyView).setText(emptyText);
+     }
+     }*/
 
     /**
-    * This interface must be implemented by activities that contain this
-    * fragment to allow an interaction in this fragment to be communicated
-    * to the activity and potentially other fragments contained in that
-    * activity.
-    * <p>
-    * See the Android Training lesson <a href=
-    * "http://developer.android.com/training/basics/fragments/communicating.html"
-    * >Communicating with Other Fragments</a> for more information.
-    */
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public static interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id, String name, String admin, String numU);
     }

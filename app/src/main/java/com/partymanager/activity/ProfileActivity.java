@@ -6,22 +6,16 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Request;
@@ -41,8 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class ProfileActivity extends Activity {
@@ -77,7 +69,7 @@ public class ProfileActivity extends Activity {
 
         prefs = getPreferences();
 
-        //Controllo KEY HASH per connessione FB
+        /*Controllo KEY HASH per connessione FB
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.partymanager", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -92,7 +84,7 @@ public class ProfileActivity extends Activity {
         } catch (NoSuchAlgorithmException e) {
             Toast.makeText(getApplicationContext(), "error2 - ProfileActivity", Toast.LENGTH_LONG).show();
         }
-
+        */
         //Inizializzazione componenti layout
         setContentView(R.layout.activity_profilo);
         buttonLoginLogout = (Button) findViewById(R.id.buttonLoginLogout);
@@ -179,8 +171,7 @@ public class ProfileActivity extends Activity {
 
                 String username_pref = prefs.getString(REG_USERNAME, "");
                 textInstructionsOrLink.setText(username_pref);
-
-                loadImageFromStorage();
+                loadImageFromStorage("large");
 
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
@@ -188,7 +179,8 @@ public class ProfileActivity extends Activity {
                     public void onCompleted(GraphUser user, Response response) {
                         if (user != null) {
 
-                            getFacebookProfilePicture(user.getId());
+                            getFacebookProfilePicture(user.getId(), "large");
+                            //getFacebookProfilePicture(user.getId(), "small");
                             textInstructionsOrLink.setText(user.getName());
                             username = user.getName();
                             id_fb = user.getId();
@@ -209,11 +201,11 @@ public class ProfileActivity extends Activity {
         }
     }
 
-    private void loadImageFromStorage() {
+    private void loadImageFromStorage(String quale) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         try {
-            File f = new File(directory, "profile.jpg");
+            File f = new File(directory, "profile" + quale + ".jpg");
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             foto_profilo.setImageBitmap(b);
         } catch (FileNotFoundException e) {
@@ -221,10 +213,10 @@ public class ProfileActivity extends Activity {
         }
     }
 
-    private String saveToInternalSorage(Bitmap bitmapImage) {
+    private String saveToInternalSorage(Bitmap bitmapImage, String quale) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile.jpg");
+        File mypath = new File(directory, "profile" + quale + ".jpg");
 
         FileOutputStream fos;
         try {
@@ -240,7 +232,7 @@ public class ProfileActivity extends Activity {
         return directory.getAbsolutePath();
     }
 
-    private SharedPreferences getPreferences() {
+    public SharedPreferences getPreferences() {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
         return getSharedPreferences(ProfileActivity.class.getSimpleName(),
@@ -254,14 +246,14 @@ public class ProfileActivity extends Activity {
         editor.commit();
     }
 
-    private void getFacebookProfilePicture(final String userID) {
+    private void getFacebookProfilePicture(final String userID, final String quale) {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... args) {
                 URL imageURL;
                 Bitmap bitmap = null;
                 try {
-                    imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+                    imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=" + quale);
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -274,8 +266,9 @@ public class ProfileActivity extends Activity {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap != null) {
-                    saveToInternalSorage(bitmap);
-                    foto_profilo.setImageBitmap(bitmap);
+                    saveToInternalSorage(bitmap, quale);
+                    if (quale.equals("large"))
+                        foto_profilo.setImageBitmap(bitmap);
                 }
             }
 

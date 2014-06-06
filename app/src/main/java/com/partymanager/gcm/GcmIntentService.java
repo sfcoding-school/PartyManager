@@ -1,11 +1,5 @@
 package com.partymanager.gcm;
 
-import com.partymanager.R;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.partymanager.activity.MainActivity;
-import com.partymanager.helper.DataProvide;
-
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +9,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
+import com.partymanager.helper.DataProvide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +71,8 @@ public class GcmIntentService extends IntentService {
                         e.printStackTrace();
                     }
 
-                }else if (s.equals("newAttr")) {
+                } else if (s.equals("newAttr")) {
+
                     sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
 
                     try {
@@ -152,8 +152,8 @@ public class GcmIntentService extends IntentService {
 
                         .setContentText(msg)
                         .setDefaults(android.app.Notification.DEFAULT_ALL)
-                        //.setSound(alarmSound);
-                        ;
+                //.setSound(alarmSound);
+                ;
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

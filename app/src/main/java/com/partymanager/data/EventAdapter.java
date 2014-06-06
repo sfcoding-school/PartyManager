@@ -56,7 +56,7 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
             giornoN.setText(HelperDataParser.getGiornoNumerio(evento.date));
             giornoS.setText(HelperDataParser.getGiornoLettere(evento.date));
             mese.setText(HelperDataParser.getMese(evento.date));
-        }else{
+        } else {
             giornoN.setText("");
             giornoS.setText("");
             mese.setText("");
