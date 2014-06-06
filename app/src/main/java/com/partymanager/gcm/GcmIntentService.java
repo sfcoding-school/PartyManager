@@ -72,7 +72,7 @@ public class GcmIntentService extends IntentService {
                         e.printStackTrace();
                     }
 
-                }else if (s.equals("newAttr")){
+                }else if (s.equals("newAttr")) {
                     sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
 
                     try {
@@ -85,12 +85,29 @@ public class GcmIntentService extends IntentService {
                         element.put("numd", extras.getInt("numd"));
                         element.put("numr", extras.getInt("numr"));
 
-                        DataProvide.addElementJson(element,"attributi"+extras.getInt("idEvento") ,getApplicationContext());
+                        DataProvide.addElementJson(element, "attributi" + extras.getInt("idEvento"), getApplicationContext());
 
-                    }catch (JSONException e ){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+                }else if (s.equals("newRis")) {
+                    sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                    if (extras.getBoolean("agg")) {
+
+                    } else {
+
+                    }
+
+                }else if (s.equals("risp")){
+                        sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                        //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                        if (extras.getBoolean("agg")){
+
+                        }else{
+
+                        }
                 }else if (s.equals("test")){
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
 
