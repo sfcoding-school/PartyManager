@@ -1,8 +1,13 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -22,10 +28,15 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.RisposteAdapter;
+import com.partymanager.helper.HelperConnessione;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Evento extends Fragment {
 
@@ -99,7 +110,7 @@ public class Evento extends Fragment {
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
         for (DatiAttributi.Attributo temp : prova) {
-            Log.e("checkTEmplate-TEST: ", temp.id + " " + temp.domanda + " " + temp.risposta + " " + temp.template + " " + temp.close);
+            //Log.e("checkTEmplate-TEST: ", temp.id + " " + temp.domanda + " " + temp.risposta + " " + temp.template + " " + temp.close);
             if (temp.template.equals("data")) {
                 quando_data.setText(temp.risposta);
             }
@@ -120,8 +131,6 @@ public class Evento extends Fragment {
         View view = inflater.inflate(R.layout.fragment_evento, container, false);
 
         listView = (ListView) view.findViewById(R.id.eventList);
-        //btn_Domanda = (Button) view.findViewById(R.id.btn_domanda);
-        //btn_sino = (Button) view.findViewById(R.id.btn_sino);
         riepilogo = view.findViewById(R.id.stickyheader);
         bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
@@ -149,7 +158,7 @@ public class Evento extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
                 // custom dialog
                 final Dialog dialog = new Dialog(getActivity());
@@ -160,16 +169,24 @@ public class Evento extends Fragment {
                 text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
                 ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
-
+                final EditText edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("Dialog-Risposte", "hai cliccato send");
+                        Log.e("clicked","");
+                        if (!"".equals(edt.getText().toString()))
+                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
+
                     }
                 });
 
                 EditText nuova_risposta = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 nuova_risposta.setHint("Scrivi qui la tua risposta");
+
+                ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+                RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                risp.setAdapter(adapter);
+
                 dialog.show();
             }
         });
@@ -178,7 +195,6 @@ public class Evento extends Fragment {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-
                 Log.e("long clicked", "pos: " + pos);
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
                 popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
@@ -219,13 +235,38 @@ public class Evento extends Fragment {
             }
         });
 
-        //SOLO PER TEST
-        DatiAttributi.addItem(new DatiAttributi.Attributo("1", "prova", "", "", false, 0, 0));
-        eAdapter.notifyDataSetChanged();
-        //FINE TEST
-
-
         return view;
+    }
+
+    private void addRisposta(final String id_attributo, final String risposta) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+
+                String[] name, param;
+
+                 name = new String[]{"risposta"};
+                 param = new String[]{risposta};
+
+
+                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/event/" + idEvento + "/" + id_attributo, name, param);
+
+                Log.e("addRisposta-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+
+            }
+        }.execute(null, null, null);
     }
 
     @Override

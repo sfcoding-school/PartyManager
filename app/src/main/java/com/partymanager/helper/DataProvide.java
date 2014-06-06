@@ -9,6 +9,7 @@ import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiRisposte;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,9 +30,13 @@ public class DataProvide {
     }
 
     public static void getAttributi(Context context, String eventoId) {
-
         loadJson("attributi_" + eventoId, context);
         downloadAttributi(eventoId, context);
+    }
+
+    public static void getRisposte(String id_evento, String id_attr, Context context){
+        loadJson("risposte_"+id_evento + "_" + id_attr, context);
+        downloadRisposte(id_evento, id_attr, context);
     }
 
     private static void loadJson(final String name, final Context context) {
@@ -47,8 +52,10 @@ public class DataProvide {
                 if (jsonArray != null) {
                     if (name.equals("eventi"))
                         loadIntoEventiAdapter(jsonArray);
-                    else
+                    if (name.contains("attributi"))
                         loadIntoAttributiAdapter(jsonArray);
+                    if (name.contains("risposte"))
+                        loadIntoRisposteAdapter(jsonArray);
                 }
             }
 
@@ -118,7 +125,7 @@ public class DataProvide {
             protected void onPostExecute(JSONArray jsonArray) {
                 saveJson(jsonArray, "attributi_" + id, context);
 
-                //loadIntoAttributiAdapter(jsonArray); //SOLO PER TEST DA RIMETTERE
+                loadIntoAttributiAdapter(jsonArray);
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
@@ -171,6 +178,46 @@ public class DataProvide {
         }
     }
 
+    private static void downloadRisposte(final String id_evento, final String id_attr, final Context context) {
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                String jsonString = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event/" + id_evento + "/" + id_attr);
+                return stringToJsonArray(jsonString);
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonArray) {
+                saveJson(jsonArray, "risposte_"+id_evento + "_" + id_attr, context);
+
+                loadIntoRisposteAdapter(jsonArray);
+            }
+        }.execute(null, null, null);
+    }
+
+    private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
+        DatiRisposte.removeAll();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+               DatiRisposte.addItem( new DatiRisposte.Risposta(
+                       jsonArray.getJSONObject(i).getString("id_risposta"),
+                       jsonArray.getJSONObject(i).getString("risposta"),
+                       jsonArray.getJSONObject(i).getJSONArray("userList")
+                       )
+               );
+            }
+        } catch (JSONException e) {
+            Log.e("DataProdive", "JSONException loadIntoRisposteAdapter: " + e);
+        } catch (NullPointerException e) {
+            Log.e("DataProdive", "NullPointerException loadIntoRisposteAdapter: " + e);
+        }
+    }
 
     public static void addElementJson(final JSONObject element, final String jsonName, final Context context) {
         new AsyncTask<Void, Void, Void>() {

@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:id="@+id/rel_layout_diagRisposte">
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imgBSend"
-        android:layout_gravity="right"
-        android:background="@android:drawable/ic_menu_send"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/imgBSend"
-        android:id="@+id/linearLayout">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Domanda"
-            android:id="@+id/txt_domanda_dialog"
-            android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
-            android:textSize="22dp"
-            android:textAlignment="center" />
+            android:id="@+id/linearLayout">
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/listView" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Domanda"
+                android:id="@+id/txt_domanda_dialog"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="22dp"
+                android:textAlignment="center" />
 
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/listView_risposte" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edtxt_nuovaRisposta"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayout"
+                android:layout_weight="0.8" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgBSend"
+                android:layout_gravity="right"
+                android:background="@android:drawable/ic_menu_send"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </LinearLayout>
     </LinearLayout>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtxt_nuovaRisposta"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout" />
 
 </RelativeLayout>
