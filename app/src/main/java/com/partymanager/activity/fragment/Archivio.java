@@ -1,9 +1,9 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import com.partymanager.R;
  * to handle interaction events.
  * Use the {@link Archivio#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class Archivio extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -35,7 +34,6 @@ public class Archivio extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     *
      * @return A new instance of fragment Archivio.
      */
     // TODO: Rename and change types and number of parameters
@@ -47,6 +45,7 @@ public class Archivio extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public Archivio() {
         // Required empty public constructor
     }
@@ -98,7 +97,7 @@ public class Archivio extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

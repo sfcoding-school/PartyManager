@@ -3,7 +3,6 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +14,6 @@ import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,7 +22,6 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
-import com.partymanager.activity.MainActivity;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 
@@ -167,7 +164,7 @@ public class Evento extends Fragment {
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       Log.e("Dialog-Risposte", "hai cliccato send");
+                        Log.e("Dialog-Risposte", "hai cliccato send");
                     }
                 });
 
@@ -248,7 +245,7 @@ public class Evento extends Fragment {
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         DatiAttributi.removeAll();
         eAdapter.notifyDataSetChanged();

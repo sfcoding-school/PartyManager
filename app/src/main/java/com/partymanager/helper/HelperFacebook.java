@@ -21,16 +21,16 @@ public class HelperFacebook {
     private static String facebookId;
     private static Activity activity = MainActivity.getActivity();
 
-    public static String getFacebookId(){
+    public static String getFacebookId() {
         if (facebookId != null)
             return facebookId;
-        else{
-            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(),activity.MODE_PRIVATE);
-            String id = prefs.getString("reg_id","");
+        else {
+            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(), activity.MODE_PRIVATE);
+            String id = prefs.getString("reg_id", "");
             if (id.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "id facebook not found.");
                 return null;
-            }else{
+            } else {
                 facebookId = id;
                 return facebookId;
             }
@@ -39,8 +39,8 @@ public class HelperFacebook {
 
     private static Session session = null;
 
-    public static Session getSession(Activity activity){
-        if (session == null){
+    public static Session getSession(Activity activity) {
+        if (session == null) {
             session = Session.getActiveSession();
             if (session == null) {
                 session = new Session(activity);
@@ -53,18 +53,18 @@ public class HelperFacebook {
         return session;
     }
 
-    public static String getToken(){
+    public static String getToken() {
         Session session = getSession(activity);
         String token = session.getAccessToken();
         Log.e("TOKEN - getToken", token);
         return token;
     }
 
-    public static WebDialog inviteFriends(final Context context, String friendsTo){
+    public static WebDialog inviteFriends(final Context context, String friendsTo) {
 
         Bundle parameters = new Bundle();
         parameters.putString("to", friendsTo);
-        parameters.putString( "message", context.getString(R.string.msgWebDialog));
+        parameters.putString("message", context.getString(R.string.msgWebDialog));
 
         //Ritorno il WEBDialog
         return (

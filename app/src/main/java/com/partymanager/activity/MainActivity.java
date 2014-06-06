@@ -132,7 +132,7 @@ public class MainActivity extends Activity
                         }
                         Email.setType("text/email");
                         Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
-                        Email.putExtra(Intent.EXTRA_SUBJECT, R.string.mailSubject +  " (" + (pInfo != null ? pInfo.versionName : null) + ")");
+                        Email.putExtra(Intent.EXTRA_SUBJECT, R.string.mailSubject + " (" + (pInfo != null ? pInfo.versionName : null) + ")");
                         Email.putExtra(Intent.EXTRA_TEXT, R.string.txtMail);
                         startActivity(Intent.createChooser(Email, "Send Feedback:"));
                         break;
@@ -151,12 +151,13 @@ public class MainActivity extends Activity
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               if (position == 0) {
-                   Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
-                   newact.putExtra("chiave", "1");
-                   startActivity(newact);
-               } else {
-                changeFragment(position-1); }
+                if (position == 0) {
+                    Intent newact = new Intent(getApplicationContext(), ProfileActivity.class);
+                    newact.putExtra("chiave", "1");
+                    startActivity(newact);
+                } else {
+                    changeFragment(position - 1);
+                }
             }
         });
 

@@ -6,13 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +20,6 @@ import com.partymanager.activity.ProfileActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class DrawerAdapter extends ArrayAdapter<String> {
 
@@ -67,7 +58,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             tv.setTextSize(20);
         } else {
             tv.setTextSize(25);
-            if (position == 0){
+            if (position == 0) {
                 SharedPreferences prefs = getPreferences();
                 String username_pref = prefs.getString(REG_USERNAME, "");
                 tv.setText(username_pref);

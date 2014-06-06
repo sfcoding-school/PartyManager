@@ -71,31 +71,31 @@ public class EventDialog {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(false);
 
-        sp  =(Spinner) dialog.findViewById(R.id.spinner);
+        sp = (Spinner) dialog.findViewById(R.id.spinner);
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (arg2 == 0){
+                if (arg2 == 0) {
                     personalizzata();
                 }
-                if (arg2 == 1 ){
+                if (arg2 == 1) {
                     luogoI();
                 }
-                if (arg2 == 2){
+                if (arg2 == 2) {
                     luogoE();
                 }
-                if (arg2 == 3 ){
+                if (arg2 == 3) {
                     date();
                 }
-                if (arg2 == 4 ){
+                if (arg2 == 4) {
                     orarioI();
                 }
-                if (arg2 == 5){
+                if (arg2 == 5) {
                     orarioE();
                 }
-                if (arg2 == 6 ) {
+                if (arg2 == 6) {
                     domanda_chiusa();
                 }
             }
@@ -105,9 +105,9 @@ public class EventDialog {
         });
     }
 
-    public Dialog returnD(){
+    public Dialog returnD() {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         return dialog;
     }
 
@@ -185,7 +185,7 @@ public class EventDialog {
             }
         });
 
-       // return dialog;
+        // return dialog;
     }
 
     public void luogoE() {
@@ -273,7 +273,7 @@ public class EventDialog {
             }
         });
 
-       // return dialog;
+        // return dialog;
     }
 
     public void domanda_chiusa() {
@@ -384,7 +384,7 @@ public class EventDialog {
                     b.putBoolean("close", chiusura.isChecked());
                     m.setData(b);
                     mResponseHandler.sendMessage(m);
-                } else  {
+                } else {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                     alertDialogBuilder.setMessage(R.string.problInsDom);
 

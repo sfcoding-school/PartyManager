@@ -26,7 +26,7 @@ public class HelperConnessione {
 
     static public boolean login() {
         String[] name = {"idFacebook", "token"};
-        String[] param = {HelperFacebook.getFacebookId() , HelperFacebook.getToken() };
+        String[] param = {HelperFacebook.getFacebookId(), HelperFacebook.getToken()};
         String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/login", name, param);
         Log.e("DATA_PROVIDE", "login " + ris);
         return ris.equals("fatto");
@@ -58,18 +58,18 @@ public class HelperConnessione {
 
             String temp = EntityUtils.toString(response.getEntity());
 
-            if(temp.equals("session error")){
+            if (temp.equals("session error")) {
                 login();
                 httpPostConnection(url, name, param);
             } else {
                 return temp;
             }
         } catch (ClientProtocolException e) {
-            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
         } catch (UnsupportedEncodingException e) {
-            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-IOException: ", e.toString() );
+            Log.e("HelperConnessione-IOException: ", e.toString());
         }
         return "error";
     }
@@ -88,7 +88,7 @@ public class HelperConnessione {
             String test_ritorno = EntityUtils.toString(response.getEntity());
             Log.e("httpGetConnection-Ris: ", test_ritorno);
 
-            if(test_ritorno.equals("session error")){
+            if (test_ritorno.equals("session error")) {
                 login();
                 return httpGetConnection(url);
             }
@@ -96,11 +96,11 @@ public class HelperConnessione {
             return test_ritorno;
 
         } catch (ClientProtocolException e) {
-            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
         } catch (UnsupportedEncodingException e) {
-            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-IOException: ", e.toString() );
+            Log.e("HelperConnessione-IOException: ", e.toString());
         }
         return "error";
     }
@@ -122,11 +122,11 @@ public class HelperConnessione {
             return EntityUtils.toString(response.getEntity());
 
         } catch (ClientProtocolException e) {
-            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
         } catch (UnsupportedEncodingException e) {
-            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-IOException: ", e.toString() );
+            Log.e("HelperConnessione-IOException: ", e.toString());
         }
         return "error";
     }
@@ -142,11 +142,11 @@ public class HelperConnessione {
             return EntityUtils.toString(response.getEntity());
 
         } catch (ClientProtocolException e) {
-            Log.e("HelperConnessione-ClientProtocolException: ", e.toString() );
+            Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
         } catch (UnsupportedEncodingException e) {
-            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString() );
+            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-IOException: ", e.toString() );
+            Log.e("HelperConnessione-IOException: ", e.toString());
         }
         return "error";
     }
