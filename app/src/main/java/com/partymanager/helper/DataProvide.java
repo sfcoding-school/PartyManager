@@ -207,15 +207,18 @@ public class DataProvide {
     }
 
     private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
+        Log.e("loadIntoRisposteAdapter-jsonArray: ", String.valueOf(jsonArray) + " " + jsonArray.length());
         DatiRisposte.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
+
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
-                                jsonArray.getJSONObject(i).getString("id_risposta"),
+                                String.valueOf(jsonArray.getJSONObject(i).getInt("id_risposta")),
                                 jsonArray.getJSONObject(i).getString("risposta"),
-                                jsonArray.getJSONObject(i).getJSONArray("userList")
+                                null
                         )
                 );
+
             }
         } catch (JSONException e) {
             Log.e("DataProvide", "JSONException loadIntoRisposteAdapter: " + e);
@@ -249,7 +252,7 @@ public class DataProvide {
                 sb.append(line);
             }
             fis.close();
-            return stringToJsonArray(sb.toString());
+            return stringToJsonArrayBefore(sb.toString());
 
         } catch (IOException e) {
             Log.e("DATA_PROVIDE-loadJsonFromFile", e.toString());
@@ -271,11 +274,28 @@ public class DataProvide {
     }
 
     private static JSONArray stringToJsonArray(String jsonString) {
+
         try {
-            return new JSONArray(jsonString);
+        JSONObject json_data = new JSONObject(jsonString);
+        String status = json_data.getString("results");
+            return new JSONArray(status);
         } catch (JSONException e) {
             Log.e("DataProvide-stringToJsonArray", "JSONException " + e);
             return null;
         }
+
+    }
+
+    private static JSONArray stringToJsonArrayBefore(String jsonString) {
+
+        try {
+            //JSONObject json_data = new JSONObject(jsonString);
+            //String status = json_data.getString("results");
+            return new JSONArray(jsonString);
+        } catch (JSONException e) {
+            Log.e("DataProvide-stringToJsonArrayBefore", "JSONException " + e);
+            return null;
+        }
+
     }
 }

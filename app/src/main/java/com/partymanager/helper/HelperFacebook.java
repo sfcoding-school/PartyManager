@@ -56,7 +56,7 @@ public class HelperFacebook {
     public static String getToken() {
         Session session = getSession(activity);
         String token = session.getAccessToken();
-        //Log.e("TOKEN - getToken", token);
+        Log.e("TOKEN - getToken", token);
         return token;
     }
 

@@ -1,6 +1,7 @@
 package com.partymanager.gcm;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -153,8 +154,8 @@ public class GcmIntentService extends IntentService {
                                 .bigText(msg))
 
                         .setContentText(msg)
-                        .setDefaults(android.app.Notification.DEFAULT_ALL)
-                        .setLights(Color.RED, 500, 500)
+                        .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                        .setLights(0xff0000ff, 500, 500)
                 //.setSound(alarmSound);
                 ;
         mBuilder.setAutoCancel(true);

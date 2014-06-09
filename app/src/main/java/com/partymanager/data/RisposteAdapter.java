@@ -1,6 +1,7 @@
 package com.partymanager.data;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.risposta_row, parent, false);
         }
@@ -26,7 +28,15 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         risp.setText(DatiRisposte.ITEMS.get(position).risposta);
 
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
-        who.setText(DatiRisposte.ITEMS.get(position).userList.toString());
+
+        String persone = null;
+/*
+        for (int i=0; i<DatiRisposte.ITEMS.get(position).persone.size(); i++){
+            persone.concat(", " + DatiRisposte.ITEMS.get(position).persone.get(i).nome);
+
+        }
+*/
+        who.setText(persone);
 
         return convertView;
     }
