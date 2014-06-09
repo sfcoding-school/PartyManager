@@ -96,11 +96,11 @@ public class HelperConnessione {
             return test_ritorno;
 
         } catch (ClientProtocolException e) {
-            Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
+            Log.e("HelperConnessione-httpGetConnection-ClientProtocolException: ", e.toString());
         } catch (UnsupportedEncodingException e) {
-            Log.e("HelperConnessione-UnsupportedEncodingException: ", e.toString());
+            Log.e("HelperConnessione-httpGetConnection-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-IOException: ", e.toString());
+            Log.e("HelperConnessione-httpGetConnection-IOException-: ", e.toString());
         }
         return "error";
     }

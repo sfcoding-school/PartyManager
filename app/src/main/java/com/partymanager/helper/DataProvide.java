@@ -34,8 +34,8 @@ public class DataProvide {
         downloadAttributi(eventoId, context);
     }
 
-    public static void getRisposte(String id_evento, String id_attr, Context context){
-        loadJson("risposte_"+id_evento + "_" + id_attr, context);
+    public static void getRisposte(String id_evento, String id_attr, Context context) {
+        loadJson("risposte_" + id_evento + "_" + id_attr, context);
         downloadRisposte(id_evento, id_attr, context);
     }
 
@@ -87,7 +87,7 @@ public class DataProvide {
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event");
 
-                Log.e("DATA_PROVIDE", json_string);
+                Log.e("DATA_PROVIDE-downloadEvent", json_string);
 
                 return stringToJsonArray(json_string);
             }
@@ -95,8 +95,10 @@ public class DataProvide {
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
 
-                saveJson(jsonArray, "eventi", context);
-                loadIntoEventiAdapter(jsonArray);
+                if (jsonArray != null) {
+                    saveJson(jsonArray, "eventi", context);
+                    loadIntoEventiAdapter(jsonArray);
+                }
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
@@ -123,9 +125,11 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
-                saveJson(jsonArray, "attributi_" + id, context);
 
-                loadIntoAttributiAdapter(jsonArray);
+                if (jsonArray != null) {
+                    saveJson(jsonArray, "attributi_" + id, context);
+                    loadIntoAttributiAdapter(jsonArray);
+                }
 
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
@@ -149,9 +153,9 @@ public class DataProvide {
                 ));
             }
         } catch (JSONException e) {
-            Log.e("DataProdive", "JSONException loadIntoEventiAdapter: " + e);
+            Log.e("DataProvide", "JSONException loadIntoEventiAdapter: " + e);
         } catch (NullPointerException e) {
-            Log.e("DataProdive", "NullPointerException loadIntoEventiAdapter: " + e);
+            Log.e("DataProvide", "NullPointerException loadIntoEventiAdapter: " + e);
         }
     }
 
@@ -172,9 +176,9 @@ public class DataProvide {
             }
             Evento.checkTemplate();
         } catch (JSONException e) {
-            Log.e("DataProdive", "JSONException loadIntoAttributiAdapter: " + e);
+            Log.e("DataProvide", "JSONException loadIntoAttributiAdapter: " + e);
         } catch (NullPointerException e) {
-            Log.e("DataProdive", "NullPointerException loadIntoAttributiAdapter: " + e);
+            Log.e("DataProvide", "NullPointerException loadIntoAttributiAdapter: " + e);
         }
     }
 
@@ -194,9 +198,10 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
-                saveJson(jsonArray, "risposte_"+id_evento + "_" + id_attr, context);
-
-                loadIntoRisposteAdapter(jsonArray);
+                if (jsonArray != null) {
+                    saveJson(jsonArray, "risposte_" + id_evento + "_" + id_attr, context);
+                    loadIntoRisposteAdapter(jsonArray);
+                }
             }
         }.execute(null, null, null);
     }
@@ -205,17 +210,17 @@ public class DataProvide {
         DatiRisposte.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
-               DatiRisposte.addItem( new DatiRisposte.Risposta(
-                       jsonArray.getJSONObject(i).getString("id_risposta"),
-                       jsonArray.getJSONObject(i).getString("risposta"),
-                       jsonArray.getJSONObject(i).getJSONArray("userList")
-                       )
-               );
+                DatiRisposte.addItem(new DatiRisposte.Risposta(
+                                jsonArray.getJSONObject(i).getString("id_risposta"),
+                                jsonArray.getJSONObject(i).getString("risposta"),
+                                jsonArray.getJSONObject(i).getJSONArray("userList")
+                        )
+                );
             }
         } catch (JSONException e) {
-            Log.e("DataProdive", "JSONException loadIntoRisposteAdapter: " + e);
+            Log.e("DataProvide", "JSONException loadIntoRisposteAdapter: " + e);
         } catch (NullPointerException e) {
-            Log.e("DataProdive", "NullPointerException loadIntoRisposteAdapter: " + e);
+            Log.e("DataProvide", "NullPointerException loadIntoRisposteAdapter: " + e);
         }
     }
 
@@ -247,8 +252,7 @@ public class DataProvide {
             return stringToJsonArray(sb.toString());
 
         } catch (IOException e) {
-            String error = e.toString();
-            Log.e("DATA_PROVIDE", error);
+            Log.e("DATA_PROVIDE-loadJsonFromFile", e.toString());
             return null;
         }
     }
@@ -260,20 +264,18 @@ public class DataProvide {
             fos.write(jsonString.getBytes());
             fos.close();
         } catch (IOException e) {
-            Log.e("DataProdive", "IOException saveJsonToFile: " + e);
+            Log.e("DataProvide", "IOException saveJsonToFile: " + e);
         } catch (NullPointerException e) {
-            Log.e("DataProdive", "NullPointerException saveJsonToFile: " + e);
+            Log.e("DataProvide", "NullPointerException saveJsonToFile: " + e);
         }
     }
 
     private static JSONArray stringToJsonArray(String jsonString) {
         try {
-            JSONObject jsonRis = new JSONObject(jsonString);
-            return jsonRis.getJSONArray("results");
+            return new JSONArray(jsonString);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("DataProvide-stringToJsonArray", "JSONException " + e);
             return null;
         }
-
     }
 }

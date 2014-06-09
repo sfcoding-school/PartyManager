@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -252,6 +253,7 @@ public class MainActivity extends Activity
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, mTitle.toString())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack((String) mTitle)
                 .commit();
         drawerLayout.closeDrawer(leftRL);
@@ -334,6 +336,7 @@ public class MainActivity extends Activity
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
             }
         }
@@ -362,6 +365,7 @@ public class MainActivity extends Activity
         Fragment fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "Evento")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("evento")
                 .commit();
 

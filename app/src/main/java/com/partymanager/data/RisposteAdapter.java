@@ -25,6 +25,9 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         TextView risp = (TextView) convertView.findViewById(R.id.txt_risposta2);
         risp.setText(DatiRisposte.ITEMS.get(position).risposta);
 
+        TextView who = (TextView) convertView.findViewById(R.id.txt_who);
+        who.setText(DatiRisposte.ITEMS.get(position).userList.toString());
+
         return convertView;
     }
 }
