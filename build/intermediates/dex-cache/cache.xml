@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/ulisse/Documenti/PartyManager/app/build/intermediates/pre-dexed/debug/classes-0db39d8a0fb5715af38aa6070ea7fff5d7eda4b7.jar"
+        jar="/home/ulisse/Documenti/PartyManager/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="/home/ulisse/Documenti/PartyManager/app/build/intermediates/pre-dexed/debug/classes-003ebf0a4ab9b3f95b1e2d2eed64c5759a80866e.jar"
+        jar="/home/ulisse/Documenti/PartyManager/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.3.23/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7676c0cb230efa6ac41c47867d372ed5913029d4"/>
+    <item
+        dex="/home/ulisse/Documenti/PartyManager/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-b56fb9b6b50910a68ed06df2454fe31f9df99afd.jar"
+        jar="/home/ulisse/Dropbox/Programmazione/ANDROID/android-studio/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="/home/ulisse/Documenti/PartyManager/app/build/intermediates/pre-dexed/debug/classes-f8b4dde525dbbe3ec695aa8ada5cf6a5e6603b0c.jar"
+        jar="/home/ulisse/Documenti/PartyManager/build/intermediates/exploded-aar/PartyManager.libs/facebook/unspecified/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="c0501e0d01ac8ff8ab5de77b4baee93230196d4d"/>
+
+</pre-dex-items>

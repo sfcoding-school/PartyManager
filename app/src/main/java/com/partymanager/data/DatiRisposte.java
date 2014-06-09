@@ -48,5 +48,15 @@ public class DatiRisposte {
             return id;
         }
     }
+
+    public static class Persona {
+        public String id_fb;
+        public String nome;
+
+        public Persona(String id_fb, String nome){
+            this.id_fb = id_fb;
+            this.nome = nome;
+        }
+    }
 }
 
