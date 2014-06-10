@@ -86,6 +86,5 @@ public class Archivio extends Fragment {
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(Uri uri);
     }
-    
 
 }

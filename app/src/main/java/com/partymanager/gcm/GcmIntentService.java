@@ -1,10 +1,12 @@
 package com.partymanager.gcm;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
@@ -145,17 +147,22 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+
                         .setSmallIcon(R.drawable.ic_stat_partymanagernotificationicon)
                         .setContentTitle(title)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
 
                         .setContentText(msg)
-                        .setDefaults(android.app.Notification.DEFAULT_ALL)
+                        .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                        .setLights(0xff0000ff, 500, 500)
                 //.setSound(alarmSound);
                 ;
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
+
+
+
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }

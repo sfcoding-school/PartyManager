@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -55,7 +54,6 @@ public class EventDialog {
         this.idEvento = idEvento;
 
         dialog = new Dialog(context);
-        //dialog.setContentView(R.layout.dialog_domande);
         dialog.setContentView(R.layout.dialog_domanda_2);
         alto = (EditText) dialog.findViewById(R.id.editText2);
         risposta = (EditText) dialog.findViewById(R.id.editText_risposta);
@@ -68,7 +66,7 @@ public class EventDialog {
             chiusura.setVisibility(View.GONE);
         }
 
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
+        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(false);
 
         sp = (Spinner) dialog.findViewById(R.id.spinner);
@@ -103,11 +101,13 @@ public class EventDialog {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
+
     }
 
     public Dialog returnD() {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        //InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         return dialog;
     }
 
@@ -327,6 +327,7 @@ public class EventDialog {
 
                 String chiusa = "0";
                 String[] name, param;
+
                 if (template.equals("")) {
                     name = new String[]{"domanda", "risposta", "chiusa"};
                     param = new String[]{domanda, risposta, chiusa};
@@ -335,7 +336,7 @@ public class EventDialog {
                     param = new String[]{domanda, template, risposta, chiusa};
                 }
 
-                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/attr/" + idEvento, name, param);
+                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/event/" + idEvento, name, param);
 
                 Log.e("addDomanda-ris: ", ris);
 

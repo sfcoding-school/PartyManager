@@ -5,27 +5,32 @@
         android:title="Notifiche">
 
         <CheckBoxPreference
-            android:key="checkbox_preference"
+            android:key="checkbox_notifiche_all"
+            android:title="Abilita notifiche"
+            android:summary="" />
+
+        <CheckBoxPreference
+            android:key="checkbox_preference1"
             android:title="Nuovo Evento"
             android:summary="Invito a nuovo evento" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference"
+            android:key="checkbox_preference2"
             android:title="Nuova Domanda"
             android:summary="Creazione Nuova Domanda" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference"
+            android:key="checkbox_preference3"
             android:title="Nuova Risposta"
             android:summary="" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference"
+            android:key="checkbox_preference4"
             android:title="Ricorda evento"
             android:summary="Ricevi una notifica poco prima dell\'evento" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference"
+            android:key="checkbox_preference5"
             android:title="Nuovo Utente"
             android:summary="Ingresso nuovo amico in un Evento" />
 

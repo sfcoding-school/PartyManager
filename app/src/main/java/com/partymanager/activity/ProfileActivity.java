@@ -6,16 +6,22 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Request;
@@ -35,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class ProfileActivity extends Activity {
@@ -69,22 +77,22 @@ public class ProfileActivity extends Activity {
 
         prefs = getPreferences();
 
-        /*Controllo KEY HASH per connessione FB
+        //Controllo KEY HASH per connessione FB
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.partymanager", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 String sign = Base64.encodeToString(md.digest(), Base64.DEFAULT);
-                //Log.e("MY KEY HASH:", sign);
+                Log.e("MY KEY HASH:", sign);
                 //Toast.makeText(getApplicationContext(), sign, Toast.LENGTH_LONG).show();
             }
-        } catch (NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             Toast.makeText(getApplicationContext(), "error1 - ProfileActivity", Toast.LENGTH_LONG).show();
         } catch (NoSuchAlgorithmException e) {
             Toast.makeText(getApplicationContext(), "error2 - ProfileActivity", Toast.LENGTH_LONG).show();
         }
-        */
+
         //Inizializzazione componenti layout
         setContentView(R.layout.activity_profilo);
         buttonLoginLogout = (Button) findViewById(R.id.buttonLoginLogout);

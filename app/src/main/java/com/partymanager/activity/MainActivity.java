@@ -2,6 +2,7 @@ package com.partymanager.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -170,6 +173,24 @@ public class MainActivity extends Activity
                 getResources().obtainTypedArray(R.array.list_icons2),
                 true
         ));
+
+        LinearLayout LL = (LinearLayout) findViewById(R.id.about);
+        LL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAbout();
+            }
+        });
+    }
+
+    protected void showAbout() {
+        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle(R.string.app_name);
+        builder.setView(messageView);
+        builder.create();
+        builder.show();
     }
 
     private void setUp() {
@@ -232,6 +253,8 @@ public class MainActivity extends Activity
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, mTitle.toString())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack((String) mTitle)
                 .commit();
         drawerLayout.closeDrawer(leftRL);
     }
@@ -266,9 +289,6 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.Nuovo_evento) {
@@ -308,6 +328,7 @@ public class MainActivity extends Activity
                 String ListFriends = data.getStringExtra("listfriend");
                 String nome_evento = data.getStringExtra("nome_evento");
                 String id_evento = data.getStringExtra("id_evento");
+
                 Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento + " " + id_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
@@ -315,6 +336,7 @@ public class MainActivity extends Activity
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
             }
         }
@@ -343,6 +365,7 @@ public class MainActivity extends Activity
         Fragment fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "Evento")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("evento")
                 .commit();
 

@@ -129,7 +129,6 @@ public class CreaEventoActivity extends Activity {
                 listView.setAdapter(dataAdapter);
                 dataAdapter.setAdapter(dataAdapter);
                 friendList = dataAdapter.friendList;
-
             }
         });
         friendsRequest.executeAsync();
@@ -207,6 +206,7 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
                     id_toSend = new ArrayList<String>();
+
                     StringBuilder id_to_invite = new StringBuilder();
                     for (Friends aFinali : finali) {
                         if (aFinali.getAppInstalled()) {
@@ -330,6 +330,8 @@ public class CreaEventoActivity extends Activity {
         // set positive button: Yes message
         alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                if(id_toSend != null ) id_toSend.clear();
+                container_friends.setText("");
                 CreaEventoActivity.this.finish();
             }
         });
