@@ -104,9 +104,9 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         holder.name.setText(friends1.getName());
         holder.name.setChecked(friends1.isSelected());
         if (friends1.getAppInstalled())
-            holder.installed.setVisibility(convertView.VISIBLE);
+            holder.installed.setVisibility(View.VISIBLE);
         else
-            holder.installed.setVisibility(convertView.GONE);
+            holder.installed.setVisibility(View.GONE);
         holder.name.setTag(friends1);
 
         //Gestione foto profilo nella listview

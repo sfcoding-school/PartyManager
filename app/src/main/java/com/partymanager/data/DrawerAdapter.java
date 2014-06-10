@@ -2,7 +2,6 @@ package com.partymanager.data;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +18,6 @@ import com.facebook.Response;
 import com.facebook.model.GraphUser;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
-import com.partymanager.activity.ProfileActivity;
 import com.partymanager.helper.HelperFacebook;
 
 import java.io.File;

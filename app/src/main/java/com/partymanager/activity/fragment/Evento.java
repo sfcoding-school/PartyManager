@@ -1,12 +1,8 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -28,7 +23,6 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
-import com.partymanager.activity.MainActivity;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
@@ -36,7 +30,6 @@ import com.partymanager.data.RisposteAdapter;
 import com.partymanager.helper.HelperConnessione;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Evento extends Fragment {
 
@@ -170,6 +163,7 @@ public class Evento extends Fragment {
 
                 ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 final EditText edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
+                edt.setHint("Scrivi qui la tua risposta");
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -177,9 +171,6 @@ public class Evento extends Fragment {
                             addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
                     }
                 });
-
-                EditText nuova_risposta = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
-                nuova_risposta.setHint("Scrivi qui la tua risposta");
 
                 ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
                 RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
@@ -210,7 +201,6 @@ public class Evento extends Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.e("onScroll", listView.getLastVisiblePosition() + " " + totalItemCount);
                 if (firstVisibleItem > mLastFirstVisibleItem) {
                     if (!animation) {
                         TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * add_domanda.getWidth());
@@ -219,9 +209,8 @@ public class Evento extends Fragment {
                         add_domanda.startAnimation(anim);
                         animation = true;
                     }
-
                 }
-                if (firstVisibleItem < mLastFirstVisibleItem) {
+                if (firstVisibleItem < mLastFirstVisibleItem || listView.getLastVisiblePosition() == totalItemCount - 1) {
                     if (animation) {
                         TranslateAnimation anim = new TranslateAnimation(0, 0, +2 * add_domanda.getWidth(), 0);
                         anim.setDuration(500);
@@ -233,7 +222,6 @@ public class Evento extends Fragment {
                 mLastFirstVisibleItem = firstVisibleItem;
             }
         });
-
         return view;
     }
 
@@ -247,12 +235,10 @@ public class Evento extends Fragment {
             @Override
             protected String doInBackground(Void... params) {
 
-
                 String[] name, param;
 
-                 name = new String[]{"risposta"};
-                 param = new String[]{risposta};
-
+                name = new String[]{"risposta"};
+                param = new String[]{risposta};
 
                 String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/event/" + idEvento + "/" + id_attributo, name, param);
 
