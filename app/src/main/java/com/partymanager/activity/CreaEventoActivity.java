@@ -227,7 +227,7 @@ public class CreaEventoActivity extends Activity {
                     if (registrationId.isEmpty()) {
                         Log.e(getLocalClassName(), "problema REG_ID vuoto");
                     } else {
-                        Log.e("TESTJSON: ", jsArray.toString());
+                        Log.e("TESTJSON - Persone prima di invio: ", jsArray.toString());
 
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
                         if (id_to_invite.length() > 0)
@@ -281,6 +281,7 @@ public class CreaEventoActivity extends Activity {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 } else {
+                    FbFriendsAdapter.svuotaLista();
                     closeActivity(List, name, result);
                 }
             }
@@ -332,6 +333,7 @@ public class CreaEventoActivity extends Activity {
             public void onClick(DialogInterface dialog, int id) {
                 if(id_toSend != null ) id_toSend.clear();
                 container_friends.setText("");
+                FbFriendsAdapter.svuotaLista();
                 CreaEventoActivity.this.finish();
             }
         });

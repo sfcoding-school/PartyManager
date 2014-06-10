@@ -86,9 +86,6 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event");
-
-                Log.e("DATA_PROVIDE-downloadEvent", json_string);
-
                 return stringToJsonArray(json_string);
             }
 

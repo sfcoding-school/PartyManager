@@ -86,7 +86,7 @@ public class HelperConnessione {
         try {
             HttpResponse response = httpclient.execute(httpget);
             String test_ritorno = EntityUtils.toString(response.getEntity());
-            Log.e("httpGetConnection-Ris: ", test_ritorno);
+            Log.e("httpGetConnection-Ris: ", url + " risposta:" +  test_ritorno);
 
             if (test_ritorno.equals("session error")) {
                 login();

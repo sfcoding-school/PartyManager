@@ -39,9 +39,6 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         this.inputSearch = inputSearch;
         if (finali == null)
             finali = new ArrayList<Friends>();
-        else {
-            finali.clear();
-        }
     }
 
     public void setAdapter(FbFriendsAdapter adapter) {
@@ -52,6 +49,10 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         CheckBox name;
         ImageView foto_profilo;
         TextView installed;
+    }
+
+    public static void svuotaLista(){
+        finali.clear();
     }
 
     public List<Friends> getFinali() {

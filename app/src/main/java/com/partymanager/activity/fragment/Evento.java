@@ -167,8 +167,11 @@ public class Evento extends Fragment {
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!"".equals(edt.getText().toString()))
+                        if (!"".equals(edt.getText().toString())) {
                             addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
+                        }
+
+                        dialog.dismiss();
                     }
                 });
 
