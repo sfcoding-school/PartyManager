@@ -37,13 +37,12 @@ public class DatiRisposte {
     public static class Risposta {
         public String id;
         public String risposta;
-        //public List<Persona> persone;
+        public List<Persona> persone;
 
         public Risposta(String id, String risposta, JSONArray userList) {
             this.id = id;
             this.risposta = risposta;
-            //this.persone = creaLista(userList);
-            Log.e("TESTRISPOSTA", id + " " + risposta);
+            this.persone = creaLista(userList);
         }
 
         @Override
@@ -51,26 +50,20 @@ public class DatiRisposte {
             return id;
         }
 
-        /*
         private List<Persona> creaLista(JSONArray userList) {
-            List<Persona> temp = null;
-            try {
-                for (int i = 0; i < userList.length(); i++) {
-                    temp.add(new Persona(userList.getJSONObject(i).getString("id_user"),
-                            userList.getJSONObject(i).getString("name")));
-
-                    Log.e("DatiRisposte-creaLista:", userList.getJSONObject(i).getString("id_user"));
+            List<Persona> list = new ArrayList<Persona>();
+            for (int i = 0; i < userList.length(); i++) {
+                try {
+                    list.add(new Persona(userList.getJSONObject(i).getString("id_user"), userList.getJSONObject(i).getString("name")));
+                } catch (JSONException e) {
+                    Log.e("TESTRISPOSTA", "error creaLista");
+                    return null;
                 }
-                return temp;
-            } catch (JSONException e) {
-                Log.e("DatiRisposte-creaLista:", "JSONException " + e);
-                return null;
             }
+            return list;
         }
-        */
     }
 
-    /*
     public static class Persona {
         public String id_fb;
         public String nome;
@@ -80,6 +73,6 @@ public class DatiRisposte {
             this.nome = nome;
         }
     }
-    */
+
 }
 

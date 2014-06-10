@@ -215,7 +215,7 @@ public class DataProvide {
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
                                 String.valueOf(jsonArray.getJSONObject(i).getInt("id_risposta")),
                                 jsonArray.getJSONObject(i).getString("risposta"),
-                                null
+                                jsonArray.getJSONObject(i).getJSONArray("userList")
                         )
                 );
 
@@ -276,8 +276,8 @@ public class DataProvide {
     private static JSONArray stringToJsonArray(String jsonString) {
 
         try {
-        JSONObject json_data = new JSONObject(jsonString);
-        String status = json_data.getString("results");
+            JSONObject json_data = new JSONObject(jsonString);
+            String status = json_data.getString("results");
             return new JSONArray(status);
         } catch (JSONException e) {
             Log.e("DataProvide-stringToJsonArray", "JSONException " + e);
