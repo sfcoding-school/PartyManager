@@ -14,8 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
+import com.partymanager.helper.HelperFacebook;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +32,8 @@ public class DrawerAdapter extends ArrayAdapter<String> {
     private String[] mStrings;
     private TypedArray mIcons;
     private Boolean alto;
-    public final String REG_USERNAME = "reg_username";
     private int mViewResourceId;
+    Context context;
 
     public DrawerAdapter(Context ctx, int viewResourceId, String[] strings, TypedArray icons, Boolean alto) {
         super(ctx, viewResourceId, strings);
@@ -40,6 +45,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         this.mIcons = icons;
         this.mViewResourceId = viewResourceId;
         this.alto = alto;
+        this.context = ctx;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         ImageView iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
         iv.setImageDrawable(mIcons.getDrawable(position));
 
-        TextView tv = (TextView) convertView.findViewById(R.id.txt_drawer_line);
+        final TextView tv = (TextView) convertView.findViewById(R.id.txt_drawer_line);
         tv.setText(mStrings[position]);
         tv.setTextColor(Color.BLACK);
         if (!alto) {
@@ -58,9 +64,18 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         } else {
             tv.setTextSize(25);
             if (position == 0) {
-                SharedPreferences prefs = getPreferences();
-                String username_pref = prefs.getString(REG_USERNAME, "");
-                tv.setText(username_pref);
+
+                Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
+
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            tv.setText(user.getName());
+                            user.getId();
+                        }
+                    }
+                });
+
                 iv.setImageBitmap(loadImageFromStorage());
                 iv.setMaxWidth(50);
                 iv.setMaxWidth(50);
@@ -75,13 +90,6 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
     }
 
-    public SharedPreferences getPreferences() {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
-        return new ContextWrapper(getContext()).getSharedPreferences(ProfileActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-    }
-
     private Bitmap loadImageFromStorage() {
         ContextWrapper cw = new ContextWrapper(getContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -90,7 +98,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             return BitmapFactory.decodeStream(new FileInputStream(f));
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+
             return null;
         }
     }

@@ -210,6 +210,7 @@ public class Evento extends Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Log.e("onScroll", listView.getLastVisiblePosition() + " " + totalItemCount);
                 if (firstVisibleItem > mLastFirstVisibleItem) {
                     if (!animation) {
                         TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * add_domanda.getWidth());

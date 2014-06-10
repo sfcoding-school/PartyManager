@@ -39,6 +39,9 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         this.inputSearch = inputSearch;
         if (finali == null)
             finali = new ArrayList<Friends>();
+        else {
+            finali.clear();
+        }
     }
 
     public void setAdapter(FbFriendsAdapter adapter) {
