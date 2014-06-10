@@ -1,8 +1,6 @@
 # built application files
 *.apk
 *.ap_
-build/
-app/build
 
 # files for the dex VM
 *.dex
@@ -33,6 +31,7 @@ proguard/
 #androidStudio
 .gradle
 .DS_Store
+build/
 
 #linux
 *~
