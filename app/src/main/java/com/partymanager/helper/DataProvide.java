@@ -207,7 +207,6 @@ public class DataProvide {
     }
 
     private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
-        Log.e("loadIntoRisposteAdapter-jsonArray: ", String.valueOf(jsonArray) + " " + jsonArray.length());
         DatiRisposte.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
