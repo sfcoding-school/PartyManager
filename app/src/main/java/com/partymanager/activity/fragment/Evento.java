@@ -162,27 +162,17 @@ public class Evento extends Fragment {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_risposte);
 
-                TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
-                text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
-
                 ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
                 RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
                 risp.setAdapter(adapter);
 
-/*                String id_fb = HelperFacebook.getFacebookId();
-                Boolean bool_temp = false; int i = 0;
-                while(!bool_temp){
-                    if(  DatiRisposte.ITEMS.get(arg2).persone.get(i).id_fb.equals(id_fb)){
-                        bool_temp = true;}
-                    else {
-                        i++;
-                    }
-                }
-                Log.e("TESTaddrisp", String.valueOf(bool_temp));*/
+                TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
+                text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
                 ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 final EditText edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 edt.setHint("Scrivi qui la tua risposta");
+
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -217,7 +207,6 @@ public class Evento extends Fragment {
                         }
                     });
                 }
-
                 dialog.show();
             }
         });

@@ -176,7 +176,6 @@ public class DataProvide {
         DatiRisposte.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
                                 String.valueOf(jsonArray.getJSONObject(i).getInt("id_risposta")),
                                 jsonArray.getJSONObject(i).getString("risposta"),
@@ -184,7 +183,6 @@ public class DataProvide {
                                 jsonArray.getJSONObject(i).getJSONArray("userList")
                         )
                 );
-
             }
         } catch (JSONException e) {
             Log.e("DataProvide", "JSONException loadIntoRisposteAdapter: " + e);
