@@ -67,7 +67,7 @@ public class Evento extends Fragment {
     public static Evento newInstance(String param1, String param2, String param3, String param4) {
         Evento fragment = new Evento();
 
-        Log.e("Evento newInstance: ", param1 + " " + param2 + " " + param3 + " " + param4);
+        Log.e("Evento newInstance: ", "id: " + param1 + " nome: " + param2 + " admin: " + param3 + " #utenti: " + param4);
 
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -91,8 +91,6 @@ public class Evento extends Fragment {
             nomeEvento = getArguments().getString(ARG_PARAM2);
             adminEvento = getArguments().getString(ARG_PARAM3);
             numUtenti = getArguments().getString(ARG_PARAM4);
-
-            //Log.e("Evento onCreate: ", idEvento + " " + nomeEvento + " " + adminEvento + " " + numUtenti);
         }
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
@@ -153,7 +151,6 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
-                // custom dialog
                 final Dialog dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_risposte);
@@ -338,65 +335,4 @@ public class Evento extends Fragment {
             }
         }
     };
-
-
 }
-                            /*if (prova.getVisibility() != View.GONE && currentFirstVisibleItem > 8) {
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -prova.getHeight());
-                                anim.setDuration(500);
-                                anim.setFillAfter(false);
-                                prova.startAnimation(anim);
-                                prova.setVisibility(View.GONE);
-                            }
-                            if (currentLAstVisibileItem <= 11) {
-                                prova.setVisibility(View.VISIBLE);
-                            }*/
-
-/*
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-
-            int lastVisible = 0;
-            int firstVisible = 0;
-            boolean animation = true;
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                TranslateAnimation anim = null;
-                if (scrollState == SCROLL_STATE_TOUCH_SCROLL){
-                    firstVisible = view.getFirstVisiblePosition();
-                    if (view.getFirstVisiblePosition() > lastVisible){
-                        if (animation) {
-                            animation = false;
-                            anim = new TranslateAnimation(0, 0, 0, -360);
-                            //riepilogo.setVisibility(View.GONE);
-                            //FirstItem = view.getFirstVisiblePosition();
-                            //itemFirst = view.getChildAt(FirstItem);
-                            anim.setDuration(500);
-                            anim.setFillAfter(true);
-                            riepilogo.startAnimation(anim);
-                        }
-                    }else{
-                        if (animation){
-                            animation = false;
-                            anim = new TranslateAnimation(0, 0, -360, 0);
-                            anim.setDuration(500);
-                            anim.setFillAfter(true);
-                            riepilogo.startAnimation(anim);
-
-                        }
-                    }
-                    lastVisible = firstVisible;
-                }
-                else if (scrollState == SCROLL_STATE_IDLE){
-                   animation = true;
-                }
-
-
-        }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
-*/

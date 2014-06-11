@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.helper.HelperDataParser;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,12 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         }
 
         TextView risp = (TextView) convertView.findViewById(R.id.txt_risposta2);
-        risp.setText(DatiRisposte.ITEMS.get(position).risposta);
+
+        String temp_risposta = DatiRisposte.ITEMS.get(position).risposta;
+        if (DatiRisposte.ITEMS.get(position).template.equals("data")){
+           temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
+        }
+        risp.setText(temp_risposta);
 
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
 

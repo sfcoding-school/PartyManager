@@ -52,6 +52,7 @@ public class MainActivity extends Activity
     ListView mDrawerListView;
     ActionBarDrawerToggle mDrawerToggle;
     public static Handler handlerService = null;
+    public static boolean progressBarVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,50 @@ public class MainActivity extends Activity
                 changeFragment(0);
             }
         }
+    }
+
+    protected void showAbout() {
+        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle(R.string.app_name);
+        builder.setView(messageView);
+        builder.create();
+        builder.show();
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="NavigationDrawer">
+    private void setUp() {
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                    /* host Activity */
+                drawerLayout,                    /* DrawerLayout object */
+                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+        };
+
+        drawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     private void setNavigationDrawer() {
@@ -182,49 +227,7 @@ public class MainActivity extends Activity
             }
         });
     }
-
-    protected void showAbout() {
-        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.drawable.ic_launcher);
-        builder.setTitle(R.string.app_name);
-        builder.setView(messageView);
-        builder.create();
-        builder.show();
-    }
-
-    private void setUp() {
-        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                    /* host Activity */
-                drawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-        };
-
-        drawerLayout.setDrawerListener(mDrawerToggle);
-    }
+    // </editor-fold>
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -271,8 +274,6 @@ public class MainActivity extends Activity
             actionBar.setTitle(mTitle);
         }
     }
-
-    public static boolean progressBarVisible = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

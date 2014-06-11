@@ -47,7 +47,6 @@ public class HelperConnessione {
         HttpPost httppost = new HttpPost(url);
 
         try {
-            // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             for (int i = 0; i < name.length; i++) {
                 nameValuePairs.add(new BasicNameValuePair(name[i], param[i]));
@@ -86,7 +85,7 @@ public class HelperConnessione {
         try {
             HttpResponse response = httpclient.execute(httpget);
             String test_ritorno = EntityUtils.toString(response.getEntity());
-            Log.e("httpGetConnection-Ris: ", url + " risposta:" +  test_ritorno);
+            Log.e("HelperConnessione-httpGetConnection-Ris: ", url + " risposta:" +  test_ritorno);
 
             if (test_ritorno.equals("session error")) {
                 login();

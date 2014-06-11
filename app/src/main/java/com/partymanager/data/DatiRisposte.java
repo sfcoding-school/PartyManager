@@ -38,11 +38,13 @@ public class DatiRisposte {
         public String id;
         public String risposta;
         public List<Persona> persone;
+        public String template;
 
-        public Risposta(String id, String risposta, JSONArray userList) {
+        public Risposta(String id, String risposta, String template,  JSONArray userList) {
             this.id = id;
             this.risposta = risposta;
             this.persone = creaLista(userList);
+            this.template = template;
         }
 
         @Override

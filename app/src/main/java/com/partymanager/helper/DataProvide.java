@@ -39,41 +39,7 @@ public class DataProvide {
         downloadRisposte(id_evento, id_attr, context);
     }
 
-    private static void loadJson(final String name, final Context context) {
-        new AsyncTask<Void, Void, JSONArray>() {
-            @Override
-            protected JSONArray doInBackground(Void... params) {
-
-                return loadJsonFromFile(name, context);
-            }
-
-            @Override
-            protected void onPostExecute(JSONArray jsonArray) {
-                if (jsonArray != null) {
-                    if (name.equals("eventi"))
-                        loadIntoEventiAdapter(jsonArray);
-                    if (name.contains("attributi"))
-                        loadIntoAttributiAdapter(jsonArray);
-                    if (name.contains("risposte"))
-                        loadIntoRisposteAdapter(jsonArray);
-                }
-            }
-
-
-        }.execute(null, null, null);
-    }
-
-    private static void saveJson(final JSONArray jsonArray, final String name, final Context context) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                saveJsonToFile(jsonArray, name, context);
-                return null;
-            }
-
-        }.execute(null, null, null);
-    }
-
+    // <editor-fold defaultstate="collapsed" desc="download...">
     private static void downloadEvent(final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -136,6 +102,34 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
+
+
+    private static void downloadRisposte(final String id_evento, final String id_attr, final Context context) {
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                String jsonString = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event/" + id_evento + "/" + id_attr);
+                return stringToJsonArray(jsonString);
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonArray) {
+                if (jsonArray != null) {
+                    saveJson(jsonArray, "risposte_" + id_evento + "_" + id_attr, context);
+                    loadIntoRisposteAdapter(jsonArray);
+                }
+            }
+        }.execute(null, null, null);
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="loadInto...Adapter">
     private static void loadIntoEventiAdapter(JSONArray jsonArray) {
         DatiEventi.removeAll();
         try {
@@ -179,30 +173,6 @@ public class DataProvide {
         }
     }
 
-    private static void downloadRisposte(final String id_evento, final String id_attr, final Context context) {
-        new AsyncTask<Void, Void, JSONArray>() {
-
-            @Override
-            protected void onPreExecute() {
-
-            }
-
-            @Override
-            protected JSONArray doInBackground(Void... params) {
-                String jsonString = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event/" + id_evento + "/" + id_attr);
-                return stringToJsonArray(jsonString);
-            }
-
-            @Override
-            protected void onPostExecute(JSONArray jsonArray) {
-                if (jsonArray != null) {
-                    saveJson(jsonArray, "risposte_" + id_evento + "_" + id_attr, context);
-                    loadIntoRisposteAdapter(jsonArray);
-                }
-            }
-        }.execute(null, null, null);
-    }
-
     private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
         DatiRisposte.removeAll();
         try {
@@ -211,6 +181,7 @@ public class DataProvide {
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
                                 String.valueOf(jsonArray.getJSONObject(i).getInt("id_risposta")),
                                 jsonArray.getJSONObject(i).getString("risposta"),
+                                jsonArray.getJSONObject(i).getString("template"),
                                 jsonArray.getJSONObject(i).getJSONArray("userList")
                         )
                 );
@@ -222,18 +193,60 @@ public class DataProvide {
             Log.e("DataProvide", "NullPointerException loadIntoRisposteAdapter: " + e);
         }
     }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Metodi JSON">
+    private static void loadJson(final String name, final Context context) {
+        new AsyncTask<Void, Void, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+
+                return loadJsonFromFile(name, context);
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonArray) {
+                if (jsonArray != null) {
+                    if (name.equals("eventi"))
+                        loadIntoEventiAdapter(jsonArray);
+                    if (name.contains("attributi"))
+                        loadIntoAttributiAdapter(jsonArray);
+                    if (name.contains("risposte"))
+                        loadIntoRisposteAdapter(jsonArray);
+                }
+            }
+        }.execute(null, null, null);
+    }
+
+    private static void saveJson(final JSONArray jsonArray, final String name, final Context context) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                saveJsonToFile(jsonArray, name, context);
+                return null;
+            }
+
+        }.execute(null, null, null);
+    }
 
     public static void addElementJson(final JSONObject element, final String jsonName, final Context context) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-
-                JSONArray jsonArray = loadJsonFromFile(jsonName, context);
-                jsonArray = jsonArray.put(element);
-                saveJsonToFile(jsonArray, jsonName, context);
-                return null;
+                try {
+                    JSONArray jsonArray = loadJsonFromFile(jsonName, context);
+                    if (jsonArray != null) {
+                        jsonArray = jsonArray.put(element);
+                        saveJsonToFile(jsonArray, jsonName, context);
+                    } else {
+                        Log.e("DataProvide-addElementJson: ", "jsonArray == null");
+                    }
+                    return null;
+                } catch (NullPointerException e) {
+                    Log.e("DataProvide-addElementJson: ", "NullPointerException" + e);
+                    return null;
+                }
             }
-
         }.execute(null, null, null);
     }
 
@@ -283,7 +296,6 @@ public class DataProvide {
     }
 
     private static JSONArray stringToJsonArrayBefore(String jsonString) {
-
         try {
             //JSONObject json_data = new JSONObject(jsonString);
             //String status = json_data.getString("results");
@@ -292,6 +304,6 @@ public class DataProvide {
             Log.e("DataProvide-stringToJsonArrayBefore", "JSONException " + e);
             return null;
         }
-
     }
+    // </editor-fold>
 }

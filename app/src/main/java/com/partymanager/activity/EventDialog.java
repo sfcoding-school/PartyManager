@@ -111,6 +111,7 @@ public class EventDialog {
         return dialog;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Data">
     public void date() {
 
         dialog.setTitle(R.string.dataE);
@@ -132,10 +133,10 @@ public class EventDialog {
                 dialog.dismiss();
             }
         });
-
-        //return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Orario Evento">
     public void orarioE() {
 
         dialog.setTitle(R.string.orarioE);
@@ -158,10 +159,10 @@ public class EventDialog {
                 dialog.dismiss();
             }
         });
-
-        //return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Orario Incontro">
     public void orarioI() {
 
         dialog.setTitle(R.string.orarioI);
@@ -184,10 +185,10 @@ public class EventDialog {
                 dialog.dismiss();
             }
         });
-
-        // return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Luogo Evento">
     public void luogoE() {
         dialog.setTitle(R.string.luogoE);
 
@@ -211,10 +212,10 @@ public class EventDialog {
                 dialog.dismiss();
             }
         });
-
-        //return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Luogo Incontro">
     public void luogoI() {
         dialog.setTitle(R.string.luogoI);
 
@@ -239,10 +240,10 @@ public class EventDialog {
                 dialog.dismiss();
             }
         });
-
-        //return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Personalizzata">
     public void personalizzata() {
 
         alto.setVisibility(View.VISIBLE);
@@ -272,10 +273,10 @@ public class EventDialog {
 
             }
         });
-
-        // return dialog;
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Dialog Domanda Chiusa">
     public void domanda_chiusa() {
         dialog.setTitle(R.string.dmndChiusa);
 
@@ -299,9 +300,8 @@ public class EventDialog {
                 }
             }
         });
-
-        //return dialog;
     }
+    // </editor-fold>
 
     private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
