@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.partymanager.R;
@@ -102,9 +103,23 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         // Set OnItemClickListener so we can be notified on item clicks
         listView.setOnItemClickListener(this);
 
-
         listView.setAdapter(eAdapter);
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                Log.e("long clicked", "pos: " + pos);
+                PopupMenu popup = new PopupMenu(getActivity(), arg1);
+                int temp = R.menu.popup_esci_da_evento;
+                if (DatiEventi.ITEMS.get(pos).admin.equals(HelperFacebook.getFacebookId()))
+                    temp = R.menu.popup_delete;
+
+                popup.getMenuInflater().inflate(temp, popup.getMenu());
+                popup.show();
+                return true;
+            }
+        });
 
         //progressBarLarge.setVisibility(View.INVISIBLE);
         //getActivity().invalidateOptionsMenu();

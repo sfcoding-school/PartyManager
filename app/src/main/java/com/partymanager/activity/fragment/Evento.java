@@ -28,6 +28,7 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.RisposteAdapter;
 import com.partymanager.helper.HelperConnessione;
+import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
 
@@ -185,9 +186,13 @@ public class Evento extends Fragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 Log.e("long clicked", "pos: " + pos);
-                PopupMenu popup = new PopupMenu(getActivity(), arg1);
-                popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
-                popup.show();
+
+                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                    PopupMenu popup = new PopupMenu(getActivity(), arg1);
+                    popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
+                    popup.show();
+                }
+
                 return true;
             }
         });

@@ -295,7 +295,7 @@ public class EventDialog {
 
                 Log.e("SI/NO: ", alto.getText().toString());
                 if (!alto.getText().toString().equals("")) {
-                    addDomanda(7, alto.getText().toString(), idEvento, null, "si");
+                    addDomanda(7, alto.getText().toString(), idEvento, "", "si");
                     dialog.dismiss();
                 }
             }
