@@ -122,6 +122,7 @@ public class Evento extends Fragment {
     }
 
     int mLastFirstVisibleItem = 0;
+    Dialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -158,7 +159,7 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
-                final Dialog dialog = new Dialog(getActivity());
+                dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_risposte);
 
@@ -187,6 +188,7 @@ public class Evento extends Fragment {
                 if (DatiAttributi.ITEMS.get(arg2).template != null && DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
                     LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                     normal.setVisibility(View.GONE);
+                    risp.setVisibility(View.GONE);
                     LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.risposta_sino);
                     sino.setVisibility(View.VISIBLE);
                     Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
@@ -215,6 +217,7 @@ public class Evento extends Fragment {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
+
                 Log.e("long clicked", "pos: " + pos);
 
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
@@ -332,6 +335,10 @@ public class Evento extends Fragment {
         super.onDestroyView();
         DatiAttributi.removeAll();
         eAdapter.notifyDataSetChanged();
+        if (dialog != null)
+            dialog.dismiss();
+        if (eventDialog != null)
+            eventDialog.close();
     }
 
 
@@ -346,47 +353,41 @@ public class Evento extends Fragment {
             if (msg != null) {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
+                String id_attributo = msg.getData().getString("id_attributo");
                 String ris2;
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
-                        Log.e("handler-DATA: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Data Evento", ris, "data", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        Log.e("handler-ORARIO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Evento", ris, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        Log.e("handler-ORARIO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Orario Incontro", ris, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        Log.e("handler-LUOGO-I: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo incontro", ris, "luogoI", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
-                        Log.e("handler-LUOGO-E: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, "Luogo Evento", ris, "luogoE", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
                         ris2 = "";
-                        Log.e("handler-PERS: ", ris);
                         if (close) {
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
                         ris2 = "1 voto: 100% SI";
-                        Log.e("handler-SINO: ", ris);
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(idEvento, ris, ris2, null, false, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1));
                         break;
                 }
             }

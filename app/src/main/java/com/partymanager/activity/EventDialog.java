@@ -383,6 +383,7 @@ public class EventDialog {
                             break;
                     }
                     b.putBoolean("close", chiusura.isChecked());
+                    b.putString("id_attributo", ris);
                     m.setData(b);
                     mResponseHandler.sendMessage(m);
                 } else {
@@ -410,5 +411,10 @@ public class EventDialog {
             return false;
         }
         return true;
+    }
+
+    public void close(){
+        if (dialog != null)
+            dialog.dismiss();
     }
 }
