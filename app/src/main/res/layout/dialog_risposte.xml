@@ -54,7 +54,8 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:id="@+id/risposta_stringa">
 
             <EditText
                 android:layout_width="match_parent"
@@ -74,6 +75,31 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/risposta_sino"
+            android:visibility="gone">
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NO"
+                android:id="@+id/btn_risp_no"
+                android:layout_weight="0.5"
+                style="@android:style/DeviceDefault.ButtonBar.AlertDialog" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SI"
+                android:id="@+id/btn_risp_si"
+                android:layout_weight="0.5"
+                style="@android:style/DeviceDefault.ButtonBar.AlertDialog" />
         </LinearLayout>
     </LinearLayout>
 

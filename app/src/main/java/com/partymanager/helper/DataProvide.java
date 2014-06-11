@@ -152,17 +152,16 @@ public class DataProvide {
 
     private static void loadIntoAttributiAdapter(JSONArray jsonArray) {
         DatiAttributi.removeAll();
-        //campo template: data, luogoI, luogoE
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
-                        jsonArray.getJSONObject(i).getString("risposta"),
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?"":jsonArray.getJSONObject(i).getString("risposta"),
                         jsonArray.getJSONObject(i).getString("template"),
                         Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa")),
-                        jsonArray.getJSONObject(i).getInt("numd"),
-                        jsonArray.getJSONObject(i).getInt("numr")
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?-1:jsonArray.getJSONObject(i).getInt("numd"),
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?-1:jsonArray.getJSONObject(i).getInt("numr")
                 ));
             }
             Evento.checkTemplate();
@@ -265,8 +264,8 @@ public class DataProvide {
 
         } catch (IOException e) {
             Log.e("DATA_PROVIDE-loadJsonFromFile", e.toString());
-            return null;
         }
+        return null;
     }
 
     private static synchronized void saveJsonToFile(JSONArray jsonArray, String fileName, Context context) {

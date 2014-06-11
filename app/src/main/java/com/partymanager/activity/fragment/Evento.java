@@ -15,8 +15,10 @@ import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -27,8 +29,12 @@ import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.RisposteAdapter;
+import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -159,6 +165,21 @@ public class Evento extends Fragment {
                 TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
                 text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
+                ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+                RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                risp.setAdapter(adapter);
+
+/*                String id_fb = HelperFacebook.getFacebookId();
+                Boolean bool_temp = false; int i = 0;
+                while(!bool_temp){
+                    if(  DatiRisposte.ITEMS.get(arg2).persone.get(i).id_fb.equals(id_fb)){
+                        bool_temp = true;}
+                    else {
+                        i++;
+                    }
+                }
+                Log.e("TESTaddrisp", String.valueOf(bool_temp));*/
+
                 ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 final EditText edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 edt.setHint("Scrivi qui la tua risposta");
@@ -173,9 +194,29 @@ public class Evento extends Fragment {
                     }
                 });
 
-                ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-                RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
-                risp.setAdapter(adapter);
+                if (DatiAttributi.ITEMS.get(arg2).template != null && DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+                    LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+                    normal.setVisibility(View.GONE);
+                    LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.risposta_sino);
+                    sino.setVisibility(View.VISIBLE);
+                    Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
+                    no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.e("dialog_risp", "no");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
+                    si.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.e("dialog_risp", "si");
+                            dialog.dismiss();
+                        }
+                    });
+                }
 
                 dialog.show();
             }
@@ -254,8 +295,30 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPostExecute(String ris) {
+                if (isInteger(ris)) {
+                    try {
+                        JSONObject element = new JSONObject();
+                        element.put("id_risposta", ris);
+                        element.put("risposta", risposta);
+                        element.put("template", "");
+                        element.put("userlist", "");
 
+                        DataProvide.addElementJson(element, "risposte_" + idEvento + "_" + id_attributo, getActivity().getApplicationContext());
+
+                    } catch (JSONException e) {
+                       Log.e("Evento-addRisposta: ", "JSONException " + e);
+                    }
+                }
             }
+                private boolean isInteger(String s) {
+                    try {
+                        Integer.parseInt(s);
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                    return true;
+                }
+
         }.execute(null, null, null);
     }
 
