@@ -52,7 +52,8 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
     }
 
     public static void svuotaLista(){
-        finali.clear();
+        if (finali != null)
+            finali.clear();
     }
 
     public List<Friends> getFinali() {

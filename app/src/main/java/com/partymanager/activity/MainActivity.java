@@ -180,8 +180,8 @@ public class MainActivity extends Activity
                         }
                         Email.setType("text/email");
                         Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"fedo.coro@gmail.com", "lucarin91@gmail.com"});
-                        Email.putExtra(Intent.EXTRA_SUBJECT, R.string.mailSubject + " (" + (pInfo != null ? pInfo.versionName : null) + ")");
-                        Email.putExtra(Intent.EXTRA_TEXT, R.string.txtMail);
+                        Email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailSubject) + " (" + (pInfo != null ? pInfo.versionName : null) + ")");
+                        Email.putExtra(Intent.EXTRA_TEXT, getString(R.string.txtMail));
                         startActivity(Intent.createChooser(Email, "Send Feedback:"));
                         break;
                 }

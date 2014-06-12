@@ -93,10 +93,10 @@ public class CreaEventoActivity extends Activity {
             if (networkInfo != null && networkInfo.isConnected()) {
                 requestMyAppFacebookFriends(session);
             } else {
-                Toast.makeText(getApplicationContext(), R.string.connAssente, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.connAssente), Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getApplicationContext(), R.string.errFB, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.errFB), Toast.LENGTH_LONG).show();
         }
 
         updateView();
@@ -196,12 +196,12 @@ public class CreaEventoActivity extends Activity {
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
-                        output.append(R.string.insrtNameE);
+                        output.append(getString(R.string.insrtNameE));
                     }
                     if (finali.isEmpty()) {
                         if (output.length() != 0)
                             output.append("\n");
-                        output.append(R.string.insrtAE);
+                        output.append(getString(R.string.insrtAE));
                     }
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
@@ -268,10 +268,10 @@ public class CreaEventoActivity extends Activity {
                     progressDialog.dismiss();
                 if (!isInteger(result)) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
-                    alertDialogBuilder.setMessage(R.string.errCreazEvento);
+                    alertDialogBuilder.setMessage(getString(R.string.errCreazEvento));
 
                     // set positive button: Yes message
-                    alertDialogBuilder.setPositiveButton(R.string.chiudi, new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
@@ -325,7 +325,7 @@ public class CreaEventoActivity extends Activity {
     //Click pulsante indietro
     public void onBackPressed() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
-        alertDialogBuilder.setMessage(R.string.delEvento);
+        alertDialogBuilder.setMessage(getString(R.string.delEvento));
 
         // set positive button: Yes message
         alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
