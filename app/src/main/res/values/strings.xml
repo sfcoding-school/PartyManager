@@ -106,12 +106,18 @@
         <item>Viola</item>
     </string-array>
     <string-array name="listValuesLED">
-        <item>0xFFFFFF</item>
+        <item>16777215</item>
+        <item>16711680</item>
+        <item>16776960</item>
+        <item>32768</item>
+        <item>255</item>
+        <item>8388736</item>
+      <!--  <item>0xFFFFFF</item>
         <item>0xFF0000</item>
         <item>0xFFFF00</item>
         <item>0x008000</item>
         <item>0x0000FF</item>
-        <item>0x800080</item>
+        <item>0x800080</item>-->
     </string-array>
 
 </resources>

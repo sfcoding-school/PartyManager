@@ -38,7 +38,7 @@
             android:title="LED"
             android:summary="Seleziona il colore del LED per le notifiche"
             android:key="downloadType"
-            android:defaultValue="#FFFFFF"
+            android:defaultValue="16777215"
             android:entries="@array/listArrayLED"
             android:entryValues="@array/listValuesLED" />
 

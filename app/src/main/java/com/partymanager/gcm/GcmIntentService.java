@@ -145,7 +145,6 @@ public class GcmIntentService extends IntentService {
 
         int colorLed = Integer.parseInt(preferences.getString("downloadType", null));
 
-
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
