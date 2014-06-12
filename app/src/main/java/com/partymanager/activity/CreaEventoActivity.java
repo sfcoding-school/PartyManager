@@ -255,8 +255,7 @@ public class CreaEventoActivity extends Activity {
             protected String doInBackground(Void... args) {
                 String ris;
 
-                String url = "http://androidpartymanager.herokuapp.com/event";
-                ris = HelperConnessione.httpPostConnection(url, new String[]{"name", "userList", "admin"}, new String[]{name, List, ID_FB});
+                ris = HelperConnessione.httpPostConnection("event", new String[]{"name", "userList", "admin"}, new String[]{name, List, ID_FB});
 
                 Log.e("CreaEventoActivity-sendNewEvent-ris: ", ris);
 

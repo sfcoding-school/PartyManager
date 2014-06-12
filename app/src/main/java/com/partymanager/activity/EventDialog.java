@@ -336,7 +336,7 @@ public class EventDialog {
                     param = new String[]{domanda, template, risposta, chiusa};
                 }
 
-                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/event/" + idEvento, name, param);
+                String ris = HelperConnessione.httpPostConnection("event/" + idEvento, name, param);
 
                 Log.e("addDomanda-ris: ", ris);
 

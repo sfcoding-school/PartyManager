@@ -45,7 +45,7 @@ public class Helper_Notifiche {
 
                     String[] name = {"idCell", "username"};
                     String[] param = {regid, username};
-                    String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/user", name, param);
+                    String ris = HelperConnessione.httpPostConnection("user", name, param);
                     Log.e(TAG, "sendRegistrationIdToBackend-ris: " + ris);
 
                     // For this demo: we don't need to send it because the device

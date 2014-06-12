@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 
 public class DataProvide {
 
-
     public static void getEvent(Context context) {
         loadJson("eventi", context);
         downloadEvent(context);
@@ -51,7 +50,7 @@ public class DataProvide {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                String json_string = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event");
+                String json_string = HelperConnessione.httpGetConnection("event");
                 return stringToJsonArray(json_string);
             }
 
@@ -82,7 +81,7 @@ public class DataProvide {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                String jsonString = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event/" + id);
+                String jsonString = HelperConnessione.httpGetConnection("event/" + id);
                 return stringToJsonArray(jsonString);
             }
 
@@ -114,7 +113,7 @@ public class DataProvide {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                String jsonString = HelperConnessione.httpGetConnection("http://androidpartymanager.herokuapp.com/event/" + id_evento + "/" + id_attr);
+                String jsonString = HelperConnessione.httpGetConnection("event/" + id_evento + "/" + id_attr);
                 return stringToJsonArray(jsonString);
             }
 

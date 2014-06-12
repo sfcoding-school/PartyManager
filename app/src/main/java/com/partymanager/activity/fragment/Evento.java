@@ -278,7 +278,7 @@ public class Evento extends Fragment {
                 name = new String[]{"risposta"};
                 param = new String[]{risposta};
 
-                String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/event/" + idEvento + "/" + id_attributo, name, param);
+                String ris = HelperConnessione.httpPostConnection("event/" + idEvento + "/" + id_attributo, name, param);
 
                 Log.e("addRisposta-ris: ", ris);
 
