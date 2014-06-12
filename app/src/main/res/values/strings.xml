@@ -96,4 +96,22 @@
     <string name="ntwError">Errore connessione</string>
     <string name="rqstSend">Richiesta inviata</string>
 
+    <!-- Settings -->
+    <string-array name="listArrayLED">
+        <item>Bianco</item>
+        <item>Rosso</item>
+        <item>Giallo</item>
+        <item>Verde</item>
+        <item>Blu</item>
+        <item>Viola</item>
+    </string-array>
+    <string-array name="listValuesLED">
+        <item>0xFFFFFF</item>
+        <item>0xFF0000</item>
+        <item>0xFFFF00</item>
+        <item>0x008000</item>
+        <item>0x0000FF</item>
+        <item>0x800080</item>
+    </string-array>
+
 </resources>

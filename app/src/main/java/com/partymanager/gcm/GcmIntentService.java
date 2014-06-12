@@ -6,9 +6,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -93,7 +94,7 @@ public class GcmIntentService extends IntentService {
                         e.printStackTrace();
                     }
 
-                }else if (s.equals("newRis")) {
+                } else if (s.equals("newRis")) {
                     sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
@@ -102,15 +103,15 @@ public class GcmIntentService extends IntentService {
 
                     }
 
-                }else if (s.equals("risp")){
-                        sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
-                        //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
-                        if (extras.getBoolean("agg")){
+                } else if (s.equals("risp")) {
+                    sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                    if (extras.getBoolean("agg")) {
 
-                        }else{
+                    } else {
 
-                        }
-                }else if (s.equals("test")){
+                    }
+                } else if (s.equals("test")) {
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
 
                     sendNotification("TEST", extras.getString("msg"));
@@ -140,6 +141,11 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        int colorLed = Integer.parseInt(preferences.getString("downloadType", null));
+
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
@@ -155,12 +161,11 @@ public class GcmIntentService extends IntentService {
 
                         .setContentText(msg)
                         .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
-                        .setLights(0xff0000ff, 500, 500)
+                        .setLights(colorLed, 500, 500)
                 //.setSound(alarmSound);
                 ;
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
-
 
 
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

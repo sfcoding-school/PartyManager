@@ -34,6 +34,15 @@
             android:title="Nuovo Utente"
             android:summary="Ingresso nuovo amico in un Evento" />
 
+        <ListPreference
+            android:title="LED"
+            android:summary="Seleziona il colore del LED per le notifiche"
+            android:key="downloadType"
+            android:defaultValue="#FFFFFF"
+            android:entries="@array/listArrayLED"
+            android:entryValues="@array/listValuesLED" />
+
     </PreferenceCategory>
+
 
 </PreferenceScreen>

@@ -69,7 +69,7 @@ public class MainActivity extends Activity
                         DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
                     }
                 } else if (type.equals("newAttr")) {
-                    if (fragmentManager.findFragmentByTag("Evento").isVisible()) {
+                    if (fragmentManager != null && fragmentManager.findFragmentByTag("Evento").isVisible()) {
                         DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
                     }
                 }
