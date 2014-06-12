@@ -72,7 +72,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
                                 tv.setText(user.getName());
                             }
                         }
-                    }); 
+                    });
                 } else {
                     tv.setText(username);
                 }
