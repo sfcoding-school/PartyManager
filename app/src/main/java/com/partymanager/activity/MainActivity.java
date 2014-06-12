@@ -65,11 +65,11 @@ public class MainActivity extends Activity
                 Bundle b = msg.getData();
                 String type = b.getString("type");
                 if (type.equals("newEvent")) {
-                    if (fragmentManager.findFragmentByTag("Eventi").isVisible()) {
+                    if (fragmentManager.findFragmentByTag("Eventi") != null && fragmentManager.findFragmentByTag("Eventi").isVisible()) {
                         DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
                     }
                 } else if (type.equals("newAttr")) {
-                    if (fragmentManager != null && fragmentManager.findFragmentByTag("Evento").isVisible()) {
+                    if (fragmentManager.findFragmentByTag("Evento") != null && fragmentManager.findFragmentByTag("Evento").isVisible()) {
                         DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
                     }
                 }
