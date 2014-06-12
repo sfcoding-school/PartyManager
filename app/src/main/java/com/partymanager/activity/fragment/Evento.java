@@ -3,6 +3,7 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -163,8 +164,8 @@ public class Evento extends Fragment {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_risposte);
 
-                ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-                RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+                final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
                 risp.setAdapter(adapter);
 
                 TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
@@ -209,6 +210,14 @@ public class Evento extends Fragment {
                         }
                     });
                 }
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        DatiRisposte.removeAll();
+                    }
+                });
+
                 dialog.show();
             }
         });

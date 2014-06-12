@@ -19,7 +19,9 @@ import com.partymanager.activity.ProfileActivity;
 public class HelperFacebook {
 
     private static String facebookId;
+    private static String facebookUserName;
     private static Activity activity = MainActivity.getActivity();
+    private static Session session = null;
 
     public static String getFacebookId() {
         if (facebookId != null)
@@ -37,9 +39,24 @@ public class HelperFacebook {
         }
     }
 
-    private static Session session = null;
+    public static String getFacebookUserName() {
+        if (facebookUserName != null)
+            return facebookUserName;
+        else {
+            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(), activity.MODE_PRIVATE);
+            String name = prefs.getString("reg_username", "");
+            if (name.isEmpty()) {
+                Log.e("HELPER_FACEBOOK", "username facebook not found.");
+                return null;
+            } else {
+                facebookUserName = name;
+                return facebookUserName;
+            }
+        }
+    }
 
     public static Session getSession(Activity activity) {
+        /*
         if (session == null) {
             session = Session.getActiveSession();
             if (session == null) {
@@ -48,6 +65,16 @@ public class HelperFacebook {
                 if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
                     session.openForRead(new Session.OpenRequest(activity));
                 }
+            }
+        }
+        return session;
+        */
+        session = Session.getActiveSession();
+        if (session == null) {
+            session = new Session(activity);
+            Session.setActiveSession(session);
+            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                session.openForRead(new Session.OpenRequest(activity));
             }
         }
         return session;

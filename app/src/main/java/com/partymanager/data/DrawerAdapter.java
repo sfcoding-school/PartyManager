@@ -62,18 +62,20 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         } else {
             tv.setTextSize(25);
             if (position == 0) {
+                String username = HelperFacebook.getFacebookUserName();
+                if (username == null) {
+                    Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
 
-                Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
-
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (user != null) {
-                            tv.setText(user.getName());
-                            user.getId();
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                tv.setText(user.getName());
+                            }
                         }
-                    }
-                });
-
+                    }); 
+                } else {
+                    tv.setText(username);
+                }
                 iv.setImageBitmap(loadImageFromStorage());
                 iv.setMaxWidth(50);
                 iv.setMaxWidth(50);

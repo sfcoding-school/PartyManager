@@ -300,6 +300,7 @@ public class ProfileActivity extends Activity {
         foto_profilo.setVisibility(View.GONE);
         textInstructionsOrLink.setText(R.string.instruction);
         savePreferences("", "");
+        view_profilo = 0;
         Session session = Session.getActiveSession();
         if (!session.isClosed()) {
             session.closeAndClearTokenInformation();
