@@ -21,13 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelperConnessione {
+    private static final String URL = "http://apipm.sfcoding.com/";
 
     private static HttpClient httpclient = null;
 
     static public boolean login() {
         String[] name = {"idFacebook", "token"};
         String[] param = {HelperFacebook.getFacebookId(), HelperFacebook.getToken()};
-        String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/login", name, param);
+        String ris = HelperConnessione.httpPostConnection("login", name, param);
         Log.e("DATA_PROVIDE", "login " + ris);
         return ris.equals("fatto");
     }
@@ -36,15 +37,15 @@ public class HelperConnessione {
     static public boolean logout() {
         String[] name = {};
         String[] param = {};
-        String ris = HelperConnessione.httpPostConnection("http://androidpartymanager.herokuapp.com/logout", name, param);
+        String ris = HelperConnessione.httpPostConnection("logout", name, param);
 
         return ris.equals("fatto");
     }
 
     static public String httpPostConnection(String url, String[] name, String[] param) {
-
+        //url = URL+url;
         httpclient = getHttpclient();
-        HttpPost httppost = new HttpPost(url);
+        HttpPost httppost = new HttpPost(URL+url);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -59,7 +60,7 @@ public class HelperConnessione {
 
             if (temp.equals("session error")) {
                 login();
-                httpPostConnection(url, name, param);
+                return httpPostConnection(url, name, param);
             } else {
                 return temp;
             }
@@ -81,11 +82,11 @@ public class HelperConnessione {
 
     static public String httpGetConnection(String url) {
         httpclient = getHttpclient();
-        HttpGet httpget = new HttpGet(url);
+        HttpGet httpget = new HttpGet(URL+url);
         try {
             HttpResponse response = httpclient.execute(httpget);
             String test_ritorno = EntityUtils.toString(response.getEntity());
-            Log.e("HelperConnessione-httpGetConnection-Ris: ", url + " risposta:" +  test_ritorno);
+            Log.e("HelperConnessione-httpGetConnection-Ris: ", URL+url + " risposta:" +  test_ritorno);
 
             if (test_ritorno.equals("session error")) {
                 login();
@@ -106,7 +107,7 @@ public class HelperConnessione {
 
     static public String httpPutConnection(String url, String[] name, String[] param) {
         httpclient = getHttpclient();
-        HttpPut httpPut = new HttpPut(url);
+        HttpPut httpPut = new HttpPut(URL+url);
 
         try {
             // Add your data
@@ -117,8 +118,14 @@ public class HelperConnessione {
             httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpResponse response = httpclient.execute(httpPut);
+            String temp = EntityUtils.toString(response.getEntity());
 
-            return EntityUtils.toString(response.getEntity());
+            if (temp.equals("session error")) {
+                login();
+                return httpPutConnection(url, name, param);
+            } else
+                return temp;
+
 
         } catch (ClientProtocolException e) {
             Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
@@ -132,13 +139,17 @@ public class HelperConnessione {
 
     static public String httpDeleteConnection(String url) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpDelete httpDel = new HttpDelete(url);
+        HttpDelete httpDel = new HttpDelete(URL+url);
 
         try {
-
             HttpResponse response = httpclient.execute(httpDel);
+            String temp = EntityUtils.toString(response.getEntity());
 
-            return EntityUtils.toString(response.getEntity());
+            if (temp.equals("session error")) {
+                login();
+                return httpDeleteConnection(url);
+            }else
+                return temp;
 
         } catch (ClientProtocolException e) {
             Log.e("HelperConnessione-ClientProtocolException: ", e.toString());
