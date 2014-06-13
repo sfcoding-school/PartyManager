@@ -41,6 +41,7 @@
     <string name="insrtAE">Devi inserire almeno un amico</string>
     <string name="connAssente">Connessione assente</string>
     <string name="errFB">Problema sessione FB</string>
+    <string name="riprova">Riprova</string>
 
     <!--Activity Profilo e FB-->
     <string name="app_id">401068586702319</string>

@@ -165,7 +165,7 @@ public class Evento extends Fragment {
                 dialog.setContentView(R.layout.dialog_risposte);
 
                 final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-                final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti));
                 risp.setAdapter(adapter);
 
                 TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
@@ -189,9 +189,9 @@ public class Evento extends Fragment {
                 if (DatiAttributi.ITEMS.get(arg2).template != null && DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
                     LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                     normal.setVisibility(View.GONE);
-                    risp.setVisibility(View.GONE);
-                    LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.risposta_sino);
+                    LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
                     sino.setVisibility(View.VISIBLE);
+
                     Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
                     no.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -248,7 +248,7 @@ public class Evento extends Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem > mLastFirstVisibleItem) {
+                if (firstVisibleItem > mLastFirstVisibleItem && totalItemCount > 9) {
                     if (!animation) {
                         TranslateAnimation anim = new TranslateAnimation(0, 0, 0, +2 * add_domanda.getWidth());
                         anim.setDuration(500);

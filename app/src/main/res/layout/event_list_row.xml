@@ -4,13 +4,15 @@
     android:layout_height="wrap_content"
 
     android:orientation="horizontal"
-    android:padding="5dip" >
+    android:padding="5dip"
+    android:background="#ccc">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="false">
+        android:layout_alignParentStart="false"
+        android:background="@drawable/bg_card">
 
         <LinearLayout
             android:orientation="vertical"

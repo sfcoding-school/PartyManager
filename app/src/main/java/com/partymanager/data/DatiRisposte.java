@@ -18,8 +18,8 @@ public class DatiRisposte {
     private static RisposteAdapter eAdapter;
     public static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
 
-    public static RisposteAdapter init(Context context, String id_evento, String id_attr) {
-        eAdapter = new RisposteAdapter(context, DatiRisposte.ITEMS);
+    public static RisposteAdapter init(Context context, String id_evento, String id_attr, int num_pers) {
+        eAdapter = new RisposteAdapter(context, DatiRisposte.ITEMS, num_pers);
         DataProvide.getRisposte(id_evento, id_attr, context);
         return eAdapter;
     }

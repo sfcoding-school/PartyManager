@@ -2,6 +2,7 @@ package com.partymanager.data;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,17 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.helper.HelperDataParser;
+import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
 
 public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
-    public RisposteAdapter(Context context, ArrayList<DatiRisposte.Risposta> Risposta) {
+    private int num_pers_evento;
+
+    public RisposteAdapter(Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento) {
         super(context, R.layout.risposta_row, Risposta);
+        this.num_pers_evento = num_pers_evento;
     }
 
     @Override
@@ -32,17 +37,24 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         if (DatiRisposte.ITEMS.get(position).template.equals("data")){
            temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
         }
-        risp.setText(temp_risposta);
 
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
 
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0; i < DatiRisposte.ITEMS.get(position).persone.size(); i++) {
             if (i > 0)
                 sb.append(", ");
-            sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome);
+            if (DatiRisposte.ITEMS.get(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
+                sb.append("Io");
+            else
+                sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
         }
+
+        if (DatiRisposte.ITEMS.get(position).template.equals("sino")){
+            Log.e("TESTPERCENT", DatiRisposte.ITEMS.get(position).persone.size() + " " + num_pers_evento);
+            temp_risposta += " " + (100*DatiRisposte.ITEMS.get(position).persone.size())/num_pers_evento + "%";
+        }
+        risp.setText(temp_risposta);
 
         who.setText(sb.toString());
         who.setTextColor(Color.BLACK);

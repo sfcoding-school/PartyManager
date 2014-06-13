@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
     public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo) {
-        super(context, R.layout.attributi, Attributo);
+        super(context, R.layout.attributi_row, Attributo);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
         DatiAttributi.Attributo attr = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
         }
 
         TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);

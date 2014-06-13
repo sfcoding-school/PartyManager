@@ -81,6 +81,10 @@ public class CreaEventoActivity extends Activity {
         pb = (ProgressBar) findViewById(R.id.progressBar_creaEvento);
         pb.setVisibility(ProgressBar.VISIBLE);
 
+        initView();
+    }
+
+    private void initView(){
         //setto networkInfo per controllo accesso a internet
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -93,7 +97,19 @@ public class CreaEventoActivity extends Activity {
             if (networkInfo != null && networkInfo.isConnected()) {
                 requestMyAppFacebookFriends(session);
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.connAssente), Toast.LENGTH_LONG).show();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
+                alertDialogBuilder.setMessage(getString(R.string.connAssente));
+
+                // set positive button: Yes message
+                alertDialogBuilder.setPositiveButton(getString(R.string.riprova), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        initView();
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.errFB), Toast.LENGTH_LONG).show();
