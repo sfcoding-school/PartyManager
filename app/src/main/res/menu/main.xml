@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.partymanager.activity.MainActivity" >
+
     <item android:id="@+id/Nuovo_evento"
         android:title="@string/new_event"
         android:orderInCategory="100"
@@ -10,12 +11,6 @@
         android:title="@string/action_example"
         android:showAsAction="withText|ifRoom" />
     -->
-
-
-    <item android:id="@+id/debug"
-        android:title="DEBUG: EVENTO"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
 
     <item android:id="@+id/progressBarSmall"
         android:actionLayout="@layout/progressbar_small"

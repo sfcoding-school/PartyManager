@@ -98,9 +98,20 @@ public class CreaEventoActivity extends Activity {
                 requestMyAppFacebookFriends(session);
             } else {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
+                alertDialogBuilder.setCancelable(false);
                 alertDialogBuilder.setMessage(getString(R.string.connAssente));
 
-                // set positive button: Yes message
+
+                alertDialogBuilder.setNegativeButton("Esci", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(id_toSend != null ) id_toSend.clear();
+                        container_friends.setText("");
+                        FbFriendsAdapter.svuotaLista();
+                        CreaEventoActivity.this.finish();
+                        dialog.cancel();
+                    }
+                });
+
                 alertDialogBuilder.setPositiveButton(getString(R.string.riprova), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         initView();

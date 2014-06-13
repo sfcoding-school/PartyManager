@@ -298,17 +298,6 @@ public class MainActivity extends Activity
             return true;
         }
 
-        /*
-        if (id == R.id.debug) {
-            Fragment fragment = Evento.newInstance(null, null, null, null);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment, String.valueOf(mTitle))
-                    .addToBackStack("evento")
-                    .commit();
-            return true;
-        }
-        */
-
         if (mDrawerToggle.onOptionsItemSelected(item) && !drawerLayout.isDrawerOpen(leftRL)) {
             drawerLayout.openDrawer(leftRL);
             return true;
