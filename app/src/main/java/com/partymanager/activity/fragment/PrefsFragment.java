@@ -3,6 +3,7 @@ package com.partymanager.activity.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -54,6 +55,14 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
                 pref.setEnabled(what);
             }
         }
+
+        pref = (CheckBoxPreference) getPreferenceScreen().findPreference("checkbox_vibrate");
+        pref.setEnabled(what);
+        pref.setEnabled(what);
+
+        ListPreference pref2 = (ListPreference) getPreferenceScreen().findPreference("downloadType");
+        pref2.setEnabled(what);
+
     }
 
 }

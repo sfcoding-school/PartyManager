@@ -6,37 +6,35 @@
 
         <CheckBoxPreference
             android:key="checkbox_notifiche_all"
-            android:title="Abilita notifiche"
-            android:summary="" />
+            android:title="@string/notifiche1"/>
 
         <CheckBoxPreference
             android:key="checkbox_preference1"
-            android:title="Nuovo Evento"
-            android:summary="Invito a nuovo evento" />
+            android:title="@string/notifiche2"
+            android:summary="@string/notifiche_sum2" />
 
         <CheckBoxPreference
             android:key="checkbox_preference2"
-            android:title="Nuova Domanda"
-            android:summary="Creazione Nuova Domanda" />
+            android:title="@string/notifiche3"
+            android:summary="@string/notifiche_sum3" />
 
         <CheckBoxPreference
             android:key="checkbox_preference3"
-            android:title="Nuova Risposta"
-            android:summary="" />
+            android:title="@string/notifiche4"/>
 
         <CheckBoxPreference
             android:key="checkbox_preference4"
-            android:title="Ricorda evento"
-            android:summary="Ricevi una notifica poco prima dell\'evento" />
+            android:title="@string/notifiche5"
+            android:summary="@string/notifiche_sum5" />
 
         <CheckBoxPreference
             android:key="checkbox_preference5"
-            android:title="Nuovo Utente"
-            android:summary="Ingresso nuovo amico in un Evento" />
+            android:title="@string/notifiche6"
+            android:summary="@string/notifiche_sum6" />
 
         <ListPreference
             android:title="LED"
-            android:summary="Seleziona il colore del LED per le notifiche"
+            android:summary="@string/notifiche_sum7"
             android:key="downloadType"
             android:defaultValue="16777215"
             android:entries="@array/listArrayLED"
@@ -44,8 +42,8 @@
 
         <CheckBoxPreference
             android:key="checkbox_vibrate"
-            android:title="Vibrazione"
-            android:summary="Abilita vibrazione ricezione notifiche"
+            android:title="@string/notifiche8"
+            android:summary="@string/notifiche_sum8"
             android:defaultValue="true"/>
 
     </PreferenceCategory>

@@ -298,6 +298,7 @@ public class MainActivity extends Activity
             return true;
         }
 
+        /*
         if (id == R.id.debug) {
             Fragment fragment = Evento.newInstance(null, null, null, null);
             fragmentManager.beginTransaction()
@@ -306,6 +307,7 @@ public class MainActivity extends Activity
                     .commit();
             return true;
         }
+        */
 
         if (mDrawerToggle.onOptionsItemSelected(item) && !drawerLayout.isDrawerOpen(leftRL)) {
             drawerLayout.openDrawer(leftRL);

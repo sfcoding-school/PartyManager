@@ -147,6 +147,7 @@ public class Evento extends Fragment {
             }
         });
 
+        listView.setEmptyView(view.findViewById(R.id.txt_empty));
         listView.setAdapter(eAdapter);
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {

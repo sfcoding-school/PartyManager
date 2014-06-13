@@ -102,7 +102,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
         // Set OnItemClickListener so we can be notified on item clicks
         listView.setOnItemClickListener(this);
-
+        listView.setEmptyView(view.findViewById(R.id.txt_emptyE));
         listView.setAdapter(eAdapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -120,9 +120,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                 return true;
             }
         });
-
-        //progressBarLarge.setVisibility(View.INVISIBLE);
-        //getActivity().invalidateOptionsMenu();
 
         return view;
     }

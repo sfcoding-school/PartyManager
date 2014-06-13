@@ -12,6 +12,9 @@
     <string name="app_descrip">SFCoding</string>
     <string name="app_credits"><b>Developed by</b> \n Luca Rinaldi \n Federico Corò</string>
 
+    <!-- Fragment Eventi -->
+    <string name="emptyEventi">Non ci sono ancora domande \n in questo evento</string>
+
     <!-- altro Bho -->
     <string name="hello_blank_fragment">Hello Archivio</string>
     <string name="action_settings">Impostazioni</string>
@@ -55,6 +58,7 @@
     <string name="luogo">Luogo</string>
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
+    <string name="emptyDomande">Non ci sono ancora domande \n in questo evento</string>
 
     <string-array name="spinner_list">
         <item>Personalizzata</item>
@@ -113,12 +117,19 @@
         <item>32768</item>
         <item>255</item>
         <item>8388736</item>
-      <!--  <item>0xFFFFFF</item>
-        <item>0xFF0000</item>
-        <item>0xFFFF00</item>
-        <item>0x008000</item>
-        <item>0x0000FF</item>
-        <item>0x800080</item>-->
     </string-array>
+    <string name="notifiche1">Abilita notifiche</string>
+    <string name="notifiche2">Nuovo Evento</string>
+    <string name="notifiche_sum2">Invito a nuovo evento</string>
+    <string name="notifiche3">Nuova Domanda</string>
+    <string name="notifiche_sum3">Creazione Nuova Domanda</string>
+    <string name="notifiche4">Nuova Risposta</string>
+    <string name="notifiche5">Ricorda evento</string>
+    <string name="notifiche_sum5">Ricevi una notifica poco prima dell\'evento</string>
+    <string name="notifiche6">Nuovo Utente</string>
+    <string name="notifiche_sum6">Ingresso nuovo amico in un Evento</string>
+    <string name="notifiche_sum7">Seleziona il colore del LED per le notifiche</string>
+    <string name="notifiche8">Vibrazione</string>
+    <string name="notifiche_sum8">Abilita vibrazione ricezione notifiche</string>
 
 </resources>
