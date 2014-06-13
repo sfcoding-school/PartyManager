@@ -1,17 +1,25 @@
 package com.partymanager.data;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
+import com.partymanager.activity.fragment.Evento;
+import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -25,7 +33,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.risposta_row, parent, false);
@@ -50,9 +58,17 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
                 sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
         }
 
+        Button vota = (Button) convertView.findViewById(R.id.button_voto);
+        vota.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Evento.vota(DatiRisposte.ITEMS.get(position).id);
+            }
+        });
+
         if (DatiRisposte.ITEMS.get(position).template.equals("sino")){
-            Log.e("TESTPERCENT", DatiRisposte.ITEMS.get(position).persone.size() + " " + num_pers_evento);
             temp_risposta += " " + (100*DatiRisposte.ITEMS.get(position).persone.size())/num_pers_evento + "%";
+            vota.setVisibility(View.GONE);
         }
         risp.setText(temp_risposta);
 

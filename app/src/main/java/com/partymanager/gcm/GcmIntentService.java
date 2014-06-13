@@ -80,7 +80,7 @@ public class GcmIntentService extends IntentService {
 
                 } else if (s.equals("newAttr")) {
                     if (nessuna_notifica && preferences.getBoolean("checkbox_preference2", true))
-                        sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
+                        sendNotification("Nuova Domanda", extras.getString("userName") + " ha chiesto " + extras.getString("domanda"));
 
                     try {
                         JSONObject element = new JSONObject();
@@ -100,7 +100,7 @@ public class GcmIntentService extends IntentService {
 
                 } else if (s.equals("newRis")) {
                     if (nessuna_notifica && preferences.getBoolean("checkbox_preference3", true))
-                        sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                        sendNotification("Nuova Risposta", extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
 
@@ -109,8 +109,8 @@ public class GcmIntentService extends IntentService {
                     }
 
                 } else if (s.equals("risp")) {
-                    if (nessuna_notifica)
-                        sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    if (nessuna_notifica && preferences.getBoolean("checkbox_preference3", true))
+                        sendNotification("Risposta", "anche" + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
 

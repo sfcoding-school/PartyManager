@@ -41,12 +41,13 @@ import java.util.ArrayList;
 
 public class Evento extends Fragment {
 
+    // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
 
-    private String idEvento;
+    private static String idEvento;
     private String nomeEvento;
     private String adminEvento;
     private String numUtenti;
@@ -61,6 +62,9 @@ public class Evento extends Fragment {
     static TextView quando_data;
     TextView quando_ora;
     static TextView dove;
+    static int attuale;
+    int mLastFirstVisibleItem = 0;
+    Dialog dialog;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -71,7 +75,9 @@ public class Evento extends Fragment {
     private static final int DIALOG_SINO = 7;
 
     private OnFragmentInteractionListener mListener;
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Init + Grafica">
     public static Evento newInstance(String param1, String param2, String param3, String param4) {
         Evento fragment = new Evento();
 
@@ -122,9 +128,6 @@ public class Evento extends Fragment {
         }
     }
 
-    int mLastFirstVisibleItem = 0;
-    Dialog dialog;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -161,6 +164,8 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
+
+                attuale = arg2;
                 dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_risposte);
@@ -198,6 +203,7 @@ public class Evento extends Fragment {
                         @Override
                         public void onClick(View view) {
                             Log.e("dialog_risp", "no");
+                            addDomandaSino("no");
                             dialog.dismiss();
                         }
                     });
@@ -207,6 +213,7 @@ public class Evento extends Fragment {
                         @Override
                         public void onClick(View view) {
                             Log.e("dialog_risp", "si");
+                            addDomandaSino("si");
                             dialog.dismiss();
                         }
                     });
@@ -273,6 +280,39 @@ public class Evento extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        /*try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                + " must implement OnFragmentInteractionListener");
+        }*/
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        DatiAttributi.removeAll();
+        eAdapter.notifyDataSetChanged();
+        if (dialog != null)
+            dialog.dismiss();
+        if (eventDialog != null)
+            eventDialog.close();
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        public void onFragmentInteraction(String id);
+    }
+    // </editor-fold>
+
     private void addRisposta(final String id_attributo, final String risposta) {
         new AsyncTask<Void, Void, String>() {
 
@@ -284,10 +324,8 @@ public class Evento extends Fragment {
             protected String doInBackground(Void... params) {
 
                 String[] name, param;
-
                 name = new String[]{"risposta"};
                 param = new String[]{risposta};
-
                 String ris = HelperConnessione.httpPostConnection("event/" + idEvento + "/" + id_attributo, name, param);
 
                 Log.e("addRisposta-ris: ", ris);
@@ -324,39 +362,54 @@ public class Evento extends Fragment {
         }.execute(null, null, null);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        /*try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
-        }*/
+    public static void vota(final String idRisposta) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String[] name, param;
+
+                name = new String[]{"idRisposta"};
+                param = new String[]{idRisposta};
+
+                String ris = HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(attuale).id, name, param);
+
+                Log.e("addRisposta-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+
+                Log.e("Evento-vota:", ris);
+                if (ris.equals("aggiornato")){
+                    //va aggiunto al JSON
+                } else {
+                    //errore Server
+                }
+
+            }
+        }.execute(null, null, null);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void addDomandaSino(String cosa) {
+
+        if(DatiRisposte.ITEMS.size() == 1){
+            //non esiste ancora la risposta no
+            addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa);
+        } else {
+            if (cosa.equals("si"))
+                vota(DatiRisposte.ITEMS.get(0).id);
+            else {
+                vota(DatiRisposte.ITEMS.get(1).id);
+            }
+        }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        DatiAttributi.removeAll();
-        eAdapter.notifyDataSetChanged();
-        if (dialog != null)
-            dialog.dismiss();
-        if (eventDialog != null)
-            eventDialog.close();
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
-    }
-
+    // <editor-fold defaultstate="collapsed" desc="Handler">
     private Handler dialogMsgHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
             String ris;
@@ -403,4 +456,5 @@ public class Evento extends Fragment {
             }
         }
     };
+    // </editor-fold>
 }
