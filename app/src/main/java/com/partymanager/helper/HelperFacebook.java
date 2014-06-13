@@ -21,7 +21,6 @@ public class HelperFacebook {
     private static String facebookId;
     private static String facebookUserName;
     private static Activity activity = MainActivity.getActivity();
-    private static Session session = null;
 
     public static String getFacebookId() {
         if (facebookId != null)
@@ -56,20 +55,7 @@ public class HelperFacebook {
     }
 
     public static Session getSession(Activity activity) {
-        /*
-        if (session == null) {
-            session = Session.getActiveSession();
-            if (session == null) {
-                session = new Session(activity);
-                Session.setActiveSession(session);
-                if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                    session.openForRead(new Session.OpenRequest(activity));
-                }
-            }
-        }
-        return session;
-        */
-        session = Session.getActiveSession();
+        Session session = Session.getActiveSession();
         if (session == null) {
             session = new Session(activity);
             Session.setActiveSession(session);

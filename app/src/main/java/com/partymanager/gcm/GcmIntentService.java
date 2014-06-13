@@ -24,7 +24,6 @@ import org.json.JSONObject;
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -37,6 +36,10 @@ public class GcmIntentService extends IntentService {
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        boolean nessuna_notifica = preferences.getBoolean("checkbox_notifiche_all", true);
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
                 /*
@@ -58,7 +61,8 @@ public class GcmIntentService extends IntentService {
 
                 String s = extras.getString("type");
                 if (s.equals("newEvent")) {
-                    sendNotification("Nuovo Evento", extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"));
+                    if (nessuna_notifica && preferences.getBoolean("checkbox_preference1", true))
+                        sendNotification("Nuovo Evento", extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"));
 
                     try {
                         JSONObject element = new JSONObject();
@@ -75,8 +79,8 @@ public class GcmIntentService extends IntentService {
                     }
 
                 } else if (s.equals("newAttr")) {
-
-                    sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
+                    if (nessuna_notifica && preferences.getBoolean("checkbox_preference2", true))
+                        sendNotification("Nuova Domanda", extras.getString("user") + " ha chiesto " + extras.getString("domanda"));
 
                     try {
                         JSONObject element = new JSONObject();
@@ -95,7 +99,8 @@ public class GcmIntentService extends IntentService {
                     }
 
                 } else if (s.equals("newRis")) {
-                    sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    if (nessuna_notifica && preferences.getBoolean("checkbox_preference3", true))
+                        sendNotification("Nuova Risposta", extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
 
@@ -104,7 +109,8 @@ public class GcmIntentService extends IntentService {
                     }
 
                 } else if (s.equals("risp")) {
-                    sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                    if (nessuna_notifica)
+                        sendNotification("Risposta", "anche" + extras.getString("user") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
 
@@ -113,8 +119,8 @@ public class GcmIntentService extends IntentService {
                     }
                 } else if (s.equals("test")) {
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
-
-                    sendNotification("TEST", extras.getString("msg"));
+                    if (nessuna_notifica)
+                        sendNotification("TEST", extras.getString("msg"));
 
                     Message m = new Message();
                     m.setData(extras);
@@ -146,13 +152,11 @@ public class GcmIntentService extends IntentService {
         int colorLed = Integer.parseInt(preferences.getString("downloadType", null));
         boolean prova = preferences.getBoolean("checkbox_vibrate", true);
         long[] vibr = null;
-        if (prova){
+        if (prova) {
             vibr = new long[]{1000, 1000, 1000};
         }
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
-
-        //Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -166,8 +170,7 @@ public class GcmIntentService extends IntentService {
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setLights(colorLed, 500, 500)
                         .setVibrate(vibr);
-                //.setSound(alarmSound);
-                ;
+
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(contentIntent);
 
