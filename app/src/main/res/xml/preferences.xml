@@ -42,6 +42,12 @@
             android:entries="@array/listArrayLED"
             android:entryValues="@array/listValuesLED" />
 
+        <CheckBoxPreference
+            android:key="checkbox_vibrate"
+            android:title="Vibrazione"
+            android:summary="Abilita vibrazione ricezione notifiche"
+            android:defaultValue="true"/>
+
     </PreferenceCategory>
 
 

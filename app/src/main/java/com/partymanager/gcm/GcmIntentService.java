@@ -144,7 +144,11 @@ public class GcmIntentService extends IntentService {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         int colorLed = Integer.parseInt(preferences.getString("downloadType", null));
-
+        boolean prova = preferences.getBoolean("checkbox_vibrate", true);
+        long[] vibr = null;
+        if (prova){
+            vibr = new long[]{1000, 1000, 1000};
+        }
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
@@ -159,8 +163,9 @@ public class GcmIntentService extends IntentService {
                                 .bigText(msg))
 
                         .setContentText(msg)
-                        .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                        .setDefaults(Notification.DEFAULT_SOUND)
                         .setLights(colorLed, 500, 500)
+                        .setVibrate(vibr);
                 //.setSound(alarmSound);
                 ;
         mBuilder.setAutoCancel(true);
