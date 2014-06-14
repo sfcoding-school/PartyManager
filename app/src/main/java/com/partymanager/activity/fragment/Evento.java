@@ -202,9 +202,7 @@ public class Evento extends Fragment {
                     no.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e("dialog_risp", "no");
                             addDomandaSino("no");
-                            dialog.dismiss();
                         }
                     });
 
@@ -212,9 +210,7 @@ public class Evento extends Fragment {
                     si.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e("dialog_risp", "si");
                             addDomandaSino("si");
-                            dialog.dismiss();
                         }
                     });
                 }
@@ -362,7 +358,7 @@ public class Evento extends Fragment {
         }.execute(null, null, null);
     }
 
-    public static void vota(final String idRisposta) {
+    public static void vota(final String idRisposta, final int position) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -384,13 +380,30 @@ public class Evento extends Fragment {
 
                 Log.e("Evento-vota:", ris);
                 if (ris.equals("aggiornato")){
-                    //va aggiunto al JSON
+                    //va aggiunto al JSON e alla grafica
+                    graficaVota(position);
                 } else {
                     //errore Server
                 }
 
             }
         }.execute(null, null, null);
+    }
+
+    public static void graficaVota(int position){
+        Boolean trovato = false;
+        for(int i=0; i< DatiRisposte.ITEMS.size() && !trovato; i++){
+            for (int j=0; j<DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++){
+                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())){
+                    DatiRisposte.ITEMS.get(i).persone.remove(j);
+                    trovato=true;
+                }
+            }
+        }
+
+        if (DatiRisposte.ITEMS.size() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
+            DatiRisposte.ITEMS.get(position).addPersona(new DatiRisposte.Persona(HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName()));
+
     }
 
     public void addDomandaSino(String cosa) {
@@ -400,9 +413,9 @@ public class Evento extends Fragment {
             addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa);
         } else {
             if (cosa.equals("si"))
-                vota(DatiRisposte.ITEMS.get(0).id);
+                vota(DatiRisposte.ITEMS.get(0).id, 0);
             else {
-                vota(DatiRisposte.ITEMS.get(1).id);
+                vota(DatiRisposte.ITEMS.get(1).id, 1);
             }
         }
     }

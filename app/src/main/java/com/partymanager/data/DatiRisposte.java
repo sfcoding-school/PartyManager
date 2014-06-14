@@ -64,6 +64,11 @@ public class DatiRisposte {
             }
             return list;
         }
+
+        public void addPersona(Persona item){
+            persone.add(item);
+            eAdapter.notifyDataSetChanged();
+        }
     }
 
     public static class Persona {
@@ -75,6 +80,5 @@ public class DatiRisposte {
             this.nome = nome;
         }
     }
-
 }
 

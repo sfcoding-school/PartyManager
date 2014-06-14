@@ -62,7 +62,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Evento.vota(DatiRisposte.ITEMS.get(position).id);
+                Evento.vota(DatiRisposte.ITEMS.get(position).id, position);
             }
         });
 
