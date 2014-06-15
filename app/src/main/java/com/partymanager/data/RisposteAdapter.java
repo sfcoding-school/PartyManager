@@ -1,10 +1,7 @@
 package com.partymanager.data;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.partymanager.R;
-import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
-import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -42,22 +35,25 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         TextView risp = (TextView) convertView.findViewById(R.id.txt_risposta2);
 
         String temp_risposta = DatiRisposte.ITEMS.get(position).risposta;
-        if (DatiRisposte.ITEMS.get(position).template.equals("data")){
-           temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
+        if (DatiRisposte.ITEMS.get(position).template.equals("data")) {
+            temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
         }
 
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < DatiRisposte.ITEMS.get(position).persone.size(); i++) {
-            if (i > 0)
-                sb.append(", ");
-            if (DatiRisposte.ITEMS.get(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
-                sb.append("Io");
-            else
-                sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
-        }
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("");
+        if (DatiRisposte.ITEMS.get(position).persone != null) {
+            for (int i = 0; i < DatiRisposte.ITEMS.get(position).persone.size(); i++) {
+                if (i > 0)
+                    sb.append(", ");
+                if (DatiRisposte.ITEMS.get(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
+                    sb.append("Io");
+                else
+                    sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
+            }
+        }
         Button vota = (Button) convertView.findViewById(R.id.button_voto);
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,8 +62,8 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
             }
         });
 
-        if (DatiRisposte.ITEMS.get(position).template.equals("sino")){
-            temp_risposta += " " + (100*DatiRisposte.ITEMS.get(position).persone.size())/num_pers_evento + "%";
+        if (DatiRisposte.ITEMS.get(position).template.equals("sino")) {
+            temp_risposta += " " + (100 * DatiRisposte.ITEMS.get(position).persone.size()) / num_pers_evento + "%";
             vota.setVisibility(View.GONE);
         }
         risp.setText(temp_risposta);

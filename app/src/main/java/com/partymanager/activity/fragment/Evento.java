@@ -30,10 +30,10 @@ import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.RisposteAdapter;
-import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -188,7 +188,7 @@ public class Evento extends Fragment {
                             addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
                         }
 
-                        dialog.dismiss();
+                        //dialog.dismiss();
                     }
                 });
 
@@ -218,7 +218,11 @@ public class Evento extends Fragment {
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        DatiRisposte.removeAll();
+                        try {
+                            DatiRisposte.removeAll(true, idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                        } catch (IndexOutOfBoundsException e) {
+                            Log.e("Evento-dialog.setOnDismissListener", "IndexOutOfBoundsException " + e);
+                        }
                     }
                 });
 
@@ -332,28 +336,27 @@ public class Evento extends Fragment {
             @Override
             protected void onPostExecute(String ris) {
                 if (isInteger(ris)) {
+                    JSONObject pers = new JSONObject();
+                    JSONArray userL = new JSONArray();
                     try {
-                        JSONObject element = new JSONObject();
-                        element.put("id_risposta", ris);
-                        element.put("risposta", risposta);
-                        element.put("template", "");
-                        element.put("userlist", "");
-
-                        DataProvide.addElementJson(element, "risposte_" + idEvento + "_" + id_attributo, getActivity().getApplicationContext());
-
+                        pers.put("id_user", HelperFacebook.getFacebookId());
+                        pers.put("name", HelperFacebook.getFacebookUserName());
+                        userL.put(pers);
+                        DatiRisposte.ITEMS.add(new DatiRisposte.Risposta(ris, risposta, "", userL));
                     } catch (JSONException e) {
-                       Log.e("Evento-addRisposta: ", "JSONException " + e);
+                        Log.e("Evento-addRisposta", "JSONException " + e);
                     }
                 }
             }
-                private boolean isInteger(String s) {
-                    try {
-                        Integer.parseInt(s);
-                    } catch (NumberFormatException e) {
-                        return false;
-                    }
-                    return true;
+
+            private boolean isInteger(String s) {
+                try {
+                    Integer.parseInt(s);
+                } catch (NumberFormatException e) {
+                    return false;
                 }
+                return true;
+            }
 
         }.execute(null, null, null);
     }
@@ -367,10 +370,7 @@ public class Evento extends Fragment {
 
                 name = new String[]{"idRisposta"};
                 param = new String[]{idRisposta};
-
                 String ris = HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(attuale).id, name, param);
-
-                Log.e("addRisposta-ris: ", ris);
 
                 return ris;
             }
@@ -379,24 +379,20 @@ public class Evento extends Fragment {
             protected void onPostExecute(String ris) {
 
                 Log.e("Evento-vota:", ris);
-                if (ris.equals("aggiornato")){
-                    //va aggiunto al JSON e alla grafica
+                if (ris.equals("aggiornato")) {
                     graficaVota(position);
-                } else {
-                    //errore Server
                 }
-
             }
         }.execute(null, null, null);
     }
 
-    public static void graficaVota(int position){
+    public static void graficaVota(int position) {
         Boolean trovato = false;
-        for(int i=0; i< DatiRisposte.ITEMS.size() && !trovato; i++){
-            for (int j=0; j<DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++){
-                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())){
+        for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
+            for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {
+                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())) {
                     DatiRisposte.ITEMS.get(i).persone.remove(j);
-                    trovato=true;
+                    trovato = true;
                 }
             }
         }
@@ -408,7 +404,7 @@ public class Evento extends Fragment {
 
     public void addDomandaSino(String cosa) {
 
-        if(DatiRisposte.ITEMS.size() == 1){
+        if (DatiRisposte.ITEMS.size() == 1) {
             //non esiste ancora la risposta no
             addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa);
         } else {

@@ -102,7 +102,6 @@ public class DataProvide {
     }
 
 
-
     private static void downloadRisposte(final String id_evento, final String id_attr, final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -156,11 +155,11 @@ public class DataProvide {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
                         jsonArray.getJSONObject(i).getString("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?"":jsonArray.getJSONObject(i).getString("risposta"),
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? "" : jsonArray.getJSONObject(i).getString("risposta"),
                         jsonArray.getJSONObject(i).getString("template"),
                         Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa")),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?-1:jsonArray.getJSONObject(i).getInt("numd"),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null"))?-1:jsonArray.getJSONObject(i).getInt("numr")
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numd"),
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numr")
                 ));
             }
             Evento.checkTemplate();
@@ -172,7 +171,7 @@ public class DataProvide {
     }
 
     private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
-        DatiRisposte.removeAll();
+        DatiRisposte.removeAll(false, null, null);
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
@@ -214,7 +213,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void saveJson(final JSONArray jsonArray, final String name, final Context context) {
+    public static void saveJson(final JSONArray jsonArray, final String name, final Context context) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
