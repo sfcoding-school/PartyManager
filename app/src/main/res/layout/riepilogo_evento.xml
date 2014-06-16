@@ -46,12 +46,14 @@
         android:layout_marginTop="10dp" />
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:id="@+id/imgButton_amici"
-        android:background="@drawable/friends_button"
+        android:background="@drawable/user_icon"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="90dp"/>
+        android:layout_marginTop="90dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
