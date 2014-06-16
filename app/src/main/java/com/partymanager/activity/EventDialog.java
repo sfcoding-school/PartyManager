@@ -75,27 +75,7 @@ public class EventDialog {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (arg2 == 0) {
-                    personalizzata();
-                }
-                if (arg2 == 1) {
-                    luogoI();
-                }
-                if (arg2 == 2) {
-                    luogoE();
-                }
-                if (arg2 == 3) {
-                    date();
-                }
-                if (arg2 == 4) {
-                    orarioI();
-                }
-                if (arg2 == 5) {
-                    orarioE();
-                }
-                if (arg2 == 6) {
-                    domanda_chiusa();
-                }
+                    which(arg2);
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -103,6 +83,32 @@ public class EventDialog {
         });
 
 
+    }
+
+    public void which(int pos){
+        switch (pos){
+            case 0:
+                personalizzata();
+                break;
+            case 1:
+                luogoI();
+                break;
+            case 2:
+                luogoE();
+                break;
+            case 3:
+                date();
+                break;
+            case 4:
+                orarioI();
+                break;
+            case 5:
+                orarioE();
+                break;
+            case 6:
+                domanda_chiusa();
+                break;
+        }
     }
 
     public Dialog returnD() {

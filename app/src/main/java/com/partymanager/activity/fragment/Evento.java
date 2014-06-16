@@ -66,6 +66,7 @@ public class Evento extends Fragment {
     int mLastFirstVisibleItem = 0;
     Dialog dialog;
     EditText edt;
+    Dialog dialogAddDomanda;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -144,21 +145,57 @@ public class Evento extends Fragment {
 
         final View add_domanda = view.findViewById(R.id.circle);
 
-        add_domanda.setOnClickListener(new View.OnClickListener() {
+        dialogAddDomanda = eventDialog.returnD();
+
+        luogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventDialog.returnD().show();
+                eventDialog.which(2);
+                dialogAddDomanda.show();
             }
         });
 
-        listView.setEmptyView(view.findViewById(R.id.txt_empty));
-        listView.setAdapter(eAdapter);
+        quando_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventDialog.which(3);
+                dialogAddDomanda.show();
+            }
+        });
+
+        quando_ora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventDialog.which(5);
+                dialogAddDomanda.show();
+            }
+        });
+
+        dove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventDialog.which(1);
+                dialogAddDomanda.show();
+            }
+        });
+
+        add_domanda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventDialog.which(0);
+                dialogAddDomanda.show();
+            }
+        });
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
             }
         });
+
+        // <editor-fold defaultstate="collapsed" desc="listView">
+        listView.setEmptyView(view.findViewById(R.id.txt_empty));
+        listView.setAdapter(eAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -278,6 +315,8 @@ public class Evento extends Fragment {
                 mLastFirstVisibleItem = firstVisibleItem;
             }
         });
+        // </editor-fold>
+
         return view;
     }
 
@@ -314,6 +353,7 @@ public class Evento extends Fragment {
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="addRisposte + Vota">
     private void addRisposta(final String id_attributo, final String risposta) {
         new AsyncTask<Void, Void, String>() {
 
@@ -421,6 +461,7 @@ public class Evento extends Fragment {
             }
         }
     }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Handler">
     private Handler dialogMsgHandler = new Handler() {
