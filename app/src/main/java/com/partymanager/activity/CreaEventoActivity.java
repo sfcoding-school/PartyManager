@@ -65,6 +65,7 @@ public class CreaEventoActivity extends Activity {
     ArrayList<String> id_toSend;
     public final String REG_ID = "reg_id";
     ProgressDialog progressDialog;
+    String result_global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,20 +255,29 @@ public class CreaEventoActivity extends Activity {
                     if (registrationId.isEmpty()) {
                         Log.e(getLocalClassName(), "problema REG_ID vuoto");
                     } else {
-                        Log.e("TESTJSON - Persone prima di invio: ", jsArray.toString());
+                        Log.e("CreaEventoActivity-updateView - Persone prima di invio: ", jsArray.toString());
 
                         sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
-                        if (id_to_invite.length() > 0)
-                            sendInviti(id_to_invite.toString());
+                        if (id_to_invite.length() > 0) {
+                            Log.e("CreaEventoActivity-updateView - Persone invito FB: ", id_to_invite.toString());
+                            sendInviti(id_to_invite.toString(), nome_evento.getText().toString(), jsArray.toString());
+                        }
                     }
                 }
             }
         });
     }
 
-    private void sendInviti(String temp) {
-        WebDialog f = HelperFacebook.inviteFriends(this, temp);
+    WebDialog f;
+    private void sendInviti(String temp, final String name, final String List) {
+        f = HelperFacebook.inviteFriends(this, temp);
         f.show();
+        f.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                closeActivity(List, name, result_global);
+            }
+        });
     }
 
     private SharedPreferences getPreferences() {
@@ -308,7 +318,9 @@ public class CreaEventoActivity extends Activity {
                     alertDialog.show();
                 } else {
                     FbFriendsAdapter.svuotaLista();
-                    closeActivity(List, name, result);
+                    result_global = result;
+                    if (f==null || (f != null && !f.isShowing()))
+                        closeActivity(List, name, result);
                 }
             }
 

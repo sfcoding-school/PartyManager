@@ -62,7 +62,7 @@ public class EventDialog {
         close = (Button) dialog.findViewById(R.id.btn_close);
         orario = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-        if (HelperFacebook.getFacebookId().equals(adminEvento)) {
+        if (!HelperFacebook.getFacebookId().equals(adminEvento)) {
             chiusura.setVisibility(View.GONE);
         }
 
