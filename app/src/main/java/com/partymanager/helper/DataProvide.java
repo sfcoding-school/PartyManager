@@ -52,7 +52,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("user/" + idEvento);
-                return stringToJsonArray("user" , json_string);
+                return stringToJsonArray("user", json_string);
             }
 
             @Override
@@ -140,7 +140,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String jsonString = HelperConnessione.httpGetConnection("event/" + id_evento + "/" + id_attr);
-                return stringToJsonArray("event/" + id_evento + "/" + id_attr,jsonString);
+                return stringToJsonArray("event/" + id_evento + "/" + id_attr, jsonString);
             }
 
             @Override
@@ -328,7 +328,7 @@ public class DataProvide {
             String status = json_data.getString("results");
             return new JSONArray(status);
         } catch (JSONException e) {
-            Log.e("DataProvide-stringToJsonArray", "JSONException "+ fileName + " " + e);
+            Log.e("DataProvide-stringToJsonArray", "JSONException " + fileName + " " + e);
             return null;
         }
 

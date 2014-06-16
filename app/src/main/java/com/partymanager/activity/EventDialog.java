@@ -47,7 +47,8 @@ public class EventDialog {
     private static final int DIALOG_SINO = 7;
     private Handler mResponseHandler;
     ProgressDialog progressDialog;
-private boolean first;
+    private boolean first;
+
     public EventDialog(final Context context, Handler reponseHandler, String idEvento, String adminEvento) {
         this.context = context;
         this.mResponseHandler = reponseHandler;
@@ -76,8 +77,9 @@ private boolean first;
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (first){
-                which(arg2); } else {
+                if (first) {
+                    which(arg2);
+                } else {
                     first = true;
                 }
             }
