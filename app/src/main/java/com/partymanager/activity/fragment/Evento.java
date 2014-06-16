@@ -65,6 +65,7 @@ public class Evento extends Fragment {
     static int attuale;
     int mLastFirstVisibleItem = 0;
     Dialog dialog;
+    EditText edt;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -178,7 +179,7 @@ public class Evento extends Fragment {
                 text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
                 ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
-                final EditText edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
+                edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 edt.setHint("Scrivi qui la tua risposta");
 
                 dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -342,7 +343,9 @@ public class Evento extends Fragment {
                         pers.put("id_user", HelperFacebook.getFacebookId());
                         pers.put("name", HelperFacebook.getFacebookUserName());
                         userL.put(pers);
-                        DatiRisposte.ITEMS.add(new DatiRisposte.Risposta(ris, risposta, "", userL));
+                        cercami();
+                        DatiRisposte.addItem(new DatiRisposte.Risposta(ris, risposta, "", userL));
+                        edt.setText("");
                     } catch (JSONException e) {
                         Log.e("Evento-addRisposta", "JSONException " + e);
                     }
@@ -370,9 +373,8 @@ public class Evento extends Fragment {
 
                 name = new String[]{"idRisposta"};
                 param = new String[]{idRisposta};
-                String ris = HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(attuale).id, name, param);
 
-                return ris;
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(attuale).id, name, param);
             }
 
             @Override
@@ -387,6 +389,14 @@ public class Evento extends Fragment {
     }
 
     public static void graficaVota(int position) {
+        cercami();
+
+        if (DatiRisposte.ITEMS.size() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
+            DatiRisposte.ITEMS.get(position).addPersona(new DatiRisposte.Persona(HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName()));
+
+    }
+
+    private static void cercami(){
         Boolean trovato = false;
         for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
             for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {
@@ -396,10 +406,6 @@ public class Evento extends Fragment {
                 }
             }
         }
-
-        if (DatiRisposte.ITEMS.size() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
-            DatiRisposte.ITEMS.get(position).addPersona(new DatiRisposte.Persona(HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName()));
-
     }
 
     public void addDomandaSino(String cosa) {
