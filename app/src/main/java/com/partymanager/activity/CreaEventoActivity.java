@@ -85,7 +85,7 @@ public class CreaEventoActivity extends Activity {
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         //setto networkInfo per controllo accesso a internet
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -105,7 +105,7 @@ public class CreaEventoActivity extends Activity {
 
                 alertDialogBuilder.setNegativeButton("Esci", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(id_toSend != null ) id_toSend.clear();
+                        if (id_toSend != null) id_toSend.clear();
                         container_friends.setText("");
                         FbFriendsAdapter.svuotaLista();
                         CreaEventoActivity.this.finish();
@@ -269,6 +269,7 @@ public class CreaEventoActivity extends Activity {
     }
 
     WebDialog f;
+
     private void sendInviti(String temp, final String name, final String List) {
         f = HelperFacebook.inviteFriends(this, temp);
         f.show();
@@ -319,7 +320,7 @@ public class CreaEventoActivity extends Activity {
                 } else {
                     FbFriendsAdapter.svuotaLista();
                     result_global = result;
-                    if (f==null || (f != null && !f.isShowing()))
+                    if (f == null || (f != null && !f.isShowing()))
                         closeActivity(List, name, result);
                 }
             }
@@ -369,7 +370,7 @@ public class CreaEventoActivity extends Activity {
         // set positive button: Yes message
         alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if(id_toSend != null ) id_toSend.clear();
+                if (id_toSend != null) id_toSend.clear();
                 container_friends.setText("");
                 FbFriendsAdapter.svuotaLista();
                 CreaEventoActivity.this.finish();

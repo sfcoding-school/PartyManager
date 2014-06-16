@@ -453,7 +453,7 @@ public class Evento extends Fragment {
 
     }
 
-    private static void cercami(){
+    private static void cercami() {
         Boolean trovato = false;
         for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
             for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {

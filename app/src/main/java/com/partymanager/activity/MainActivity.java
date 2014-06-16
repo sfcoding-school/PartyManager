@@ -168,9 +168,9 @@ public class MainActivity extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                       if(!mTitle.equals(getString(R.string.title_section2))){
-                           changeFragment(2);
-                       }
+                        if (!mTitle.equals(getString(R.string.title_section2))) {
+                            changeFragment(2);
+                        }
                         break;
                     case 1:
                         Intent Email = new Intent(Intent.ACTION_SEND);
@@ -206,10 +206,10 @@ public class MainActivity extends Activity
                     newact.putExtra("chiave", "1");
                     startActivity(newact);
                 } else {
-                    if(!(
+                    if (!(
                             (position == 1 && mTitle.equals(getString(R.string.title_section0))) ||
-                            (position == 2 && mTitle.equals(getString(R.string.title_section1)))
-                            )){
+                                    (position == 2 && mTitle.equals(getString(R.string.title_section1)))
+                    )) {
                         changeFragment(position - 1);
                     }
                 }

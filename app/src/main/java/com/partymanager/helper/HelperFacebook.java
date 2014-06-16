@@ -91,9 +91,10 @@ public class HelperFacebook {
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap != null) {
                     friends.setFoto(bitmap);
-                    if (chi == 0){
-                    ((FbFriendsAdapter)adapter).notifyDataSetChanged();} else {
-                        ((FriendsAdapter)adapter).notifyDataSetChanged();
+                    if (chi == 0) {
+                        ((FbFriendsAdapter) adapter).notifyDataSetChanged();
+                    } else {
+                        ((FriendsAdapter) adapter).notifyDataSetChanged();
                     }
                 }
             }

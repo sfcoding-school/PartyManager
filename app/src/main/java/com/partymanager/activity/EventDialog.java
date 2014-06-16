@@ -75,7 +75,7 @@ public class EventDialog {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                    which(arg2);
+                which(arg2);
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -85,8 +85,8 @@ public class EventDialog {
 
     }
 
-    public void which(int pos){
-        switch (pos){
+    public void which(int pos) {
+        switch (pos) {
             case 0:
                 personalizzata();
                 break;
@@ -419,7 +419,7 @@ public class EventDialog {
         return true;
     }
 
-    public void close(){
+    public void close() {
         if (dialog != null)
             dialog.dismiss();
     }

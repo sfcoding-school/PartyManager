@@ -1,9 +1,6 @@
 package com.partymanager.data;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +13,6 @@ import android.widget.TextView;
 import com.partymanager.R;
 import com.partymanager.helper.HelperFacebook;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +46,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         TextView installed;
     }
 
-    public static void svuotaLista(){
+    public static void svuotaLista() {
         if (finali != null)
             finali.clear();
     }
@@ -146,7 +140,6 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             }
         }
     }
-
 
 
 }

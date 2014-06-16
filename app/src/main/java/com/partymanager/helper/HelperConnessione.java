@@ -45,7 +45,7 @@ public class HelperConnessione {
     static public String httpPostConnection(String url, String[] name, String[] param) {
         //url = URL+url;
         httpclient = getHttpclient();
-        HttpPost httppost = new HttpPost(URL+url);
+        HttpPost httppost = new HttpPost(URL + url);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -82,11 +82,11 @@ public class HelperConnessione {
 
     static public String httpGetConnection(String url) {
         httpclient = getHttpclient();
-        HttpGet httpget = new HttpGet(URL+url);
+        HttpGet httpget = new HttpGet(URL + url);
         try {
             HttpResponse response = httpclient.execute(httpget);
             String test_ritorno = EntityUtils.toString(response.getEntity());
-            Log.e("HelperConnessione-httpGetConnection-Ris: ", URL+url + " risposta:" +  test_ritorno);
+            Log.e("HelperConnessione-httpGetConnection-Ris: ", URL + url + " risposta:" + test_ritorno);
 
             if (test_ritorno.equals("session error")) {
                 login();
@@ -107,7 +107,7 @@ public class HelperConnessione {
 
     static public String httpPutConnection(String url, String[] name, String[] param) {
         httpclient = getHttpclient();
-        HttpPut httpPut = new HttpPut(URL+url);
+        HttpPut httpPut = new HttpPut(URL + url);
 
         try {
             // Add your data
@@ -139,7 +139,7 @@ public class HelperConnessione {
 
     static public String httpDeleteConnection(String url) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpDelete httpDel = new HttpDelete(URL+url);
+        HttpDelete httpDel = new HttpDelete(URL + url);
 
         try {
             HttpResponse response = httpclient.execute(httpDel);
@@ -148,7 +148,7 @@ public class HelperConnessione {
             if (temp.equals("session error")) {
                 login();
                 return httpDeleteConnection(url);
-            }else
+            } else
                 return temp;
 
         } catch (ClientProtocolException e) {

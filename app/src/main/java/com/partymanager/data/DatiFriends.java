@@ -3,10 +3,8 @@ package com.partymanager.data;
 import android.content.Context;
 
 import com.partymanager.helper.DataProvide;
-import com.partymanager.helper.HelperDataParser;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 public class DatiFriends {
 
