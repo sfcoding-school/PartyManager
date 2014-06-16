@@ -70,6 +70,7 @@ public class Evento extends Fragment {
     Dialog dialog;
     EditText edt;
     Dialog dialogAddDomanda;
+    Dialog dialogFriends;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -114,6 +115,8 @@ public class Evento extends Fragment {
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento);
+
+        dialogAddDomanda = eventDialog.returnD();
     }
 
     public static void checkTemplate() {
@@ -147,8 +150,6 @@ public class Evento extends Fragment {
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
         final View add_domanda = view.findViewById(R.id.circle);
-
-        dialogAddDomanda = eventDialog.returnD();
 
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +194,7 @@ public class Evento extends Fragment {
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 DataProvide.getFriends(idEvento, getActivity().getApplicationContext());
-                Dialog dialogFriends = new Dialog(getActivity());
+                dialogFriends = new Dialog(getActivity());
                 dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogFriends.setContentView(R.layout.dialog_friends);
 
@@ -362,6 +363,8 @@ public class Evento extends Fragment {
             dialog.dismiss();
         if (eventDialog != null)
             eventDialog.close();
+        if (dialogFriends != null)
+            dialogFriends.dismiss();
     }
 
 

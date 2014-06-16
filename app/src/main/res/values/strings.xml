@@ -131,5 +131,7 @@
     <string name="notifiche_sum7">Seleziona il colore del LED per le notifiche</string>
     <string name="notifiche8">Vibrazione</string>
     <string name="notifiche_sum8">Abilita vibrazione ricezione notifiche</string>
+    <string name="notifiche9">Suoni</string>
+    <string name="notifiche_sum9">Abilita suoni ricezione notifiche</string>
 
 </resources>

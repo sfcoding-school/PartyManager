@@ -52,7 +52,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("user/" + idEvento);
-                return stringToJsonArray(json_string);
+                return stringToJsonArray("user" , json_string);
             }
 
             @Override
@@ -78,7 +78,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("event");
-                return stringToJsonArray(json_string);
+                return stringToJsonArray("event", json_string);
             }
 
             @Override
@@ -109,7 +109,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String jsonString = HelperConnessione.httpGetConnection("event/" + id);
-                return stringToJsonArray(jsonString);
+                return stringToJsonArray("event/" + id, jsonString);
             }
 
             @Override
@@ -140,7 +140,7 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String jsonString = HelperConnessione.httpGetConnection("event/" + id_evento + "/" + id_attr);
-                return stringToJsonArray(jsonString);
+                return stringToJsonArray("event/" + id_evento + "/" + id_attr,jsonString);
             }
 
             @Override
@@ -250,6 +250,8 @@ public class DataProvide {
                         loadIntoAttributiAdapter(jsonArray);
                     if (name.contains("risposte"))
                         loadIntoRisposteAdapter(jsonArray);
+                    if (name.contains("friends"))
+                        loadIntoFriendsAdapter(jsonArray);
                 }
             }
         }.execute(null, null, null);
@@ -280,7 +282,7 @@ public class DataProvide {
                     }
                     return null;
                 } catch (NullPointerException e) {
-                    Log.e("DataProvide-addElementJson: ", "NullPointerException" + e);
+                    Log.e("DataProvide-addElementJson: ", "NullPointerException " + jsonName + " " + e);
                     return null;
                 }
             }
@@ -301,7 +303,7 @@ public class DataProvide {
             return stringToJsonArrayBefore(sb.toString());
 
         } catch (IOException e) {
-            Log.e("DATA_PROVIDE-loadJsonFromFile", e.toString());
+            Log.e("DATA_PROVIDE-loadJsonFromFile ", fileName + " " + e.toString());
         }
         return null;
     }
@@ -313,20 +315,20 @@ public class DataProvide {
             fos.write(jsonString.getBytes());
             fos.close();
         } catch (IOException e) {
-            Log.e("DataProvide", "IOException saveJsonToFile: " + e);
+            Log.e("DataProvide", "IOException saveJsonToFile: " + fileName + " " + e);
         } catch (NullPointerException e) {
-            Log.e("DataProvide", "NullPointerException saveJsonToFile: " + e);
+            Log.e("DataProvide", "NullPointerException saveJsonToFile: " + fileName + " " + e);
         }
     }
 
-    private static JSONArray stringToJsonArray(String jsonString) {
+    private static JSONArray stringToJsonArray(String fileName, String jsonString) {
 
         try {
             JSONObject json_data = new JSONObject(jsonString);
             String status = json_data.getString("results");
             return new JSONArray(status);
         } catch (JSONException e) {
-            Log.e("DataProvide-stringToJsonArray", "JSONException " + e);
+            Log.e("DataProvide-stringToJsonArray", "JSONException "+ fileName + " " + e);
             return null;
         }
 

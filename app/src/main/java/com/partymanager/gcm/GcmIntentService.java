@@ -155,6 +155,13 @@ public class GcmIntentService extends IntentService {
         if (prova) {
             vibr = new long[]{1000, 1000, 1000};
         }
+
+        prova = preferences.getBoolean("checkbox_sound", true);
+        int sound = 0;
+        if (prova) {
+            sound = Notification.DEFAULT_SOUND;
+        }
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
@@ -167,7 +174,7 @@ public class GcmIntentService extends IntentService {
                                 .bigText(msg))
 
                         .setContentText(msg)
-                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setDefaults(sound)
                         .setLights(colorLed, 500, 500)
                         .setVibrate(vibr);
 

@@ -46,6 +46,12 @@
             android:summary="@string/notifiche_sum8"
             android:defaultValue="true"/>
 
+        <CheckBoxPreference
+            android:key="checkbox_sound"
+            android:title="@string/notifiche9"
+            android:summary="@string/notifiche_sum9"
+            android:defaultValue="true"/>
+
     </PreferenceCategory>
 
 

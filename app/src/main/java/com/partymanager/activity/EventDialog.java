@@ -47,7 +47,7 @@ public class EventDialog {
     private static final int DIALOG_SINO = 7;
     private Handler mResponseHandler;
     ProgressDialog progressDialog;
-
+private boolean first;
     public EventDialog(final Context context, Handler reponseHandler, String idEvento, String adminEvento) {
         this.context = context;
         this.mResponseHandler = reponseHandler;
@@ -70,19 +70,21 @@ public class EventDialog {
         dialog.setCanceledOnTouchOutside(false);
 
         sp = (Spinner) dialog.findViewById(R.id.spinner);
+        first = false;
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                which(arg2);
+                if (first){
+                which(arg2); } else {
+                    first = true;
+                }
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
-
     }
 
     public void which(int pos) {
@@ -109,6 +111,7 @@ public class EventDialog {
                 domanda_chiusa();
                 break;
         }
+        sp.setSelection(pos);
     }
 
     public Dialog returnD() {
