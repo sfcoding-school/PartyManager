@@ -9,7 +9,9 @@ import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.Friends;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +40,32 @@ public class DataProvide {
         downloadRisposte(id_evento, id_attr, context);
     }
 
+    public static void getFriends(String idEvento, Context context) {
+        loadJson("friends" + idEvento, context);
+        downloadFriends(idEvento, context);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="download...">
+    private static void downloadFriends(final String idEvento, final Context context) {
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                String json_string = HelperConnessione.httpGetConnection("user/" + idEvento);
+                return stringToJsonArray(json_string);
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonArray) {
+
+                if (jsonArray != null) {
+                    saveJson(jsonArray, "friends" + idEvento, context);
+                    loadIntoFriendsAdapter(jsonArray);
+                }
+            }
+        }.execute(null, null, null);
+    }
+
     private static void downloadEvent(final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -128,6 +155,21 @@ public class DataProvide {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="loadInto...Adapter">
+    private static void loadIntoFriendsAdapter(JSONArray jsonArray) {
+        DatiFriends.removeAll();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                DatiFriends.addItem(new Friends(jsonArray.getJSONObject(i).getString("id_user"),
+                                jsonArray.getJSONObject(i).getString("name"), false, false)
+                );
+            }
+        } catch (JSONException e) {
+            Log.e("DataProvide", "JSONException loadIntoEventiAdapter: " + e);
+        } catch (NullPointerException e) {
+            Log.e("DataProvide", "NullPointerException loadIntoEventiAdapter: " + e);
+        }
+    }
+
     private static void loadIntoEventiAdapter(JSONArray jsonArray) {
         DatiEventi.removeAll();
         try {

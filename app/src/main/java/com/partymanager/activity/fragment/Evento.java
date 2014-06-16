@@ -28,8 +28,11 @@ import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.FriendsAdapter;
 import com.partymanager.data.RisposteAdapter;
+import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -189,7 +192,23 @@ public class Evento extends Fragment {
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                DataProvide.getFriends(idEvento, getActivity().getApplicationContext());
+                Dialog dialogFriends = new Dialog(getActivity());
+                dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogFriends.setContentView(R.layout.dialog_friends);
 
+                final ListView utenti = (ListView) dialogFriends.findViewById(R.id.listView_friends);
+                final FriendsAdapter adapter = DatiFriends.init(idEvento, getActivity().getApplicationContext());
+                utenti.setAdapter(adapter);
+
+                dialogFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        DatiFriends.removeAll();
+                    }
+                });
+
+                dialogFriends.show();
             }
         });
 
@@ -225,8 +244,6 @@ public class Evento extends Fragment {
                         if (!"".equals(edt.getText().toString())) {
                             addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
                         }
-
-                        //dialog.dismiss();
                     }
                 });
 

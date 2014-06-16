@@ -3,8 +3,12 @@ package com.partymanager.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.facebook.FacebookException;
@@ -15,6 +19,13 @@ import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
+import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Friends;
+import com.partymanager.data.FriendsAdapter;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class HelperFacebook {
 
@@ -52,6 +63,41 @@ public class HelperFacebook {
                 return facebookUserName;
             }
         }
+    }
+
+    public static void getFacebookProfilePicture(final Friends friends, final Adapter adapter, final int chi) {
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... args) {
+                Bitmap bitmap = friends.getFoto();
+                if (bitmap == null) {
+                    URL imageURL;
+
+                    try {
+                        imageURL = new URL("https://graph.facebook.com/" + friends.getCode() + "/picture?type=small");
+                        bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                if (bitmap != null) {
+                    friends.setFoto(bitmap);
+                    if (chi == 0){
+                    ((FbFriendsAdapter)adapter).notifyDataSetChanged();} else {
+                        ((FriendsAdapter)adapter).notifyDataSetChanged();
+                    }
+                }
+            }
+        }.execute();
     }
 
     public static Session getSession(Activity activity) {

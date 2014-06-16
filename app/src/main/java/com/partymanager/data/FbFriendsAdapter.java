@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.helper.HelperFacebook;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -118,7 +119,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             holder.foto_profilo.setBackground(null);
             holder.foto_profilo.setImageBitmap(friends1.getFoto());
         } else {
-            getFacebookProfilePicture(friends1);
+            HelperFacebook.getFacebookProfilePicture(friends1, adapter, 0);
         }
 
         return convertView;
@@ -146,36 +147,6 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         }
     }
 
-    public void getFacebookProfilePicture(final Friends friends) {
-        new AsyncTask<Void, Void, Bitmap>() {
 
-            @Override
-            protected Bitmap doInBackground(Void... args) {
-                Bitmap bitmap = friends.getFoto();
-                if (bitmap == null) {
-                    URL imageURL;
-
-                    try {
-                        imageURL = new URL("https://graph.facebook.com/" + friends.getCode() + "/picture?type=small");
-                        bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                return bitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                if (bitmap != null) {
-                    friends.setFoto(bitmap);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }.execute();
-    }
 
 }
