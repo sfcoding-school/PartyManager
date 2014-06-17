@@ -71,8 +71,7 @@
     </string-array>
 
     <string name="daDEf">[Da definire]</string>
-    <string name="title_activity_main_activity2">MainActivity2</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="addFriends">Aggiungi</string>
 
     <!--Drawer-->
     <string-array name="list_names">

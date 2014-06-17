@@ -1,6 +1,7 @@
 package com.partymanager.data;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,16 +81,19 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
                     friends1.setSelected(cb.isChecked());
 
                     if (cb.isChecked()) {
-                        if (container_friends.getText().length() == 0)
-                            container_friends.setText(friends1.getName());
-                        else {
-                            container_friends.append(", " + friends1.getName());
+                        if (container_friends != null) {
+                            if (container_friends.getText().length() == 0)
+                                container_friends.setText(friends1.getName());
+                            else {
+                                container_friends.append(", " + friends1.getName());
+                            }
                         }
                         finali.add(friends1);
                     } else {
                         delete_friend_to_activity(friends1.getName());
                     }
-                    inputSearch.setText("");
+                    if (container_friends != null)
+                        inputSearch.setText("");
                 }
             });
 
@@ -99,6 +103,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
 
         Friends friends1 = friendList.get(position);
         holder.name.setText(friends1.getName());
+        holder.name.setTextColor(Color.BLACK);
         holder.name.setChecked(friends1.isSelected());
         if (friends1.getAppInstalled())
             holder.installed.setVisibility(View.VISIBLE);
@@ -121,7 +126,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
 
     //Aggiungo gli amici scelti all'activity e alla lista "finali"
     private void delete_friend_to_activity(String toDelete) {
-        container_friends.setText("");
+
         Friends friends1;
 
         for (int i = 0; i < finali.size(); i++) {
@@ -131,12 +136,15 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             }
         }
 
-        for (int i = 0; i < finali.size(); i++) {
-            friends1 = finali.get(i);
-            if (i == 0) {
-                container_friends.append(friends1.getName());
-            } else {
-                container_friends.append(", " + friends1.getName());
+        if (container_friends != null) {
+            container_friends.setText("");
+            for (int i = 0; i < finali.size(); i++) {
+                friends1 = finali.get(i);
+                if (i == 0) {
+                    container_friends.append(friends1.getName());
+                } else {
+                    container_friends.append(", " + friends1.getName());
+                }
             }
         }
     }

@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +25,24 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphMultiResult;
+import com.facebook.model.GraphObject;
+import com.facebook.model.GraphObjectList;
+import com.facebook.model.GraphUser;
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
 import com.partymanager.data.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Friends;
 import com.partymanager.data.FriendsAdapter;
 import com.partymanager.data.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
@@ -41,6 +54,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Evento extends Fragment {
 
@@ -71,6 +88,13 @@ public class Evento extends Fragment {
     EditText edt;
     Dialog dialogAddDomanda;
     Dialog dialogFriends;
+    ProgressBar pb;
+    ArrayList<Friends> friendList;
+    FbFriendsAdapter dataAdapter = null;
+    ArrayList<Friends> friendsList;
+    List<GraphUser> friends;
+    EditText inputSearch;
+    ListView amiciFB;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -137,7 +161,7 @@ public class Evento extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evento, container, false);
 
@@ -193,23 +217,7 @@ public class Evento extends Fragment {
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                DataProvide.getFriends(idEvento, getActivity().getApplicationContext());
-                dialogFriends = new Dialog(getActivity());
-                dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogFriends.setContentView(R.layout.dialog_friends);
-
-                final ListView utenti = (ListView) dialogFriends.findViewById(R.id.listView_friends);
-                final FriendsAdapter adapter = DatiFriends.init(idEvento, getActivity().getApplicationContext());
-                utenti.setAdapter(adapter);
-
-                dialogFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        DatiFriends.removeAll();
-                    }
-                });
-
-                dialogFriends.show();
+                dialogEventUsers();
             }
         });
 
@@ -337,6 +345,156 @@ public class Evento extends Fragment {
 
         return view;
     }
+
+    // <editor-fold defaultstate="collapsed" desc="Richiesta amici FB">
+    private void requestMyAppFacebookFriends(Session session) {
+        Request friendsRequest = createRequest(session);
+        friendsRequest.setCallback(new Request.Callback() {
+
+            @Override
+            public void onCompleted(Response response) {
+                friends = getResults(response);
+                friendsList = new ArrayList<Friends>();
+
+                for (GraphUser user : friends) {
+                    //controllo chi ha l'app installata
+                    Boolean install = false;
+                    if (user.getProperty("installed") != null && user.getProperty("installed").toString().equals("true")) {
+                        install = true;
+                    }
+
+                    Friends friend = new Friends(user.getId(), user.getName(), false, install);
+                    friendsList.add(friend);
+                }
+
+                pb.setVisibility(ProgressBar.GONE);
+
+                dataAdapter = new FbFriendsAdapter(getActivity().getApplicationContext(), null, inputSearch, R.layout.fb_friends, friendsList);
+                amiciFB.setAdapter(dataAdapter);
+                dataAdapter.setAdapter(dataAdapter);
+                friendList = dataAdapter.friendList;
+            }
+        });
+        friendsRequest.executeAsync();
+    }
+
+    private Request createRequest(Session session) {
+        Request request = Request.newGraphPathRequest(session, "me/friends", null);
+
+        Set<String> fields = new HashSet<String>();
+        String[] requiredFields = new String[]{"id", "name", "installed"};
+        fields.addAll(Arrays.asList(requiredFields));
+
+        Bundle parameters = request.getParameters();
+        parameters.putString("fields", TextUtils.join(",", fields));
+        request.setParameters(parameters);
+
+        return request;
+    }
+
+    private List<GraphUser> getResults(Response response) {
+        GraphMultiResult multiResult = response
+                .getGraphObjectAs(GraphMultiResult.class);
+        GraphObjectList<GraphObject> data = multiResult.getData();
+        return data.castToListOf(GraphUser.class);
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="dialogEventUsers">
+    public void dialogEventUsers() {
+        DataProvide.getFriends(idEvento, getActivity().getApplicationContext());
+        dialogFriends = new Dialog(getActivity());
+        dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogFriends.setContentView(R.layout.dialog_friends);
+
+        pb = (ProgressBar) dialogFriends.findViewById(R.id.progressBar_addFriends);
+        pb.setVisibility(View.VISIBLE);
+
+        ListView utenti = (ListView) dialogFriends.findViewById(R.id.listView_friends);
+        FriendsAdapter adapter = DatiFriends.init(idEvento, getActivity().getApplicationContext());
+        utenti.setEmptyView(pb);
+        utenti.setAdapter(adapter);
+
+        dialogFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                DatiFriends.removeAll();
+            }
+        });
+
+        Button addFriends = (Button) dialogFriends.findViewById(R.id.btn_addFriends);
+
+        addFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAddFriends();
+            }
+        });
+
+        dialogFriends.show();
+    }
+    // </editor-fold">
+
+    // <editor-fold defaultstate="collapsed" desc="dialogAddFriends">
+    public void dialogAddFriends() {
+        requestMyAppFacebookFriends(HelperFacebook.getSession(getActivity()));
+        Dialog dialogAddFriends = new Dialog(getActivity());
+        dialogAddFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogAddFriends.setContentView(R.layout.dialog_friends);
+        dialogAddFriends.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        pb = (ProgressBar) dialogAddFriends.findViewById(R.id.progressBar_addFriends);
+        pb.setVisibility(View.VISIBLE);
+
+        inputSearch = (EditText) dialogAddFriends.findViewById(R.id.editText_search_dialog_friends);
+        inputSearch.setVisibility(View.VISIBLE);
+
+        amiciFB = (ListView) dialogAddFriends.findViewById(R.id.listView_friends);
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+
+                int textlength = cs.length();
+                ArrayList<Friends> tempArrayList = new ArrayList<Friends>();
+                if (friendList != null && friendList.size() > 0) {
+                    for (Friends friends1 : friendList) {
+                        if (textlength <= friends1.getName().length()) {
+                            if (friends1.getName().toLowerCase().contains(cs.toString().toLowerCase())) {
+                                tempArrayList.add(friends1);
+                            }
+                        }
+                    }
+                    dataAdapter = new FbFriendsAdapter(getActivity().getApplicationContext(), null, inputSearch, R.layout.fb_friends, tempArrayList);
+                    amiciFB.setAdapter(dataAdapter);
+                    dataAdapter.setAdapter(dataAdapter);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+        });
+
+        Button addFriends = (Button) dialogAddFriends.findViewById(R.id.btn_addFriends);
+        addFriends.setText(getString(R.string.addFriends));
+        addFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        dialogAddFriends.show();
+
+    }
+    // </editor-fold">
 
     @Override
     public void onAttach(Activity activity) {

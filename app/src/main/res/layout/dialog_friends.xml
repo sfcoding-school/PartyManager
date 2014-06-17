@@ -9,6 +9,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_search_dialog_friends"
+            android:hint="Cerca amici ..."
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar_addFriends"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -20,7 +43,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="0.1">
 
         <Button
             android:layout_width="fill_parent"
@@ -31,4 +55,5 @@
             style="@android:style/DeviceDefault.ButtonBar.AlertDialog"
             android:textColor="@android:color/black" />
     </LinearLayout>
+
 </LinearLayout>

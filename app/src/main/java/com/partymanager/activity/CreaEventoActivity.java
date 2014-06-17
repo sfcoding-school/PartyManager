@@ -66,6 +66,7 @@ public class CreaEventoActivity extends Activity {
     public final String REG_ID = "reg_id";
     ProgressDialog progressDialog;
     String result_global;
+    WebDialog f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,8 +268,6 @@ public class CreaEventoActivity extends Activity {
             }
         });
     }
-
-    WebDialog f;
 
     private void sendInviti(String temp, final String name, final String List) {
         f = HelperFacebook.inviteFriends(this, temp);
