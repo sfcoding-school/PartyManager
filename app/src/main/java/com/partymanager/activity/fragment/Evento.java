@@ -432,6 +432,25 @@ public class Evento extends Fragment {
             }
         });
 
+        utenti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                    PopupMenu popup = new PopupMenu(getActivity(), view);
+                    popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(android.view.MenuItem item) {
+                            Log.e("PopUp-ButtaFuori", "click");
+                            return true;
+                        }
+                    });
+                    popup.show();
+                }
+            }
+        });
+
         dialogFriends.show();
     }
     // </editor-fold">
