@@ -23,23 +23,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     private static ProgressBar progressBarLarge;
-
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * The fragment's ListView/GridView.
-     */
     private ListView listView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
     private EventAdapter eAdapter;
 
 
@@ -48,11 +36,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         EventiListFragment fragment = new EventiListFragment();
         return fragment;
     }
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
 
     public EventiListFragment() {
     }

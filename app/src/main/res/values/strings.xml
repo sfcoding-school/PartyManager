@@ -133,4 +133,7 @@
     <string name="notifiche9">Suoni</string>
     <string name="notifiche_sum9">Abilita suoni ricezione notifiche</string>
 
+    <!-- DataProvide -->
+    <string name="serverOffline">Il server è momentaneamente offline.\nCi scusiamo per il disagio</string>
+
 </resources>

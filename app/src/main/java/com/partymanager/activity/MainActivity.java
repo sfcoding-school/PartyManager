@@ -170,6 +170,8 @@ public class MainActivity extends Activity
                     case 0:
                         if (!mTitle.equals(getString(R.string.title_section2))) {
                             changeFragment(2);
+                        } else {
+                            drawerLayout.closeDrawer(leftRL);
                         }
                         break;
                     case 1:
@@ -211,6 +213,8 @@ public class MainActivity extends Activity
                                     (position == 2 && mTitle.equals(getString(R.string.title_section1)))
                     )) {
                         changeFragment(position - 1);
+                    } else {
+                        drawerLayout.closeDrawer(leftRL);
                     }
                 }
             }

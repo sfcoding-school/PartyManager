@@ -95,6 +95,7 @@ public class Evento extends Fragment {
     List<GraphUser> friends;
     EditText inputSearch;
     ListView amiciFB;
+    Dialog dialogAddFriends;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -438,7 +439,7 @@ public class Evento extends Fragment {
     // <editor-fold defaultstate="collapsed" desc="dialogAddFriends">
     public void dialogAddFriends() {
         requestMyAppFacebookFriends(HelperFacebook.getSession(getActivity()));
-        Dialog dialogAddFriends = new Dialog(getActivity());
+        dialogAddFriends = new Dialog(getActivity());
         dialogAddFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAddFriends.setContentView(R.layout.dialog_friends);
         dialogAddFriends.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -523,6 +524,8 @@ public class Evento extends Fragment {
             eventDialog.close();
         if (dialogFriends != null)
             dialogFriends.dismiss();
+        if (dialogAddFriends != null)
+            dialogAddFriends.dismiss();
     }
 
 

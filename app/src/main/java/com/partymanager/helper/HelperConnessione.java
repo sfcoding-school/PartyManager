@@ -43,7 +43,6 @@ public class HelperConnessione {
     }
 
     static public String httpPostConnection(String url, String[] name, String[] param) {
-        //url = URL+url;
         httpclient = getHttpclient();
         HttpPost httppost = new HttpPost(URL + url);
 
@@ -52,7 +51,7 @@ public class HelperConnessione {
             for (int i = 0; i < name.length; i++) {
                 nameValuePairs.add(new BasicNameValuePair(name[i], param[i]));
             }
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
 
             HttpResponse response = httpclient.execute(httppost);
 
@@ -101,6 +100,7 @@ public class HelperConnessione {
             Log.e("HelperConnessione-httpGetConnection-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
             Log.e("HelperConnessione-httpGetConnection-IOException-: ", e.toString());
+            return "serverOffline";
         }
         return "error";
     }
@@ -115,7 +115,7 @@ public class HelperConnessione {
             for (int i = 0; i < name.length; i++) {
                 nameValuePairs.add(new BasicNameValuePair(name[i], param[i]));
             }
-            httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
 
             HttpResponse response = httpclient.execute(httpPut);
             String temp = EntityUtils.toString(response.getEntity());

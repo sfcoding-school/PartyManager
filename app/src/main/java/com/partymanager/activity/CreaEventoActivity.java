@@ -307,7 +307,6 @@ public class CreaEventoActivity extends Activity {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
                     alertDialogBuilder.setMessage(getString(R.string.errCreazEvento));
 
-                    // set positive button: Yes message
                     alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();

@@ -1,10 +1,13 @@
 package com.partymanager.helper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
@@ -78,6 +81,9 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("event");
+                if (json_string.equals("serverOffline")) {
+                    return null;
+                }
                 return stringToJsonArray("event", json_string);
             }
 
@@ -87,6 +93,18 @@ public class DataProvide {
                 if (jsonArray != null) {
                     saveJson(jsonArray, "eventi", context);
                     loadIntoEventiAdapter(jsonArray);
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setMessage(context.getString(R.string.serverOffline));
+
+                    alertDialogBuilder.setPositiveButton(context.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
 
                 MainActivity.progressBarVisible = false;

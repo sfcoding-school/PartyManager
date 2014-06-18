@@ -59,9 +59,12 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
         pref.setEnabled(what);
         pref.setEnabled(what);
 
+        pref = (CheckBoxPreference) getPreferenceScreen().findPreference("checkbox_sound");
+        pref.setEnabled(what);
+        pref.setEnabled(what);
+
         ListPreference pref2 = (ListPreference) getPreferenceScreen().findPreference("downloadType");
         pref2.setEnabled(what);
-
     }
 
 }
