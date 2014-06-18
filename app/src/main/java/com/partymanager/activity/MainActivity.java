@@ -54,9 +54,14 @@ public class MainActivity extends Activity
     public static Handler handlerService = null;
     public static boolean progressBarVisible = false;
 
+    Fragment fragment = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = this;
+        fragmentManager = getFragmentManager();
 
         handlerService = new Handler() {
             @Override
@@ -76,9 +81,6 @@ public class MainActivity extends Activity
             }
         };
 
-        mContext = this;
-        fragmentManager = getFragmentManager();
-
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.fragment_nav_drawer_custom);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -87,6 +89,7 @@ public class MainActivity extends Activity
 
         setUp();
     }
+
 
     @Override
     protected void onStart() {
@@ -100,9 +103,21 @@ public class MainActivity extends Activity
                 startActivity(newact);
             } else {
                 HelperFacebook.getToken();
-                changeFragment(0);
+                if (fragment!=null)
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, fragment,fragment.getTag())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                else
+                    changeFragment(0);
             }
         }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
     }
 
     protected void showAbout() {
@@ -247,8 +262,9 @@ public class MainActivity extends Activity
         mDrawerToggle.syncState();
     }
 
+
     private void changeFragment(int pos) {
-        Fragment fragment = null;
+        fragmentManager.popBackStackImmediate();
         switch (pos) {
             case 0:
                 fragment = EventiListFragment.newInstance();
@@ -268,7 +284,6 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, mTitle.toString())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack((String) mTitle)
                 .commit();
         drawerLayout.closeDrawer(leftRL);
     }
@@ -335,7 +350,7 @@ public class MainActivity extends Activity
                 Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento + " " + id_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
-                Fragment fragment = Evento.newInstance(null, null, null, null);
+                fragment = Evento.newInstance(null, null, null, null);
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
@@ -365,7 +380,7 @@ public class MainActivity extends Activity
     public void onFragmentInteraction(String id, String name, String admin, String num) {
         mTitle = name;
         noMenuActionBar = true;
-        Fragment fragment = Evento.newInstance(id, name, admin, num);
+        fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, "Evento")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
