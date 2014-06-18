@@ -68,7 +68,7 @@ public class EventDialog {
         }
 
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
 
         sp = (Spinner) dialog.findViewById(R.id.spinner);
         first = false;

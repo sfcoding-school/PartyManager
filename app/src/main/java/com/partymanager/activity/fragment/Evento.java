@@ -1,8 +1,10 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
 import com.partymanager.data.AttributiAdapter;
@@ -96,6 +99,9 @@ public class Evento extends Fragment {
     EditText inputSearch;
     ListView amiciFB;
     Dialog dialogAddFriends;
+    ArrayList<String> id_toSend;
+    WebDialog f;
+    ProgressDialog progressDialog;
 
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
@@ -507,7 +513,37 @@ public class Evento extends Fragment {
         addFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                id_toSend = new ArrayList<String>();
 
+                StringBuilder id_to_invite = new StringBuilder();
+                List<Friends> finali = dataAdapter.getFinali();
+
+                for (Friends aFinali : finali) {
+                    if (aFinali.getAppInstalled()) {
+                        id_toSend.add(aFinali.getCode());
+                    } else {
+                        String temp = aFinali.getCode();
+                        if (id_to_invite.length() != 0)
+                            temp = ", " + temp;
+
+                        id_to_invite.append(temp);
+                    }
+                }
+                JSONArray jsArray = new JSONArray(id_toSend);
+
+                Log.e("Evento-AddFriends-Persone prima di invio: ", jsArray.toString());
+                addFriendsToEvent(jsArray.toString());
+                if (!id_to_invite.toString().equals(""))
+                    sendInviti(id_to_invite.toString());
+
+                dialogAddFriends.dismiss();
+            }
+        });
+
+        dialogAddFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                id_toSend.clear();
             }
         });
 
@@ -515,6 +551,67 @@ public class Evento extends Fragment {
 
     }
     // </editor-fold">
+
+    private void sendInviti(String temp) {
+        f = HelperFacebook.inviteFriends(getActivity(), temp);
+        f.show();
+        f.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                dialogAddFriends.dismiss();
+            }
+        });
+    }
+
+    private void addFriendsToEvent(final String List) {
+
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.aggiuntaAmico));
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+
+            @Override
+            protected String doInBackground(Void... args) {
+                String ris;
+
+                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
+
+                Log.e("CreaEventoActivity-sendNewEvent-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                id_toSend.clear();
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+                if (!result.equals("fatto")) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errAggAmico));
+
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    dialogFriends.dismiss();
+                    FbFriendsAdapter.svuotaLista();
+                    //da aggiungere al json ??
+                }
+            }
+
+        }.execute();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -559,6 +656,7 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPreExecute() {
+                dialogFriends.dismiss();
             }
 
             @Override

@@ -54,7 +54,7 @@ public class DataProvide {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                String json_string = HelperConnessione.httpGetConnection("user/" + idEvento);
+                String json_string = HelperConnessione.httpGetConnection("friends/" + idEvento);
                 return stringToJsonArray("user", json_string);
             }
 

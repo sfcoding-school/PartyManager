@@ -105,9 +105,10 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
         holder.name.setText(friends1.getName());
         holder.name.setTextColor(Color.BLACK);
         holder.name.setChecked(friends1.isSelected());
-        if (friends1.getAppInstalled())
+        if (friends1.getAppInstalled()) {
             holder.installed.setVisibility(View.VISIBLE);
-        else
+            holder.installed.setTextColor(Color.BLACK);
+        } else
             holder.installed.setVisibility(View.GONE);
         holder.name.setTag(friends1);
 
@@ -119,6 +120,16 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             holder.foto_profilo.setImageBitmap(friends1.getFoto());
         } else {
             HelperFacebook.getFacebookProfilePicture(friends1, adapter, 0);
+        }
+
+        if (container_friends == null) {
+            for (int i = 0; i < DatiFriends.ITEMS.size(); i++) {
+                if (friends1.code.equals(DatiFriends.ITEMS.get(i).code)) {
+                    holder.name.setTextColor(Color.GRAY);
+                    holder.foto_profilo.setAlpha(100);
+                    holder.installed.setAlpha(100);
+                }
+            }
         }
 
         return convertView;

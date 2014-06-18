@@ -13,7 +13,7 @@
     <string name="app_credits"><b>Developed by</b> \n Luca Rinaldi \n Federico Corò</string>
 
     <!-- Fragment Eventi -->
-    <string name="emptyEventi">Non ci sono ancora domande \n in questo evento</string>
+    <string name="emptyEventi">Non hai ancora \n Eventi</string>
 
     <!-- altro Bho -->
     <string name="hello_blank_fragment">Hello Archivio</string>
@@ -59,7 +59,6 @@
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
     <string name="emptyDomande">Non ci sono ancora domande \n in questo evento</string>
-
     <string-array name="spinner_list">
         <item>Personalizzata</item>
         <item>Luogo Incontro</item>
@@ -69,9 +68,10 @@
         <item>Orario Evento</item>
         <item>Domanda Chiusa</item>
     </string-array>
-
     <string name="daDEf">[Da definire]</string>
     <string name="addFriends">Aggiungi</string>
+    <string name="aggiuntaAmico">Invio richiesta ...</string>
+    <string name="errAggAmico">Errore aggiunta amico all\'evento</string>
 
     <!--Drawer-->
     <string-array name="list_names">

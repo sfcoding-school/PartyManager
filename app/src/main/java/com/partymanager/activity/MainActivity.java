@@ -103,9 +103,9 @@ public class MainActivity extends Activity
                 startActivity(newact);
             } else {
                 HelperFacebook.getToken();
-                if (fragment!=null)
+                if (fragment != null)
                     fragmentManager.beginTransaction()
-                            .replace(R.id.container, fragment,fragment.getTag())
+                            .replace(R.id.container, fragment, fragment.getTag())
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
                 else
@@ -115,7 +115,7 @@ public class MainActivity extends Activity
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
 
     }
