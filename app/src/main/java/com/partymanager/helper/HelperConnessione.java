@@ -99,8 +99,11 @@ public class HelperConnessione {
         } catch (UnsupportedEncodingException e) {
             Log.e("HelperConnessione-httpGetConnection-UnsupportedEncodingException: ", e.toString());
         } catch (IOException e) {
-            Log.e("HelperConnessione-httpGetConnection-IOException-: ", e.toString());
-            return "serverOffline";
+            Log.e("HelperConnessione-httpGetConnection-IOException: ", e.toString());
+            if (e.toString().equals("org.apache.http.conn.HttpHostConnectException: Connection to http://apipm.sfcoding.com refused"))
+                return "serverOffline";
+            if (e.toString().equals("java.net.UnknownHostException: Unable to resolve host \"apipm.sfcoding.com\": No address associated with hostname"))
+                return "connessioneAssente";
         }
         return "error";
     }

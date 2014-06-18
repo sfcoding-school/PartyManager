@@ -81,8 +81,16 @@ public class DataProvide {
             @Override
             protected JSONArray doInBackground(Void... params) {
                 String json_string = HelperConnessione.httpGetConnection("event");
-                if (json_string.equals("serverOffline")) {
-                    return null;
+                if (json_string.equals("serverOffline") || json_string.equals("connessioneAssente")) {
+                    JSONArray a = new JSONArray();
+                    JSONObject b = new JSONObject();
+                    try {
+                        b.put("error", json_string);
+                        a.put(b);
+                        return a;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return stringToJsonArray("event", json_string);
             }
@@ -90,26 +98,30 @@ public class DataProvide {
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
 
-                if (jsonArray != null) {
-                    saveJson(jsonArray, "eventi", context);
-                    loadIntoEventiAdapter(jsonArray);
-                } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage(context.getString(R.string.serverOffline));
-
-                    alertDialogBuilder.setPositiveButton(context.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-
                 MainActivity.progressBarVisible = false;
                 ((Activity) context).invalidateOptionsMenu();
 
+                if (jsonArray != null) {
+                    try {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                        if (jsonArray.getJSONObject(0).getString("error").equals("serverOffline")) {
+                            alertDialogBuilder.setMessage(context.getString(R.string.serverOffline));
+                        } else {
+                            alertDialogBuilder.setMessage(context.getString(R.string.connAssente));
+                        }
+                        alertDialogBuilder.setPositiveButton(context.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    } catch (JSONException e) {
+                        saveJson(jsonArray, "eventi", context);
+                        loadIntoEventiAdapter(jsonArray);
+                    }
+                }
             }
         }.execute(null, null, null);
     }
