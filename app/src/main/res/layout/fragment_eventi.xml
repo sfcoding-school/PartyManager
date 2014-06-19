@@ -19,6 +19,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/txt_emptyE"
         android:text="@string/emptyEventi"
-        android:layout_gravity="center" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="#ff666666" />
 
 </FrameLayout>

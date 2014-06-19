@@ -43,6 +43,7 @@
             android:id="@+id/txt_empty"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:textColor="#ff7f7f7f"
             android:text="@string/emptyDomande" />
 
     </RelativeLayout>
