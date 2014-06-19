@@ -15,8 +15,8 @@ import android.widget.ProgressBar;
 
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
-import com.partymanager.data.DatiEventi;
 import com.partymanager.data.Adapter.EventAdapter;
+import com.partymanager.data.DatiEventi;
 import com.partymanager.helper.HelperFacebook;
 
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {

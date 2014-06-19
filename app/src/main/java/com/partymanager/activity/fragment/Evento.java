@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -41,13 +42,13 @@ import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
 import com.partymanager.data.Adapter.AttributiAdapter;
+import com.partymanager.data.Adapter.FbFriendsAdapter;
+import com.partymanager.data.Adapter.FriendsAdapter;
+import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
-import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Friends;
-import com.partymanager.data.Adapter.FriendsAdapter;
-import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
@@ -263,27 +264,47 @@ public class Evento extends Fragment {
                     }
                 });
 
-                if (DatiAttributi.ITEMS.get(arg2).template != null && DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
-                    LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
-                    normal.setVisibility(View.GONE);
-                    LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
-                    sino.setVisibility(View.VISIBLE);
+                if (DatiAttributi.ITEMS.get(arg2).template != null) {
+                    if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+                        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+                        normal.setVisibility(View.GONE);
+                        LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
+                        sino.setVisibility(View.VISIBLE);
 
-                    Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
-                    no.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addDomandaSino("no");
-                        }
-                    });
+                        Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
+                        no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                addDomandaSino("no");
+                            }
+                        });
 
-                    Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
-                    si.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addDomandaSino("si");
-                        }
-                    });
+                        Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                addDomandaSino("si");
+                            }
+                        });
+                    }
+                    if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
+                        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+                        normal.setVisibility(View.GONE);
+                        LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
+                        dataL.setVisibility(View.VISIBLE);
+
+                        final DatePicker dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
+
+                        Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
+                        add.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
+
+                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp);
+                            }
+                        });
+                    }
                 }
 
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -448,7 +469,7 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaUser(DatiFriends.ITEMS.get(i));
+                            eliminaUser(i);
                             return true;
                         }
                     });
@@ -613,14 +634,14 @@ public class Evento extends Fragment {
         }.execute();
     }
 
-    private void eliminaUser(final Friends friends) {
+    private void eliminaUser(final int i) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... args) {
                 String ris;
 
-                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + friends.getCode());
+                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + DatiFriends.ITEMS.get(i).getCode());
 
                 Log.e("Evento-eliminaUser-ris: ", ris);
 
@@ -641,6 +662,8 @@ public class Evento extends Fragment {
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
+                } else {
+                    DatiFriends.removeItem(i);
                 }
             }
 
@@ -690,7 +713,8 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPreExecute() {
-                dialogFriends.dismiss();
+                if (dialogFriends != null && dialogFriends.isShowing())
+                    dialogFriends.dismiss();
             }
 
             @Override
@@ -752,7 +776,7 @@ public class Evento extends Fragment {
             @Override
             protected void onPostExecute(String ris) {
 
-                Log.e("Evento-vota:", ris);
+                Log.e("Evento-vota-ris:", ris);
                 if (ris.equals("aggiornato")) {
                     graficaVota(position);
                 }

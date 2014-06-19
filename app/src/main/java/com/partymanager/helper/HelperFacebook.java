@@ -20,8 +20,8 @@ import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
-import com.partymanager.data.Friends;
 import com.partymanager.data.Adapter.FriendsAdapter;
+import com.partymanager.data.Friends;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

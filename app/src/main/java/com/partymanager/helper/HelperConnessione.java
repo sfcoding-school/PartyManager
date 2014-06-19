@@ -141,7 +141,7 @@ public class HelperConnessione {
     }
 
     static public String httpDeleteConnection(String url) {
-        HttpClient httpclient = new DefaultHttpClient();
+        httpclient = getHttpclient();
         HttpDelete httpDel = new HttpDelete(URL + url);
 
         try {

@@ -28,4 +28,10 @@ public class DatiFriends {
         ITEMS.add(item);
         eAdapter.notifyDataSetChanged();
     }
+
+    public static void removeItem(int i) {
+        ITEMS.remove(i);
+        eAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -130,6 +130,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
                     holder.name.setTextColor(Color.GRAY);
                     holder.foto_profilo.setAlpha(100);
                     holder.installed.setAlpha(100);
+                    holder.name.setEnabled(false);
                 }
             }
         }

@@ -110,7 +110,7 @@ public class GcmIntentService extends IntentService {
 
                 } else if (s.equals("risp")) {
                     if (nessuna_notifica && preferences.getBoolean("checkbox_preference3", true))
-                        sendNotification("Risposta", "anche" + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
+                        sendNotification("Risposta", "anche " + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"));
                     //'type':'newRis', 'agg': 0, 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
                     if (extras.getBoolean("agg")) {
 

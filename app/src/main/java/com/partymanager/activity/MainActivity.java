@@ -34,9 +34,9 @@ import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
+import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.helper.HelperFacebook;
 
 public class MainActivity extends Activity
@@ -252,6 +252,13 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View view) {
                 showAbout();
+            }
+        });
+
+        leftRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* Serve per disabilitare il touch alla subview */
             }
         });
     }
