@@ -20,7 +20,10 @@
         android:text="@string/app_descrip"
         android:textColor="#000"
         android:layout_gravity="center_horizontal"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:fontFamily="sans-serif" />
 
     <TextView
         android:id="@+id/about_credits"
