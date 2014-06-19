@@ -13,7 +13,7 @@
     <string name="app_credits"><b>Developed by</b> \n Luca Rinaldi \n Federico Corò</string>
 
     <!-- Fragment Eventi -->
-    <string name="emptyEventi">Non hai ancora \n Eventi</string>
+    <string name="emptyEventi">Non hai ancora Eventi</string>
 
     <!-- altro Bho -->
     <string name="hello_blank_fragment">Hello Archivio</string>
