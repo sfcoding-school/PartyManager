@@ -1,147 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/rel_layout_diagRisposte">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:visibility="visible">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/linearLayout"
-            android:visibility="visible"
-            android:layout_weight="0.8">
+            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Domanda"
-                    android:id="@+id/txt_domanda_dialog"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="22dp"
-                    android:textAlignment="center"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.8dp"
-                android:background="@android:color/holo_blue_dark"/>
-
-            <ListView
+            <TextView
+                android:id="@+id/txt_domanda_dialog"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:id="@+id/listView_risposte"
-                android:divider="#ff000000"
-                android:dividerHeight="0.2dp"
-                android:visibility="visible" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/domanda"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
-        </LinearLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.8dp"
+            android:background="@android:color/holo_blue_dark" />
+
+        <ListView
+            android:id="@+id/listView_risposte"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:divider="#ff000000"
+            android:dividerHeight="0.2dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/risposta_stringa"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.1"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/edtxt_nuovaRisposta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8" />
+
+        <ImageButton
+            android:id="@+id/imgBSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@android:drawable/ic_menu_send" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearL_sino"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/risposta_sino"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:id="@+id/risposta_stringa"
-            android:visibility="visible"
-            android:layout_weight="0.1">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edtxt_nuovaRisposta"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/linearLayout"
-                android:layout_weight="0.8" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imgBSend"
-                android:layout_gravity="right"
-                android:background="@android:drawable/ic_menu_send"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/linearL_sino"
-            android:layout_weight="0.1">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/risposta_sino"
-                android:visibility="visible">
-
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NO"
-                    android:id="@+id/btn_risp_no"
-                    android:layout_weight="0.5"
-                    style="@android:style/DeviceDefault.ButtonBar.AlertDialog" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SI"
-                    android:id="@+id/btn_risp_si"
-                    android:layout_weight="0.5"
-                    style="@android:style/DeviceDefault.ButtonBar.AlertDialog" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/linearL_data"
-            android:visibility="gone">
-
-            <DatePicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/datePicker_risposta"
-                android:layout_gravity="center_horizontal"
-                style="@android:style/Widget.DatePicker" />
 
             <Button
+                android:id="@+id/btn_risp_no"
+                style="@android:style/DeviceDefault.ButtonBar.AlertDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rispondi"
-                android:id="@+id/button_rispndi_data"
-                style="@android:style/DeviceDefault.ButtonBar"
-                android:layout_gravity="center_horizontal" />
+                android:layout_weight="0.5"
+                android:text="@string/no" />
 
+            <Button
+                android:id="@+id/btn_risp_si"
+                style="@android:style/DeviceDefault.ButtonBar.AlertDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/yes" />
         </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linearL_data"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <DatePicker
+            android:id="@+id/datePicker_risposta"
+            style="@android:style/Widget.DatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/button_rispndi_data"
+            style="@android:style/DeviceDefault.ButtonBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/rispondi" />
+
+    </LinearLayout>
+
+</LinearLayout>

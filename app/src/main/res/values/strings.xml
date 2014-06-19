@@ -70,7 +70,7 @@
     </string-array>
     <string name="daDEf">[Da definire]</string>
     <string name="addFriends">Aggiungi</string>
-    <string name="aggiuntaAmico">Invio richiesta ...</string>
+    <string name="aggiuntaAmico">Invio richiesta …</string>
     <string name="errAggAmico">Errore aggiunta amico all\'evento</string>
     <string name="errDeleteFriend">Errore nell\'eliminazione user</string>
 
@@ -135,5 +135,11 @@
 
     <!-- DataProvide -->
     <string name="serverOffline">Il server è momentaneamente offline.\nCi scusiamo per il disagio</string>
+
+    <!-- Dialog Risposte -->
+    <string name="domanda">Domanda</string>
+    <string name="no">NO</string>
+    <string name="yes">SI</string>
+    <string name="rispondi">Rispondi</string>
 
 </resources>
