@@ -72,6 +72,7 @@
     <string name="addFriends">Aggiungi</string>
     <string name="aggiuntaAmico">Invio richiesta ...</string>
     <string name="errAggAmico">Errore aggiunta amico all\'evento</string>
+    <string name="errDeleteFriend">Errore nell\'eliminazione user</string>
 
     <!--Drawer-->
     <string-array name="list_names">
@@ -82,7 +83,6 @@
         <item>@android:drawable/ic_menu_preferences</item>
         <item>@android:drawable/ic_dialog_email</item>
     </array>
-
     <string-array name="list_names2">
         <item>Profilo</item>
         <item>Eventi</item>

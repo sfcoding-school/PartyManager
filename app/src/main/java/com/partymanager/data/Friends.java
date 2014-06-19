@@ -4,11 +4,11 @@ import android.graphics.Bitmap;
 
 public class Friends {
 
-    String code = null;
-    String name = null;
-    boolean selected = false;
-    boolean appInstalled;
-    Bitmap foto = null;
+    public String code = null;
+    public String name = null;
+    public boolean selected = false;
+    public boolean appInstalled;
+    public Bitmap foto = null;
 
     public Friends(String code, String name, boolean selected, boolean appI) {
         super();

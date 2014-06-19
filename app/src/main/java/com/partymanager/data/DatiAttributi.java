@@ -4,6 +4,7 @@ package com.partymanager.data;
 
 import android.content.Context;
 
+import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.helper.DataProvide;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ public class DatiAttributi {
     private static AttributiAdapter eAdapter;
     public static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
 
-    public static AttributiAdapter init(Context context, String id) {
-        eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS);
+    public static AttributiAdapter init(Context context, String id, int num_pers) {
+        eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS, num_pers);
         DataProvide.getAttributi(context, id);
         return eAdapter;
     }
@@ -49,8 +50,8 @@ public class DatiAttributi {
             this.risposta = risposta;
             this.template = template;
             this.close = close;
-            this.numd = numd;
-            this.numr = numr;
+            this.numd = numd; /* Quanti hanno risposto/votato in questo attributo */
+            this.numr = numr; /* Quanti hanno risposto alla domanda più votata */
         }
 
         @Override

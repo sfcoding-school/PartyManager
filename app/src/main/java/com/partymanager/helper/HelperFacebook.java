@@ -19,9 +19,9 @@ import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.ProfileActivity;
-import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Friends;
-import com.partymanager.data.FriendsAdapter;
+import com.partymanager.data.Adapter.FriendsAdapter;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

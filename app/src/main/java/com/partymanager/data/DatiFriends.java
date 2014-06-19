@@ -2,6 +2,7 @@ package com.partymanager.data;
 
 import android.content.Context;
 
+import com.partymanager.data.Adapter.FriendsAdapter;
 import com.partymanager.helper.DataProvide;
 
 import java.util.ArrayList;

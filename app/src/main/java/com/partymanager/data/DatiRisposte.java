@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
 
 import org.json.JSONArray;

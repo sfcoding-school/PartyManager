@@ -1,4 +1,4 @@
-package com.partymanager.data;
+package com.partymanager.data.Adapter;
 
 import android.content.Context;
 import android.content.ContextWrapper;

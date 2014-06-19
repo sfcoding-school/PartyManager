@@ -33,7 +33,7 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
-import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;

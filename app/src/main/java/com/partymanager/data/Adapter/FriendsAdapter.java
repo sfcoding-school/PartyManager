@@ -1,4 +1,4 @@
-package com.partymanager.data;
+package com.partymanager.data.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.data.DatiFriends;
+import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.partymanager.data;
+package com.partymanager.data.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.fragment.Evento;
+import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
 

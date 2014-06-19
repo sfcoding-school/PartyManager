@@ -36,7 +36,7 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DrawerAdapter;
+import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.helper.HelperFacebook;
 
 public class MainActivity extends Activity
@@ -152,12 +152,14 @@ public class MainActivity extends Activity
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
         };
 

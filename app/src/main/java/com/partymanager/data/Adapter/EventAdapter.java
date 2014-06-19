@@ -1,4 +1,4 @@
-package com.partymanager.data;
+package com.partymanager.data.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.data.DatiEventi;
 import com.partymanager.helper.HelperDataParser;
 
 import java.text.SimpleDateFormat;

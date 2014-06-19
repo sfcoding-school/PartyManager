@@ -40,14 +40,14 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.EventDialog;
-import com.partymanager.data.AttributiAdapter;
+import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
-import com.partymanager.data.FbFriendsAdapter;
+import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Friends;
-import com.partymanager.data.FriendsAdapter;
-import com.partymanager.data.RisposteAdapter;
+import com.partymanager.data.Adapter.FriendsAdapter;
+import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
@@ -145,7 +145,7 @@ public class Evento extends Fragment {
         }
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
-        eAdapter = DatiAttributi.init(getActivity(), idEvento);
+        eAdapter = DatiAttributi.init(getActivity(), idEvento, Integer.parseInt(numUtenti));
 
         dialogAddDomanda = eventDialog.returnD();
     }
@@ -440,7 +440,7 @@ public class Evento extends Fragment {
 
         utenti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
                     PopupMenu popup = new PopupMenu(getActivity(), view);
                     popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
@@ -448,7 +448,7 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            Log.e("PopUp-ButtaFuori", "click");
+                            eliminaUser(DatiFriends.ITEMS.get(i));
                             return true;
                         }
                     });
@@ -543,7 +543,8 @@ public class Evento extends Fragment {
         dialogAddFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                id_toSend.clear();
+                if (id_toSend != null)
+                    id_toSend.clear();
             }
         });
 
@@ -564,7 +565,6 @@ public class Evento extends Fragment {
     }
 
     private void addFriendsToEvent(final String List) {
-
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -581,7 +581,7 @@ public class Evento extends Fragment {
 
                 ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
 
-                Log.e("CreaEventoActivity-sendNewEvent-ris: ", ris);
+                Log.e("Evento-addFriendsToEvent-ris: ", ris);
 
                 return ris;
             }
@@ -607,6 +607,40 @@ public class Evento extends Fragment {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
                     //da aggiungere al json ??
+                }
+            }
+
+        }.execute();
+    }
+
+    private void eliminaUser(final Friends friends) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... args) {
+                String ris;
+
+                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + friends.getCode());
+
+                Log.e("Evento-eliminaUser-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (!result.equals("fatto")) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errDeleteFriend));
+
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
             }
 

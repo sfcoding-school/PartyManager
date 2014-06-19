@@ -1,4 +1,4 @@
-package com.partymanager.data;
+package com.partymanager.data.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,18 +8,21 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.data.DatiAttributi;
 
 import java.util.ArrayList;
 
 public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
-    public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo) {
+    private int num_pers_evento;
+
+    public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo, int num_pers_evento) {
         super(context, R.layout.attributi_row, Attributo);
+        this.num_pers_evento = num_pers_evento;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
         DatiAttributi.Attributo attr = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -30,7 +33,18 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
         TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
 
         name.setText(attr.domanda);
-        details.setText(attr.risposta);
+
+        StringBuilder temp = new StringBuilder();
+        temp.append(attr.risposta);
+        if (!attr.risposta.equals("")) {
+        /* la percentuale di persone che hanno votato quella domanda, rispetto alle persone che hanno risposto alla domanda */
+            temp.append(" (" + 100 * attr.numr / attr.numd + "% ha votato questa risposta, ");
+
+        /* il numero di persone che hanno risposto alla domanda rispetto alle persone totali dell'evento */
+            temp.append(attr.numr + "/" + num_pers_evento + " hanno risposto)");
+        }
+
+        details.setText(temp);
 
         return convertView;
     }
