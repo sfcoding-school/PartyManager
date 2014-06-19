@@ -41,7 +41,7 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
             temp.append(" (" + 100 * attr.numr / attr.numd + "% ha votato questa risposta, ");
 
         /* il numero di persone che hanno risposto alla domanda rispetto alle persone totali dell'evento */
-            temp.append(attr.numr + "/" + num_pers_evento + " hanno risposto)");
+            temp.append(attr.numd + "/" + num_pers_evento + " hanno risposto)");
         }
 
         details.setText(temp);
