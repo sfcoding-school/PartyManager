@@ -39,6 +39,8 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.helper.HelperFacebook;
 
+import java.lang.reflect.Array;
+
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
 
@@ -352,17 +354,18 @@ public class MainActivity extends Activity
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 0) {
             if (data != null) {
-                String ListFriends = data.getStringExtra("listfriend");
+                String num_utenti = data.getStringExtra("num_utenti");
                 String nome_evento = data.getStringExtra("nome_evento");
                 String id_evento = data.getStringExtra("id_evento");
 
-                Log.e("DEBUG ACTIVITY RESULT: ", ListFriends + " " + nome_evento + " " + id_evento);
+                Log.e("DEBUG ACTIVITY RESULT: ", num_utenti + " " + nome_evento + " " + id_evento);
 
                 FragmentManager fragmentManager = getFragmentManager();
-                fragment = Evento.newInstance(null, null, null, null);
+                fragment = Evento.newInstance(id_evento, nome_evento, HelperFacebook.getFacebookId(), num_utenti);
                 mTitle = nome_evento;
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
+                        .addToBackStack("evento")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
             }

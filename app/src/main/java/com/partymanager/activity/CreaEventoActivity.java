@@ -258,10 +258,10 @@ public class CreaEventoActivity extends Activity {
                     } else {
                         Log.e("CreaEventoActivity-updateView - Persone prima di invio: ", jsArray.toString());
 
-                        sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray.toString());
+                        sendNewEvent(nome_evento.getText().toString(), registrationId, jsArray);
                         if (id_to_invite.length() > 0) {
                             Log.e("CreaEventoActivity-updateView - Persone invito FB: ", id_to_invite.toString());
-                            sendInviti(id_to_invite.toString(), nome_evento.getText().toString(), jsArray.toString());
+                            sendInviti(id_to_invite.toString(), nome_evento.getText().toString(), jsArray);
                         }
                     }
                 }
@@ -269,13 +269,13 @@ public class CreaEventoActivity extends Activity {
         });
     }
 
-    private void sendInviti(String temp, final String name, final String List) {
+    private void sendInviti(String temp, final String name, final JSONArray List) {
         f = HelperFacebook.inviteFriends(this, temp);
         f.show();
         f.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                closeActivity(List, name, result_global);
+                closeActivity(String.valueOf(List.length()+1), name, result_global);
             }
         });
     }
@@ -285,14 +285,14 @@ public class CreaEventoActivity extends Activity {
                 Context.MODE_PRIVATE);
     }
 
-    private void sendNewEvent(final String name, final String ID_FB, final String List) {
+    private void sendNewEvent(final String name, final String ID_FB, final JSONArray List) {
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... args) {
                 String ris;
 
-                ris = HelperConnessione.httpPostConnection("event", new String[]{"name", "userList", "admin"}, new String[]{name, List, ID_FB});
+                ris = HelperConnessione.httpPostConnection("event", new String[]{"name", "userList", "admin"}, new String[]{name, List.toString(), ID_FB});
 
                 Log.e("CreaEventoActivity-sendNewEvent-ris: ", ris);
 
@@ -319,7 +319,7 @@ public class CreaEventoActivity extends Activity {
                     FbFriendsAdapter.svuotaLista();
                     result_global = result;
                     if (f == null || (f != null && !f.isShowing()))
-                        closeActivity(List, name, result);
+                        closeActivity(String.valueOf(List.length()+1), name, result);
                 }
             }
 
@@ -350,11 +350,12 @@ public class CreaEventoActivity extends Activity {
         }.execute();
     }
 
-    private void closeActivity(String List, String nome_evento, String id_evento) {
+    private void closeActivity(String num_utenti, String nome_evento, String id_evento) {
         Intent intent = new Intent();
-        intent.putExtra("listfriend", List);
+        Log.e("CREAEVENTO", "num_utenti "+num_utenti);
         intent.putExtra("nome_evento", nome_evento);
         intent.putExtra("id_evento", id_evento);
+        intent.putExtra("num_utenti", num_utenti);
         setResult(0, intent);
 
         finish();
