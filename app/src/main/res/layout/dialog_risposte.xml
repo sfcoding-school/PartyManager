@@ -29,7 +29,8 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/domanda"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAlignment="center" />
         </RelativeLayout>
 
         <View
@@ -68,6 +69,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@android:drawable/ic_menu_send" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:id="@+id/pb_addRisposta"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout
@@ -77,6 +85,13 @@
         android:layout_weight="0.1"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pb_sino"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/risposta_sino"
@@ -112,6 +127,13 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pb_data"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
         <DatePicker
             android:id="@+id/datePicker_risposta"

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.partymanager.R;
@@ -55,17 +56,20 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
                     sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
             }
         }
-        Button vota = (Button) convertView.findViewById(R.id.button_voto);
+        final Button vota = (Button) convertView.findViewById(R.id.button_voto);
+        vota.setVisibility(View.VISIBLE);
+        final ProgressBar pb_vota = (ProgressBar) convertView.findViewById(R.id.pb_vota);
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Evento.vota(DatiRisposte.ITEMS.get(position).id, position);
+                Evento.vota(DatiRisposte.ITEMS.get(position).id, position, pb_vota);
+                vota.setVisibility(View.GONE);
             }
         });
 
         if (DatiRisposte.ITEMS.get(position).template.equals("sino")) {
-            temp_risposta += " " + (100 * DatiRisposte.ITEMS.get(position).persone.size()) / num_pers_evento + "%";
             vota.setVisibility(View.GONE);
+            temp_risposta += " " + (100 * DatiRisposte.ITEMS.get(position).persone.size()) / num_pers_evento + "%";
         }
         risp.setText(temp_risposta);
 

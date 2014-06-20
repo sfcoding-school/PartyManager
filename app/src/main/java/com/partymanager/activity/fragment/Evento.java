@@ -251,15 +251,19 @@ public class Evento extends Fragment {
                 TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
                 text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
-                ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
+                final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
                 edt.setHint("Scrivi qui la tua risposta");
+
+                final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
 
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (!"".equals(edt.getText().toString())) {
-                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString());
+                            dialogButton.setVisibility(View.GONE);
+                            pb_add.setVisibility(View.VISIBLE);
+                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add);
                         }
                     }
                 });
@@ -271,11 +275,14 @@ public class Evento extends Fragment {
                         LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
                         sino.setVisibility(View.VISIBLE);
 
+                        final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
+
                         Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
                         no.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                addDomandaSino("no");
+                                pb_sino.setVisibility(View.VISIBLE);
+                                addDomandaSino("no", pb_sino);
                             }
                         });
 
@@ -283,7 +290,8 @@ public class Evento extends Fragment {
                         si.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                addDomandaSino("si");
+                                pb_sino.setVisibility(View.VISIBLE);
+                                addDomandaSino("si", pb_sino);
                             }
                         });
                     }
@@ -293,6 +301,8 @@ public class Evento extends Fragment {
                         LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
                         dataL.setVisibility(View.VISIBLE);
 
+                        final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
+
                         final DatePicker dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
 
                         Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
@@ -300,8 +310,8 @@ public class Evento extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
-
-                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp);
+                                pb_data.setVisibility(View.VISIBLE);
+                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data);
                             }
                         });
                     }
@@ -452,6 +462,8 @@ public class Evento extends Fragment {
 
         Button addFriends = (Button) dialogFriends.findViewById(R.id.btn_addFriends);
 
+        final ProgressBar pb_buttaFuori = (ProgressBar) dialogFriends.findViewById(R.id.pb_deleteUser);
+
         addFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -469,7 +481,8 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaUser(i);
+                            pb_buttaFuori.setVisibility(View.VISIBLE);
+                            eliminaUser(i, pb_buttaFuori);
                             return true;
                         }
                     });
@@ -634,7 +647,7 @@ public class Evento extends Fragment {
         }.execute();
     }
 
-    private void eliminaUser(final int i) {
+    private void eliminaUser(final int i, final ProgressBar pb_buttaFuori) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -650,6 +663,7 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPostExecute(String result) {
+                pb_buttaFuori.setVisibility(View.GONE);
                 if (!result.equals("fatto")) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                     alertDialogBuilder.setMessage(getString(R.string.errDeleteFriend));
@@ -708,7 +722,7 @@ public class Evento extends Fragment {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="addRisposte + Vota">
-    private void addRisposta(final String id_attributo, final String risposta) {
+    private void addRisposta(final String id_attributo, final String risposta, final String template, final ProgressBar pb_add) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -732,6 +746,7 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPostExecute(String ris) {
+                pb_add.setVisibility(View.GONE);
                 if (isInteger(ris)) {
                     JSONObject pers = new JSONObject();
                     JSONArray userL = new JSONArray();
@@ -740,7 +755,7 @@ public class Evento extends Fragment {
                         pers.put("name", HelperFacebook.getFacebookUserName());
                         userL.put(pers);
                         cercami();
-                        DatiRisposte.addItem(new DatiRisposte.Risposta(ris, risposta, "", userL));
+                        DatiRisposte.addItem(new DatiRisposte.Risposta(ris, risposta, template, userL));
                         edt.setText("");
                     } catch (JSONException e) {
                         Log.e("Evento-addRisposta", "JSONException " + e);
@@ -760,8 +775,13 @@ public class Evento extends Fragment {
         }.execute(null, null, null);
     }
 
-    public static void vota(final String idRisposta, final int position) {
+    public static void vota(final String idRisposta, final int position, final ProgressBar pb_vota) {
         new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+                pb_vota.setVisibility(View.VISIBLE);
+            }
 
             @Override
             protected String doInBackground(Void... params) {
@@ -775,7 +795,7 @@ public class Evento extends Fragment {
 
             @Override
             protected void onPostExecute(String ris) {
-
+                pb_vota.setVisibility(View.GONE);
                 Log.e("Evento-vota-ris:", ris);
                 if (ris.equals("aggiornato")) {
                     graficaVota(position);
@@ -804,16 +824,16 @@ public class Evento extends Fragment {
         }
     }
 
-    public void addDomandaSino(String cosa) {
+    public void addDomandaSino(String cosa, ProgressBar pb_sino) {
 
         if (DatiRisposte.ITEMS.size() == 1) {
             //non esiste ancora la risposta no
-            addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa);
+            addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa, "sino", pb_sino);
         } else {
             if (cosa.equals("si"))
-                vota(DatiRisposte.ITEMS.get(0).id, 0);
+                vota(DatiRisposte.ITEMS.get(0).id, 0, pb_sino);
             else {
-                vota(DatiRisposte.ITEMS.get(1).id, 1);
+                vota(DatiRisposte.ITEMS.get(1).id, 1, pb_sino);
             }
         }
     }

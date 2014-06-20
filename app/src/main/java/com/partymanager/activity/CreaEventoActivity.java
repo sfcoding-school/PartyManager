@@ -275,7 +275,7 @@ public class CreaEventoActivity extends Activity {
         f.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                closeActivity(String.valueOf(List.length()+1), name, result_global);
+                closeActivity(String.valueOf(List.length() + 1), name, result_global);
             }
         });
     }
@@ -319,7 +319,7 @@ public class CreaEventoActivity extends Activity {
                     FbFriendsAdapter.svuotaLista();
                     result_global = result;
                     if (f == null || (f != null && !f.isShowing()))
-                        closeActivity(String.valueOf(List.length()+1), name, result);
+                        closeActivity(String.valueOf(List.length() + 1), name, result);
                 }
             }
 
@@ -352,7 +352,7 @@ public class CreaEventoActivity extends Activity {
 
     private void closeActivity(String num_utenti, String nome_evento, String id_evento) {
         Intent intent = new Intent();
-        Log.e("CREAEVENTO", "num_utenti "+num_utenti);
+        Log.e("CREAEVENTO", "num_utenti " + num_utenti);
         intent.putExtra("nome_evento", nome_evento);
         intent.putExtra("id_evento", id_evento);
         intent.putExtra("num_utenti", num_utenti);

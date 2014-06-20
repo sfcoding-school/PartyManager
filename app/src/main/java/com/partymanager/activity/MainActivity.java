@@ -39,8 +39,6 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.helper.HelperFacebook;
 
-import java.lang.reflect.Array;
-
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
 
@@ -153,19 +151,23 @@ public class MainActivity extends Activity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-
+                getActionBar().setTitle(mTitle);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-
+                getActionBar().setTitle("Party Manager");
             }
         };
 
         drawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void setNavigationDrawer() {
