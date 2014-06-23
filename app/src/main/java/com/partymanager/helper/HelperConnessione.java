@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelperConnessione {
+    //private static final String URL = "http://apipm.sfcoding.com/";
     private static final String URL = "http://apipm.sfcoding.com/";
 
     private static HttpClient httpclient = null;
