@@ -149,7 +149,17 @@ public class GcmIntentService extends IntentService {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        int colorLed = Integer.parseInt(preferences.getString("downloadType", null));
+        int colorLed;
+        colorLed = Integer.parseInt(preferences.getString("downloadType", null));
+
+        /* //Per ISSUE #23 (se dovesse ricapitare si mette)
+        try{
+            colorLed = Integer.parseInt(preferences.getString("downloadType", null));
+        } catch (NumberFormatException e){
+            Log.e("GcmIntentService", "NumberFormatException " + e);
+            colorLed = 16777215;
+        }
+        */
         boolean prova = preferences.getBoolean("checkbox_vibrate", true);
         long[] vibr = null;
         if (prova) {

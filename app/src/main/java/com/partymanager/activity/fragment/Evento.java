@@ -243,101 +243,8 @@ public class Evento extends Fragment {
                                     long arg3) {
 
                 attuale = arg2;
-                dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_risposte);
+                dialogRisposte(arg2);
 
-                final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-                final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti));
-                risp.setAdapter(adapter);
-
-                TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
-                text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
-
-                final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
-                edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
-
-                if (DatiAttributi.ITEMS.get(arg2).close) {
-                    edt.setVisibility(View.GONE);
-                    dialogButton.setVisibility(View.GONE);
-                } else {
-                    edt.setHint("Scrivi qui la tua risposta");
-                }
-
-                final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
-
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!"".equals(edt.getText().toString())) {
-                            dialogButton.setVisibility(View.GONE);
-                            pb_add.setVisibility(View.VISIBLE);
-                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
-                        }
-                    }
-                });
-
-                if (DatiAttributi.ITEMS.get(arg2).template != null) {
-                    if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
-                        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
-                        normal.setVisibility(View.GONE);
-                        LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
-                        sino.setVisibility(View.VISIBLE);
-
-                        final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
-
-                        Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
-                        no.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                pb_sino.setVisibility(View.VISIBLE);
-                                addDomandaSino("no", pb_sino);
-                            }
-                        });
-
-                        Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
-                        si.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                pb_sino.setVisibility(View.VISIBLE);
-                                addDomandaSino("si", pb_sino);
-                            }
-                        });
-                    }
-                    if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
-                        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
-                        normal.setVisibility(View.GONE);
-                        LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
-                        dataL.setVisibility(View.VISIBLE);
-
-                        final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
-
-                        final DatePicker dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
-
-                        Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
-                        add.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
-                                pb_data.setVisibility(View.VISIBLE);
-                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
-                            }
-                        });
-                    }
-                }
-
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        try {
-                            DatiRisposte.removeAll(true, idEvento, DatiAttributi.ITEMS.get(arg2).id);
-                        } catch (IndexOutOfBoundsException e) {
-                            Log.e("Evento-dialog.setOnDismissListener", "IndexOutOfBoundsException " + e);
-                        }
-                    }
-                });
-
-                dialog.show();
             }
         });
 
@@ -393,6 +300,154 @@ public class Evento extends Fragment {
         return view;
     }
 
+    private void sendInviti(String temp) {
+        f = HelperFacebook.inviteFriends(getActivity(), temp);
+        f.show();
+        f.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                dialogAddFriends.dismiss();
+            }
+        });
+    }
+
+    private void addFriendsToEvent(final String List, final int quanti_aggiunti) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.aggiuntaAmico));
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+
+            @Override
+            protected String doInBackground(Void... args) {
+                String ris;
+
+                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
+
+                Log.e("Evento-addFriendsToEvent-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                id_toSend.clear();
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+
+                if (!result.equals("fatto")) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errAggAmico));
+
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    dialogFriends.dismiss();
+                    FbFriendsAdapter.svuotaLista();
+
+                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
+                            DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
+                            bnt_friends.setText(numUtenti + quanti_aggiunti);
+                            break;
+                        }
+                    }
+                }
+            }
+        }.execute();
+    }
+
+    private void eliminaUser(final int i, final ProgressBar pb_buttaFuori) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... args) {
+                String ris;
+
+                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + DatiFriends.ITEMS.get(i).getCode());
+
+                Log.e("Evento-eliminaUser-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                pb_buttaFuori.setVisibility(View.GONE);
+                if (!result.equals("fatto")) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errDeleteFriend));
+
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    DatiFriends.removeItem(i);
+
+                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
+                            DatiEventi.ITEMS.get(i).numUtenti--;
+                            bnt_friends.setText(DatiEventi.ITEMS.get(i).numUtenti);
+                            break;
+                        }
+                    }
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        /*try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                + " must implement OnFragmentInteractionListener");
+        }*/
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        DatiAttributi.removeAll();
+        eAdapter.notifyDataSetChanged();
+        if (dialog != null)
+            dialog.dismiss();
+        if (eventDialog != null)
+            eventDialog.close();
+        if (dialogFriends != null)
+            dialogFriends.dismiss();
+        if (dialogAddFriends != null)
+            dialogAddFriends.dismiss();
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        public void onFragmentInteraction(String id);
+    }
+    // </editor-fold>
+
     // <editor-fold defaultstate="collapsed" desc="Richiesta amici FB">
     private void requestMyAppFacebookFriends(Session session) {
         Request friendsRequest = createRequest(session);
@@ -444,6 +499,106 @@ public class Evento extends Fragment {
                 .getGraphObjectAs(GraphMultiResult.class);
         GraphObjectList<GraphObject> data = multiResult.getData();
         return data.castToListOf(GraphUser.class);
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="dialogRisposte">
+    public void dialogRisposte(final int arg2){
+        dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_risposte);
+
+        final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+        final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti));
+        risp.setAdapter(adapter);
+
+        TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
+        text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
+
+        final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
+        edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
+
+        if (DatiAttributi.ITEMS.get(arg2).close) {
+            edt.setVisibility(View.GONE);
+            dialogButton.setVisibility(View.GONE);
+        } else {
+            edt.setHint("Scrivi qui la tua risposta");
+        }
+
+        final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!"".equals(edt.getText().toString())) {
+                    dialogButton.setVisibility(View.GONE);
+                    pb_add.setVisibility(View.VISIBLE);
+                    addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
+                }
+            }
+        });
+
+        if (DatiAttributi.ITEMS.get(arg2).template != null) {
+            if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+                LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+                normal.setVisibility(View.GONE);
+                LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
+                sino.setVisibility(View.VISIBLE);
+
+                final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
+
+                Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
+                no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pb_sino.setVisibility(View.VISIBLE);
+                        addDomandaSino("no", pb_sino);
+                    }
+                });
+
+                Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
+                si.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pb_sino.setVisibility(View.VISIBLE);
+                        addDomandaSino("si", pb_sino);
+                    }
+                });
+            }
+            if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
+                LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+                normal.setVisibility(View.GONE);
+                LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
+                dataL.setVisibility(View.VISIBLE);
+
+                final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
+
+                final DatePicker dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
+
+                Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
+                        pb_data.setVisibility(View.VISIBLE);
+                        addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
+                    }
+                });
+            }
+        }
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                try {
+                    DatiRisposte.removeAll(true, idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                } catch (IndexOutOfBoundsException e) {
+                    Log.e("Evento-dialog.setOnDismissListener", "IndexOutOfBoundsException " + e);
+                }
+            }
+        });
+
+        dialog.show();
     }
     // </editor-fold>
 
@@ -595,154 +750,6 @@ public class Evento extends Fragment {
 
     }
     // </editor-fold">
-
-    private void sendInviti(String temp) {
-        f = HelperFacebook.inviteFriends(getActivity(), temp);
-        f.show();
-        f.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                dialogAddFriends.dismiss();
-            }
-        });
-    }
-
-    private void addFriendsToEvent(final String List, final int quanti_aggiunti) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected void onPreExecute() {
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getActivity().getApplicationContext().getString(R.string.aggiuntaAmico));
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
-
-            @Override
-            protected String doInBackground(Void... args) {
-                String ris;
-
-                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
-
-                Log.e("Evento-addFriendsToEvent-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                id_toSend.clear();
-                if (progressDialog.isShowing())
-                    progressDialog.dismiss();
-
-                if (!result.equals("fatto")) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                    alertDialogBuilder.setMessage(getString(R.string.errAggAmico));
-
-                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                } else {
-                    dialogFriends.dismiss();
-                    FbFriendsAdapter.svuotaLista();
-
-                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
-                            DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
-                            bnt_friends.setText(numUtenti + quanti_aggiunti);
-                            break;
-                        }
-                    }
-                }
-            }
-        }.execute();
-    }
-
-    private void eliminaUser(final int i, final ProgressBar pb_buttaFuori) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... args) {
-                String ris;
-
-                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + DatiFriends.ITEMS.get(i).getCode());
-
-                Log.e("Evento-eliminaUser-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                pb_buttaFuori.setVisibility(View.GONE);
-                if (!result.equals("fatto")) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                    alertDialogBuilder.setMessage(getString(R.string.errDeleteFriend));
-
-                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                } else {
-                    DatiFriends.removeItem(i);
-
-                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
-                            DatiEventi.ITEMS.get(i).numUtenti--;
-                            bnt_friends.setText(DatiEventi.ITEMS.get(i).numUtenti);
-                            break;
-                        }
-                    }
-                }
-            }
-        }.execute();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        /*try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
-        }*/
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        DatiAttributi.removeAll();
-        eAdapter.notifyDataSetChanged();
-        if (dialog != null)
-            dialog.dismiss();
-        if (eventDialog != null)
-            eventDialog.close();
-        if (dialogFriends != null)
-            dialogFriends.dismiss();
-        if (dialogAddFriends != null)
-            dialogAddFriends.dismiss();
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
-    }
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="addRisposte + Vota">
     private void addRisposta(final String id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
