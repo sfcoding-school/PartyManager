@@ -158,7 +158,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
             @Override
             protected String doInBackground(Void... params) {
-                return HelperConnessione.httpDeleteConnection("dio/" + DatiEventi.ITEMS.get(pos).id);
+                return HelperConnessione.httpDeleteConnection("event/" + DatiEventi.ITEMS.get(pos).id);
             }
 
             @Override
