@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.fragment.Evento;
-import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
@@ -30,7 +29,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         this.id_attributo = id_attributo;
     }
 
-    public int getId(){
+    public int getId() {
         return id_attributo;
     }
 

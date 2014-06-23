@@ -40,7 +40,6 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
-import com.partymanager.helper.EventDialog;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.FriendsAdapter;
@@ -51,6 +50,7 @@ import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.Friends;
 import com.partymanager.helper.DataProvide;
+import com.partymanager.helper.EventDialog;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -500,7 +500,7 @@ public class Evento extends Fragment {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="dialogRisposte">
-    public void dialogRisposte(final int arg2){
+    public void dialogRisposte(final int arg2) {
         dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_risposte);
@@ -858,8 +858,8 @@ public class Evento extends Fragment {
         int temp = 0;
         String risposta_max = null, idMax = null;
 
-        for (int i=0 ; i<DatiRisposte.ITEMS.size(); i++){
-            if (DatiRisposte.ITEMS.get(i).persone.size() > temp){
+        for (int i = 0; i < DatiRisposte.ITEMS.size(); i++) {
+            if (DatiRisposte.ITEMS.get(i).persone.size() > temp) {
                 temp = DatiRisposte.ITEMS.get(i).persone.size();
                 idMax = DatiRisposte.ITEMS.get(i).id;
                 risposta_max = DatiRisposte.ITEMS.get(i).risposta;

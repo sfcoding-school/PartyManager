@@ -61,7 +61,7 @@ public class DatiAttributi {
             return id;
         }
 
-        public void changeRisposta(String risposta_max, String idMax){
+        public void changeRisposta(String risposta_max, String idMax) {
             this.id_risposta = idMax;
             this.risposta = risposta_max;
             eAdapter.notifyDataSetChanged();
