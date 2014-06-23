@@ -46,6 +46,7 @@ import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.FriendsAdapter;
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.Friends;
@@ -253,7 +254,13 @@ public class Evento extends Fragment {
 
                 final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
-                edt.setHint("Scrivi qui la tua risposta");
+
+                if (DatiAttributi.ITEMS.get(arg2).close){
+                    edt.setVisibility(View.GONE);
+                    dialogButton.setVisibility(View.GONE);
+                } else {
+                    edt.setHint("Scrivi qui la tua risposta");
+                }
 
                 final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
 
@@ -566,7 +573,7 @@ public class Evento extends Fragment {
                 JSONArray jsArray = new JSONArray(id_toSend);
 
                 Log.e("Evento-AddFriends-Persone prima di invio: ", jsArray.toString());
-                addFriendsToEvent(jsArray.toString());
+                addFriendsToEvent(jsArray.toString(), jsArray.length());
                 if (!id_to_invite.toString().equals(""))
                     sendInviti(id_to_invite.toString());
 
@@ -598,7 +605,7 @@ public class Evento extends Fragment {
         });
     }
 
-    private void addFriendsToEvent(final String List) {
+    private void addFriendsToEvent(final String List, final int quanti_aggiunti) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -625,6 +632,7 @@ public class Evento extends Fragment {
                 id_toSend.clear();
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
+
                 if (!result.equals("fatto")) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                     alertDialogBuilder.setMessage(getString(R.string.errAggAmico));
@@ -640,10 +648,15 @@ public class Evento extends Fragment {
                 } else {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
-                    //da aggiungere al json ??
+
+                    for (int i=0; i<DatiEventi.ITEMS.size(); i++){
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)){
+                            DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
+                            break;
+                        }
+                    }
                 }
             }
-
         }.execute();
     }
 
@@ -678,6 +691,13 @@ public class Evento extends Fragment {
                     alertDialog.show();
                 } else {
                     DatiFriends.removeItem(i);
+
+                    for (int i=0; i<DatiEventi.ITEMS.size(); i++){
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)){
+                            DatiEventi.ITEMS.get(i).numUtenti--;
+                            break;
+                        }
+                    }
                 }
             }
 

@@ -336,7 +336,7 @@ public class EventDialog {
             @Override
             protected String doInBackground(Void... params) {
 
-                String chiusa = "0";
+                String chiusa = String.valueOf(chiusura.isChecked() ? 1 : 0);
                 String[] name, param;
 
                 if (template.equals("")) {
