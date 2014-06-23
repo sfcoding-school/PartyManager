@@ -1,7 +1,10 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.EventAdapter;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
@@ -74,14 +78,23 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-                Log.e("long clicked", "pos: " + pos);
+                                           final int pos, long id) {
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
                 int temp = R.menu.popup_esci_da_evento;
                 if (DatiEventi.ITEMS.get(pos).admin.equals(HelperFacebook.getFacebookId()))
                     temp = R.menu.popup_delete;
 
                 popup.getMenuInflater().inflate(temp, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(android.view.MenuItem item) {
+                        esciEliminaDaEvento(pos);
+                        return true;
+                    }
+                });
+
                 popup.show();
                 return true;
             }
@@ -123,7 +136,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
@@ -139,6 +151,35 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
     public static interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id, String name, String admin, String numU);
+    }
+
+    public void esciEliminaDaEvento(final int pos) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                return HelperConnessione.httpDeleteConnection("dio/" + DatiEventi.ITEMS.get(pos).id);
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+                if (!ris.equals("fatto")) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errEsciDaEvento));
+
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    DatiEventi.ITEMS.remove(pos);
+                }
+            }
+        }.execute(null, null, null);
     }
 
 }

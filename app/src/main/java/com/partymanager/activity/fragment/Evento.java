@@ -399,7 +399,7 @@ public class Evento extends Fragment {
                     for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
                         if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti--;
-                            bnt_friends.setText(""+DatiEventi.ITEMS.get(i).numUtenti);
+                            bnt_friends.setText("" + DatiEventi.ITEMS.get(i).numUtenti);
                             break;
                         }
                     }

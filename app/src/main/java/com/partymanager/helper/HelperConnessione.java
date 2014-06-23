@@ -149,6 +149,8 @@ public class HelperConnessione {
             HttpResponse response = httpclient.execute(httpDel);
             String temp = EntityUtils.toString(response.getEntity());
 
+            Log.e("HelperConnessione-Delete-ris", "url: " + URL +  url + " \nrisposta: " + temp);
+
             if (temp.equals("session error")) {
                 login();
                 return httpDeleteConnection(url);

@@ -14,6 +14,7 @@
 
     <!-- Fragment Eventi -->
     <string name="emptyEventi">Non hai ancora Eventi</string>
+    <string name="errEsciDaEvento">Errore nell\'uscire dall\'evento</string>
 
     <!-- altro Bho -->
     <string name="hello_blank_fragment">Hello Archivio</string>
