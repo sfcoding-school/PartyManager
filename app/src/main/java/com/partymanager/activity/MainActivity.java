@@ -152,12 +152,16 @@ public class MainActivity extends Activity
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActionBar().setTitle(mTitle);
+                noMenuActionBar = false;
+                invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActionBar().setTitle("Party Manager");
+                noMenuActionBar = true;
+                invalidateOptionsMenu();
             }
         };
 

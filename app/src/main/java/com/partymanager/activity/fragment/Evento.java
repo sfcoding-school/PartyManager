@@ -263,7 +263,7 @@ public class Evento extends Fragment {
                         if (!"".equals(edt.getText().toString())) {
                             dialogButton.setVisibility(View.GONE);
                             pb_add.setVisibility(View.VISIBLE);
-                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add);
+                            addRisposta(DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
                         }
                     }
                 });
@@ -311,7 +311,7 @@ public class Evento extends Fragment {
                             public void onClick(View view) {
                                 String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                                 pb_data.setVisibility(View.VISIBLE);
-                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data);
+                                addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
                             }
                         });
                     }
@@ -722,7 +722,7 @@ public class Evento extends Fragment {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="addRisposte + Vota">
-    private void addRisposta(final String id_attributo, final String risposta, final String template, final ProgressBar pb_add) {
+    private void addRisposta(final String id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -747,6 +747,8 @@ public class Evento extends Fragment {
             @Override
             protected void onPostExecute(String ris) {
                 pb_add.setVisibility(View.GONE);
+                if (dialogButton != null)
+                    dialogButton.setVisibility(View.VISIBLE);
                 if (isInteger(ris)) {
                     JSONObject pers = new JSONObject();
                     JSONArray userL = new JSONArray();
@@ -828,7 +830,7 @@ public class Evento extends Fragment {
 
         if (DatiRisposte.ITEMS.size() == 1) {
             //non esiste ancora la risposta no
-            addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa, "sino", pb_sino);
+            addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa, "sino", pb_sino, null);
         } else {
             if (cosa.equals("si"))
                 vota(DatiRisposte.ITEMS.get(0).id, 0, pb_sino);
