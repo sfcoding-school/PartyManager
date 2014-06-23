@@ -45,6 +45,7 @@ public class MainActivity extends Activity
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private FragmentManager fragmentManager;
     private boolean noMenuActionBar = false;
+    private boolean drawerAperto = false;
     public static CharSequence mTitle;
     private static Activity mContext;
     RelativeLayout leftRL;
@@ -152,7 +153,7 @@ public class MainActivity extends Activity
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActionBar().setTitle(mTitle);
-                noMenuActionBar = false;
+                drawerAperto = false;
                 invalidateOptionsMenu();
             }
 
@@ -160,7 +161,7 @@ public class MainActivity extends Activity
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActionBar().setTitle("Party Manager");
-                noMenuActionBar = true;
+                drawerAperto = true;
                 invalidateOptionsMenu();
             }
         };
@@ -320,11 +321,19 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int temp;
+
         if (!noMenuActionBar) {
-            getMenuInflater().inflate(R.menu.main, menu);
+            temp = R.menu.main;
         } else {
-            getMenuInflater().inflate(R.menu.main_no_menu, menu);
+            temp = R.menu.main_no_menu;
         }
+
+        if (drawerAperto)
+            temp = R.menu.main_no_menu;
+
+        getMenuInflater().inflate(temp, menu);
+
         MenuItem prova = menu.findItem(R.id.progressBarSmall);
         prova.setVisible(progressBarVisible);
         restoreActionBar();
