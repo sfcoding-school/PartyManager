@@ -75,7 +75,7 @@ public class MainActivity extends Activity
                     }
                 } else if (type.equals("newAttr")) {
                     if (fragmentManager.findFragmentByTag("Evento") != null && fragmentManager.findFragmentByTag("Evento").isVisible()) {
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2, null));
                     }
                 }
             }

@@ -231,7 +231,8 @@ public class DataProvide {
                         jsonArray.getJSONObject(i).getString("template"),
                         Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa")),
                         (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numd"),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numr")
+                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numr"),
+                        jsonArray.getJSONObject(i).getString("id_risposta")
                 ));
             }
             Evento.checkTemplate();

@@ -1,4 +1,4 @@
-package com.partymanager.activity;
+package com.partymanager.helper;
 
 import android.app.Activity;
 import android.app.AlertDialog;

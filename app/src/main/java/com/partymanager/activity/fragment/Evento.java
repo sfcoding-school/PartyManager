@@ -40,7 +40,7 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
-import com.partymanager.activity.EventDialog;
+import com.partymanager.helper.EventDialog;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.FriendsAdapter;
@@ -78,6 +78,7 @@ public class Evento extends Fragment {
     private String numUtenti;
     private TextView bnt_friends;
     boolean animation;
+    static RisposteAdapter adapter;
 
     AttributiAdapter eAdapter;
     ListView listView;
@@ -87,7 +88,6 @@ public class Evento extends Fragment {
     static TextView quando_data;
     TextView quando_ora;
     static TextView dove;
-    static int attuale;
     int mLastFirstVisibleItem = 0;
     Dialog dialog;
     EditText edt;
@@ -241,10 +241,7 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
-
-                attuale = arg2;
                 dialogRisposte(arg2);
-
             }
         });
 
@@ -509,7 +506,7 @@ public class Evento extends Fragment {
         dialog.setContentView(R.layout.dialog_risposte);
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        final RisposteAdapter adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti));
+        adapter = DatiRisposte.init(getActivity().getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti), arg2);
         risp.setAdapter(adapter);
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
@@ -552,7 +549,7 @@ public class Evento extends Fragment {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        addDomandaSino("no", pb_sino);
+                        addDomandaSino("no", pb_sino, arg2);
                     }
                 });
 
@@ -561,9 +558,14 @@ public class Evento extends Fragment {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        addDomandaSino("si", pb_sino);
+                        addDomandaSino("si", pb_sino, arg2);
                     }
                 });
+
+                if (DatiAttributi.ITEMS.get(arg2).close) {
+                    si.setVisibility(View.GONE);
+                    no.setVisibility(View.GONE);
+                }
             }
             if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
                 LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
@@ -584,6 +586,11 @@ public class Evento extends Fragment {
                         addRisposta(DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
                     }
                 });
+
+                if (DatiAttributi.ITEMS.get(arg2).close) {
+                    add.setVisibility(View.GONE);
+                    dateR.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -777,8 +784,10 @@ public class Evento extends Fragment {
             @Override
             protected void onPostExecute(String ris) {
                 pb_add.setVisibility(View.GONE);
+
                 if (dialogButton != null)
                     dialogButton.setVisibility(View.VISIBLE);
+
                 if (isInteger(ris)) {
                     JSONObject pers = new JSONObject();
                     JSONArray userL = new JSONArray();
@@ -807,7 +816,7 @@ public class Evento extends Fragment {
         }.execute(null, null, null);
     }
 
-    public static void vota(final String idRisposta, final int position, final ProgressBar pb_vota) {
+    public static void vota(final Button vota, final String idRisposta, final int position, final ProgressBar pb_vota) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -822,26 +831,41 @@ public class Evento extends Fragment {
                 name = new String[]{"idRisposta"};
                 param = new String[]{idRisposta};
 
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(attuale).id, name, param);
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(adapter.getId()).id, name, param);
             }
 
             @Override
             protected void onPostExecute(String ris) {
                 pb_vota.setVisibility(View.GONE);
+                if (vota != null)
+                    vota.setVisibility(View.VISIBLE);
+
                 Log.e("Evento-vota-ris:", ris);
+
                 if (ris.equals("aggiornato")) {
-                    graficaVota(position);
+                    graficaVota(position, adapter.getId());
                 }
             }
         }.execute(null, null, null);
     }
 
-    public static void graficaVota(int position) {
+    public static void graficaVota(int position, int attuale) {
         cercami();
 
         if (DatiRisposte.ITEMS.size() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
             DatiRisposte.ITEMS.get(position).addPersona(new DatiRisposte.Persona(HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName()));
 
+        int temp = 0;
+        String risposta_max = null, idMax = null;
+
+        for (int i=0 ; i<DatiRisposte.ITEMS.size(); i++){
+            if (DatiRisposte.ITEMS.get(i).persone.size() > temp){
+                temp = DatiRisposte.ITEMS.get(i).persone.size();
+                idMax = DatiRisposte.ITEMS.get(i).id;
+                risposta_max = DatiRisposte.ITEMS.get(i).risposta;
+            }
+        }
+        DatiAttributi.ITEMS.get(attuale).changeRisposta(risposta_max, idMax);
     }
 
     private static void cercami() {
@@ -856,16 +880,15 @@ public class Evento extends Fragment {
         }
     }
 
-    public void addDomandaSino(String cosa, ProgressBar pb_sino) {
+    public void addDomandaSino(String cosa, ProgressBar pb_sino, int attuale) {
 
         if (DatiRisposte.ITEMS.size() == 1) {
-            //non esiste ancora la risposta no
             addRisposta(DatiAttributi.ITEMS.get(attuale).id, cosa, "sino", pb_sino, null);
         } else {
             if (cosa.equals("si"))
-                vota(DatiRisposte.ITEMS.get(0).id, 0, pb_sino);
+                vota(null, DatiRisposte.ITEMS.get(0).id, 0, pb_sino);
             else {
-                vota(DatiRisposte.ITEMS.get(1).id, 1, pb_sino);
+                vota(null, DatiRisposte.ITEMS.get(1).id, 1, pb_sino);
             }
         }
     }
@@ -885,23 +908,23 @@ public class Evento extends Fragment {
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1, null));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1, null));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1, null));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
@@ -909,12 +932,12 @@ public class Evento extends Fragment {
                         if (close) {
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1, null));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
                         ris2 = "1 voto: 100% SI";
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1, null));
                         break;
                 }
             }

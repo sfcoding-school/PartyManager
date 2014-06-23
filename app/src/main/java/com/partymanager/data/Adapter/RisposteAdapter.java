@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.partymanager.R;
 import com.partymanager.activity.fragment.Evento;
+import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
@@ -21,10 +22,16 @@ import java.util.ArrayList;
 public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     private int num_pers_evento;
+    private int id_attributo;
 
-    public RisposteAdapter(Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento) {
+    public RisposteAdapter(Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo) {
         super(context, R.layout.risposta_row, Risposta);
         this.num_pers_evento = num_pers_evento;
+        this.id_attributo = id_attributo;
+    }
+
+    public int getId(){
+        return id_attributo;
     }
 
     @Override
@@ -62,7 +69,8 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Evento.vota(DatiRisposte.ITEMS.get(position).id, position, pb_vota);
+
+                Evento.vota(vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
                 vota.setVisibility(View.GONE);
             }
         });
