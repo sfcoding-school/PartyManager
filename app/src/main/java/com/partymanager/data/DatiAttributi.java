@@ -43,8 +43,9 @@ public class DatiAttributi {
         public Boolean close;
         public int numd;
         public int numr;
+        public String id_risposta;
 
-        public Attributo(String id, String domanda, String risposta, String template, Boolean close, int numd, int numr) {
+        public Attributo(String id, String domanda, String risposta, String template, Boolean close, int numd, int numr, String id_risposta) {
             this.id = id;
             this.domanda = domanda;
             this.risposta = risposta;
@@ -52,11 +53,18 @@ public class DatiAttributi {
             this.close = close;
             this.numd = numd; /* Quanti hanno risposto/votato in questo attributo */
             this.numr = numr; /* Quanti hanno risposto alla domanda più votata */
+            this.id_risposta = id_risposta;
         }
 
         @Override
         public String toString() {
             return id;
+        }
+
+        public void changeRisposta(String risposta_max, String idMax) {
+            this.id_risposta = idMax;
+            this.risposta = risposta_max;
+            eAdapter.notifyDataSetChanged();
         }
     }
 }

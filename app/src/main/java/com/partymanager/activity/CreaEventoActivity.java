@@ -34,6 +34,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
+import com.partymanager.data.DatiEventi;
 import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
@@ -357,6 +358,8 @@ public class CreaEventoActivity extends Activity {
         intent.putExtra("id_evento", id_evento);
         intent.putExtra("num_utenti", num_utenti);
         setResult(0, intent);
+
+        DatiEventi.addItem(new DatiEventi.Evento(Integer.parseInt(id_evento), nome_evento, "", "", HelperFacebook.getFacebookId(), Integer.parseInt(num_utenti)));
 
         finish();
     }
