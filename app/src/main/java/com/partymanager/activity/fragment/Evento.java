@@ -76,7 +76,7 @@ public class Evento extends Fragment {
     private String nomeEvento;
     private String adminEvento;
     private String numUtenti;
-    private ImageButton bnt_friends;
+    private TextView bnt_friends;
     boolean animation;
 
     AttributiAdapter eAdapter;
@@ -176,13 +176,15 @@ public class Evento extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.eventList);
         riepilogo = view.findViewById(R.id.stickyheader);
-        bnt_friends = (ImageButton) view.findViewById(R.id.imgButton_amici);
+        bnt_friends = (TextView) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
         final View add_domanda = view.findViewById(R.id.circle);
+
+        bnt_friends.setText(numUtenti);
 
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +257,7 @@ public class Evento extends Fragment {
                 final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
                 edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
 
-                if (DatiAttributi.ITEMS.get(arg2).close){
+                if (DatiAttributi.ITEMS.get(arg2).close) {
                     edt.setVisibility(View.GONE);
                     dialogButton.setVisibility(View.GONE);
                 } else {
@@ -649,9 +651,10 @@ public class Evento extends Fragment {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
 
-                    for (int i=0; i<DatiEventi.ITEMS.size(); i++){
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)){
+                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
+                            bnt_friends.setText(numUtenti + quanti_aggiunti);
                             break;
                         }
                     }
@@ -692,15 +695,15 @@ public class Evento extends Fragment {
                 } else {
                     DatiFriends.removeItem(i);
 
-                    for (int i=0; i<DatiEventi.ITEMS.size(); i++){
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)){
+                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
+                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti--;
+                            bnt_friends.setText(DatiEventi.ITEMS.get(i).numUtenti);
                             break;
                         }
                     }
                 }
             }
-
         }.execute();
     }
 

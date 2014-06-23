@@ -90,6 +90,7 @@ public class EventDialog {
     }
 
     public void which(int pos) {
+        chiusura.setChecked(false);
         switch (pos) {
             case 0:
                 personalizzata();
