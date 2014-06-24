@@ -31,6 +31,11 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void removeItem(int pos){
+        ITEMS.remove(pos);
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static class Evento {
         public int id;
         public String name;

@@ -152,7 +152,8 @@ public class GcmIntentService extends IntentService {
                     'id_user': idFacebook,
                     'user_name': getFacebookName(idFacebook)
                      */
-                    sendNotification("Amico eliminato", extras.getString("user_name") + " è stato rimosso dall'evento " + extras.getString("nome_evento"));
+
+                    sendNotification("Amico eliminato ", extras.getString("user_name") + " è stato rimosso dall'evento " + extras.getString("nome_evento"));
                 } else if (s.equals("test")) {
                     Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
                     if (nessuna_notifica)

@@ -176,7 +176,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 } else {
-                    DatiEventi.ITEMS.remove(pos);
+                    DatiEventi.removeItem(pos);
                 }
             }
         }.execute(null, null, null);

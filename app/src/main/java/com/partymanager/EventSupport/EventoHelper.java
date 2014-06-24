@@ -424,7 +424,7 @@ public class EventoHelper {
                         if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
                             int temp = Integer.parseInt(numUtenti) + quanti_aggiunti;
-                            bnt_friends.setText(temp);
+                            bnt_friends.setText("" + temp);
                             break;
                         }
                     }
@@ -467,7 +467,7 @@ public class EventoHelper {
 
                     for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
                         if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
-                            DatiEventi.ITEMS.get(i).numUtenti--;
+                            DatiEventi.ITEMS.get(i).numUtenti -= 1;
                             bnt_friends.setText("" + DatiEventi.ITEMS.get(i).numUtenti);
                             break;
                         }
