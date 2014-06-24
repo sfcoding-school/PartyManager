@@ -201,7 +201,7 @@ public class DataProvide {
     }
 
     private static void loadIntoEventiAdapter(JSONArray jsonArray) {
-        DatiEventi.removeAll(false);
+        DatiEventi.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiEventi.addItem(new DatiEventi.Evento(
