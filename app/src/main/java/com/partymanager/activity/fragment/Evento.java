@@ -1,11 +1,8 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,7 +22,6 @@ import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
-import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
@@ -210,7 +206,7 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaDomanda(pos);
+                            EventoHelper.eliminaDomanda(pos, idEvento, getActivity());
                             return true;
                         }
                     });
@@ -255,40 +251,6 @@ public class Evento extends Fragment {
         // </editor-fold>
 
         return view;
-    }
-
-    private void eliminaDomanda(final int pos) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
-
-                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id + " \nrisposta: " + ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                if (ris.equals("fatto")) {
-                    DatiAttributi.removeItem(pos);
-                } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                    alertDialogBuilder.setMessage(getString(R.string.errDeleteDomanda));
-
-                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-            }
-        }.execute(null, null, null);
     }
 
     @Override

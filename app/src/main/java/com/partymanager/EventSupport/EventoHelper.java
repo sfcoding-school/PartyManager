@@ -237,6 +237,40 @@ public class EventoHelper {
         }.execute(null, null, null);
     }
 
+    public static void eliminaDomanda(final int pos, final String idEvento, final Activity activity) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
+
+                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id + " \nrisposta: " + ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+                if (ris.equals("fatto")) {
+                    DatiAttributi.removeItem(pos);
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+                    alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteDomanda));
+
+                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            }
+        }.execute(null, null, null);
+    }
+
     private static void addRisposta(final String idEvento, final String id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
         new AsyncTask<Void, Void, String>() {
 
