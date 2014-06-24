@@ -201,7 +201,7 @@ public class DataProvide {
     }
 
     private static void loadIntoEventiAdapter(JSONArray jsonArray) {
-        DatiEventi.removeAll();
+        DatiEventi.removeAll(false);
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiEventi.addItem(new DatiEventi.Evento(
@@ -221,7 +221,7 @@ public class DataProvide {
     }
 
     private static void loadIntoAttributiAdapter(JSONArray jsonArray) {
-        DatiAttributi.removeAll();
+        DatiAttributi.removeAll(false, null);
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(

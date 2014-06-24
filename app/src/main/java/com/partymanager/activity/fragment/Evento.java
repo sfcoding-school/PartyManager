@@ -3,6 +3,7 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +23,13 @@ import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiRisposte;
+import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -203,6 +210,16 @@ public class Evento extends Fragment {
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
                     PopupMenu popup = new PopupMenu(getActivity(), arg1);
                     popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(android.view.MenuItem item) {
+                            eliminaDomanda();
+                            return true;
+                        }
+                    });
+
                     popup.show();
                 }
 
@@ -245,6 +262,26 @@ public class Evento extends Fragment {
         return view;
     }
 
+    private void eliminaDomanda() {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                String ris = HelperConnessione.httpDeleteConnection("qualcosa");
+
+                Log.e("eliminaDomanda-ris: ", ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+
+            }
+        }.execute(null, null, null);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -264,7 +301,7 @@ public class Evento extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        DatiAttributi.removeAll();
+        DatiAttributi.removeAll(true, idEvento);
         eAdapter.notifyDataSetChanged();
     }
 

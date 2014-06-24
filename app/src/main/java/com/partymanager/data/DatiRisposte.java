@@ -31,7 +31,6 @@ public class DatiRisposte {
 
     public static void removeAll(Boolean salva_anche, String id_evento, String id_attributo) {
         if (salva_anche) {
-            Log.e("DatiRisposte-toJson-prima di invio", ITEMS.toString() + " " + ITEMS.size());
             toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
         }
         ITEMS.removeAll(ITEMS);
@@ -43,7 +42,6 @@ public class DatiRisposte {
 
             @Override
             protected JSONArray doInBackground(Void... params) {
-                Log.e("DatiRisposte-toJson-appenaArrivato", ITEMS_temp.toString() + " " + ITEMS_temp.size());
                 JSONArray jsonArr = new JSONArray();
                 try {
                     for (Risposta aITEMS_temp : ITEMS_temp) {
@@ -69,9 +67,7 @@ public class DatiRisposte {
                     Log.e("DatiRisposte-toJson", "NullPointerException " + e);
                     return null;
                 }
-
                 return jsonArr;
-
             }
 
             @Override
@@ -84,7 +80,6 @@ public class DatiRisposte {
                 }
             }
         }.execute(null, null, null);
-
     }
 
     public static void addItem(Risposta item) {

@@ -118,7 +118,7 @@ public class MainActivity extends Activity
     @Override
     protected void onStop() {
         super.onStop();
-
+        DatiEventi.removeAll(true);
     }
 
     protected void showAbout() {
@@ -277,7 +277,6 @@ public class MainActivity extends Activity
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
-
 
     private void changeFragment(int pos) {
         fragmentManager.popBackStackImmediate();
