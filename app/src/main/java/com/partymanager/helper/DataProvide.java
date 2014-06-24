@@ -367,8 +367,6 @@ public class DataProvide {
 
     private static JSONArray stringToJsonArrayBefore(String jsonString) {
         try {
-            //JSONObject json_data = new JSONObject(jsonString);
-            //String status = json_data.getString("results");
             return new JSONArray(jsonString);
         } catch (JSONException e) {
             Log.e("DataProvide-stringToJsonArrayBefore", "JSONException " + e);

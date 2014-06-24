@@ -423,9 +423,4 @@ public class EventDialog {
         }
         return true;
     }
-
-    public void close() {
-        if (dialog != null)
-            dialog.dismiss();
-    }
 }
