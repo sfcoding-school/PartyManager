@@ -1,4 +1,4 @@
-package com.partymanager.helper;
+package com.partymanager.EventSupport;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.partymanager.R;
+import com.partymanager.helper.HelperConnessione;
+import com.partymanager.helper.HelperFacebook;
 
 public class EventDialog {
 
@@ -420,10 +422,5 @@ public class EventDialog {
             return false;
         }
         return true;
-    }
-
-    public void close() {
-        if (dialog != null)
-            dialog.dismiss();
     }
 }
