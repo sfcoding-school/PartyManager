@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
-import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
@@ -22,11 +22,13 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     private int num_pers_evento;
     private int id_attributo;
+    private String idEvento;
 
-    public RisposteAdapter(Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo) {
+    public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo) {
         super(context, R.layout.risposta_row, Risposta);
         this.num_pers_evento = num_pers_evento;
         this.id_attributo = id_attributo;
+        this.idEvento = idEvento;
     }
 
     public int getId() {
@@ -43,7 +45,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         TextView risp = (TextView) convertView.findViewById(R.id.txt_risposta2);
 
         String temp_risposta = DatiRisposte.ITEMS.get(position).risposta;
-        if (DatiRisposte.ITEMS.get(position).template.equals("data")) {
+        if (DatiRisposte.ITEMS.get(position).template != null && DatiRisposte.ITEMS.get(position).template.equals("data")) {
             temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
         }
 
@@ -69,12 +71,12 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
             @Override
             public void onClick(View view) {
 
-                Evento.vota(vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
+                EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
                 vota.setVisibility(View.GONE);
             }
         });
 
-        if (DatiRisposte.ITEMS.get(position).template.equals("sino")) {
+        if (DatiRisposte.ITEMS.get(position).template != null && DatiRisposte.ITEMS.get(position).template.equals("sino")) {
             vota.setVisibility(View.GONE);
             temp_risposta += " " + (100 * DatiRisposte.ITEMS.get(position).persone.size()) / num_pers_evento + "%";
         }

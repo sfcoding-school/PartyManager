@@ -152,7 +152,6 @@ public class MainActivity extends Activity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActionBar().setTitle(mTitle);
                 drawerAperto = false;
                 invalidateOptionsMenu();
             }
@@ -160,7 +159,6 @@ public class MainActivity extends Activity
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle("Party Manager");
                 drawerAperto = true;
                 invalidateOptionsMenu();
             }
@@ -329,14 +327,22 @@ public class MainActivity extends Activity
             temp = R.menu.main_no_menu;
         }
 
-        if (drawerAperto)
+        if (drawerAperto) {
             temp = R.menu.main_no_menu;
+        }
 
         getMenuInflater().inflate(temp, menu);
 
         MenuItem prova = menu.findItem(R.id.progressBarSmall);
         prova.setVisible(progressBarVisible);
         restoreActionBar();
+
+        String title = (String) mTitle;
+        if (drawerAperto)
+            title = "Party Manager";
+
+        getActionBar().setTitle(title);
+
         return true;
     }
 

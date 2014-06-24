@@ -24,7 +24,7 @@ public class DatiRisposte {
 
     public static RisposteAdapter init(Context context, String id_evento, String id_attr, int num_pers, int id_attributo) {
         context_global = context;
-        eAdapter = new RisposteAdapter(context, DatiRisposte.ITEMS, num_pers, id_attributo);
+        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attributo);
         DataProvide.getRisposte(id_evento, id_attr, context);
         return eAdapter;
     }
