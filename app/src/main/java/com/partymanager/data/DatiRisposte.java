@@ -87,6 +87,11 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void removeItem(int pos) {
+        ITEMS.remove(pos);
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static class Risposta {
         public String id;
         public String risposta;

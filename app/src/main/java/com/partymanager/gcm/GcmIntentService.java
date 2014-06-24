@@ -18,7 +18,6 @@ import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.helper.DataProvide;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -118,7 +117,7 @@ public class GcmIntentService extends IntentService {
                     } else {
 
                     }
-                }else if (s.equals("delEvent")) {
+                } else if (s.equals("delEvent")) {
                     /*
                     'id_evento': str(idEvento),
                     'nome_evento': Database.getEventName(idEvento),
@@ -126,16 +125,16 @@ public class GcmIntentService extends IntentService {
                      */
                     sendNotification("Evento Eliminato", extras.getString("admin_name") + " ha eliminato l'evento " + extras.getString("nome_evento"));
 
-                }else if (s.equals("uscitoEvent")) {
+                } else if (s.equals("uscitoEvent")) {
                     /*
                     'id_evento': str(idEvento),
                    'nome_evento': Database.getEventName(idEvento),
                    'id_user': user,
                    'name_user': getFacebookName(admin)
                      */
-                   sendNotification("Utente uscito", extras.getString("name_user") + " è uscito dall'evento " + extras.getString("nome_evento"));
+                    sendNotification("Utente uscito", extras.getString("name_user") + " è uscito dall'evento " + extras.getString("nome_evento"));
 
-                }else if (s.equals("addFriends")) {
+                } else if (s.equals("addFriends")) {
                     /*
                     'type': 'addFriends',
                     'id_evento': idEvento,
@@ -143,7 +142,7 @@ public class GcmIntentService extends IntentService {
                     'user_list': Facebook.getFacebookName(userList)})
                      */
                     sendNotification("Aggiunti amici", extras.getString("user_list") + "sono stati aggiunti all'evento" + extras.getString("nome_evento"));
-                }else if (s.equals("delFriends")){
+                } else if (s.equals("delFriends")) {
                     /*
                     'type': 'delFriends',
                     'id_evento': str(idEvento),

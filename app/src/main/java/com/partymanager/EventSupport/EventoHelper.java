@@ -72,7 +72,7 @@ public class EventoHelper {
     static ProgressDialog progressDialog;
 
 
-    public static void dialogRisposte(final int arg2, Activity activity, final String idEvento, String numUtenti) {
+    public static void dialogRisposte(final String adminEvento, final int arg2, final Activity activity, final String idEvento, String numUtenti) {
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_risposte);
@@ -80,6 +80,27 @@ public class EventoHelper {
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
         RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti), arg2);
         risp.setAdapter(adapter);
+
+        risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                    PopupMenu popup = new PopupMenu(activity, view);
+                    popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(android.view.MenuItem item) {
+                            eliminaRisposta(i, idEvento, activity);
+                            return true;
+                        }
+                    });
+
+                    popup.show();
+                }
+            }
+        });
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
         text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
@@ -180,6 +201,40 @@ public class EventoHelper {
         });
 
         dialog.show();
+    }
+
+    private static void eliminaRisposta(final int pos, final String idEvento, final Activity activity) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                String ris = HelperConnessione.httpDeleteConnection("qualcosa/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
+
+                Log.e("Evento-Helper-eliminaRisposta-ris: ", " \nrisposta: " + ris);
+
+                return ris;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+                if (ris.equals("fatto")) {
+                    DatiRisposte.removeItem(pos);
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+                    alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteRisposta));
+
+                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            }
+        }.execute(null, null, null);
     }
 
     private static void addRisposta(final String idEvento, final String id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {

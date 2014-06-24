@@ -74,6 +74,8 @@
     <string name="aggiuntaAmico">Invio richiesta …</string>
     <string name="errAggAmico">Errore aggiunta amico all\'evento</string>
     <string name="errDeleteFriend">Errore nell\'eliminazione user</string>
+    <string name="errDeleteDomanda">Errore nella eliminazione della domanda</string>
+    <string name="errDeleteRisposta">Errore nella eliminazione di una risposta</string>
 
     <!--Drawer-->
     <string-array name="list_names">

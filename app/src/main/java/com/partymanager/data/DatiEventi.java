@@ -21,10 +21,7 @@ public class DatiEventi {
     public static EventAdapter eAdapter;
     private static Context context_global;
 
-    public static void removeAll(Boolean salva_anche) {
-        if (salva_anche) {
-            toJson(new ArrayList<Evento>(ITEMS));
-        }
+    public static void removeAll() {
         ITEMS.removeAll(ITEMS);
         eAdapter.notifyDataSetChanged();
     }
@@ -81,9 +78,13 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeItem(int pos){
+    public static void removeItem(int pos) {
         ITEMS.remove(pos);
         eAdapter.notifyDataSetChanged();
+    }
+
+    public static void save() {
+        toJson(new ArrayList<Evento>(ITEMS));
     }
 
     public static class Evento {

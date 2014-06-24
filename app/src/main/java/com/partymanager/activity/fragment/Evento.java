@@ -1,8 +1,10 @@
 package com.partymanager.activity.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,13 +25,8 @@ import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
-import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -196,16 +193,14 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
-                EventoHelper.dialogRisposte(arg2, getActivity(), idEvento, numUtenti);
+                EventoHelper.dialogRisposte(adminEvento, arg2, getActivity(), idEvento, numUtenti);
             }
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-
-                Log.e("long clicked", "pos: " + pos);
+                                           final int pos, long id) {
 
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
                     PopupMenu popup = new PopupMenu(getActivity(), arg1);
@@ -215,7 +210,7 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaDomanda();
+                            eliminaDomanda(pos);
                             return true;
                         }
                     });
@@ -262,22 +257,36 @@ public class Evento extends Fragment {
         return view;
     }
 
-    private void eliminaDomanda() {
+    private void eliminaDomanda(final int pos) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("qualcosa");
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
 
-                Log.e("eliminaDomanda-ris: ", ris);
+                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id + " \nrisposta: " + ris);
 
                 return ris;
             }
 
             @Override
             protected void onPostExecute(String ris) {
+                if (ris.equals("fatto")) {
+                    DatiAttributi.removeItem(pos);
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.errDeleteDomanda));
 
+                    alertDialogBuilder.setPositiveButton(getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
             }
         }.execute(null, null, null);
     }

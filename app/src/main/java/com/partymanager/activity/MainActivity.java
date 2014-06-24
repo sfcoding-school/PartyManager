@@ -118,7 +118,7 @@ public class MainActivity extends Activity
     @Override
     protected void onStop() {
         super.onStop();
-        DatiEventi.removeAll(true);
+        DatiEventi.save();
     }
 
     protected void showAbout() {
