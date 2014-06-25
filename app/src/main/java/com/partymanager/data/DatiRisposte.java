@@ -22,9 +22,9 @@ public class DatiRisposte {
     public static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
     private static Context context_global;
 
-    public static RisposteAdapter init(Context context, String id_evento, String id_attr, int num_pers, int id_attributo) {
+    public static RisposteAdapter init(Context context, String id_evento, String id_attr, int num_pers, int arg2, boolean chiusa) {
         context_global = context;
-        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attributo);
+        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, Integer.parseInt(id_attr), arg2, chiusa);
         DataProvide.getRisposte(id_evento, id_attr, context);
         return eAdapter;
     }

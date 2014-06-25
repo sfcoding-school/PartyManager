@@ -70,21 +70,32 @@ public class EventoHelper {
     static Dialog dialogAddFriends;
     static ArrayList<String> id_toSend;
     static ProgressDialog progressDialog;
+    static int arg2;
+    static Button si;
+    static Button no;
+    static ImageButton dialogButton;
+    static DatePicker dateR;
+    static Button add;
 
 
-    public static void dialogRisposte(final String adminEvento, final int arg2, final Activity activity, final String idEvento, String numUtenti) {
+    public static void dialogRisposte(final String adminEvento, int arg, final Activity activity, final String idEvento, String numUtenti) {
+
+        arg2 = arg;
+
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_risposte);
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti), arg2);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti), arg2, DatiAttributi.ITEMS.get(arg2).close);
         risp.setAdapter(adapter);
 
         risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                Log.e("provaRISP", "click");
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+
                     PopupMenu popup = new PopupMenu(activity, view);
                     popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
 
@@ -105,7 +116,7 @@ public class EventoHelper {
         TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
         text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
 
-        final ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
+        dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
         edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
 
         if (DatiAttributi.ITEMS.get(arg2).close) {
@@ -123,8 +134,11 @@ public class EventoHelper {
                 if (!"".equals(edt.getText().toString())) {
                     dialogButton.setVisibility(View.GONE);
                     pb_add.setVisibility(View.VISIBLE);
-                    addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
-                }
+                    if (DatiAttributi.ITEMS.get(arg2).close){
+
+                    } else {
+                        addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
+                    } }
             }
         });
 
@@ -137,22 +151,28 @@ public class EventoHelper {
 
                 final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
 
-                Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
+                no = (Button) dialog.findViewById(R.id.btn_risp_no);
                 final RisposteAdapter finalAdapter = adapter;
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
+                        if (DatiAttributi.ITEMS.get(arg2).close){
+
+                        } else {
                         addDomandaSino(finalAdapter, idEvento, "no", pb_sino, arg2);
-                    }
+                    }}
                 });
 
-                Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
+                si = (Button) dialog.findViewById(R.id.btn_risp_si);
                 si.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);
+                        if (DatiAttributi.ITEMS.get(arg2).close){
+
+                        } else {
+                        addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);}
                     }
                 });
 
@@ -169,16 +189,20 @@ public class EventoHelper {
 
                 final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
 
-                final DatePicker dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
+                dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
 
-                Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
+                add = (Button) dialog.findViewById(R.id.button_rispndi_data);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                         pb_data.setVisibility(View.VISIBLE);
-                        addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
+                        if (DatiAttributi.ITEMS.get(arg2).close){
 
+                        } else {
+
+                            addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
+                        }
                     }
                 });
 
@@ -201,6 +225,21 @@ public class EventoHelper {
         });
 
         dialog.show();
+    }
+
+    public static void modificaChiusa(){
+        if (DatiAttributi.ITEMS.get(arg2).template.equals("data")){
+            add.setVisibility(View.VISIBLE);
+            dateR.setVisibility(View.VISIBLE);
+        }
+        if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")){
+            si.setVisibility(View.VISIBLE);
+            no.setVisibility(View.VISIBLE);
+        }
+        if (!DatiAttributi.ITEMS.get(arg2).template.equals("data") && !DatiAttributi.ITEMS.get(arg2).template.equals("sino")){
+            edt.setVisibility(View.VISIBLE);
+            dialogButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private static void eliminaRisposta(final int pos, final String idEvento, final Activity activity) {
@@ -362,7 +401,7 @@ public class EventoHelper {
                 name = new String[]{"idRisposta"};
                 param = new String[]{idRisposta};
 
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(adapter.getId()).id, name, param);
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId(), name, param);
             }
 
             @Override
@@ -374,7 +413,7 @@ public class EventoHelper {
                 Log.e("Evento-vota-ris:", ris);
 
                 if (ris.equals("aggiornato")) {
-                    graficaVota(position, adapter.getId());
+                    graficaVota(position, adapter.getArg2());
                 }
             }
         }.execute(null, null, null);
@@ -396,6 +435,7 @@ public class EventoHelper {
                 risposta_max = DatiRisposte.ITEMS.get(i).risposta;
             }
         }
+
         DatiAttributi.ITEMS.get(attuale).changeRisposta(risposta_max, idMax);
     }
 

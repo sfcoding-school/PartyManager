@@ -23,12 +23,16 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
     private int num_pers_evento;
     private int id_attributo;
     private String idEvento;
+    private boolean chiusa;
+    private int arg2;
 
-    public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo) {
+    public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
         super(context, R.layout.risposta_row, Risposta);
         this.num_pers_evento = num_pers_evento;
         this.id_attributo = id_attributo;
         this.idEvento = idEvento;
+        this.chiusa = chiusa;
+        this.arg2 = arg2; /* posizione attributo su DatiAttributi */
     }
 
     public int getId() {
@@ -66,13 +70,20 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         }
         final Button vota = (Button) convertView.findViewById(R.id.button_voto);
         vota.setVisibility(View.VISIBLE);
+
+        if(chiusa){
+            vota.setText("Modifica");
+        }
+
         final ProgressBar pb_vota = (ProgressBar) convertView.findViewById(R.id.pb_vota);
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (chiusa){
+                    EventoHelper.modificaChiusa();
+                } else {
                 EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
-                vota.setVisibility(View.GONE);
+                vota.setVisibility(View.GONE);}
             }
         });
 
@@ -86,5 +97,9 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         who.setTextColor(Color.BLACK);
 
         return convertView;
+    }
+
+    public int getArg2() {
+        return arg2;
     }
 }

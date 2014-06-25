@@ -41,7 +41,8 @@
             android:layout_height="fill_parent"
             android:divider="#ff000000"
             android:dividerHeight="0.2dp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            />
 
     </LinearLayout>
 

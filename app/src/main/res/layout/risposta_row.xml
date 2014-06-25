@@ -23,10 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_risposta2"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="#ff000000"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp" />
@@ -43,9 +40,7 @@
             android:layout_height="wrap_content"
             android:text="vota"
             android:id="@+id/button_voto"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:focusable="false"/>
 
         <ProgressBar
             android:layout_width="wrap_content"
