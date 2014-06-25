@@ -71,7 +71,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         final Button vota = (Button) convertView.findViewById(R.id.button_voto);
         vota.setVisibility(View.VISIBLE);
 
-        if(chiusa){
+        if (chiusa) {
             vota.setText("Modifica");
         }
 
@@ -79,11 +79,12 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chiusa){
+                if (chiusa) {
                     EventoHelper.modificaChiusa();
                 } else {
-                EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
-                vota.setVisibility(View.GONE);}
+                    EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
+                    vota.setVisibility(View.GONE);
+                }
             }
         });
 

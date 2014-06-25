@@ -208,7 +208,7 @@ public class DataProvide {
                         jsonArray.getJSONObject(i).getInt("id_evento"),
                         jsonArray.getJSONObject(i).getString("nome_evento"),
                         "content",
-                        jsonArray.getJSONObject(i).getString("data"),
+                        jsonArray.getJSONObject(i).optString("data"), /*Returns the value mapped by name if it exists, coercing it if necessary. Returns the empty string if no such mapping exists.*/
                         jsonArray.getJSONObject(i).getString("admin"),
                         jsonArray.getJSONObject(i).getInt("num_utenti")
                 ));
@@ -230,8 +230,8 @@ public class DataProvide {
                         (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? "" : jsonArray.getJSONObject(i).getString("risposta"),
                         jsonArray.getJSONObject(i).getString("template"),
                         Boolean.valueOf(jsonArray.getJSONObject(i).getString("chiusa")),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numd"),
-                        (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numr"),
+                        (jsonArray.getJSONObject(i).getString("numd").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numd"),
+                        (jsonArray.getJSONObject(i).getString("numr").equals("null")) ? -1 : jsonArray.getJSONObject(i).getInt("numr"),
                         jsonArray.getJSONObject(i).getString("id_risposta")
                 ));
             }

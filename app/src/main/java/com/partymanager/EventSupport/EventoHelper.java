@@ -134,11 +134,12 @@ public class EventoHelper {
                 if (!"".equals(edt.getText().toString())) {
                     dialogButton.setVisibility(View.GONE);
                     pb_add.setVisibility(View.VISIBLE);
-                    if (DatiAttributi.ITEMS.get(arg2).close){
+                    if (DatiAttributi.ITEMS.get(arg2).close) {
 
                     } else {
                         addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
-                    } }
+                    }
+                }
             }
         });
 
@@ -157,11 +158,12 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close){
+                        if (DatiAttributi.ITEMS.get(arg2).close) {
 
                         } else {
-                        addDomandaSino(finalAdapter, idEvento, "no", pb_sino, arg2);
-                    }}
+                            addDomandaSino(finalAdapter, idEvento, "no", pb_sino, arg2);
+                        }
+                    }
                 });
 
                 si = (Button) dialog.findViewById(R.id.btn_risp_si);
@@ -169,10 +171,11 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close){
+                        if (DatiAttributi.ITEMS.get(arg2).close) {
 
                         } else {
-                        addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);}
+                            addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);
+                        }
                     }
                 });
 
@@ -197,7 +200,7 @@ public class EventoHelper {
                     public void onClick(View view) {
                         String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                         pb_data.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close){
+                        if (DatiAttributi.ITEMS.get(arg2).close) {
 
                         } else {
 
@@ -227,16 +230,41 @@ public class EventoHelper {
         dialog.show();
     }
 
-    public static void modificaChiusa(){
-        if (DatiAttributi.ITEMS.get(arg2).template.equals("data")){
+    private static void modificaChiusaAsync(final int pos, final String nuova) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                /*
+                String[] name, param;
+
+                name = new String[]{"idRisposta"};
+                param = new String[]{idRisposta};
+
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId(), name, param);
+            */
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String ris) {
+                if (ris.equals("aggiornato")) {
+                    DatiRisposte.modificaRisposta(pos, nuova);
+                }
+            }
+        }.execute(null, null, null);
+    }
+
+    public static void modificaChiusa() {
+        if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
             add.setVisibility(View.VISIBLE);
             dateR.setVisibility(View.VISIBLE);
         }
-        if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")){
+        if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
             si.setVisibility(View.VISIBLE);
             no.setVisibility(View.VISIBLE);
         }
-        if (!DatiAttributi.ITEMS.get(arg2).template.equals("data") && !DatiAttributi.ITEMS.get(arg2).template.equals("sino")){
+        if (!DatiAttributi.ITEMS.get(arg2).template.equals("data") && !DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
             edt.setVisibility(View.VISIBLE);
             dialogButton.setVisibility(View.VISIBLE);
         }

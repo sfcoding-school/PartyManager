@@ -92,6 +92,11 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void modificaRisposta(int pos, String nuova) {
+        ITEMS.get(pos).risposta = nuova;
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static class Risposta {
         public String id;
         public String risposta;
