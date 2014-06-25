@@ -9,6 +9,14 @@ import android.preference.PreferenceFragment;
 
 import com.partymanager.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public class PrefsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
@@ -46,8 +54,15 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
     synchronized void setNotifiche(Boolean what) {
         CheckBoxPreference pref;
 
-        for (int i = 1; i < 6; i++) {
-            pref = (CheckBoxPreference) getPreferenceScreen().findPreference("checkbox_preference" + Integer.toString(i));
+        List<String> imp = new ArrayList<String>();
+        imp.add("checkbox_eventi");
+        imp.add("checkbox_domande");
+        imp.add("checkbox_risposte");
+        imp.add("checkbox_allarme");
+        imp.add("checkbox_utenti");
+
+        for (String s : imp) {
+            pref = (CheckBoxPreference) getPreferenceScreen().findPreference(s);
 
             if (pref != null) {
                 pref.setChecked(what);
@@ -57,10 +72,8 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
 
         pref = (CheckBoxPreference) getPreferenceScreen().findPreference("checkbox_vibrate");
         pref.setEnabled(what);
-        pref.setEnabled(what);
 
         pref = (CheckBoxPreference) getPreferenceScreen().findPreference("checkbox_sound");
-        pref.setEnabled(what);
         pref.setEnabled(what);
 
         ListPreference pref2 = (ListPreference) getPreferenceScreen().findPreference("downloadType");

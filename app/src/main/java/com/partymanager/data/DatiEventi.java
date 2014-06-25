@@ -8,15 +8,39 @@ import com.partymanager.helper.HelperDataParser;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-public class DatiEventi {
+public class DatiEventi{
 
-    public static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
+    private static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
+    private static Map<Integer,Evento> MAP  = new HashMap<Integer, Evento>();
     public static EventAdapter eAdapter;
 
     public static void removeAll() {
         ITEMS.removeAll(ITEMS);
+        MAP = new HashMap<Integer, Evento>();
         eAdapter.notifyDataSetChanged();
+    }
+
+    public static void removeItem(int idEvento){
+        ITEMS.remove(MAP.get(idEvento));
+        MAP.remove(idEvento);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    public static void removePositionItem(int position){
+        ITEMS.remove(position);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    public static Evento getItem(int idEvento){
+        return MAP.get(idEvento);
+    }
+
+    public static Evento getPositionItem(int position){
+        return ITEMS.get(position);
     }
 
     public static EventAdapter init(Context context) {
@@ -28,6 +52,7 @@ public class DatiEventi {
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
+        MAP.put(item.id,item);
         eAdapter.notifyDataSetChanged();
     }
 

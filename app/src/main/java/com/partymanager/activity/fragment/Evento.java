@@ -34,7 +34,7 @@ public class Evento extends Fragment {
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
 
-    private static String idEvento;
+    private static int idEvento;
     private String nomeEvento;
     private String adminEvento;
     private String numUtenti;
@@ -88,11 +88,12 @@ public class Evento extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            idEvento = getArguments().getString(ARG_PARAM1);
+            idEvento = Integer.parseInt(getArguments().getString(ARG_PARAM1));
             nomeEvento = getArguments().getString(ARG_PARAM2);
             adminEvento = getArguments().getString(ARG_PARAM3);
             numUtenti = getArguments().getString(ARG_PARAM4);
         }
+        Log.e("DEBUG",""+idEvento);
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento, Integer.parseInt(numUtenti));
@@ -101,6 +102,12 @@ public class Evento extends Fragment {
     }
 
     public static void checkTemplate() {
+        String[] template = DatiAttributi.getTemplate();
+
+        quando_data.setText(template[0]);
+        luogo.setText(template[1]);
+        dove.setText(template[2]);
+        /*
         ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
 
         for (DatiAttributi.Attributo temp : prova) {
@@ -115,6 +122,7 @@ public class Evento extends Fragment {
                 dove.setText(temp.risposta);
             }
         }
+        */
     }
 
     @Override
@@ -283,28 +291,28 @@ public class Evento extends Fragment {
             if (msg != null) {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
-                String id_attributo = msg.getData().getString("id_attributo");
+                int id_attributo = msg.getData().getInt("id_attributo");
                 String ris2;
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1,null));
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1,null));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1,null));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1,null));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1,null));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
@@ -312,12 +320,12 @@ public class Evento extends Fragment {
                         if (close) {
                             ris2 = msg.getData().getString("pers-r");
                         }
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1,null));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
                         ris2 = "1 voto: 100% SI";
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1,null));
                         break;
                 }
             }

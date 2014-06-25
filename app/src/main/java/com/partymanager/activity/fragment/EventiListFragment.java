@@ -81,7 +81,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                                            final int pos, long id) {
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
                 int temp = R.menu.popup_esci_da_evento;
-                if (DatiEventi.ITEMS.get(pos).admin.equals(HelperFacebook.getFacebookId()))
+                if (DatiEventi.getPositionItem(pos).admin.equals(HelperFacebook.getFacebookId()))
                     temp = R.menu.popup_delete;
 
                 popup.getMenuInflater().inflate(temp, popup.getMenu());
@@ -141,10 +141,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            String idEvento = Integer.toString(DatiEventi.ITEMS.get(position).id);
-            String name = DatiEventi.ITEMS.get(position).name;
-            String admin = DatiEventi.ITEMS.get(position).admin;
-            String numU = Integer.toString(DatiEventi.ITEMS.get(position).numUtenti);
+            String idEvento = Integer.toString(DatiEventi.getPositionItem(position).id);
+            Log.e("DEBUG",idEvento);
+            String name = DatiEventi.getPositionItem(position).name;
+            String admin = DatiEventi.getPositionItem(position).admin;
+            String numU = Integer.toString(DatiEventi.getPositionItem(position).numUtenti);
             mListener.onFragmentInteraction(idEvento, name, admin, numU);
         }
     }
@@ -158,7 +159,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
             @Override
             protected String doInBackground(Void... params) {
-                return HelperConnessione.httpDeleteConnection("event/" + DatiEventi.ITEMS.get(pos).id);
+                return HelperConnessione.httpDeleteConnection("event/" + DatiEventi.getPositionItem(pos).id);
             }
 
             @Override
@@ -176,7 +177,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 } else {
-                    DatiEventi.ITEMS.remove(pos);
+                    DatiEventi.removePositionItem(pos);
                 }
             }
         }.execute(null, null, null);
