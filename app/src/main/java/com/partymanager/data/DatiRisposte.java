@@ -4,6 +4,7 @@ package com.partymanager.data;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
@@ -23,7 +24,8 @@ public class DatiRisposte {
 
     private static RisposteAdapter eAdapter;
     private static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
-    private static Map<Integer,Risposta> MAP = new HashMap<Integer, Risposta>();
+    private static SparseArray<Risposta> MAP = new SparseArray<Risposta>();
+
     public static String template = null;
     private static Context context_global;
 
@@ -48,7 +50,7 @@ public class DatiRisposte {
     public static void removeAll (){
         template = null;
         ITEMS.removeAll(ITEMS);
-        MAP = new HashMap<Integer, Risposta>();
+        MAP = new SparseArray<Risposta>();
         eAdapter.notifyDataSetChanged();
     }
 
