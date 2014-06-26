@@ -3,6 +3,7 @@ package com.partymanager.data;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.partymanager.data.Adapter.EventAdapter;
 import com.partymanager.helper.DataProvide;
@@ -21,13 +22,13 @@ import java.util.Objects;
 public class DatiEventi{
 
     private static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
-    private static Map<Integer,Evento> MAP  = new HashMap<Integer, Evento>();
+    private static SparseArray<Evento> MAP  = new SparseArray<Evento>();
     public static EventAdapter eAdapter;
     private static Context context_global;
 
     public static void removeAll() {
         ITEMS.removeAll(ITEMS);
-        MAP = new HashMap<Integer, Evento>();
+        MAP = new SparseArray<Evento>();
         eAdapter.notifyDataSetChanged();
     }
 

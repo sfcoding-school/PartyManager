@@ -5,6 +5,7 @@ package com.partymanager.data;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.helper.DataProvide;
@@ -28,7 +29,8 @@ public class DatiAttributi {
     private static Context context_global;
 //=======
     private static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
-    private static Map<Integer,Attributo> MAP = new HashMap<Integer, Attributo>();
+    private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
+
 //>>>>>>> agg-notifiche
 
     public static AttributiAdapter init(Context context, int id, int num_pers) {
@@ -49,7 +51,7 @@ public class DatiAttributi {
     public static void removeAll() {
 //>>>>>>> agg-notifiche
         ITEMS.removeAll(ITEMS);
-        MAP = new HashMap<Integer, Attributo>();
+        MAP = new SparseArray<Attributo>();
         eAdapter.notifyDataSetChanged();
     }
 
