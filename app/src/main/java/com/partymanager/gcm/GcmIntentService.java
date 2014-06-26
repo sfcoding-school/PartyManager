@@ -232,7 +232,7 @@ public class GcmIntentService extends IntentService {
                                 break;
 
                             //mod
-                            case 4:
+                            case 2:
                                 sendNotification("Risposta",
                                         "anche " + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"),
                                         "checkbox_risposte");

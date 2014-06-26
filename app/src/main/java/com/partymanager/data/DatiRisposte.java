@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -122,6 +124,7 @@ public class DatiRisposte {
     public static void addItem(Risposta item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
+        Collections.sort(ITEMS,comparator);
         eAdapter.notifyDataSetChanged();
     }
 
@@ -130,6 +133,23 @@ public class DatiRisposte {
         if (controllo) cercami();
         addItem(item);
     }
+
+    private static Comparator<Risposta> comparator = new Comparator<Risposta>() {
+        @Override
+        public int compare(Risposta item1, Risposta item2) {
+            Integer numr1 = Integer.valueOf(item1.persone.size());
+            Integer numr2 = Integer.valueOf(item2.persone.size());
+            Integer id1 = Integer.valueOf(item1.id);
+            Integer id2 = Integer.valueOf(item2.id);
+
+            if (numr1.compareTo(numr2)>0)
+                return -1;
+            else if(numr1.compareTo(numr2)==0)
+                return id2.compareTo(id1);
+            else
+                return 1;
+        }
+    };
 
     //<<<<<<< HEAD
     public static void removePositionItem(int pos) {

@@ -136,8 +136,9 @@ public class MainActivity extends Activity
                                     //int numD = Integer.parseInt(b.getString("numd"));
                                     //int numR = Integer.parseInt(b.getString("numr"));
 
-                                    if (template.equals("data") && idRisposta.equals("None")) {
+                                    if (template.equals("data") && !idRisposta.equals("None")) {
                                         DatiEventi.getIdItem(idEvento).date = HelperDataParser.getCalFromString(risposta);
+                                        DatiEventi.notifyDataChange();
                                     }
                                     break;
 
@@ -146,7 +147,7 @@ public class MainActivity extends Activity
                                     //aggingere l'eliminazione della data se viene eliminato un attributo con template uguale a data
                                     break;
                             }
-                            DatiEventi.notifyDataChange();
+
                             break;
 
                         //risp
@@ -159,7 +160,7 @@ public class MainActivity extends Activity
                                     break;
 
                                 //mod
-                                case 4:
+                                case 2:
                                     break;
                             }
                             break;
@@ -178,16 +179,17 @@ public class MainActivity extends Activity
                                         Log.e("AGG-NOTIFICHE", e.toString());
                                     }
                                     DatiEventi.getIdItem(idEvento).numUtenti += numAddUser;
+                                    DatiEventi.notifyDataChange();
                                     break;
 
                                 //del
                                 case 3:
                                     DatiEventi.getIdItem(idEvento).numUtenti--;
-
+                                    DatiEventi.notifyDataChange();
                                     break;
                             }
 
-                        DatiEventi.notifyDataChange();
+
                             break;
                     }
                 } else //EVENTO VISIBILE
@@ -227,7 +229,7 @@ public class MainActivity extends Activity
                             case 3:
                                 //int idAttributo = EventoHelper.getIdAttributo();
                                 //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
-                                if (Integer.parseInt(event.getArguments().getString("param1")) == b.getInt("id_evento")) {
+                                if (event.getArguments().getString("param1").equals(b.getString("id_evento"))) {
                                     int idAttr = Integer.parseInt(b.getString("id_attributo"));
                                     int idRisposta = b.getInt("id_risposta");
                                     String risposta = b.getString("risposta");
@@ -241,8 +243,9 @@ public class MainActivity extends Activity
                                                 attr.id_risposta = String.valueOf(idRisposta);
                                                 attr.risposta = risposta;
                                                 attr.numr = 1;
+                                                DatiAttributi.notifyDataChange();
                                             }
-                                            DatiAttributi.notifyDataChange();
+
                                             break;
 
                                         //delete
@@ -252,14 +255,15 @@ public class MainActivity extends Activity
                                             break;
 
                                         //mod
-                                        case 4:
+                                        case 2:
                                             int numr = Integer.parseInt(b.getString("numr"));
                                             if (numr >= attr.numr) {
                                                 attr.id_risposta = String.valueOf(idRisposta);
                                                 attr.risposta = risposta;
                                                 attr.numr = numr;
+                                                DatiAttributi.notifyDataChange();
                                             }
-                                            DatiAttributi.notifyDataChange();
+
                                             break;
 
                                     }
@@ -281,7 +285,7 @@ public class MainActivity extends Activity
                                 }
                                 break;
                         }
-                    } else //RISPOSTE VISIBILE
+                    } //RISPOSTE VISIBILE
                         if (dialogIdAttributo != -1) {
                             switch (type) {
                                 //risp
@@ -292,7 +296,7 @@ public class MainActivity extends Activity
                                         String user = b.getString("user");
                                         String userName = b.getString("userName");
                                         int idRisposta = Integer.parseInt(b.getString("id_risposta"));
-                                        boolean controllo = b.getBoolean("agg");
+                                        boolean controllo = b.getString("agg")!=null && b.getString("agg").equals("1") ? true : false;
                                         switch (method) {
                                             //new
                                             case 1:
@@ -322,10 +326,10 @@ public class MainActivity extends Activity
                                             //del
                                             case 3:
                                                 DatiRisposte.removeIdItem(idRisposta);
-
-                                                //mod
-                                            case 4:
-                                                int numr = Integer.parseInt(b.getString("numr"));
+                                                break;
+                                            //mod
+                                            case 2:
+                                                //int numr = Integer.parseInt(b.getString("numr"));
                                                 DatiRisposte.addIdPersona(idRisposta, user, userName, controllo);
                                                 break;
                                         }

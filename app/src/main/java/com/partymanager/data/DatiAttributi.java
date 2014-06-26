@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class DatiAttributi {
@@ -98,8 +100,26 @@ public class DatiAttributi {
     public static void addItem(Attributo item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
+        Collections.sort(ITEMS, comparator);
         eAdapter.notifyDataSetChanged();
     }
+
+    private static Comparator<Attributo> comparator = new Comparator<Attributo>() {
+        @Override
+        public int compare(Attributo item1, Attributo item2) {
+            Integer numd1 = Integer.valueOf(item1.numd);
+            Integer numd2 = Integer.valueOf(item2.numd);
+            Integer id1 = Integer.valueOf(item1.id);
+            Integer id2 = Integer.valueOf(item2.id);
+
+            if (numd1.compareTo(numd2)>0)
+                return 1;
+            else if(numd1.compareTo(numd2)==0)
+                return id2.compareTo(id1);
+            else
+                return -1;
+        }
+    };
 
 
     public static void removePositionItem(int pos) {
@@ -156,7 +176,7 @@ public class DatiAttributi {
         public Attributo(int id, String domanda, String risposta, String template, Boolean close, int numd, int numr, String id_risposta) {
             this.id = id;
             this.domanda = domanda;
-            this.risposta = risposta;
+            this.risposta = risposta != null ? risposta : "";
             this.template = template;
             this.close = close;
             this.numd = numd; /* Quanti hanno risposto/votato in questo attributo */

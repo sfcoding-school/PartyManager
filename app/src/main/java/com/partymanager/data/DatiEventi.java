@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 public class DatiEventi {
@@ -29,7 +31,7 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void notifyDataChange(){
+    public static void notifyDataChange() {
         eAdapter.notifyDataSetChanged();
     }
 
@@ -107,8 +109,29 @@ public class DatiEventi {
     public static void addItem(Evento item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
+        Collections.sort(ITEMS, comparator);
         eAdapter.notifyDataSetChanged();
     }
+
+    private static Comparator<Evento> comparator = new Comparator<Evento>() {
+        @Override
+        public int compare(Evento item1, Evento item2) {
+            if (item1.date != null && item2.date != null) {
+                return item1.date.compareTo(item2.date);
+            } else if (item1.date != null) {
+                return 1;
+            } else if (item2.date != null) {
+                return -1;
+            } else {
+                if (item1.id < item2.id)
+                    return 1;
+                else if (item1.id == item2.id)
+                    return 0;
+                else
+                    return -1;
+            }
+        }
+    };
 
     public static void save() {
         toJson(new ArrayList<Evento>(ITEMS));
