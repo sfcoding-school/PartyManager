@@ -33,23 +33,23 @@ public class DataProvide {
         downloadEvent(context);
     }
 
-    public static void getAttributi(Context context, String eventoId) {
+    public static void getAttributi(Context context, int eventoId) {
         loadJson("attributi_" + eventoId, context);
         downloadAttributi(eventoId, context);
     }
 
-    public static void getRisposte(String id_evento, String id_attr, Context context) {
+    public static void getRisposte(int id_evento, int id_attr, Context context) {
         loadJson("risposte_" + id_evento + "_" + id_attr, context);
         downloadRisposte(id_evento, id_attr, context);
     }
 
-    public static void getFriends(String idEvento, Context context) {
+    public static void getFriends(int idEvento, Context context) {
         loadJson("friends" + idEvento, context);
         downloadFriends(idEvento, context);
     }
 
     // <editor-fold defaultstate="collapsed" desc="download...">
-    private static void downloadFriends(final String idEvento, final Context context) {
+    private static void downloadFriends(final int idEvento, final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
@@ -126,7 +126,7 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    private static void downloadAttributi(final String id, final Context context) {
+    private static void downloadAttributi(final int id, final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
@@ -159,7 +159,7 @@ public class DataProvide {
     }
 
 
-    private static void downloadRisposte(final String id_evento, final String id_attr, final Context context) {
+    private static void downloadRisposte(final int id_evento, final int id_attr, final Context context) {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
@@ -221,11 +221,11 @@ public class DataProvide {
     }
 
     private static void loadIntoAttributiAdapter(JSONArray jsonArray) {
-        DatiAttributi.removeAll(false, null);
+        DatiAttributi.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiAttributi.addItem(new DatiAttributi.Attributo(
-                        jsonArray.getJSONObject(i).getString("id_attributo"),
+                        jsonArray.getJSONObject(i).getInt("id_attributo"),
                         jsonArray.getJSONObject(i).getString("domanda"),
                         (jsonArray.getJSONObject(i).getString("risposta").equals("null")) ? "" : jsonArray.getJSONObject(i).getString("risposta"),
                         jsonArray.getJSONObject(i).getString("template"),
@@ -244,15 +244,14 @@ public class DataProvide {
     }
 
     private static void loadIntoRisposteAdapter(JSONArray jsonArray) {
-        DatiRisposte.removeAll(false, null, null);
+        DatiRisposte.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 DatiRisposte.addItem(new DatiRisposte.Risposta(
-                                String.valueOf(jsonArray.getJSONObject(i).getInt("id_risposta")),
+                                jsonArray.getJSONObject(i).getInt("id_risposta"),
                                 jsonArray.getJSONObject(i).getString("risposta"),
-                                jsonArray.getJSONObject(i).getString("template"),
                                 jsonArray.getJSONObject(i).getJSONArray("userList")
-                        )
+                        ),jsonArray.getJSONObject(i).getString("template")
                 );
             }
         } catch (JSONException e) {

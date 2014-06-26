@@ -22,11 +22,17 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     private int num_pers_evento;
     private int id_attributo;
-    private String idEvento;
+//<<<<<<< HEAD
+    //private String idEvento;
     private boolean chiusa;
     private int arg2;
 
-    public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
+  //  public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
+//=======
+    private int idEvento;
+
+    public RisposteAdapter(int idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
+//>>>>>>> agg-notifiche
         super(context, R.layout.risposta_row, Risposta);
         this.num_pers_evento = num_pers_evento;
         this.id_attributo = id_attributo;
@@ -48,24 +54,26 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
         TextView risp = (TextView) convertView.findViewById(R.id.txt_risposta2);
 
-        String temp_risposta = DatiRisposte.ITEMS.get(position).risposta;
-        if (DatiRisposte.ITEMS.get(position).template != null && DatiRisposte.ITEMS.get(position).template.equals("data")) {
+        String temp_risposta = DatiRisposte.getPositionItem(position).risposta;
+
+        if (DatiRisposte.template != null && DatiRisposte.template.equals("data")) {
             temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
         }
+
 
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
 
 
         StringBuilder sb = new StringBuilder();
         sb.append("");
-        if (DatiRisposte.ITEMS.get(position).persone != null) {
-            for (int i = 0; i < DatiRisposte.ITEMS.get(position).persone.size(); i++) {
+        if (DatiRisposte.getPositionItem(position).persone != null) {
+            for (int i = 0; i < DatiRisposte.getPositionItem(position).persone.size(); i++) {
                 if (i > 0)
                     sb.append(", ");
-                if (DatiRisposte.ITEMS.get(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
+                if (DatiRisposte.getPositionItem(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
                     sb.append("Io");
                 else
-                    sb.append(DatiRisposte.ITEMS.get(position).persone.get(i).nome.split(" ")[0]);
+                    sb.append(DatiRisposte.getPositionItem(position).persone.get(i).nome.split(" ")[0]);
             }
         }
         final Button vota = (Button) convertView.findViewById(R.id.button_voto);
@@ -79,18 +87,24 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//<<<<<<< HEAD
                 if (chiusa) {
                     EventoHelper.modificaChiusa();
                 } else {
-                    EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.ITEMS.get(position).id, position, pb_vota);
+                    EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getPositionItem(position).id, position, pb_vota);
                     vota.setVisibility(View.GONE);
                 }
+/*=======
+
+                EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getItemPosition(position).id, position, pb_vota);
+                vota.setVisibility(View.GONE);
+>>>>>>> agg-notifiche*/
             }
         });
 
-        if (DatiRisposte.ITEMS.get(position).template != null && DatiRisposte.ITEMS.get(position).template.equals("sino")) {
+        if (DatiRisposte.template != null && DatiRisposte.template.equals("sino")) {
             vota.setVisibility(View.GONE);
-            temp_risposta += " " + (100 * DatiRisposte.ITEMS.get(position).persone.size()) / num_pers_evento + "%";
+            temp_risposta += " " + (100 * DatiRisposte.getPositionItem(position).persone.size()) / num_pers_evento + "%";
         }
         risp.setText(temp_risposta);
 

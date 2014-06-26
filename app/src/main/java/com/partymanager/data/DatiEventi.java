@@ -14,18 +14,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-public class DatiEventi {
+public class DatiEventi{
 
-    public static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
+    private static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
+    private static Map<Integer,Evento> MAP  = new HashMap<Integer, Evento>();
     public static EventAdapter eAdapter;
     private static Context context_global;
 
     public static void removeAll() {
         ITEMS.removeAll(ITEMS);
+        MAP = new HashMap<Integer, Evento>();
         eAdapter.notifyDataSetChanged();
     }
 
+//<<<<<<< HEAD
     private static void toJson(final ArrayList<Evento> ITEMS_temp) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -65,6 +71,28 @@ public class DatiEventi {
             }
         }.execute(null, null, null);
     }
+//=======
+    public static void removeIdItem(int idEvento){
+        ITEMS.remove(MAP.get(idEvento));
+        MAP.remove(idEvento);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    public static void removePositionItem(int position){
+        int i = ITEMS.get(position).id;
+        ITEMS.remove(position);
+        MAP.remove(i);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    public static Evento getIdItem(int idEvento){
+        return MAP.get(idEvento);
+    }
+
+    public static Evento getPositionItem(int position){
+        return ITEMS.get(position);
+//>>>>>>> agg-notifiche
+    }
 
     public static EventAdapter init(Context context) {
         eAdapter = new EventAdapter(context, DatiEventi.ITEMS);
@@ -75,11 +103,7 @@ public class DatiEventi {
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
-        eAdapter.notifyDataSetChanged();
-    }
-
-    public static void removeItem(int pos) {
-        ITEMS.remove(pos);
+        MAP.put(item.id,item);
         eAdapter.notifyDataSetChanged();
     }
 

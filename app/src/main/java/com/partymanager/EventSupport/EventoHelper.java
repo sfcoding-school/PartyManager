@@ -77,17 +77,54 @@ public class EventoHelper {
     static DatePicker dateR;
     static Button add;
 
+    static private Dialog dialog;
 
-    public static void dialogRisposte(final String adminEvento, int arg, final Activity activity, final String idEvento, String numUtenti) {
+    private static Dialog getRisposteDialog(Activity activity) {
+        if (dialog == null) {
+            dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_risposte);
+        }
+        return dialog;
+    }
 
+    /*
+    public boolean isVisible(){
+        if (dialog != null && dialog.isShowing())
+            return DatiAttributi.ITEMS.get(arg2).id;
+        else return false;
+    }
+    */
+
+    public static int getIdAttributo() {
+        if (dialog != null && dialog.isShowing())
+            return Integer.valueOf(idAttributo);
+        else return -1;
+    }
+
+    private static int idAttributo;
+
+    //<<<<<<< HEAD
+    public static void dialogRisposte(final String adminEvento, int arg, final Activity activity, final int idEvento, String numUtenti) {
         arg2 = arg;
-
+/*
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_risposte);
+        dialog.setContentView(R.layout.dialog_risposte);*/
+
+        dialog = getRisposteDialog(activity);
+        idAttributo = DatiAttributi.getPositionItem(arg2).id;
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.ITEMS.get(arg2).id, Integer.parseInt(numUtenti), arg2, DatiAttributi.ITEMS.get(arg2).close);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(arg2).id, Integer.parseInt(numUtenti), arg2, DatiAttributi.getPositionItem(arg2).close);
+/*=======
+
+    public static void dialogRisposte(final int arg2, Activity activity, final int idEvento, String numUtenti) {
+
+
+        final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, idAttributo, Integer.parseInt(numUtenti), arg2);
+>>>>>>> agg-notifiche*/
         risp.setAdapter(adapter);
 
         risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,12 +151,12 @@ public class EventoHelper {
         });
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
-        text.setText(DatiAttributi.ITEMS.get(arg2).domanda);
+        text.setText(DatiAttributi.getPositionItem(arg2).domanda);
 
         dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
         edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
 
-        if (DatiAttributi.ITEMS.get(arg2).close) {
+        if (DatiAttributi.getPositionItem(arg2).close) {
             edt.setVisibility(View.GONE);
             dialogButton.setVisibility(View.GONE);
         } else {
@@ -134,17 +171,21 @@ public class EventoHelper {
                 if (!"".equals(edt.getText().toString())) {
                     dialogButton.setVisibility(View.GONE);
                     pb_add.setVisibility(View.VISIBLE);
-                    if (DatiAttributi.ITEMS.get(arg2).close) {
+//<<<<<<< HEAD
+                    if (DatiAttributi.getPositionItem(arg2).close) {
 
                     } else {
-                        addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, edt.getText().toString(), DatiAttributi.ITEMS.get(arg2).template, pb_add, dialogButton);
+                        addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, edt.getText().toString(), DatiAttributi.getPositionItem(arg2).template, pb_add, dialogButton);
                     }
+/*=======
+                    addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, edt.getText().toString(), DatiAttributi.getPositionItem(arg2).template, pb_add, dialogButton);
+>>>>>>> agg-notifiche*/
                 }
             }
         });
 
-        if (DatiAttributi.ITEMS.get(arg2).template != null) {
-            if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+        if (DatiAttributi.getPositionItem(arg2).template != null) {
+            if (DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
                 LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                 normal.setVisibility(View.GONE);
                 LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
@@ -158,7 +199,7 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close) {
+                        if (DatiAttributi.getPositionItem(arg2).close) {
 
                         } else {
                             addDomandaSino(finalAdapter, idEvento, "no", pb_sino, arg2);
@@ -171,7 +212,7 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close) {
+                        if (DatiAttributi.getPositionItem(arg2).close) {
 
                         } else {
                             addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);
@@ -179,12 +220,12 @@ public class EventoHelper {
                     }
                 });
 
-                if (DatiAttributi.ITEMS.get(arg2).close) {
+                if (DatiAttributi.getPositionItem(arg2).close) {
                     si.setVisibility(View.GONE);
                     no.setVisibility(View.GONE);
                 }
             }
-            if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
+            if (DatiAttributi.getPositionItem(arg2).template.equals("data")) {
                 LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                 normal.setVisibility(View.GONE);
                 LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
@@ -200,16 +241,20 @@ public class EventoHelper {
                     public void onClick(View view) {
                         String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                         pb_data.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.ITEMS.get(arg2).close) {
+//<<<<<<< HEAD
+                        if (DatiAttributi.getPositionItem(arg2).close) {
+//=======
+                        addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
+//>>>>>>> agg-notifiche
 
                         } else {
 
-                            addRisposta(idEvento, DatiAttributi.ITEMS.get(arg2).id, temp, "data", pb_data, null);
+                            addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
                         }
                     }
                 });
 
-                if (DatiAttributi.ITEMS.get(arg2).close) {
+                if (DatiAttributi.getPositionItem(arg2).close) {
                     add.setVisibility(View.GONE);
                     dateR.setVisibility(View.GONE);
                 }
@@ -220,7 +265,7 @@ public class EventoHelper {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 try {
-                    DatiRisposte.removeAll(true, idEvento, DatiAttributi.ITEMS.get(arg2).id);
+                    DatiRisposte.removeAll(true, idEvento, DatiAttributi.getPositionItem(arg2).id);
                 } catch (IndexOutOfBoundsException e) {
                     Log.e("Evento-dialog.setOnDismissListener", "IndexOutOfBoundsException " + e);
                 }
@@ -230,6 +275,7 @@ public class EventoHelper {
         dialog.show();
     }
 
+//<<<<<<< HEAD
     private static void modificaChiusaAsync(final int pos, final String nuova) {
         new AsyncTask<Void, Void, String>() {
 
@@ -256,27 +302,27 @@ public class EventoHelper {
     }
 
     public static void modificaChiusa() {
-        if (DatiAttributi.ITEMS.get(arg2).template.equals("data")) {
+        if (DatiAttributi.getPositionItem(arg2).template.equals("data")) {
             add.setVisibility(View.VISIBLE);
             dateR.setVisibility(View.VISIBLE);
         }
-        if (DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+        if (DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
             si.setVisibility(View.VISIBLE);
             no.setVisibility(View.VISIBLE);
         }
-        if (!DatiAttributi.ITEMS.get(arg2).template.equals("data") && !DatiAttributi.ITEMS.get(arg2).template.equals("sino")) {
+        if (!DatiAttributi.getPositionItem(arg2).template.equals("data") && !DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
             edt.setVisibility(View.VISIBLE);
             dialogButton.setVisibility(View.VISIBLE);
         }
     }
 
-    private static void eliminaRisposta(final int pos, final String idEvento, final Activity activity) {
+    private static void eliminaRisposta(final int pos, final int idEvento, final Activity activity) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("qualcosa/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
+                String ris = HelperConnessione.httpDeleteConnection("qualcosa/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id);
 
                 Log.e("Evento-Helper-eliminaRisposta-ris: ", " \nrisposta: " + ris);
 
@@ -286,7 +332,7 @@ public class EventoHelper {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    DatiRisposte.removeItem(pos);
+                    DatiRisposte.removePositionItem(pos);
                 } else {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
                     alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteRisposta));
@@ -304,15 +350,15 @@ public class EventoHelper {
         }.execute(null, null, null);
     }
 
-    public static void eliminaDomanda(final int pos, final String idEvento, final Activity activity) {
+    public static void eliminaDomanda(final int pos, final int idEvento, final Activity activity) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id);
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id);
 
-                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.ITEMS.get(pos).id + " \nrisposta: " + ris);
+                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + " \nrisposta: " + ris);
 
                 return ris;
             }
@@ -320,7 +366,7 @@ public class EventoHelper {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    DatiAttributi.removeItem(pos);
+                    DatiAttributi.removePositionItem(pos);
                 } else {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
                     alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteDomanda));
@@ -338,7 +384,10 @@ public class EventoHelper {
         }.execute(null, null, null);
     }
 
-    private static void addRisposta(final String idEvento, final String id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
+    private static void addRisposta(final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
+/*=======
+    private static void addRisposta(final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
+>>>>>>> agg-notifiche*/
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -361,22 +410,21 @@ public class EventoHelper {
                 if (dialogButton != null)
                     dialogButton.setVisibility(View.VISIBLE);
 
-                if (isInteger(ris)) {
+                try {
                     JSONObject pers = new JSONObject();
                     JSONArray userL = new JSONArray();
-                    try {
-                        pers.put("id_user", HelperFacebook.getFacebookId());
-                        pers.put("name", HelperFacebook.getFacebookUserName());
-                        userL.put(pers);
-                        cercami();
-                        DatiRisposte.addItem(new DatiRisposte.Risposta(ris, risposta, template, userL));
-                        edt.setText("");
-                    } catch (JSONException e) {
-                        Log.e("Evento-addRisposta", "JSONException " + e);
-                    }
+                    pers.put("id_user", HelperFacebook.getFacebookId());
+                    pers.put("name", HelperFacebook.getFacebookUserName());
+                    userL.put(pers);
+                    DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template);
+                    edt.setText("");
+                } catch (JSONException e) {
+                    Log.e("Evento-addRisposta", "JSONException " + e);
+                } catch (NumberFormatException e) {
+                    Log.e("Evento-addRisposta", "risposta non numerica " + e);
                 }
-            }
 
+/*
             private boolean isInteger(String s) {
                 try {
                     Integer.parseInt(s);
@@ -385,10 +433,12 @@ public class EventoHelper {
                 }
                 return true;
             }
-
+*/
+            }
         }.execute(null, null, null);
     }
 
+    /*
     private static void cercami() {
         Boolean trovato = false;
         for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
@@ -400,21 +450,22 @@ public class EventoHelper {
             }
         }
     }
+    */
 
-    public static void addDomandaSino(RisposteAdapter adapter, String idEvento, String cosa, ProgressBar pb_sino, int attuale) {
+    public static void addDomandaSino(RisposteAdapter adapter, int idEvento, String cosa, ProgressBar pb_sino, int attuale) {
 
-        if (DatiRisposte.ITEMS.size() == 1) {
-            addRisposta(idEvento, DatiAttributi.ITEMS.get(attuale).id, cosa, "sino", pb_sino, null);
+        if (DatiRisposte.getLenght() == 1) {
+            addRisposta(idEvento, DatiAttributi.getPositionItem(attuale).id, cosa, "sino", pb_sino, null);
         } else {
             if (cosa.equals("si"))
-                vota(idEvento, adapter, null, DatiRisposte.ITEMS.get(0).id, 0, pb_sino);
+                vota(idEvento, adapter, null, DatiRisposte.getPositionItem(0).id, 0, pb_sino);
             else {
-                vota(idEvento, adapter, null, DatiRisposte.ITEMS.get(1).id, 1, pb_sino);
+                vota(idEvento, adapter, null, DatiRisposte.getPositionItem(1).id, 1, pb_sino);
             }
         }
     }
 
-    public static void vota(final String idEvento, final RisposteAdapter adapter, final Button vota, final String idRisposta, final int position, final ProgressBar pb_vota) {
+    public static void vota(final int idEvento, final RisposteAdapter adapter, final Button vota, final int idRisposta, final int position, final ProgressBar pb_vota) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -427,9 +478,13 @@ public class EventoHelper {
                 String[] name, param;
 
                 name = new String[]{"idRisposta"};
-                param = new String[]{idRisposta};
+                param = new String[]{String.valueOf(idRisposta)};
 
+//<<<<<<< HEAD
                 return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId(), name, param);
+/*=======
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(adapter.getId()).id, name, param);
+>>>>>>> agg-notifiche*/
             }
 
             @Override
@@ -448,26 +503,31 @@ public class EventoHelper {
     }
 
     public static void graficaVota(int position, int attuale) {
-        cercami();
+        //cercami();
 
-        if (DatiRisposte.ITEMS.size() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
-            DatiRisposte.ITEMS.get(position).addPersona(new DatiRisposte.Persona(HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName()));
+        if (DatiRisposte.getLenght() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
+            DatiRisposte.addPositionPersona(position, HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName(), true);
 
         int temp = 0;
-        String risposta_max = null, idMax = null;
+        String risposta_max = null;
+         int idMax = -1;
 
-        for (int i = 0; i < DatiRisposte.ITEMS.size(); i++) {
-            if (DatiRisposte.ITEMS.get(i).persone.size() > temp) {
-                temp = DatiRisposte.ITEMS.get(i).persone.size();
-                idMax = DatiRisposte.ITEMS.get(i).id;
-                risposta_max = DatiRisposte.ITEMS.get(i).risposta;
+        for (int i = 0; i < DatiRisposte.getLenght(); i++) {
+            if (DatiRisposte.getPositionItem(i).persone.size() > temp) {
+                temp = DatiRisposte.getPositionItem(i).persone.size();
+                idMax = DatiRisposte.getPositionItem(i).id;
+                risposta_max = DatiRisposte.getPositionItem(i).risposta;
             }
         }
+/*<<<<<<< HEAD
 
         DatiAttributi.ITEMS.get(attuale).changeRisposta(risposta_max, idMax);
+=======*/
+        DatiAttributi.getPositionItem(attuale).changeRisposta(risposta_max, idMax);
+//>>>>>>> agg-notifiche
     }
 
-    public static void dialogEventUsers(final String numUtenti, final TextView bnt_friends, final String idEvento, final Activity activity, final String adminEvento) {
+    public static void dialogEventUsers(final String numUtenti, final TextView bnt_friends, final int idEvento, final Activity activity, final String adminEvento) {
         DataProvide.getFriends(idEvento, activity.getApplicationContext());
         dialogFriends = new Dialog(activity);
         dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -533,7 +593,7 @@ public class EventoHelper {
         });
     }
 
-    private static void addFriendsToEvent(final TextView bnt_friends, final String numUtenti, final Activity activity, final String idEvento, final String List, final int quanti_aggiunti) {
+    private static void addFriendsToEvent(final TextView bnt_friends, final String numUtenti, final Activity activity, final int idEvento, final String List, final int quanti_aggiunti) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -577,6 +637,10 @@ public class EventoHelper {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
 
+                    DatiEventi.getIdItem(idEvento).numUtenti+=quanti_aggiunti;
+                    bnt_friends.setText(""+DatiEventi.getIdItem(idEvento).numUtenti);
+
+                    /*
                     for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
                         if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
@@ -585,12 +649,13 @@ public class EventoHelper {
                             break;
                         }
                     }
+                    */
                 }
             }
         }.execute();
     }
 
-    private static void eliminaUser(final TextView bnt_friends, final String idEvento, final Activity activity, final int i, final ProgressBar pb_buttaFuori) {
+    private static void eliminaUser(final TextView bnt_friends, final int idEvento, final Activity activity, final int i, final ProgressBar pb_buttaFuori) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -622,13 +687,16 @@ public class EventoHelper {
                 } else {
                     DatiFriends.removeItem(i);
 
+                    DatiEventi.getIdItem(idEvento).numUtenti--;
+                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
+                    /*
                     for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
                         if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
                             DatiEventi.ITEMS.get(i).numUtenti -= 1;
                             bnt_friends.setText("" + DatiEventi.ITEMS.get(i).numUtenti);
                             break;
                         }
-                    }
+                    }*/
                 }
             }
         }.execute();
@@ -689,7 +757,7 @@ public class EventoHelper {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="dialogAddFriends">
-    public static void dialogAddFriends(final TextView bnt_friends, final String numUtenti, final String idEvento, final Activity activity) {
+    public static void dialogAddFriends(final TextView bnt_friends, final String numUtenti, final int idEvento, final Activity activity) {
         requestMyAppFacebookFriends(HelperFacebook.getSession(activity), activity);
         dialogAddFriends = new Dialog(activity);
         dialogAddFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);

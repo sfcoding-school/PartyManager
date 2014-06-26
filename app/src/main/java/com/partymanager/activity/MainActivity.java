@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
@@ -37,7 +38,19 @@ import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiFriends;
+import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.Friends;
+import com.partymanager.gcm.Helper_Notifiche;
+import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Attr;
+
+import java.lang.reflect.Array;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
@@ -56,6 +69,10 @@ public class MainActivity extends Activity
     public static boolean progressBarVisible = false;
 
     Fragment fragment = null;
+    private final String eventListTAG = "eventList";
+    private final String eventTAG = "evento";
+    private final String archivioTAG = "archivio";
+    private final String impostazioniTAG = "impostazioni";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,26 +86,269 @@ public class MainActivity extends Activity
             public void handleMessage(Message msg) {
                 Log.e("SERVICEHANDLER", "arrivato il messaggio " + msg.toString());
                 Bundle b = msg.getData();
-                String type = b.getString("type");
-                if (type.equals("newEvent")) {
-                    if (fragmentManager.findFragmentByTag("Eventi") != null && fragmentManager.findFragmentByTag("Eventi").isVisible()) {
-                        DatiEventi.addItem(new DatiEventi.Evento(b.getInt("id"), b.getString("name"), "", "", b.getString("adminId"), b.getInt("numUtenti")));
+                int type = Integer.parseInt(b.getString("type"));
+                int method = Integer.parseInt(b.getString("method"));
+
+                Fragment eventList = fragmentManager.findFragmentByTag(eventListTAG);
+                Fragment event = fragmentManager.findFragmentByTag(eventTAG);
+                int dialogIdAttributo = EventoHelper.getIdAttributo();
+
+                //EVENTLIST VISIBILE
+                if (eventList != null && eventList.isVisible()) {
+                    switch (type) {
+                        //event
+                        case 1:
+                            int idEvento = Integer.parseInt(b.getString("id_evento"));
+
+                            switch (method) {
+                                //new
+                                case 1:
+                                    DatiEventi.addItem(
+                                            new DatiEventi.Evento(
+                                                    idEvento,
+                                                    b.getString("nome_evento"),
+                                                    "",
+                                                    "",
+                                                    b.getString("admin"),
+                                                    Integer.parseInt(b.getString("num_utenti"))
+                                            )
+                                    );
+                                    break;
+
+                                //'del'
+                                case 3:
+                                    DatiEventi.removeIdItem(idEvento);
+                                    break;
+                                //'uscito'
+                                case 4:
+                                    DatiEventi.getIdItem(idEvento).numUtenti -= 1;
+                                    break;
+                            }
+                            break;
+
+                        //attr
+                        case 2:
+                            switch (method) {
+                                //new
+                                case 1:
+                                    idEvento = Integer.parseInt(b.getString("id_evento"));
+                                    //String idAttributo = b.getString("id_attributo");
+                                    String idRisposta = b.getString("id_risposta");
+                                    //String domanda = b.getString("domanda");
+                                    String risposta = b.getString("risposta");
+                                    String template = b.getString("template");
+                                    //boolean chiusa = Boolean.parseBoolean(b.getString("chiusa"));
+                                    //int numD = Integer.parseInt(b.getString("numd"));
+                                    //int numR = Integer.parseInt(b.getString("numr"));
+
+                                    if (template.equals("data") && idRisposta.equals("None")) {
+                                        DatiEventi.getIdItem(idEvento).date = HelperDataParser.getCalFromString(risposta);
+                                    }
+                                    break;
+
+                                //del
+                                case 3:
+                                    //aggingere l'eliminazione della data se viene eliminato un attributo con template uguale a data
+                                    break;
+                            }
+                            break;
+
+                        //risp
+                        case 3:
+                            //aggiornare la data dell'evento se viene votata o aggiunta una nuova risposta su un attributo con template data
+                            switch (method) {
+                                //new
+                                case 1:
+
+                                    break;
+
+                                //mod
+                                case 4:
+                                    break;
+                            }
+                            break;
+
+                        //user
+                        case 4:
+                            idEvento = b.getInt("id_evento");
+
+                            switch (method) {
+                                //new
+                                case 1:
+                                    int numAddUser = 0;
+                                    try {
+                                        numAddUser = new JSONArray(b.getString("user_list")).length();
+                                    } catch (JSONException e) {
+                                        Log.e("AGG-NOTIFICHE", e.toString());
+                                    }
+                                    DatiEventi.getIdItem(idEvento).numUtenti += numAddUser;
+                                    break;
+
+                                //del
+                                case 3:
+                                    DatiEventi.getIdItem(idEvento).numUtenti--;
+                                    break;
+                            }
+                            break;
                     }
-                } else if (type.equals("newAttr")) {
-                    if (fragmentManager.findFragmentByTag("Evento") != null && fragmentManager.findFragmentByTag("Evento").isVisible()) {
-                        DatiAttributi.addItem(new DatiAttributi.Attributo("id", "doma", "risposta", "template", false, /*numd*/1, /*numr*/ 2, null));
-                    }
-                }
+                } else //EVENTO VISIBILE
+                    if (event != null && event.isVisible()) {
+                        switch (type) {
+                            //attr
+                            case 2:
+                                if (event.getArguments().getString("param1").equals(b.getString("id_evento"))) {
+                                    int idAttr = Integer.parseInt(b.getString("id_attributo"));
+                                    switch (method) {
+                                        //new
+                                        case 1:
+                                            //boolean chiusa = Boolean.parseBoolean();
+                                            //String id, String domanda, String risposta, String template, chiusa, int numd, int numr, String id_risposta
+                                            DatiAttributi.addItem(
+                                                    new DatiAttributi.Attributo(
+                                                            idAttr,
+                                                            b.getString("domanda"),
+                                                            b.getString("risposta"),
+                                                            b.getString("template"),
+                                                            b.getBoolean("chiusa"),
+                                                            Integer.parseInt(b.getString("numd")),
+                                                            Integer.parseInt(b.getString("numr")),
+                                                            b.getString("id_risposta")
+                                                    )
+                                            );
+                                            break;
+                                        //del
+                                        case 3:
+                                            DatiAttributi.removeIdItem(idAttr);
+                                    }
+                                }
+
+                                break;
+
+                            //risp
+                            case 3:
+                                //int idAttributo = EventoHelper.getIdAttributo();
+                                //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
+                                if (Integer.parseInt(event.getArguments().getString("param1")) == b.getInt("id_evento")) {
+                                    int idAttr = Integer.parseInt(b.getString("id_attributo"));
+                                    int idRisposta = b.getInt("id_risposta");
+                                    String risposta = b.getString("risposta");
+                                    DatiAttributi.Attributo attr = DatiAttributi.getIdItem(idAttr);
+
+                                    switch (method) {
+                                        //new
+                                        case 1:
+                                            //String id, String risposta, String template, JSONArray userList
+                                            if (attr.numr <= 1) {
+                                                attr.id_risposta = String.valueOf(idRisposta);
+                                                attr.risposta = risposta;
+                                                attr.numr = 1;
+                                            }
+                                            break;
+
+                                        //delete
+                                        case 3:
+                                            //problemi implementativi
+
+                                            break;
+
+                                        //mod
+                                        case 4:
+                                            int numr = Integer.parseInt(b.getString("numr"));
+                                            if (numr >= attr.numr) {
+                                                attr.id_risposta = String.valueOf(idRisposta);
+                                                attr.risposta = risposta;
+                                                attr.numr = numr;
+                                            }
+                                            break;
+
+                                    }
+                                    break;
+                                }
+                                //user
+                            case 4:
+                                switch (method) {
+
+                                    //new
+                                    case 1:
+                                        //da implementare
+                                        break;
+
+                                    //del
+                                    case 3:
+                                        //da implementare
+                                        break;
+                                }
+                                break;
+                        }
+                    } else //RISPOSTE VISIBILE
+                        if (dialogIdAttributo != -1) {
+                            switch (type) {
+                                //risp
+                                case 3:
+                                    //int idAttributo = EventoHelper.getIdAttributo();
+                                    //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
+                                    if (dialogIdAttributo == Integer.parseInt(b.getString("id_attributo"))) {
+                                        String user = b.getString("user");
+                                        String userName = b.getString("userName");
+                                        int idRisposta = Integer.parseInt(b.getString("id_risposta"));
+                                        boolean controllo = b.getBoolean("agg");
+                                        switch (method) {
+                                            //new
+                                            case 1:
+                                                String risposta = b.getString("risposta");
+
+                                                JSONArray userList = null;
+                                                try {
+                                                    JSONObject json = new JSONObject();
+                                                    json.put("id_user", user);
+                                                    json.put("name", userName);
+                                                    userList = new JSONArray();
+                                                    userList.put(json);
+                                                } catch (JSONException e) {
+                                                    Log.e("AGG-NOTIFICHE", e.toString());
+                                                }
+
+                                                //String id, String risposta, String template, JSONArray userList
+                                                DatiRisposte.addItem(
+                                                        new DatiRisposte.Risposta(
+                                                                idRisposta,
+                                                                risposta,
+                                                                userList
+                                                        ), controllo
+                                                );
+                                                break;
+
+                                            //del
+                                            case 3:
+                                                DatiRisposte.removeIdItem(idRisposta);
+
+                                                //mod
+                                            case 4:
+                                                int numr = Integer.parseInt(b.getString("numr"));
+                                                DatiRisposte.addIdPersona(idRisposta, user, userName, controllo);
+                                                break;
+                                        }
+                                        break;
+                                    }
+
+
+                            }
+
+
+                        }
             }
         };
 
+
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.fragment_nav_drawer_custom);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setNavigationDrawer();
 
         setUp();
+
     }
 
 
@@ -280,24 +540,28 @@ public class MainActivity extends Activity
 
     private void changeFragment(int pos) {
         fragmentManager.popBackStackImmediate();
+        String tag = null;
         switch (pos) {
             case 0:
                 fragment = EventiListFragment.newInstance();
+                tag = eventListTAG;
                 mTitle = getString(R.string.title_section0);
                 break;
             case 1:
                 fragment = Archivio.newInstance();
+                tag = archivioTAG;
                 mTitle = getString(R.string.title_section1);
                 break;
             case 2:
                 fragment = new PrefsFragment();
+                tag = impostazioniTAG;
                 mTitle = getString(R.string.title_section2);
                 break;
         }
 
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, mTitle.toString())
+                .replace(R.id.container, fragment, tag)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
         drawerLayout.closeDrawer(leftRL);
@@ -414,15 +678,15 @@ public class MainActivity extends Activity
         noMenuActionBar = true;
         fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, "Evento")
+                .replace(R.id.container, fragment, eventTAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("evento")
+                .addToBackStack(eventTAG)
                 .commit();
 
         fragmentManager.addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
-                        if (fragmentManager.getBackStackEntryCount() == 0 || !fragmentManager.getBackStackEntryAt(0).getName().equals("evento")) {
+                        if (fragmentManager.getBackStackEntryCount() == 0 || !fragmentManager.getBackStackEntryAt(0).getName().equals(eventTAG)) {
                             noMenuActionBar = false;
                         }
                         invalidateOptionsMenu();

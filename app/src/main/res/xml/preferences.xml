@@ -9,26 +9,26 @@
             android:title="@string/notifiche1"/>
 
         <CheckBoxPreference
-            android:key="checkbox_preference1"
+            android:key="checkbox_eventi"
             android:title="@string/notifiche2"
             android:summary="@string/notifiche_sum2" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference2"
+            android:key="checkbox_domande"
             android:title="@string/notifiche3"
             android:summary="@string/notifiche_sum3" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference3"
+            android:key="checkbox_risposte"
             android:title="@string/notifiche4"/>
 
         <CheckBoxPreference
-            android:key="checkbox_preference4"
+            android:key="checkbox_allarme"
             android:title="@string/notifiche5"
             android:summary="@string/notifiche_sum5" />
 
         <CheckBoxPreference
-            android:key="checkbox_preference5"
+            android:key="checkbox_utenti"
             android:title="@string/notifiche6"
             android:summary="@string/notifiche_sum6" />
 

@@ -37,7 +37,7 @@ public class EventDialog {
     TimePicker orario;
     Spinner sp;
 
-    private String idEvento;
+    private int idEvento;
     private static final int DIALOG_DATA = 1;
     private static final int DIALOG_ORARIO_E = 2;
     private static final int DIALOG_ORARIO_I = 3;
@@ -49,7 +49,7 @@ public class EventDialog {
     ProgressDialog progressDialog;
     private boolean first;
 
-    public EventDialog(final Context context, Handler reponseHandler, String idEvento, String adminEvento) {
+    public EventDialog(final Context context, Handler reponseHandler, int idEvento, String adminEvento) {
         this.context = context;
         this.mResponseHandler = reponseHandler;
         this.idEvento = idEvento;
@@ -315,7 +315,7 @@ public class EventDialog {
     }
     // </editor-fold>
 
-    private void addDomanda(final int who, final String domanda, final String idEvento, final String template, final String risposta) {
+    private void addDomanda(final int who, final String domanda, final int idEvento, final String template, final String risposta) {
         new AsyncTask<Void, Void, String>() {
 
             @Override

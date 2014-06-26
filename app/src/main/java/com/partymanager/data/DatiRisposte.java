@@ -7,37 +7,58 @@ import android.util.Log;
 
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.helper.DataProvide;
+import com.partymanager.helper.HelperFacebook;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DatiRisposte {
 
     private static RisposteAdapter eAdapter;
-    public static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
+    private static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
+    private static Map<Integer,Risposta> MAP = new HashMap<Integer, Risposta>();
+    public static String template = null;
     private static Context context_global;
 
-    public static RisposteAdapter init(Context context, String id_evento, String id_attr, int num_pers, int arg2, boolean chiusa) {
+//<<<<<<< HEAD
+    public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int arg2, boolean chiusa) {
+//=======
+    //public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int id_attributo) {
+//>>>>>>> agg-notifiche
         context_global = context;
-        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, Integer.parseInt(id_attr), arg2, chiusa);
-        DataProvide.getRisposte(id_evento, id_attr, context);
+        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
+        DataProvide.getRisposte(Integer.valueOf(id_evento), Integer.valueOf(id_attr), context);
         return eAdapter;
     }
 
-    public static void removeAll(Boolean salva_anche, String id_evento, String id_attributo) {
+    public static void removeAll(boolean salva_anche, int id_evento, int id_attributo) {
         if (salva_anche) {
             toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
         }
+      removeAll();
+    }
+
+    public static void removeAll (){
+        template = null;
         ITEMS.removeAll(ITEMS);
+        MAP = new HashMap<Integer, Risposta>();
         eAdapter.notifyDataSetChanged();
     }
 
-    private static void toJson(final ArrayList<Risposta> ITEMS_temp, final String id_evento, final String id_attributo) {
+    public static void removeIdItem(int idRisposta){
+        ITEMS.remove(MAP.get(idRisposta));
+        MAP.remove(idRisposta);
+        eAdapter.notifyDataSetChanged();
+    }
+
+    private static void toJson(final ArrayList<Risposta> ITEMS_temp, final int id_evento, final int id_attributo) {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
@@ -48,7 +69,7 @@ public class DatiRisposte {
                         JSONObject pnObj = new JSONObject();
                         pnObj.put("id_risposta", aITEMS_temp.id);
                         pnObj.put("risposta", aITEMS_temp.risposta);
-                        pnObj.put("template", aITEMS_temp.template);
+                        //pnObj.put("template", aITEMS_temp.template);
 
                         JSONArray userL = new JSONArray();
                         for (int j = 0; j < aITEMS_temp.persone.size(); j++) {
@@ -82,13 +103,35 @@ public class DatiRisposte {
         }.execute(null, null, null);
     }
 
+    public static Risposta getPositionItem(int position){
+        return ITEMS.get(position);
+    }
+
+    public static int getLenght(){
+        return ITEMS.size();
+    }
+
+    public static void addItem(Risposta item, String template) {
+        DatiRisposte.template=template;
+        addItem(item);
+    }
+
     public static void addItem(Risposta item) {
         ITEMS.add(item);
+        MAP.put(item.id,item);
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeItem(int pos) {
+    public static void addItem(Risposta item, boolean controllo) {
+        if (controllo) cercami();
+        addItem(item);
+    }
+
+//<<<<<<< HEAD
+    public static void removePositionItem(int pos) {
+        int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
+        MAP.remove(i);
         eAdapter.notifyDataSetChanged();
     }
 
@@ -96,25 +139,51 @@ public class DatiRisposte {
         ITEMS.get(pos).risposta = nuova;
         eAdapter.notifyDataSetChanged();
     }
+//=======
+
+
+    public static void addIdPersona (int idRisposta, String idUser, String name, boolean controllo){
+        if (controllo) cercami();
+        MAP.get(idRisposta).addPersona(new Persona(idUser,name));
+    }
+
+    public static void addPositionPersona (int position, String idUser, String name, boolean controllo){
+        if (controllo) cercami();
+        ITEMS.get(position).addPersona(new Persona(idUser,name));
+    }
+
+    private static void cercami() {
+        Boolean trovato = false;
+        for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
+            for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {
+                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())) {
+                    DatiRisposte.ITEMS.get(i).persone.remove(j);
+                    trovato = true;
+                }
+            }
+        }
+//>>>>>>> agg-notifiche
+    }
 
     public static class Risposta {
-        public String id;
+        public int id;
         public String risposta;
         public List<Persona> persone;
-        public String template;
+        //public String template;
 
-        public Risposta(String id, String risposta, String template, JSONArray userList) {
+        public Risposta(int id, String risposta, /*String template,*/ JSONArray userList) {
             this.id = id;
             this.risposta = risposta;
             this.persone = creaLista(userList);
-            this.template = template;
+            //this.template = template;
         }
 
+/*
         @Override
         public String toString() {
             return id;
         }
-
+*/
         private List<Persona> creaLista(JSONArray userList) {
             List<Persona> list = new ArrayList<Persona>();
             for (int i = 0; i < userList.length(); i++) {
