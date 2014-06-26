@@ -22,12 +22,12 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     private int num_pers_evento;
     private int id_attributo;
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     //private String idEvento;
     private boolean chiusa;
     private int arg2;
 
-  //  public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
+    //  public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
 //=======
     private int idEvento;
 

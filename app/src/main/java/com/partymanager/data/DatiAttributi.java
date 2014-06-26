@@ -15,19 +15,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class DatiAttributi {
 
     private static AttributiAdapter eAdapter;
-//<<<<<<< HEAD
-  //  public static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
+    //<<<<<<< HEAD
+    //  public static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static Context context_global;
-//=======
+    //=======
     private static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
 
@@ -40,14 +36,15 @@ public class DatiAttributi {
         return eAdapter;
     }
 
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     public static void removeAll(boolean salva_anche, int id_evento) {
         if (salva_anche) {
             toJson(new ArrayList<Attributo>(ITEMS), id_evento);
         }
         removeAll();
     }
-//======
+
+    //======
     public static void removeAll() {
 //>>>>>>> agg-notifiche
         ITEMS.removeAll(ITEMS);
@@ -100,7 +97,7 @@ public class DatiAttributi {
 
     public static void addItem(Attributo item) {
         ITEMS.add(item);
-        MAP.put(item.id,item);
+        MAP.put(item.id, item);
         eAdapter.notifyDataSetChanged();
     }
 
@@ -112,24 +109,24 @@ public class DatiAttributi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeIdItem(int idAttributo){
+    public static void removeIdItem(int idAttributo) {
         ITEMS.remove(MAP.get(idAttributo));
         MAP.remove(idAttributo);
         eAdapter.notifyDataSetChanged();
     }
 
-    public static Attributo getIdItem(int idAttributo){
+    public static Attributo getIdItem(int idAttributo) {
         return MAP.get(idAttributo);
     }
 
-    public static Attributo getPositionItem(int position){
+    public static Attributo getPositionItem(int position) {
         return ITEMS.get(position);
     }
 
-    public static String[] getTemplate(){
-        String[] ris = new String[]{null,null,null};
+    public static String[] getTemplate() {
+        String[] ris = new String[]{null, null, null};
 
-        for (Attributo a : ITEMS){
+        for (Attributo a : ITEMS) {
             if (a.template.equals("data"))
                 ris[0] = a.risposta;
 

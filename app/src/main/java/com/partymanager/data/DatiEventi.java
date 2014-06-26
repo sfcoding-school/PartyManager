@@ -15,14 +15,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
-public class DatiEventi{
+public class DatiEventi {
 
     private static ArrayList<Evento> ITEMS = new ArrayList<Evento>();
-    private static SparseArray<Evento> MAP  = new SparseArray<Evento>();
+    private static SparseArray<Evento> MAP = new SparseArray<Evento>();
     public static EventAdapter eAdapter;
     private static Context context_global;
 
@@ -32,7 +29,7 @@ public class DatiEventi{
         eAdapter.notifyDataSetChanged();
     }
 
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     private static void toJson(final ArrayList<Evento> ITEMS_temp) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -72,25 +69,26 @@ public class DatiEventi{
             }
         }.execute(null, null, null);
     }
-//=======
-    public static void removeIdItem(int idEvento){
+
+    //=======
+    public static void removeIdItem(int idEvento) {
         ITEMS.remove(MAP.get(idEvento));
         MAP.remove(idEvento);
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removePositionItem(int position){
+    public static void removePositionItem(int position) {
         int i = ITEMS.get(position).id;
         ITEMS.remove(position);
         MAP.remove(i);
         eAdapter.notifyDataSetChanged();
     }
 
-    public static Evento getIdItem(int idEvento){
+    public static Evento getIdItem(int idEvento) {
         return MAP.get(idEvento);
     }
 
-    public static Evento getPositionItem(int position){
+    public static Evento getPositionItem(int position) {
         return ITEMS.get(position);
 //>>>>>>> agg-notifiche
     }
@@ -104,7 +102,7 @@ public class DatiEventi{
 
     public static void addItem(Evento item) {
         ITEMS.add(item);
-        MAP.put(item.id,item);
+        MAP.put(item.id, item);
         eAdapter.notifyDataSetChanged();
     }
 

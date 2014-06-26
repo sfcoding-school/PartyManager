@@ -15,9 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class DatiRisposte {
@@ -29,10 +27,10 @@ public class DatiRisposte {
     public static String template = null;
     private static Context context_global;
 
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int arg2, boolean chiusa) {
 //=======
-    //public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int id_attributo) {
+        //public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int id_attributo) {
 //>>>>>>> agg-notifiche
         context_global = context;
         eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
@@ -44,17 +42,17 @@ public class DatiRisposte {
         if (salva_anche) {
             toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
         }
-      removeAll();
+        removeAll();
     }
 
-    public static void removeAll (){
+    public static void removeAll() {
         template = null;
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Risposta>();
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeIdItem(int idRisposta){
+    public static void removeIdItem(int idRisposta) {
         ITEMS.remove(MAP.get(idRisposta));
         MAP.remove(idRisposta);
         eAdapter.notifyDataSetChanged();
@@ -105,22 +103,22 @@ public class DatiRisposte {
         }.execute(null, null, null);
     }
 
-    public static Risposta getPositionItem(int position){
+    public static Risposta getPositionItem(int position) {
         return ITEMS.get(position);
     }
 
-    public static int getLenght(){
+    public static int getLenght() {
         return ITEMS.size();
     }
 
     public static void addItem(Risposta item, String template) {
-        DatiRisposte.template=template;
+        DatiRisposte.template = template;
         addItem(item);
     }
 
     public static void addItem(Risposta item) {
         ITEMS.add(item);
-        MAP.put(item.id,item);
+        MAP.put(item.id, item);
         eAdapter.notifyDataSetChanged();
     }
 
@@ -129,7 +127,7 @@ public class DatiRisposte {
         addItem(item);
     }
 
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     public static void removePositionItem(int pos) {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
@@ -144,14 +142,14 @@ public class DatiRisposte {
 //=======
 
 
-    public static void addIdPersona (int idRisposta, String idUser, String name, boolean controllo){
+    public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo) {
         if (controllo) cercami();
-        MAP.get(idRisposta).addPersona(new Persona(idUser,name));
+        MAP.get(idRisposta).addPersona(new Persona(idUser, name));
     }
 
-    public static void addPositionPersona (int position, String idUser, String name, boolean controllo){
+    public static void addPositionPersona(int position, String idUser, String name, boolean controllo) {
         if (controllo) cercami();
-        ITEMS.get(position).addPersona(new Persona(idUser,name));
+        ITEMS.get(position).addPersona(new Persona(idUser, name));
     }
 
     private static void cercami() {
@@ -180,12 +178,12 @@ public class DatiRisposte {
             //this.template = template;
         }
 
-/*
-        @Override
-        public String toString() {
-            return id;
-        }
-*/
+        /*
+                @Override
+                public String toString() {
+                    return id;
+                }
+        */
         private List<Persona> creaLista(JSONArray userList) {
             List<Persona> list = new ArrayList<Persona>();
             for (int i = 0; i < userList.length(); i++) {

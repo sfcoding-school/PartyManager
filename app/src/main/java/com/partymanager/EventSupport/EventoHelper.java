@@ -244,7 +244,7 @@ public class EventoHelper {
 //<<<<<<< HEAD
                         if (DatiAttributi.getPositionItem(arg2).close) {
 //=======
-                        addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
+                            addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
 //>>>>>>> agg-notifiche
 
                         } else {
@@ -275,7 +275,7 @@ public class EventoHelper {
         dialog.show();
     }
 
-//<<<<<<< HEAD
+    //<<<<<<< HEAD
     private static void modificaChiusaAsync(final int pos, final String nuova) {
         new AsyncTask<Void, Void, String>() {
 
@@ -510,7 +510,7 @@ public class EventoHelper {
 
         int temp = 0;
         String risposta_max = null;
-         int idMax = -1;
+        int idMax = -1;
 
         for (int i = 0; i < DatiRisposte.getLenght(); i++) {
             if (DatiRisposte.getPositionItem(i).persone.size() > temp) {
@@ -637,8 +637,8 @@ public class EventoHelper {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
 
-                    DatiEventi.getIdItem(idEvento).numUtenti+=quanti_aggiunti;
-                    bnt_friends.setText(""+DatiEventi.getIdItem(idEvento).numUtenti);
+                    DatiEventi.getIdItem(idEvento).numUtenti += quanti_aggiunti;
+                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
 
                     /*
                     for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {

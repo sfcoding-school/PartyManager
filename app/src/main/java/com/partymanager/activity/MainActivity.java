@@ -38,19 +38,13 @@ import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
-import com.partymanager.data.Friends;
-import com.partymanager.gcm.Helper_Notifiche;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
-
-import java.lang.reflect.Array;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {

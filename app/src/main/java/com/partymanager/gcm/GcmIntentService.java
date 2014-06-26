@@ -16,10 +16,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
-import com.partymanager.helper.DataProvide;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
