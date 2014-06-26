@@ -38,10 +38,8 @@ public class DatiRisposte {
         return eAdapter;
     }
 
-    public static void removeAll(boolean salva_anche, int id_evento, int id_attributo) {
-        if (salva_anche) {
-            toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
-        }
+    public static void removeAll(int id_evento, int id_attributo) {
+        toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
         removeAll();
     }
 

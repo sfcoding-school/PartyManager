@@ -70,7 +70,7 @@ public class EventoHelper {
     static Dialog dialogAddFriends;
     static ArrayList<String> id_toSend;
     static ProgressDialog progressDialog;
-    static int arg2;
+    static int posAttributi;
     static Button si;
     static Button no;
     static ImageButton dialogButton;
@@ -91,7 +91,7 @@ public class EventoHelper {
     /*
     public boolean isVisible(){
         if (dialog != null && dialog.isShowing())
-            return DatiAttributi.ITEMS.get(arg2).id;
+            return DatiAttributi.ITEMS.get(posAttributi).id;
         else return false;
     }
     */
@@ -105,25 +105,25 @@ public class EventoHelper {
     private static int idAttributo;
 
     //<<<<<<< HEAD
-    public static void dialogRisposte(final String adminEvento, int arg, final Activity activity, final int idEvento, String numUtenti) {
-        arg2 = arg;
+    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento, String numUtenti) {
+        posAttributi = posAttr;
 /*
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_risposte);*/
 
         dialog = getRisposteDialog(activity);
-        idAttributo = DatiAttributi.getPositionItem(arg2).id;
+        idAttributo = DatiAttributi.getPositionItem(posAttributi).id;
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(arg2).id, Integer.parseInt(numUtenti), arg2, DatiAttributi.getPositionItem(arg2).close);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, Integer.parseInt(numUtenti), posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
 /*=======
 
-    public static void dialogRisposte(final int arg2, Activity activity, final int idEvento, String numUtenti) {
+    public static void dialogRisposte(final int posAttributi, Activity activity, final int idEvento, String numUtenti) {
 
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, idAttributo, Integer.parseInt(numUtenti), arg2);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, idAttributo, Integer.parseInt(numUtenti), posAttributi);
 >>>>>>> agg-notifiche*/
         risp.setAdapter(adapter);
 
@@ -151,12 +151,13 @@ public class EventoHelper {
         });
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_domanda_dialog);
-        text.setText(DatiAttributi.getPositionItem(arg2).domanda);
+        text.setText(DatiAttributi.getPositionItem(posAttributi).domanda);
 
         dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
         edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
+        edt.setVisibility(View.VISIBLE);
 
-        if (DatiAttributi.getPositionItem(arg2).close) {
+        if (DatiAttributi.getPositionItem(posAttributi).close) {
             edt.setVisibility(View.GONE);
             dialogButton.setVisibility(View.GONE);
         } else {
@@ -172,20 +173,20 @@ public class EventoHelper {
                     dialogButton.setVisibility(View.GONE);
                     pb_add.setVisibility(View.VISIBLE);
 //<<<<<<< HEAD
-                    if (DatiAttributi.getPositionItem(arg2).close) {
+                    if (DatiAttributi.getPositionItem(posAttributi).close) {
 
                     } else {
-                        addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, edt.getText().toString(), DatiAttributi.getPositionItem(arg2).template, pb_add, dialogButton);
+                        addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
                     }
 /*=======
-                    addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, edt.getText().toString(), DatiAttributi.getPositionItem(arg2).template, pb_add, dialogButton);
+                    addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
 >>>>>>> agg-notifiche*/
                 }
             }
         });
 
-        if (DatiAttributi.getPositionItem(arg2).template != null) {
-            if (DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
+        if (DatiAttributi.getPositionItem(posAttributi).template != null) {
+            if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
                 LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                 normal.setVisibility(View.GONE);
                 LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
@@ -199,10 +200,10 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.getPositionItem(arg2).close) {
+                        if (DatiAttributi.getPositionItem(posAttributi).close) {
 
                         } else {
-                            addDomandaSino(finalAdapter, idEvento, "no", pb_sino, arg2);
+                            addDomandaSino(finalAdapter, idEvento, "no", pb_sino, posAttributi);
                         }
                     }
                 });
@@ -212,20 +213,20 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.getPositionItem(arg2).close) {
+                        if (DatiAttributi.getPositionItem(posAttributi).close) {
 
                         } else {
-                            addDomandaSino(finalAdapter, idEvento, "si", pb_sino, arg2);
+                            addDomandaSino(finalAdapter, idEvento, "si", pb_sino, posAttributi);
                         }
                     }
                 });
 
-                if (DatiAttributi.getPositionItem(arg2).close) {
+                if (DatiAttributi.getPositionItem(posAttributi).close) {
                     si.setVisibility(View.GONE);
                     no.setVisibility(View.GONE);
                 }
             }
-            if (DatiAttributi.getPositionItem(arg2).template.equals("data")) {
+            if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
                 LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
                 normal.setVisibility(View.GONE);
                 LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
@@ -242,19 +243,19 @@ public class EventoHelper {
                         String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                         pb_data.setVisibility(View.VISIBLE);
 //<<<<<<< HEAD
-                        if (DatiAttributi.getPositionItem(arg2).close) {
+                        if (DatiAttributi.getPositionItem(posAttributi).close) {
 //=======
-                            addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
+                            addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
 //>>>>>>> agg-notifiche
 
                         } else {
 
-                            addRisposta(idEvento, DatiAttributi.getPositionItem(arg2).id, temp, "data", pb_data, null);
+                            addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
                         }
                     }
                 });
 
-                if (DatiAttributi.getPositionItem(arg2).close) {
+                if (DatiAttributi.getPositionItem(posAttributi).close) {
                     add.setVisibility(View.GONE);
                     dateR.setVisibility(View.GONE);
                 }
@@ -265,7 +266,7 @@ public class EventoHelper {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 try {
-                    DatiRisposte.removeAll(true, idEvento, DatiAttributi.getPositionItem(arg2).id);
+                    DatiRisposte.removeAll(idEvento, DatiAttributi.getPositionItem(posAttributi).id);
                 } catch (IndexOutOfBoundsException e) {
                     Log.e("Evento-dialog.setOnDismissListener", "IndexOutOfBoundsException " + e);
                 }
@@ -302,15 +303,15 @@ public class EventoHelper {
     }
 
     public static void modificaChiusa() {
-        if (DatiAttributi.getPositionItem(arg2).template.equals("data")) {
+        if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
             add.setVisibility(View.VISIBLE);
             dateR.setVisibility(View.VISIBLE);
         }
-        if (DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
+        if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
             si.setVisibility(View.VISIBLE);
             no.setVisibility(View.VISIBLE);
         }
-        if (!DatiAttributi.getPositionItem(arg2).template.equals("data") && !DatiAttributi.getPositionItem(arg2).template.equals("sino")) {
+        if (!DatiAttributi.getPositionItem(posAttributi).template.equals("data") && !DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
             edt.setVisibility(View.VISIBLE);
             dialogButton.setVisibility(View.VISIBLE);
         }
