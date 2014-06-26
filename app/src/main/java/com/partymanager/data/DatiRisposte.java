@@ -113,7 +113,8 @@ public class DatiRisposte {
         return ITEMS.size();
     }
 
-    public static void addItem(Risposta item, String template) {
+    public static void addItem(Risposta item, String template, boolean controllo) {
+        if (controllo) cercami();
         DatiRisposte.template = template;
         addItem(item);
     }
@@ -123,6 +124,7 @@ public class DatiRisposte {
         MAP.put(item.id, item);
         eAdapter.notifyDataSetChanged();
     }
+
 
     public static void addItem(Risposta item, boolean controllo) {
         if (controllo) cercami();

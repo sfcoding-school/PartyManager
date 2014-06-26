@@ -277,7 +277,6 @@ public class GcmIntentService extends IntentService {
                 if (MainActivity.handlerService != null) {
                     Message m = new Message();
                     m.setData(extras);
-                    Bundle b = new Bundle();
                     MainActivity.handlerService.sendMessage(m);
                 }
 

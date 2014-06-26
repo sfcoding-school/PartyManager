@@ -360,9 +360,12 @@ public class EventDialog {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
 
-                if (isInteger(ris)) {
+                try {
+                    int ris_temp = Integer.parseInt(ris);
+
                     Message m = new Message();
                     Bundle b = new Bundle();
+
                     switch (who) {
                         case DIALOG_DATA:
                             b.putInt("who", 1);
@@ -394,11 +397,14 @@ public class EventDialog {
                             b.putString("domanda", domanda);
                             break;
                     }
+
                     b.putBoolean("close", chiusura.isChecked());
-                    b.putString("id_attributo", ris);
+                    b.putInt("id_attributo", ris_temp);
                     m.setData(b);
                     mResponseHandler.sendMessage(m);
-                } else {
+
+                }  catch (NumberFormatException e) {
+
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                     alertDialogBuilder.setMessage(R.string.problInsDom);
 
@@ -413,14 +419,5 @@ public class EventDialog {
                 }
             }
         }.execute(null, null, null);
-    }
-
-    private boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
     }
 }

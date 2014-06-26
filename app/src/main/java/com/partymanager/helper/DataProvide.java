@@ -251,7 +251,7 @@ public class DataProvide {
                                 jsonArray.getJSONObject(i).getInt("id_risposta"),
                                 jsonArray.getJSONObject(i).getString("risposta"),
                                 jsonArray.getJSONObject(i).getJSONArray("userList")
-                        ), jsonArray.getJSONObject(i).optString("template")
+                        ), jsonArray.getJSONObject(i).optString("template"), false
                 );
             }
         } catch (JSONException e) {

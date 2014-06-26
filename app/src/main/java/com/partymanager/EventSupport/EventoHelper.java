@@ -417,7 +417,7 @@ public class EventoHelper {
                     pers.put("id_user", HelperFacebook.getFacebookId());
                     pers.put("name", HelperFacebook.getFacebookUserName());
                     userL.put(pers);
-                    DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template);
+                    DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template, true);
                     edt.setText("");
                 } catch (JSONException e) {
                     Log.e("Evento-addRisposta", "JSONException " + e);
