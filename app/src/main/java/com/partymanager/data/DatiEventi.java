@@ -29,6 +29,10 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void notifyDataChange(){
+        eAdapter.notifyDataSetChanged();
+    }
+
     //<<<<<<< HEAD
     private static void toJson(final ArrayList<Evento> ITEMS_temp) {
         new AsyncTask<Void, Void, JSONArray>() {

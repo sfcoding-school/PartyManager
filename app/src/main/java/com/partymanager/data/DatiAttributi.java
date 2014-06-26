@@ -115,6 +115,10 @@ public class DatiAttributi {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void notifyDataChange(){
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static Attributo getIdItem(int idAttributo) {
         return MAP.get(idAttributo);
     }

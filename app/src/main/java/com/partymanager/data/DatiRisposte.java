@@ -43,6 +43,10 @@ public class DatiRisposte {
         removeAll();
     }
 
+    public static void notifyDataChange(){
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static void removeAll() {
         template = null;
         ITEMS.removeAll(ITEMS);

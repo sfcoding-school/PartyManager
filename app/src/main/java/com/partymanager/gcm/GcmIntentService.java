@@ -158,6 +158,7 @@ public class GcmIntentService extends IntentService {
                     m.setData(extras);
                     MainActivity.handlerService.sendMessage(m);
 =======*/
+                Log.e("NOTIFICHE-DEBUG", extras.toString());
                 int type = Integer.parseInt(extras.getString("type"));
                 int method = Integer.parseInt(extras.getString("method"));
                 /*

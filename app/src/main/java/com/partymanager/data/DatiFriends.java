@@ -34,4 +34,7 @@ public class DatiFriends {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void notifyDataChange(){
+        eAdapter.notifyDataSetChanged();
+    }
 }

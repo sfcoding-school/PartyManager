@@ -116,6 +116,7 @@ public class MainActivity extends Activity
                                 //'uscito'
                                 case 4:
                                     DatiEventi.getIdItem(idEvento).numUtenti -= 1;
+                                    DatiEventi.notifyDataChange();
                                     break;
                             }
                             break;
@@ -145,6 +146,7 @@ public class MainActivity extends Activity
                                     //aggingere l'eliminazione della data se viene eliminato un attributo con template uguale a data
                                     break;
                             }
+                            DatiEventi.notifyDataChange();
                             break;
 
                         //risp
@@ -181,8 +183,11 @@ public class MainActivity extends Activity
                                 //del
                                 case 3:
                                     DatiEventi.getIdItem(idEvento).numUtenti--;
+
                                     break;
                             }
+
+                        DatiEventi.notifyDataChange();
                             break;
                     }
                 } else //EVENTO VISIBILE
@@ -237,6 +242,7 @@ public class MainActivity extends Activity
                                                 attr.risposta = risposta;
                                                 attr.numr = 1;
                                             }
+                                            DatiAttributi.notifyDataChange();
                                             break;
 
                                         //delete
@@ -253,6 +259,7 @@ public class MainActivity extends Activity
                                                 attr.risposta = risposta;
                                                 attr.numr = numr;
                                             }
+                                            DatiAttributi.notifyDataChange();
                                             break;
 
                                     }
