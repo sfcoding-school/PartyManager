@@ -34,7 +34,7 @@ public class DatiRisposte {
 //>>>>>>> agg-notifiche
         context_global = context;
         eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
-        DataProvide.getRisposte(Integer.valueOf(id_evento), Integer.valueOf(id_attr), context);
+        DataProvide.getRisposte(id_evento, id_attr, context);
         return eAdapter;
     }
 
