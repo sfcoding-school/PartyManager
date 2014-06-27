@@ -37,7 +37,7 @@ public class HelperFacebook {
         if (facebookId != null)
             return facebookId;
         else {
-            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(), activity.MODE_PRIVATE);
+            SharedPreferences prefs = activity.getSharedPreferences("profilo", Context.MODE_PRIVATE);
             String id = prefs.getString("reg_id", "");
             if (id.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "id facebook not found.");

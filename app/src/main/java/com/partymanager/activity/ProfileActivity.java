@@ -243,7 +243,7 @@ public class ProfileActivity extends Activity {
     public SharedPreferences getPreferences() {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return getSharedPreferences(ProfileActivity.class.getSimpleName(),
+        return getSharedPreferences("profilo",
                 Context.MODE_PRIVATE);
     }
 
