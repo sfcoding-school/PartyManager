@@ -107,14 +107,14 @@ public class DatiAttributi {
     private static Comparator<Attributo> comparator = new Comparator<Attributo>() {
         @Override
         public int compare(Attributo item1, Attributo item2) {
-            Integer numd1 = Integer.valueOf(item1.numd);
-            Integer numd2 = Integer.valueOf(item2.numd);
-            Integer id1 = Integer.valueOf(item1.id);
-            Integer id2 = Integer.valueOf(item2.id);
+            Integer numd1 = item1.numd;
+            Integer numd2 = item2.numd;
+            Integer id1 = item1.id;
+            Integer id2 = item2.id;
 
-            if (numd1.compareTo(numd2)>0)
+            if (numd1.compareTo(numd2) > 0)
                 return 1;
-            else if(numd1.compareTo(numd2)==0)
+            else if (numd1.compareTo(numd2) == 0)
                 return id2.compareTo(id1);
             else
                 return -1;
@@ -135,7 +135,7 @@ public class DatiAttributi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void notifyDataChange(){
+    public static void notifyDataChange() {
         eAdapter.notifyDataSetChanged();
     }
 
@@ -148,19 +148,32 @@ public class DatiAttributi {
     }
 
     public static String[] getTemplate() {
-        String[] ris = new String[]{null, null, null};
+        String[] ris = new String[]{null, null, null, null};
 
         for (Attributo a : ITEMS) {
-            if (a.template.equals("data"))
-                ris[0] = a.risposta;
+            if (a.template != null) {
+                if (a.template.equals("data"))
+                    ris[0] = a.risposta;
 
-            if (a.template.equals("luogoE"))
-                ris[1] = a.risposta;
+                if (a.template.equals("luogoE"))
+                    ris[1] = a.risposta;
 
-            if (a.template.equals("luogoI"))
-                ris[2] = a.risposta;
-        }
+                if (a.template.equals("luogoI"))
+                    ris[2] = a.risposta;
+
+                if (a.template.equals("oraE"))
+                    ris[3] = a.risposta;
+            }}
         return ris;
+    }
+
+    public static int cercaTemplate(String template) {
+        for (Attributo a : ITEMS) {
+            if (a.template!=null && a.template.equals(template)) {
+                return ITEMS.indexOf(a);
+            }
+        }
+        return -1;
     }
 
     public static class Attributo {

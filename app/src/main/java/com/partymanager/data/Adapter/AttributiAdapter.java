@@ -25,9 +25,16 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
     public View getView(int position, View convertView, ViewGroup parent) {
         DatiAttributi.Attributo attr = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
-        }
+
+            if (attr.template != null && (attr.template.equals("data") ||
+                    attr.template.equals("luogoE") ||
+                    attr.template.equals("luogoI") ||
+                    attr.template.equals("oraE"))) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_null, parent, false);
+            } else {
+
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
+
 
         TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);
         TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
@@ -45,6 +52,8 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
         }
 
         details.setText(temp);
+            }
+
 
         return convertView;
     }

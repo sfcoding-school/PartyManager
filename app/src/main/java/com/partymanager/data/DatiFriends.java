@@ -18,7 +18,7 @@ public class DatiFriends {
     }
 
     public static FriendsAdapter init(int idEvento, Context context) {
-        eAdapter = new FriendsAdapter(context, DatiFriends.ITEMS);
+        eAdapter = new FriendsAdapter(context, DatiFriends.ITEMS, DatiEventi.getIdItem(idEvento).admin);
 
         DataProvide.getFriends(idEvento, context);
         return eAdapter;
@@ -34,7 +34,7 @@ public class DatiFriends {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void notifyDataChange(){
+    public static void notifyDataChange() {
         eAdapter.notifyDataSetChanged();
     }
 }

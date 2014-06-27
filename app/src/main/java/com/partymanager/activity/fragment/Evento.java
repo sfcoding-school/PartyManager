@@ -45,7 +45,7 @@ public class Evento extends Fragment {
     EventDialog eventDialog;
     static TextView luogo;
     static TextView quando_data;
-    TextView quando_ora;
+    static TextView quando_ora;
     static TextView dove;
     int mLastFirstVisibleItem = 0;
     Dialog dialogAddDomanda;
@@ -105,22 +105,7 @@ public class Evento extends Fragment {
         quando_data.setText(template[0]);
         luogo.setText(template[1]);
         dove.setText(template[2]);
-        /*
-        ArrayList<DatiAttributi.Attributo> prova = DatiAttributi.ITEMS;
-
-        for (DatiAttributi.Attributo temp : prova) {
-            //Log.e("checkTEmplate-TEST: ", temp.id + " " + temp.domanda + " " + temp.risposta + " " + temp.template + " " + temp.close);
-            if (temp.template.equals("data")) {
-                quando_data.setText(temp.risposta);
-            }
-            if (temp.template.equals("luogoE")) {
-                luogo.setText(temp.risposta);
-            }
-            if (temp.template.equals("luogoI")) {
-                dove.setText(temp.risposta);
-            }
-        }
-        */
+        quando_ora.setText(template[3]);
     }
 
     @Override
@@ -143,32 +128,28 @@ public class Evento extends Fragment {
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventDialog.which(2);
-                dialogAddDomanda.show();
+                templateManager("luogoE", 2);
             }
         });
 
         quando_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventDialog.which(3);
-                dialogAddDomanda.show();
+                templateManager("data", 3);
             }
         });
 
         quando_ora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventDialog.which(5);
-                dialogAddDomanda.show();
+                templateManager("oraE", 5);
             }
         });
 
         dove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventDialog.which(1);
-                dialogAddDomanda.show();
+                templateManager("luogoI", 1);
             }
         });
 
@@ -191,7 +172,6 @@ public class Evento extends Fragment {
         listView.setAdapter(eAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
@@ -288,6 +268,16 @@ public class Evento extends Fragment {
     }
     // </editor-fold>
 
+    public void templateManager(String template, int agg) {
+        int pos;
+        if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
+            EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
+        } else {
+            eventDialog.which(agg);
+            dialogAddDomanda.show();
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Handler">
     private Handler dialogMsgHandler = new Handler() {
 
@@ -298,7 +288,7 @@ public class Evento extends Fragment {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
                 int id_attributo = msg.getData().getInt("id_attributo");
-                String ris2;
+                String ris2 = "";
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
@@ -306,11 +296,11 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, null, close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, "oraE", close, 1, 1, null));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, null, close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, "oraI", close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
@@ -322,7 +312,6 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
-                        ris2 = "";
                         if (close) {
                             ris2 = msg.getData().getString("pers-r");
                         }
@@ -330,10 +319,10 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
-                        ris2 = "1 voto: 100% SI";
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, false, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, "sino", false, 1, 1, null));
                         break;
                 }
+                checkTemplate();
             }
         }
     };

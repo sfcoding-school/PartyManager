@@ -60,9 +60,9 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
             temp_risposta = HelperDataParser.getGiornoLettere(HelperDataParser.getCalFromString(temp_risposta)) + " " + temp_risposta;
         }
 
-
         TextView who = (TextView) convertView.findViewById(R.id.txt_who);
-
+        final Button vota = (Button) convertView.findViewById(R.id.button_voto);
+        vota.setVisibility(View.VISIBLE);
 
         StringBuilder sb = new StringBuilder();
         sb.append("");
@@ -70,16 +70,16 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
             for (int i = 0; i < DatiRisposte.getPositionItem(position).persone.size(); i++) {
                 if (i > 0)
                     sb.append(", ");
-                if (DatiRisposte.getPositionItem(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId()))
+                if (DatiRisposte.getPositionItem(position).persone.get(i).id_fb.equals(HelperFacebook.getFacebookId())) {
                     sb.append("Io");
-                else
+                    vota.setVisibility(View.GONE);
+                } else
                     sb.append(DatiRisposte.getPositionItem(position).persone.get(i).nome.split(" ")[0]);
             }
         }
-        final Button vota = (Button) convertView.findViewById(R.id.button_voto);
-        vota.setVisibility(View.VISIBLE);
 
         if (chiusa) {
+            vota.setVisibility(View.VISIBLE);
             vota.setText("Modifica");
         }
 
