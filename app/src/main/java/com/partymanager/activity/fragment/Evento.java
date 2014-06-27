@@ -22,6 +22,7 @@ import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiEventi;
 import com.partymanager.helper.HelperFacebook;
 
 public class Evento extends Fragment {
@@ -294,6 +295,7 @@ public class Evento extends Fragment {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
                         DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1, null));
+                        DatiEventi.addData(idEvento, ris);
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");

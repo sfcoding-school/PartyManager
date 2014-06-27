@@ -242,18 +242,23 @@ public class EventoHelper {
             dataL.setVisibility(View.GONE);
             sino.setVisibility(View.GONE);
         } else {
-
-            if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
-                normal.setVisibility(View.GONE);
-                normal.setVisibility(View.GONE);
-                dataL.setVisibility(View.VISIBLE);
-            }
-            if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
-                normal.setVisibility(View.GONE);
-                dataL.setVisibility(View.GONE);
-                sino.setVisibility(View.VISIBLE);
-            }
-            if (!DatiAttributi.getPositionItem(posAttributi).template.equals("data") && !DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
+            if (DatiAttributi.getPositionItem(posAttributi).template != null) {
+                if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
+                    normal.setVisibility(View.GONE);
+                    normal.setVisibility(View.GONE);
+                    dataL.setVisibility(View.VISIBLE);
+                }
+                if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
+                    normal.setVisibility(View.GONE);
+                    dataL.setVisibility(View.GONE);
+                    sino.setVisibility(View.VISIBLE);
+                }
+                if (!DatiAttributi.getPositionItem(posAttributi).template.equals("data") && !DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
+                    normal.setVisibility(View.VISIBLE);
+                    dataL.setVisibility(View.GONE);
+                    sino.setVisibility(View.GONE);
+                }
+            } else {
                 normal.setVisibility(View.VISIBLE);
                 dataL.setVisibility(View.GONE);
                 sino.setVisibility(View.GONE);

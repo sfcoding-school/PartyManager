@@ -77,7 +77,11 @@ public class DatiEventi {
         }.execute(null, null, null);
     }
 
-    //=======
+    public static void addData(int idEvento, String data) {
+        MAP.get(idEvento).date = HelperDataParser.getCalFromString(data);
+        eAdapter.notifyDataSetChanged();
+    }
+
     public static void removeIdItem(int idEvento) {
         ITEMS.remove(MAP.get(idEvento));
         MAP.remove(idEvento);
@@ -97,7 +101,6 @@ public class DatiEventi {
 
     public static Evento getPositionItem(int position) {
         return ITEMS.get(position);
-//>>>>>>> agg-notifiche
     }
 
     public static EventAdapter init(Context context) {
