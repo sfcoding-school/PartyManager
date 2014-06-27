@@ -119,9 +119,9 @@ public class DatiEventi {
             if (item1.date != null && item2.date != null) {
                 return item1.date.compareTo(item2.date);
             } else if (item1.date != null) {
-                return 1;
-            } else if (item2.date != null) {
                 return -1;
+            } else if (item2.date != null) {
+                return 1;
             } else {
                 if (item1.id < item2.id)
                     return 1;
