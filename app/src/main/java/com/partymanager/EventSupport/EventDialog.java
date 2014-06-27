@@ -65,6 +65,8 @@ public class EventDialog {
 
         if (!HelperFacebook.getFacebookId().equals(adminEvento)) {
             chiusura.setVisibility(View.GONE);
+        } else {
+            chiusura.setVisibility(View.VISIBLE);
         }
 
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
@@ -297,7 +299,6 @@ public class EventDialog {
         date.setVisibility(View.GONE);
         orario.setVisibility(View.GONE);
 
-        chiusura.setVisibility(View.GONE);
         alto.setHint(R.string.persDH);
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -403,7 +404,7 @@ public class EventDialog {
                     m.setData(b);
                     mResponseHandler.sendMessage(m);
 
-                }  catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                     alertDialogBuilder.setMessage(R.string.problInsDom);

@@ -20,10 +20,12 @@ import java.util.ArrayList;
 public class FriendsAdapter extends ArrayAdapter<Friends> {
 
     Context context;
+    String idAdminEvento;
 
-    public FriendsAdapter(Context context, ArrayList<Friends> utenti) {
+    public FriendsAdapter(Context context, ArrayList<Friends> utenti, String idAdminEvento) {
         super(context, R.layout.fb_friends, utenti);
         this.context = context;
+        this.idAdminEvento = idAdminEvento;
     }
 
     @Override
@@ -38,10 +40,17 @@ public class FriendsAdapter extends ArrayAdapter<Friends> {
         ImageView foto_profilo = (ImageView) convertView.findViewById(R.id.img_profilo);
         TextView installed = (TextView) convertView.findViewById(R.id.txt_installed);
         installed.setVisibility(View.GONE);
+
         TextView name = (TextView) convertView.findViewById(R.id.txt_friends_name);
         name.setVisibility(View.VISIBLE);
 
-        name.setText(DatiFriends.ITEMS.get(position).getName());
+        String text = DatiFriends.ITEMS.get(position).getName();
+
+        if (DatiFriends.ITEMS.get(position).getCode().equals(idAdminEvento)) {
+            text += " (ADMIN)";
+        }
+
+        name.setText(text);
         name.setTextColor(Color.BLACK);
 
         foto_profilo.setImageBitmap(null);

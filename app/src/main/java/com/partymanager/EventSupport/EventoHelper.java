@@ -76,7 +76,7 @@ public class EventoHelper {
     static ImageButton dialogButton;
     static DatePicker dateR;
     static Button add;
-
+    private static int idAttributo;
     static private Dialog dialog;
 
     private static Dialog getRisposteDialog(Activity activity) {
@@ -98,39 +98,24 @@ public class EventoHelper {
 
     public static int getIdAttributo() {
         if (dialog != null && dialog.isShowing())
-            return Integer.valueOf(idAttributo);
+            return idAttributo;
         else return -1;
     }
 
-    private static int idAttributo;
-
-    //<<<<<<< HEAD
     public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento, String numUtenti) {
         posAttributi = posAttr;
-/*
-        Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_risposte);*/
 
         dialog = getRisposteDialog(activity);
         idAttributo = DatiAttributi.getPositionItem(posAttributi).id;
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
         RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, Integer.parseInt(numUtenti), posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
-/*=======
 
-    public static void dialogRisposte(final int posAttributi, Activity activity, final int idEvento, String numUtenti) {
-
-
-        final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, idAttributo, Integer.parseInt(numUtenti), posAttributi);
->>>>>>> agg-notifiche*/
         risp.setAdapter(adapter);
 
         risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                Log.e("provaRISP", "click");
                 if (adminEvento.equals(HelperFacebook.getFacebookId())) {
 
                     PopupMenu popup = new PopupMenu(activity, view);
@@ -140,7 +125,7 @@ public class EventoHelper {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaRisposta(i, idEvento, activity);
+                            eliminaRisposta(i, idEvento, DatiRisposte.getPositionItem(i).id, activity);
                             return true;
                         }
                     });
@@ -172,24 +157,24 @@ public class EventoHelper {
                 if (!"".equals(edt.getText().toString())) {
                     dialogButton.setVisibility(View.GONE);
                     pb_add.setVisibility(View.VISIBLE);
-//<<<<<<< HEAD
-                    if (DatiAttributi.getPositionItem(posAttributi).close) {
 
-                    } else {
+                    if (!DatiAttributi.getPositionItem(posAttributi).close) {
                         addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
+                    } else {
+                        modificaChiusaAsync(0, edt.getText().toString());
                     }
-/*=======
-                    addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
->>>>>>> agg-notifiche*/
                 }
             }
         });
 
+        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+        LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
+        LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
+
         if (DatiAttributi.getPositionItem(posAttributi).template != null) {
             if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
-                LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+
                 normal.setVisibility(View.GONE);
-                LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
                 sino.setVisibility(View.VISIBLE);
 
                 final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
@@ -200,10 +185,11 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.getPositionItem(posAttributi).close) {
 
-                        } else {
+                        if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(finalAdapter, idEvento, "no", pb_sino, posAttributi);
+                        }else {
+                            modificaChiusaAsync(0, "no");
                         }
                     }
                 });
@@ -213,10 +199,10 @@ public class EventoHelper {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
-                        if (DatiAttributi.getPositionItem(posAttributi).close) {
-
-                        } else {
+                        if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(finalAdapter, idEvento, "si", pb_sino, posAttributi);
+                        } else {
+                            modificaChiusaAsync(0, "si");
                         }
                     }
                 });
@@ -226,30 +212,28 @@ public class EventoHelper {
                     no.setVisibility(View.GONE);
                 }
             }
+            else {
+                normal.setVisibility(View.VISIBLE);
+                sino.setVisibility(View.GONE);
+            }
             if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
-                LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+
                 normal.setVisibility(View.GONE);
-                LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
                 dataL.setVisibility(View.VISIBLE);
 
                 final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
-
                 dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
-
                 add = (Button) dialog.findViewById(R.id.button_rispndi_data);
+
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         String temp = Integer.toString(dateR.getDayOfMonth()) + "/" + Integer.toString(dateR.getMonth() + 1) + "/" + Integer.toString(dateR.getYear());
                         pb_data.setVisibility(View.VISIBLE);
-//<<<<<<< HEAD
+
                         if (DatiAttributi.getPositionItem(posAttributi).close) {
-//=======
-                            addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
-//>>>>>>> agg-notifiche
-
+                           modificaChiusaAsync(0, temp);
                         } else {
-
                             addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
                         }
                     }
@@ -259,7 +243,14 @@ public class EventoHelper {
                     add.setVisibility(View.GONE);
                     dateR.setVisibility(View.GONE);
                 }
+            }else {
+                normal.setVisibility(View.VISIBLE);
+                dataL.setVisibility(View.GONE);
             }
+        } else {
+            normal.setVisibility(View.VISIBLE);
+            dataL.setVisibility(View.GONE);
+            sino.setVisibility(View.GONE);
         }
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -276,8 +267,7 @@ public class EventoHelper {
         dialog.show();
     }
 
-    //<<<<<<< HEAD
-    private static void modificaChiusaAsync(final int pos, final String nuova) {
+    public static void modificaChiusaAsync(final int pos, final String nuova) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -317,13 +307,13 @@ public class EventoHelper {
         }
     }
 
-    private static void eliminaRisposta(final int pos, final int idEvento, final Activity activity) {
+    private static void eliminaRisposta(final int pos, final int idEvento, final int idRisposta, final Activity activity) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("qualcosa/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id);
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + "/" + idRisposta);
 
                 Log.e("Evento-Helper-eliminaRisposta-ris: ", " \nrisposta: " + ris);
 
@@ -556,7 +546,7 @@ public class EventoHelper {
         addFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogAddFriends(bnt_friends, numUtenti, idEvento, activity);
+                dialogAddFriends(bnt_friends, idEvento, activity);
             }
         });
 
@@ -594,7 +584,7 @@ public class EventoHelper {
         });
     }
 
-    private static void addFriendsToEvent(final TextView bnt_friends, final String numUtenti, final Activity activity, final int idEvento, final String List, final int quanti_aggiunti) {
+    private static void addFriendsToEvent(final TextView bnt_friends, final Activity activity, final int idEvento, final String List, final int quanti_aggiunti) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -758,7 +748,7 @@ public class EventoHelper {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="dialogAddFriends">
-    public static void dialogAddFriends(final TextView bnt_friends, final String numUtenti, final int idEvento, final Activity activity) {
+    public static void dialogAddFriends(final TextView bnt_friends, final int idEvento, final Activity activity) {
         requestMyAppFacebookFriends(HelperFacebook.getSession(activity), activity);
         dialogAddFriends = new Dialog(activity);
         dialogAddFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -828,7 +818,7 @@ public class EventoHelper {
                 JSONArray jsArray = new JSONArray(id_toSend);
 
                 Log.e("Evento-AddFriends-Persone prima di invio: ", jsArray.toString());
-                addFriendsToEvent(bnt_friends, numUtenti, activity, idEvento, jsArray.toString(), jsArray.length());
+                addFriendsToEvent(bnt_friends, activity, idEvento, jsArray.toString(), jsArray.length());
 
                 if (!id_to_invite.toString().equals(""))
                     sendInviti(id_to_invite.toString(), activity, dialogAddFriends);

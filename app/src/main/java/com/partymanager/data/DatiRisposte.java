@@ -45,7 +45,7 @@ public class DatiRisposte {
         removeAll();
     }
 
-    public static void notifyDataChange(){
+    public static void notifyDataChange() {
         eAdapter.notifyDataSetChanged();
     }
 
@@ -124,10 +124,9 @@ public class DatiRisposte {
     public static void addItem(Risposta item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
-        Collections.sort(ITEMS,comparator);
+        Collections.sort(ITEMS, comparator);
         eAdapter.notifyDataSetChanged();
     }
-
 
     public static void addItem(Risposta item, boolean controllo) {
         if (controllo) cercami();
@@ -137,14 +136,14 @@ public class DatiRisposte {
     private static Comparator<Risposta> comparator = new Comparator<Risposta>() {
         @Override
         public int compare(Risposta item1, Risposta item2) {
-            Integer numr1 = Integer.valueOf(item1.persone.size());
-            Integer numr2 = Integer.valueOf(item2.persone.size());
-            Integer id1 = Integer.valueOf(item1.id);
-            Integer id2 = Integer.valueOf(item2.id);
+            Integer numr1 = item1.persone.size();
+            Integer numr2 = item2.persone.size();
+            Integer id1 = item1.id;
+            Integer id2 = item2.id;
 
-            if (numr1.compareTo(numr2)>0)
+            if (numr1.compareTo(numr2) > 0)
                 return -1;
-            else if(numr1.compareTo(numr2)==0)
+            else if (numr1.compareTo(numr2) == 0)
                 return id2.compareTo(id1);
             else
                 return 1;
@@ -165,15 +164,16 @@ public class DatiRisposte {
     }
 //=======
 
-
     public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo) {
         if (controllo) cercami();
         MAP.get(idRisposta).addPersona(new Persona(idUser, name));
+        eAdapter.notifyDataSetChanged();
     }
 
     public static void addPositionPersona(int position, String idUser, String name, boolean controllo) {
         if (controllo) cercami();
         ITEMS.get(position).addPersona(new Persona(idUser, name));
+        eAdapter.notifyDataSetChanged();
     }
 
     private static void cercami() {
@@ -213,6 +213,7 @@ public class DatiRisposte {
             for (int i = 0; i < userList.length(); i++) {
                 try {
                     list.add(new Persona(userList.getJSONObject(i).getString("id_user"), userList.getJSONObject(i).getString("name")));
+
                 } catch (JSONException e) {
                     Log.e("DatiRisposte-creaLista", "error creaLista " + e);
                     return new ArrayList<Persona>();

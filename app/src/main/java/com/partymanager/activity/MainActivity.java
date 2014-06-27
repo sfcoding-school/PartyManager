@@ -286,61 +286,61 @@ public class MainActivity extends Activity
                                 break;
                         }
                     } //RISPOSTE VISIBILE
-                        if (dialogIdAttributo != -1) {
-                            switch (type) {
-                                //risp
-                                case 3:
-                                    //int idAttributo = EventoHelper.getIdAttributo();
-                                    //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
-                                    if (dialogIdAttributo == Integer.parseInt(b.getString("id_attributo"))) {
-                                        String user = b.getString("user");
-                                        String userName = b.getString("userName");
-                                        int idRisposta = Integer.parseInt(b.getString("id_risposta"));
-                                        boolean controllo = b.getString("agg")!=null && b.getString("agg").equals("1") ? true : false;
-                                        switch (method) {
-                                            //new
-                                            case 1:
-                                                String risposta = b.getString("risposta");
+                if (dialogIdAttributo != -1) {
+                    switch (type) {
+                        //risp
+                        case 3:
+                            //int idAttributo = EventoHelper.getIdAttributo();
+                            //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
+                            if (dialogIdAttributo == Integer.parseInt(b.getString("id_attributo"))) {
+                                String user = b.getString("user");
+                                String userName = b.getString("userName");
+                                int idRisposta = Integer.parseInt(b.getString("id_risposta"));
+                                boolean controllo = b.getString("agg") != null && b.getString("agg").equals("1") ? true : false;
+                                switch (method) {
+                                    //new
+                                    case 1:
+                                        String risposta = b.getString("risposta");
 
-                                                JSONArray userList = null;
-                                                try {
-                                                    JSONObject json = new JSONObject();
-                                                    json.put("id_user", user);
-                                                    json.put("name", userName);
-                                                    userList = new JSONArray();
-                                                    userList.put(json);
-                                                } catch (JSONException e) {
-                                                    Log.e("AGG-NOTIFICHE", e.toString());
-                                                }
-
-                                                //String id, String risposta, String template, JSONArray userList
-                                                DatiRisposte.addItem(
-                                                        new DatiRisposte.Risposta(
-                                                                idRisposta,
-                                                                risposta,
-                                                                userList
-                                                        ), controllo
-                                                );
-                                                break;
-
-                                            //del
-                                            case 3:
-                                                DatiRisposte.removeIdItem(idRisposta);
-                                                break;
-                                            //mod
-                                            case 2:
-                                                //int numr = Integer.parseInt(b.getString("numr"));
-                                                DatiRisposte.addIdPersona(idRisposta, user, userName, controllo);
-                                                break;
+                                        JSONArray userList = null;
+                                        try {
+                                            JSONObject json = new JSONObject();
+                                            json.put("id_user", user);
+                                            json.put("name", userName);
+                                            userList = new JSONArray();
+                                            userList.put(json);
+                                        } catch (JSONException e) {
+                                            Log.e("AGG-NOTIFICHE", e.toString());
                                         }
+
+                                        //String id, String risposta, String template, JSONArray userList
+                                        DatiRisposte.addItem(
+                                                new DatiRisposte.Risposta(
+                                                        idRisposta,
+                                                        risposta,
+                                                        userList
+                                                ), controllo
+                                        );
                                         break;
-                                    }
 
-
+                                    //del
+                                    case 3:
+                                        DatiRisposte.removeIdItem(idRisposta);
+                                        break;
+                                    //mod
+                                    case 2:
+                                        //int numr = Integer.parseInt(b.getString("numr"));
+                                        DatiRisposte.addIdPersona(idRisposta, user, userName, controllo);
+                                        break;
+                                }
+                                break;
                             }
 
 
-                        }
+                    }
+
+
+                }
             }
         };
 
