@@ -156,6 +156,7 @@ public class Evento extends Fragment {
         add_domanda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                eventDialog.renderSpinner();
                 eventDialog.which(0);
                 dialogAddDomanda.show();
             }
@@ -163,7 +164,7 @@ public class Evento extends Fragment {
 
         bnt_friends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                EventoHelper.dialogEventUsers(numUtenti, bnt_friends, idEvento, getActivity(), adminEvento);
+                EventoHelper.dialogEventUsers(bnt_friends, idEvento, getActivity(), adminEvento);
             }
         });
 

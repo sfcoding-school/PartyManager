@@ -60,15 +60,6 @@
     <string name="quando">Quando</string>
     <string name="dove_vediamo">Dove ci vediamo</string>
     <string name="emptyDomande">Non ci sono ancora domande \n in questo evento</string>
-    <string-array name="spinner_list">
-        <item>Personalizzata</item>
-        <item>Luogo Incontro</item>
-        <item>Luogo Evento</item>
-        <item>Data</item>
-        <item>Orario Incontro</item>
-        <item>Orario Evento</item>
-        <item>Domanda SI/NO</item>
-    </string-array>
     <string name="daDEf">[Da definire]</string>
     <string name="addFriends">Aggiungi</string>
     <string name="aggiuntaAmico">Invio richiesta …</string>

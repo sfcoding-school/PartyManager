@@ -35,7 +35,6 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
-    //<<<<<<< HEAD
     private static void toJson(final ArrayList<Evento> ITEMS_temp) {
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -47,7 +46,7 @@ public class DatiEventi {
                         JSONObject pnObj = new JSONObject();
 
                         pnObj.put("admin", aITEMS_temp.admin);
-                        pnObj.put("data", aITEMS_temp.date);
+                        pnObj.put("data", HelperDataParser.getStringFromCal(aITEMS_temp.date));
                         pnObj.put("id_evento", aITEMS_temp.id);
                         pnObj.put("nome_evento", aITEMS_temp.name);
                         pnObj.put("num_utenti", aITEMS_temp.numUtenti);
@@ -66,11 +65,13 @@ public class DatiEventi {
 
             @Override
             protected void onPostExecute(JSONArray js) {
-                Log.e("DatiEventi-toJson-onPost", js.toString());
-                if (js != null && js.length() > 0) {
-                    DataProvide.saveJson(js, "eventi", context_global);
-                } else {
-                    Log.e("DatiEventi-toJson", "Non ho salvato array vuoto");
+                if (js != null) {
+                    Log.e("DatiEventi-toJson-onPost", js.toString());
+                    if (js != null && js.length() > 0) {
+                        DataProvide.saveJson(js, "eventi", context_global);
+                    } else {
+                        Log.e("DatiEventi-toJson", "Non ho salvato array vuoto");
+                    }
                 }
             }
         }.execute(null, null, null);

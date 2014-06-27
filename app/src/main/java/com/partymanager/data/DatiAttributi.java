@@ -163,13 +163,14 @@ public class DatiAttributi {
 
                 if (a.template.equals("oraE"))
                     ris[3] = a.risposta;
-            }}
+            }
+        }
         return ris;
     }
 
     public static int cercaTemplate(String template) {
         for (Attributo a : ITEMS) {
-            if (a.template!=null && a.template.equals(template)) {
+            if (a.template != null && a.template.equals(template)) {
                 return ITEMS.indexOf(a);
             }
         }

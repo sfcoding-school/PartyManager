@@ -38,7 +38,7 @@ public class HelperDataParser {
         }
     }
 
-    public static String getStringFromCal (GregorianCalendar cal){
-        return dateFormat.format(cal.getTime());
+    public static String getStringFromCal(GregorianCalendar cal) {
+        return cal != null ? dateFormat.format(cal.getTime()) : null;
     }
 }

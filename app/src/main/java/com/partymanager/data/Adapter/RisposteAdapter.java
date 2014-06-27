@@ -22,17 +22,12 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
     private int num_pers_evento;
     private int id_attributo;
-    //<<<<<<< HEAD
-    //private String idEvento;
     private boolean chiusa;
     private int arg2;
 
-    //  public RisposteAdapter(String idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
-//=======
     private int idEvento;
 
     public RisposteAdapter(int idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
-//>>>>>>> agg-notifiche
         super(context, R.layout.risposta_row, Risposta);
         this.num_pers_evento = num_pers_evento;
         this.id_attributo = id_attributo;
@@ -87,18 +82,13 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         vota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//<<<<<<< HEAD
+
                 if (chiusa) {
-                    EventoHelper.modificaChiusa();
+                    EventoHelper.modificaGrafica(true);
                 } else {
                     EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getPositionItem(position).id, position, pb_vota);
                     vota.setVisibility(View.GONE);
                 }
-/*=======
-
-                EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getItemPosition(position).id, position, pb_vota);
-                vota.setVisibility(View.GONE);
->>>>>>> agg-notifiche*/
             }
         });
 

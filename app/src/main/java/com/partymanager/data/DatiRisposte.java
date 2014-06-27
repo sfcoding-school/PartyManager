@@ -25,15 +25,10 @@ public class DatiRisposte {
     private static RisposteAdapter eAdapter;
     private static ArrayList<Risposta> ITEMS = new ArrayList<Risposta>();
     private static SparseArray<Risposta> MAP = new SparseArray<Risposta>();
-
     public static String template = null;
     private static Context context_global;
 
-    //<<<<<<< HEAD
     public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int arg2, boolean chiusa) {
-//=======
-        //public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int id_attributo) {
-//>>>>>>> agg-notifiche
         context_global = context;
         eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
         DataProvide.getRisposte(id_evento, id_attr, context);
@@ -150,7 +145,6 @@ public class DatiRisposte {
         }
     };
 
-    //<<<<<<< HEAD
     public static void removePositionItem(int pos) {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
@@ -162,7 +156,6 @@ public class DatiRisposte {
         ITEMS.get(pos).risposta = nuova;
         eAdapter.notifyDataSetChanged();
     }
-//=======
 
     public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo) {
         if (controllo) cercami();
@@ -186,28 +179,19 @@ public class DatiRisposte {
                 }
             }
         }
-//>>>>>>> agg-notifiche
     }
 
     public static class Risposta {
         public int id;
         public String risposta;
         public List<Persona> persone;
-        //public String template;
 
-        public Risposta(int id, String risposta, /*String template,*/ JSONArray userList) {
+        public Risposta(int id, String risposta, JSONArray userList) {
             this.id = id;
             this.risposta = risposta;
             this.persone = creaLista(userList);
-            //this.template = template;
         }
 
-        /*
-                @Override
-                public String toString() {
-                    return id;
-                }
-        */
         private List<Persona> creaLista(JSONArray userList) {
             List<Persona> list = new ArrayList<Persona>();
             for (int i = 0; i < userList.length(); i++) {

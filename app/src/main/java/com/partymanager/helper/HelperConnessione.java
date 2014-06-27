@@ -114,15 +114,19 @@ public class HelperConnessione {
         HttpPut httpPut = new HttpPut(URL + url);
 
         try {
-            // Add your data
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            for (int i = 0; i < name.length; i++) {
-                nameValuePairs.add(new BasicNameValuePair(name[i], param[i]));
+            if (name != null) {
+                for (int i = 0; i < name.length; i++) {
+                    nameValuePairs.add(new BasicNameValuePair(name[i], param[i]));
+                }
+                httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
             }
-            httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs, "utf-8"));
 
             HttpResponse response = httpclient.execute(httpPut);
             String temp = EntityUtils.toString(response.getEntity());
+
+            Log.e("HelperConnessione-httpPutConnection-Ris: ", URL + url + " risposta:" + temp);
 
             if (temp.equals("session error")) {
                 login();

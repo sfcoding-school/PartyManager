@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -22,8 +23,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.partymanager.R;
+import com.partymanager.data.DatiAttributi;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
+
+import java.util.ArrayList;
 
 public class EventDialog {
 
@@ -73,6 +77,7 @@ public class EventDialog {
         dialog.setCanceledOnTouchOutside(true);
 
         sp = (Spinner) dialog.findViewById(R.id.spinner);
+        renderSpinner();
         first = false;
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -117,6 +122,33 @@ public class EventDialog {
                 break;
         }
         sp.setSelection(pos);
+    }
+
+    public void renderSpinner() {
+
+        String[] template = DatiAttributi.getTemplate();
+
+        ArrayList<String> list = new ArrayList<String>();
+
+        list.add(context.getString(R.string.pers));
+        list.add(context.getString(R.string.dmndChiusa));
+        list.add(context.getString(R.string.orarioI));
+
+        if (template[2] == null)
+            list.add(context.getString(R.string.luogoI));
+
+        if (template[1] == null)
+            list.add(context.getString(R.string.luogoE));
+
+        if (template[0] == null)
+            list.add(context.getString(R.string.dataE));
+
+        if (template[1] == null)
+            list.add(context.getString(R.string.orarioE));
+
+        ArrayAdapter<String> testAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, list);
+
+        sp.setAdapter(testAdapter);
     }
 
     public Dialog returnD() {

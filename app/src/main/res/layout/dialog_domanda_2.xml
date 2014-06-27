@@ -7,8 +7,8 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:entries="@array/spinner_list"/>
+        android:id="@+id/spinner"/>
+        <!--android:entries="@array/spinner_list" /> -->
 
     <LinearLayout
         android:orientation="vertical"

@@ -26,33 +26,33 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
         DatiAttributi.Attributo attr = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
 
-            if (attr.template != null && (attr.template.equals("data") ||
-                    attr.template.equals("luogoE") ||
-                    attr.template.equals("luogoI") ||
-                    attr.template.equals("oraE"))) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_null, parent, false);
-            } else {
+        if (attr.template != null && (attr.template.equals("data") ||
+                attr.template.equals("luogoE") ||
+                attr.template.equals("luogoI") ||
+                attr.template.equals("oraE"))) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_null, parent, false);
+        } else {
 
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
 
 
-        TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);
-        TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
+            TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);
+            TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
 
-        name.setText(attr.domanda);
+            name.setText(attr.domanda);
 
-        StringBuilder temp = new StringBuilder();
-        temp.append(attr.risposta);
-        if (!attr.risposta.equals("")) {
+            StringBuilder temp = new StringBuilder();
+            temp.append(attr.risposta);
+            if (!attr.risposta.equals("")) {
         /* la percentuale di persone che hanno votato quella domanda, rispetto alle persone che hanno risposto alla domanda */
-            temp.append(" (" + 100 * attr.numr / attr.numd + "% ha votato questa risposta, ");
+                temp.append(" (" + 100 * attr.numr / attr.numd + "% ha votato questa risposta, ");
 
         /* il numero di persone che hanno risposto alla domanda rispetto alle persone totali dell'evento */
-            temp.append(attr.numd + "/" + num_pers_evento + " hanno risposto)");
-        }
-
-        details.setText(temp);
+                temp.append(attr.numd + "/" + num_pers_evento + " hanno risposto)");
             }
+
+            details.setText(temp);
+        }
 
 
         return convertView;

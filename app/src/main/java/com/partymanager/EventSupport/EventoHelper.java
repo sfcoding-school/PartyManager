@@ -78,6 +78,9 @@ public class EventoHelper {
     static Button add;
     private static int idAttributo;
     static private Dialog dialog;
+    static LinearLayout normal;
+    static LinearLayout sino;
+    static LinearLayout dataL;
 
     private static Dialog getRisposteDialog(Activity activity) {
         if (dialog == null) {
@@ -87,14 +90,6 @@ public class EventoHelper {
         }
         return dialog;
     }
-
-    /*
-    public boolean isVisible(){
-        if (dialog != null && dialog.isShowing())
-            return DatiAttributi.ITEMS.get(posAttributi).id;
-        else return false;
-    }
-    */
 
     public static int getIdAttributo() {
         if (dialog != null && dialog.isShowing())
@@ -141,13 +136,8 @@ public class EventoHelper {
         dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
         edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
         edt.setVisibility(View.VISIBLE);
+        edt.setHint("Scrivi qui la tua risposta");
 
-        if (DatiAttributi.getPositionItem(posAttributi).close) {
-            edt.setVisibility(View.GONE);
-            dialogButton.setVisibility(View.GONE);
-        } else {
-            edt.setHint("Scrivi qui la tua risposta");
-        }
 
         final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
 
@@ -161,21 +151,19 @@ public class EventoHelper {
                     if (!DatiAttributi.getPositionItem(posAttributi).close) {
                         addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
                     } else {
-                        modificaChiusaAsync(0, edt.getText().toString());
+                        modificaChiusaAsync(0, edt.getText().toString(), idEvento);
                     }
                 }
             }
         });
 
-        LinearLayout normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
-        LinearLayout sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
-        LinearLayout dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
+        normal = (LinearLayout) dialog.findViewById(R.id.risposta_stringa);
+        sino = (LinearLayout) dialog.findViewById(R.id.linearL_sino);
+        dataL = (LinearLayout) dialog.findViewById(R.id.linearL_data);
 
         if (DatiAttributi.getPositionItem(posAttributi).template != null) {
             if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
 
-                normal.setVisibility(View.GONE);
-                sino.setVisibility(View.VISIBLE);
 
                 final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
 
@@ -188,8 +176,8 @@ public class EventoHelper {
 
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(finalAdapter, idEvento, "no", pb_sino, posAttributi);
-                        }else {
-                            modificaChiusaAsync(0, "no");
+                        } else {
+                            modificaChiusaAsync(0, "no", idEvento);
                         }
                     }
                 });
@@ -202,24 +190,14 @@ public class EventoHelper {
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(finalAdapter, idEvento, "si", pb_sino, posAttributi);
                         } else {
-                            modificaChiusaAsync(0, "si");
+                            modificaChiusaAsync(0, "si", idEvento);
                         }
                     }
                 });
 
-                if (DatiAttributi.getPositionItem(posAttributi).close) {
-                    si.setVisibility(View.GONE);
-                    no.setVisibility(View.GONE);
-                }
             }
-            else {
-                normal.setVisibility(View.VISIBLE);
-                sino.setVisibility(View.GONE);
-            }
-            if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
 
-                normal.setVisibility(View.GONE);
-                dataL.setVisibility(View.VISIBLE);
+            if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
 
                 final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
                 dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
@@ -232,25 +210,13 @@ public class EventoHelper {
                         pb_data.setVisibility(View.VISIBLE);
 
                         if (DatiAttributi.getPositionItem(posAttributi).close) {
-                           modificaChiusaAsync(0, temp);
+                            modificaChiusaAsync(0, temp, idEvento);
                         } else {
                             addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
                         }
                     }
                 });
-
-                if (DatiAttributi.getPositionItem(posAttributi).close) {
-                    add.setVisibility(View.GONE);
-                    dateR.setVisibility(View.GONE);
-                }
-            }else {
-                normal.setVisibility(View.VISIBLE);
-                dataL.setVisibility(View.GONE);
             }
-        } else {
-            normal.setVisibility(View.VISIBLE);
-            dataL.setVisibility(View.GONE);
-            sino.setVisibility(View.GONE);
         }
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -264,47 +230,58 @@ public class EventoHelper {
             }
         });
 
+        modificaGrafica(false);
+
         dialog.show();
     }
 
-    public static void modificaChiusaAsync(final int pos, final String nuova) {
+    public static void modificaGrafica(boolean modifica) {
+
+        if (DatiAttributi.getPositionItem(posAttributi).close && !modifica) {
+            normal.setVisibility(View.GONE);
+            dataL.setVisibility(View.GONE);
+            sino.setVisibility(View.GONE);
+        } else {
+
+            if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
+                normal.setVisibility(View.GONE);
+                normal.setVisibility(View.GONE);
+                dataL.setVisibility(View.VISIBLE);
+            }
+            if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
+                normal.setVisibility(View.GONE);
+                dataL.setVisibility(View.GONE);
+                sino.setVisibility(View.VISIBLE);
+            }
+            if (!DatiAttributi.getPositionItem(posAttributi).template.equals("data") && !DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
+                normal.setVisibility(View.VISIBLE);
+                dataL.setVisibility(View.GONE);
+                sino.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public static void modificaChiusaAsync(final int pos, final String nuova, final int idEvento) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
-                /*
+
                 String[] name, param;
+                name = new String[]{"risposta"};
+                param = new String[]{nuova};
 
-                name = new String[]{"idRisposta"};
-                param = new String[]{idRisposta};
-
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId(), name, param);
-            */
-                return null;
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + idAttributo + "/" + DatiRisposte.getPositionItem(pos).id, name, param);
             }
 
             @Override
             protected void onPostExecute(String ris) {
-                if (ris.equals("aggiornato")) {
+                if (ris.equals("fatto")) {
+                    modificaGrafica(false);
                     DatiRisposte.modificaRisposta(pos, nuova);
                 }
             }
         }.execute(null, null, null);
-    }
-
-    public static void modificaChiusa() {
-        if (DatiAttributi.getPositionItem(posAttributi).template.equals("data")) {
-            add.setVisibility(View.VISIBLE);
-            dateR.setVisibility(View.VISIBLE);
-        }
-        if (DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
-            si.setVisibility(View.VISIBLE);
-            no.setVisibility(View.VISIBLE);
-        }
-        if (!DatiAttributi.getPositionItem(posAttributi).template.equals("data") && !DatiAttributi.getPositionItem(posAttributi).template.equals("sino")) {
-            edt.setVisibility(View.VISIBLE);
-            dialogButton.setVisibility(View.VISIBLE);
-        }
     }
 
     private static void eliminaRisposta(final int pos, final int idEvento, final int idRisposta, final Activity activity) {
@@ -376,9 +353,6 @@ public class EventoHelper {
     }
 
     private static void addRisposta(final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
-/*=======
-    private static void addRisposta(final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
->>>>>>> agg-notifiche*/
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -414,34 +388,9 @@ public class EventoHelper {
                 } catch (NumberFormatException e) {
                     Log.e("Evento-addRisposta", "risposta non numerica " + e);
                 }
-
-/*
-            private boolean isInteger(String s) {
-                try {
-                    Integer.parseInt(s);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-                return true;
-            }
-*/
             }
         }.execute(null, null, null);
     }
-
-    /*
-    private static void cercami() {
-        Boolean trovato = false;
-        for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
-            for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {
-                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())) {
-                    DatiRisposte.ITEMS.get(i).persone.remove(j);
-                    trovato = true;
-                }
-            }
-        }
-    }
-    */
 
     public static void addDomandaSino(RisposteAdapter adapter, int idEvento, String cosa, ProgressBar pb_sino, int attuale) {
 
@@ -466,16 +415,7 @@ public class EventoHelper {
 
             @Override
             protected String doInBackground(Void... params) {
-                String[] name, param;
-
-                name = new String[]{"idRisposta"};
-                param = new String[]{String.valueOf(idRisposta)};
-
-//<<<<<<< HEAD
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId(), name, param);
-/*=======
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(adapter.getId()).id, name, param);
->>>>>>> agg-notifiche*/
+                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId() + "/" + idRisposta, null, null);
             }
 
             @Override
@@ -494,7 +434,6 @@ public class EventoHelper {
     }
 
     public static void graficaVota(int position, int attuale) {
-        //cercami();
 
         if (DatiRisposte.getLenght() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
             DatiRisposte.addPositionPersona(position, HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName(), true);
@@ -510,15 +449,12 @@ public class EventoHelper {
                 risposta_max = DatiRisposte.getPositionItem(i).risposta;
             }
         }
-/*<<<<<<< HEAD
 
-        DatiAttributi.ITEMS.get(attuale).changeRisposta(risposta_max, idMax);
-=======*/
         DatiAttributi.getPositionItem(attuale).changeRisposta(risposta_max, idMax);
-//>>>>>>> agg-notifiche
+
     }
 
-    public static void dialogEventUsers(final String numUtenti, final TextView bnt_friends, final int idEvento, final Activity activity, final String adminEvento) {
+    public static void dialogEventUsers(final TextView bnt_friends, final int idEvento, final Activity activity, final String adminEvento) {
         DataProvide.getFriends(idEvento, activity.getApplicationContext());
         dialogFriends = new Dialog(activity);
         dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -630,17 +566,6 @@ public class EventoHelper {
 
                     DatiEventi.getIdItem(idEvento).numUtenti += quanti_aggiunti;
                     bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
-
-                    /*
-                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
-                            DatiEventi.ITEMS.get(i).numUtenti += quanti_aggiunti;
-                            int temp = Integer.parseInt(numUtenti) + quanti_aggiunti;
-                            bnt_friends.setText("" + temp);
-                            break;
-                        }
-                    }
-                    */
                 }
             }
         }.execute();
@@ -680,14 +605,6 @@ public class EventoHelper {
 
                     DatiEventi.getIdItem(idEvento).numUtenti--;
                     bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
-                    /*
-                    for (int i = 0; i < DatiEventi.ITEMS.size(); i++) {
-                        if (DatiEventi.ITEMS.get(i).id == Integer.parseInt(idEvento)) {
-                            DatiEventi.ITEMS.get(i).numUtenti -= 1;
-                            bnt_friends.setText("" + DatiEventi.ITEMS.get(i).numUtenti);
-                            break;
-                        }
-                    }*/
                 }
             }
         }.execute();
@@ -839,5 +756,4 @@ public class EventoHelper {
 
     }
     // </editor-fold">
-
 }
