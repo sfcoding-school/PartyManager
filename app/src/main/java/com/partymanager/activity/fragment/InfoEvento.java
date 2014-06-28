@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -142,7 +141,7 @@ public class InfoEvento extends Fragment {
                 }
 
                 if (modifica) {
-                    modificaNomeEvento.setBackground(getResources().getDrawable(R.drawable.checkmark));
+                    modificaNomeEvento.setBackground(getResources().getDrawable(R.drawable.ic_action_accept));
                     TxtnomeEvento.setVisibility(View.GONE);
                     cambiaNome.setVisibility(View.VISIBLE);
                     cambiaNome.setText(nomeEvento);
@@ -174,7 +173,7 @@ public class InfoEvento extends Fragment {
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
                     nomeEvento = nuovoNome;
-
+                    txt.setText(nuovoNome);
                     getActivity().getActionBar().setTitle(nuovoNome);
                 }
             }

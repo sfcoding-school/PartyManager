@@ -68,6 +68,7 @@ public class CreaEventoActivity extends Activity {
     ProgressDialog progressDialog;
     int result_global;
     WebDialog f;
+    Toast a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,13 +223,14 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                finali = dataAdapter.getFinali();
+                if (finali != null)
+                    finali = dataAdapter.getFinali();
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
                         output.append(getString(R.string.insrtNameE));
                     }
-                    if (finali.isEmpty()) {
+                    if (finali == null || finali.isEmpty()) {
                         if (output.length() != 0)
                             output.append("\n");
                         output.append(getString(R.string.insrtAE));
@@ -364,29 +366,17 @@ public class CreaEventoActivity extends Activity {
         finish();
     }
 
-    //Click pulsante indietro
     public void onBackPressed() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
-        alertDialogBuilder.setMessage(getString(R.string.delEvento));
+        if (a == null)
+            a = Toast.makeText(getApplicationContext(), getString(R.string.errFB), Toast.LENGTH_LONG);
 
-        // set positive button: Yes message
-        alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (id_toSend != null) id_toSend.clear();
-                container_friends.setText("");
-                FbFriendsAdapter.svuotaLista();
-                CreaEventoActivity.this.finish();
-            }
-        });
-
-        // set negative button: No message
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        if (a.getView().isShown()) {
+            if (id_toSend != null) id_toSend.clear();
+            container_friends.setText("");
+            FbFriendsAdapter.svuotaLista();
+            CreaEventoActivity.this.finish();
+        } else {
+            a.show();
+        }
     }
 }

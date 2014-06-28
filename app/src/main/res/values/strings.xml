@@ -75,8 +75,8 @@
         <item>Feedback</item>
     </string-array>
     <array name="list_icons">
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_dialog_email</item>
+        <item>@drawable/ic_action_settings</item>
+        <item>@drawable/ic_action_email</item>
     </array>
     <string-array name="list_names2">
         <item>Profilo</item>
@@ -86,7 +86,7 @@
     <array name="list_icons2">
         <item>@drawable/com_facebook_inverse_icon</item>
         <item>@drawable/ic_stat_partymanagernotificationicon</item>
-        <item>@android:drawable/sym_contact_card</item>
+        <item>@drawable/ic_action_collection</item>
     </array>
 
     <!--HelperFacebook-->

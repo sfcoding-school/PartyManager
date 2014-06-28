@@ -131,7 +131,6 @@ public class Evento extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.eventList);
         riepilogo = view.findViewById(R.id.stickyheader);
-        bnt_friends = (TextView) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
@@ -175,12 +174,6 @@ public class Evento extends Fragment {
                 eventDialog.renderSpinner();
                 eventDialog.which("Personalizzata", 0);
                 dialogAddDomanda.show();
-            }
-        });
-
-        bnt_friends.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                EventoHelper.dialogEventUsers(bnt_friends, idEvento, getActivity(), adminEvento);
             }
         });
 
