@@ -68,6 +68,7 @@ public class CreaEventoActivity extends Activity {
     ProgressDialog progressDialog;
     String result_global;
     WebDialog f;
+    Toast a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,29 +365,17 @@ public class CreaEventoActivity extends Activity {
         finish();
     }
 
-    //Click pulsante indietro
     public void onBackPressed() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
-        alertDialogBuilder.setMessage(getString(R.string.delEvento));
+        if (a == null)
+            a = Toast.makeText(getApplicationContext(), getString(R.string.errFB), Toast.LENGTH_LONG);
 
-        // set positive button: Yes message
-        alertDialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (id_toSend != null) id_toSend.clear();
-                container_friends.setText("");
-                FbFriendsAdapter.svuotaLista();
-                CreaEventoActivity.this.finish();
-            }
-        });
-
-        // set negative button: No message
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        if (a.getView().isShown()) {
+            if (id_toSend != null) id_toSend.clear();
+            container_friends.setText("");
+            FbFriendsAdapter.svuotaLista();
+            CreaEventoActivity.this.finish();
+        } else {
+            a.show();
+        }
     }
 }
