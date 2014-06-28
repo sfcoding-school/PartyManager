@@ -374,12 +374,20 @@ public class MainActivity extends Activity
                 startActivity(newact);
             } else {
                 HelperFacebook.getToken();
-                if (fragment != null)
+                int countBackStack = fragmentManager.getBackStackEntryCount();
+
+                if (countBackStack==0 && fragment != null) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, fragment, fragment.getTag())
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .commit();
-                else
+                }else if (countBackStack != 0){
+                    Fragment tmp= fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, tmp, fragment.getTag())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                }else
                     changeFragment(0);
             }
         }
@@ -713,7 +721,7 @@ public class MainActivity extends Activity
     public void onFragmentInteraction(String id, String name, String admin, String num) {
         mTitle = name;
         noMenuActionBar = true;
-        fragment = Evento.newInstance(id, name, admin, num);
+        Fragment fragment = Evento.newInstance(id, name, admin, num);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, eventTAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
