@@ -129,28 +129,28 @@ public class Evento extends Fragment {
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoE", 2);
+                templateManager("luogoE", "LuogoEvento", 4);
             }
         });
 
         quando_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("data", 3);
+                templateManager("data", "DataEvento", 5);
             }
         });
 
         quando_ora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("oraE", 5);
+                templateManager("oraE", "OrarioEvento", 6);
             }
         });
 
         dove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoI", 1);
+                templateManager("luogoI", "LuogoIncontro", 3);
             }
         });
 
@@ -158,7 +158,7 @@ public class Evento extends Fragment {
             @Override
             public void onClick(View view) {
                 eventDialog.renderSpinner();
-                eventDialog.which(0);
+                eventDialog.which( "Personalizzata", 0);
                 dialogAddDomanda.show();
             }
         });
@@ -270,12 +270,12 @@ public class Evento extends Fragment {
     }
     // </editor-fold>
 
-    public void templateManager(String template, int agg) {
+    public void templateManager(String template, String quale, int agg) {
         int pos;
         if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
             EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
         } else {
-            eventDialog.which(agg);
+            eventDialog.which(quale, agg);
             dialogAddDomanda.show();
         }
     }
