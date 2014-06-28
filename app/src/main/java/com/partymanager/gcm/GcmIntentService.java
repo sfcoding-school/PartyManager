@@ -197,7 +197,12 @@ public class GcmIntentService extends IntentService {
                             case 4:
                                 sendNotification("Utente uscito",
                                         extras.getString("name_user") + " è uscito dall'evento " + extras.getString("nome_evento"),
-                                        "checkbox_utenti");
+                                        "checkbox_eventi");
+                                break;
+                            case 2:
+                                sendNotification("Evento rinominato",
+                                        extras.getString("name_user") + " ha rinominato l'evento " + extras.getString("nome_evento") + " in " + extras.getString("nome_evento_vec"),
+                                        "checkbox_eventi");
                                 break;
                         }
                         break;
