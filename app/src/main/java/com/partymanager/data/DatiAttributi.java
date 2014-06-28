@@ -29,8 +29,6 @@ public class DatiAttributi {
     private static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
 
-//>>>>>>> agg-notifiche
-
     public static AttributiAdapter init(Context context, int id, int num_pers) {
         eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS, num_pers);
         DataProvide.getAttributi(context, id);
@@ -38,7 +36,6 @@ public class DatiAttributi {
         return eAdapter;
     }
 
-    //<<<<<<< HEAD
     public static void removeAll(boolean salva_anche, int id_evento) {
         if (salva_anche) {
             toJson(new ArrayList<Attributo>(ITEMS), id_evento);
@@ -46,9 +43,7 @@ public class DatiAttributi {
         removeAll();
     }
 
-    //======
     public static void removeAll() {
-//>>>>>>> agg-notifiche
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Attributo>();
         eAdapter.notifyDataSetChanged();
@@ -121,6 +116,12 @@ public class DatiAttributi {
         }
     };
 
+    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta){
+        DatiAttributi.getIdItem(idAttr).risposta = nuovaRisposta;
+        DatiAttributi.getIdItem(idAttr).id_risposta = id_risposta;
+        DatiAttributi.getIdItem(idAttr).numr = numr;
+        eAdapter.notifyDataSetChanged();
+    }
 
     public static void removePositionItem(int pos) {
         int i = ITEMS.get(pos).id;
@@ -197,14 +198,6 @@ public class DatiAttributi {
             this.numr = numr; /* Quanti hanno risposto alla domanda più votata */
             this.id_risposta = id_risposta;
         }
-
-
-        /*
-        @Override
-        public String toString() {
-            return id;
-        }
-        */
 
         public void changeRisposta(String risposta_max, int idMax) {
             this.id_risposta = String.valueOf(idMax);

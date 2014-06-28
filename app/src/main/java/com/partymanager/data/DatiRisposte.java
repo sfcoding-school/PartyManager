@@ -27,11 +27,13 @@ public class DatiRisposte {
     private static SparseArray<Risposta> MAP = new SparseArray<Risposta>();
     public static String template = null;
     private static Context context_global;
+    private static int id_attr_global;
 
     public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int arg2, boolean chiusa) {
         context_global = context;
         eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
         DataProvide.getRisposte(id_evento, id_attr, context);
+        id_attr_global = id_attr;
         return eAdapter;
     }
 
@@ -54,6 +56,7 @@ public class DatiRisposte {
     public static void removeIdItem(int idRisposta) {
         ITEMS.remove(MAP.get(idRisposta));
         MAP.remove(idRisposta);
+        cercaVotata();
         eAdapter.notifyDataSetChanged();
     }
 
@@ -114,18 +117,21 @@ public class DatiRisposte {
         if (controllo) cercami();
         DatiRisposte.template = template;
         addItem(item);
+        cercaVotata();
     }
 
     public static void addItem(Risposta item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);
+        cercaVotata();
         eAdapter.notifyDataSetChanged();
     }
 
     public static void addItem(Risposta item, boolean controllo) {
         if (controllo) cercami();
         addItem(item);
+        cercaVotata();
     }
 
     private static Comparator<Risposta> comparator = new Comparator<Risposta>() {
@@ -149,6 +155,7 @@ public class DatiRisposte {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
         MAP.remove(i);
+        cercaVotata();
         eAdapter.notifyDataSetChanged();
     }
 
@@ -167,6 +174,25 @@ public class DatiRisposte {
         if (controllo) cercami();
         ITEMS.get(position).addPersona(new Persona(idUser, name));
         eAdapter.notifyDataSetChanged();
+    }
+
+    public static void cercaVotata(){
+        int max_persone = -1, id_risposta = -1; String nuovaRisposta = null;
+
+        for (int i = 0; i < DatiRisposte.ITEMS.size(); i++) {
+            int temp = 0;
+            for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size(); j++) {
+                temp++;
+            }
+            if (temp > max_persone){
+                max_persone = temp;
+                id_risposta = DatiRisposte.ITEMS.get(i).id;
+                nuovaRisposta = DatiRisposte.ITEMS.get(i).risposta;
+            }
+        }
+
+DatiAttributi.setNuovaRisposta(id_attr_global, max_persone, String.valueOf(id_risposta), nuovaRisposta);
+
     }
 
     private static void cercami() {
@@ -208,6 +234,7 @@ public class DatiRisposte {
 
         public void addPersona(Persona item) {
             persone.add(item);
+            cercaVotata();
             eAdapter.notifyDataSetChanged();
         }
     }
