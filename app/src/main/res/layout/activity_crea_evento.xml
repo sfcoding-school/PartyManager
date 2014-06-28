@@ -33,7 +33,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/imageButton"
-        android:background="@drawable/checkmark"
+        android:background="@drawable/ic_action_accept"
         android:layout_alignBottom="@+id/textView"
         android:layout_alignRight="@+id/inputSearch"
         android:layout_alignEnd="@+id/inputSearch" />

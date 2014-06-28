@@ -141,7 +141,7 @@ public class InfoEvento extends Fragment {
                 }
 
                 if (modifica) {
-                    modificaNomeEvento.setBackground(getResources().getDrawable(R.drawable.checkmark));
+                    modificaNomeEvento.setBackground(getResources().getDrawable(R.drawable.ic_action_accept));
                     TxtnomeEvento.setVisibility(View.GONE);
                     cambiaNome.setVisibility(View.VISIBLE);
                     cambiaNome.setText(nomeEvento);

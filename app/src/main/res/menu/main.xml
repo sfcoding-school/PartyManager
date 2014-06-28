@@ -10,7 +10,7 @@
     </item>
 
     <item android:id="@+id/Nuovo_evento"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
         android:menuCategory="container"
    />

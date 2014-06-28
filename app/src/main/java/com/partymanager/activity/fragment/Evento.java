@@ -41,7 +41,6 @@ public class Evento extends Fragment {
     private String nomeEvento;
     private String adminEvento;
     private String numUtenti;
-    private TextView bnt_friends;
     boolean animation;
 
     AttributiAdapter eAdapter;
@@ -139,15 +138,12 @@ public class Evento extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.eventList);
         riepilogo = view.findViewById(R.id.stickyheader);
-        bnt_friends = (TextView) view.findViewById(R.id.imgButton_amici);
         luogo = (TextView) view.findViewById(R.id.txt_luogo);
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
 
         final View add_domanda = view.findViewById(R.id.circle);
-
-        bnt_friends.setText(numUtenti);
 
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,12 +179,6 @@ public class Evento extends Fragment {
                 eventDialog.renderSpinner();
                 eventDialog.which("Personalizzata", 0);
                 dialogAddDomanda.show();
-            }
-        });
-
-        bnt_friends.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                EventoHelper.dialogEventUsers(bnt_friends, idEvento, getActivity(), adminEvento);
             }
         });
 

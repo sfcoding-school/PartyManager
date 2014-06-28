@@ -223,13 +223,14 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                finali = dataAdapter.getFinali();
+                if (finali != null)
+                    finali = dataAdapter.getFinali();
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
                         output.append(getString(R.string.insrtNameE));
                     }
-                    if (finali.isEmpty()) {
+                    if (finali == null || finali.isEmpty()) {
                         if (output.length() != 0)
                             output.append("\n");
                         output.append(getString(R.string.insrtAE));
