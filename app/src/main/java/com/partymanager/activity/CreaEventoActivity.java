@@ -66,7 +66,7 @@ public class CreaEventoActivity extends Activity {
     ArrayList<String> id_toSend;
     public final String REG_ID = "reg_id";
     ProgressDialog progressDialog;
-    String result_global;
+    int result_global;
     WebDialog f;
 
     @Override
@@ -276,7 +276,7 @@ public class CreaEventoActivity extends Activity {
         f.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                closeActivity(String.valueOf(List.length() + 1), name, result_global);
+                closeActivity(List.length() + 1, name, result_global);
             }
         });
     }
@@ -304,7 +304,14 @@ public class CreaEventoActivity extends Activity {
             protected void onPostExecute(String result) {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                if (!isInteger(result)) {
+                try{
+                    int tmp = Integer.parseInt(result);
+                    FbFriendsAdapter.svuotaLista();
+                    result_global = tmp;
+                    if (f == null || (f != null && !f.isShowing()))
+                        closeActivity(List.length() + 1, name, tmp);
+
+                } catch (NumberFormatException e){
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
                     alertDialogBuilder.setMessage(getString(R.string.errCreazEvento));
 
@@ -316,11 +323,6 @@ public class CreaEventoActivity extends Activity {
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
-                } else {
-                    FbFriendsAdapter.svuotaLista();
-                    result_global = result;
-                    if (f == null || (f != null && !f.isShowing()))
-                        closeActivity(String.valueOf(List.length() + 1), name, result);
                 }
             }
 
@@ -351,15 +353,13 @@ public class CreaEventoActivity extends Activity {
         }.execute();
     }
 
-    private void closeActivity(String num_utenti, String nome_evento, String id_evento) {
+    private void closeActivity(int num_utenti, String nome_evento, int id_evento) {
         Intent intent = new Intent();
         Log.e("CREAEVENTO", "num_utenti " + num_utenti);
-        intent.putExtra("nome_evento", nome_evento);
         intent.putExtra("id_evento", id_evento);
-        intent.putExtra("num_utenti", num_utenti);
         setResult(0, intent);
 
-        DatiEventi.addItem(new DatiEventi.Evento(Integer.parseInt(id_evento), nome_evento, "", "", HelperFacebook.getFacebookId(), Integer.parseInt(num_utenti)));
+        DatiEventi.addItem(new DatiEventi.Evento(id_evento, nome_evento, "", "", HelperFacebook.getFacebookId(), num_utenti));
 
         finish();
     }

@@ -33,14 +33,11 @@ public class Evento extends Fragment {
 
     // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
     private static final String ID_EVENTO = "param1";
-    private static final String NOME_EVENTO = "param2";
-    private static final String ADMIN_EVENTO = "param3";
-    private static final String NUM_UTENTI = "param4";
 
     private static int idEvento;
     private String nomeEvento;
     private String adminEvento;
-    private String numUtenti;
+    private int numUtenti;
     private TextView bnt_friends;
     boolean animation;
 
@@ -68,16 +65,11 @@ public class Evento extends Fragment {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Init + Grafica">
-    public static Evento newInstance(String param1, String param2, String param3, String param4) {
+    public static Evento newInstance(int id) {
         Evento fragment = new Evento();
 
-        Log.e("Evento newInstance: ", "id: " + param1 + " nome: " + param2 + " admin: " + param3 + " #utenti: " + param4);
-
         Bundle args = new Bundle();
-        args.putString(ID_EVENTO, param1);
-        args.putString(NOME_EVENTO, param2);
-        args.putString(ADMIN_EVENTO, param3);
-        args.putString(NUM_UTENTI, param4);
+        args.putInt(ID_EVENTO, id);
         fragment.setArguments(args);
 
         return fragment;
@@ -108,15 +100,15 @@ public class Evento extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            idEvento = Integer.parseInt(getArguments().getString(ID_EVENTO));
-            nomeEvento = getArguments().getString(NOME_EVENTO);
-            adminEvento = getArguments().getString(ADMIN_EVENTO);
-            numUtenti = getArguments().getString(NUM_UTENTI);
+            idEvento = getArguments().getInt(ID_EVENTO);
+            nomeEvento = DatiEventi.getIdItem(idEvento).name;
+            adminEvento = DatiEventi.getIdItem(idEvento).admin;
+            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
         }
         Log.e("DEBUG", "" + idEvento);
 
         eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
-        eAdapter = DatiAttributi.init(getActivity(), idEvento, Integer.parseInt(numUtenti));
+        eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
 
         dialogAddDomanda = eventDialog.returnD();
 
@@ -147,7 +139,7 @@ public class Evento extends Fragment {
 
         final View add_domanda = view.findViewById(R.id.circle);
 
-        bnt_friends.setText(numUtenti);
+        bnt_friends.setText(""+numUtenti);
 
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,7 +281,7 @@ public class Evento extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(int id);
     }
     // </editor-fold>
 

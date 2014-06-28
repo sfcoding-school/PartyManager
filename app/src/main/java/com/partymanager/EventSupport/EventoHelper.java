@@ -97,14 +97,14 @@ public class EventoHelper {
         else return -1;
     }
 
-    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento, String numUtenti) {
+    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento, int numUtenti) {
         posAttributi = posAttr;
 
         dialog = getRisposteDialog(activity);
         idAttributo = DatiAttributi.getPositionItem(posAttributi).id;
 
         final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, Integer.parseInt(numUtenti), posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
+        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, numUtenti, posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
 
         risp.setAdapter(adapter);
 
