@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import com.partymanager.R;
 import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
+import com.partymanager.activity.fragment.InfoEvento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.data.DatiAttributi;
@@ -52,7 +54,7 @@ public class MainActivity extends Activity
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private FragmentManager fragmentManager;
     private boolean noMenuActionBar = false;
-    private boolean drawerAperto = false;
+    private static boolean drawerAperto = false;
     public static CharSequence mTitle;
     private static Activity mContext;
     RelativeLayout leftRL;
@@ -67,6 +69,9 @@ public class MainActivity extends Activity
     private final String eventTAG = "evento";
     private final String archivioTAG = "archivio";
     private final String impostazioniTAG = "impostazioni";
+    private boolean infoEventoAperto = false;
+    private String infoTAG = "infoEvento";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -585,24 +590,33 @@ public class MainActivity extends Activity
         }
     }
 
+    public static boolean drawerIsOpen(MenuInflater inflair, Menu menu) {
+        if (drawerAperto) {
+            menu.clear();
+            inflair.inflate(R.menu.main_no_menu, menu);
+
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        int temp;
 
-        if (!noMenuActionBar) {
-            temp = R.menu.main;
-        } else {
-            temp = R.menu.main_no_menu;
-        }
+        int temp = R.menu.main;
 
         if (drawerAperto) {
+
             temp = R.menu.main_no_menu;
+
         }
 
         getMenuInflater().inflate(temp, menu);
 
-        MenuItem prova = menu.findItem(R.id.progressBarSmall);
-        prova.setVisible(progressBarVisible);
+        if (temp == R.menu.main) {
+            MenuItem prova = menu.findItem(R.id.progressBarSmall);
+            prova.setVisible(progressBarVisible);
+        }
         restoreActionBar();
 
         String title = (String) mTitle;
@@ -611,7 +625,7 @@ public class MainActivity extends Activity
 
         getActionBar().setTitle(title);
 
-        return true;
+        return false;
     }
 
     @Override
@@ -621,6 +635,24 @@ public class MainActivity extends Activity
         if (id == R.id.Nuovo_evento) {
             Intent intent = new Intent(MainActivity.this, CreaEventoActivity.class);
             startActivityForResult(intent, 0);
+            return true;
+        }
+
+        if (id == R.id.infoEvento) {
+            //deve aprire il nuovo Fragment
+            //TEST
+
+            infoEventoAperto = true;
+            fragment = InfoEvento.newInstance(Integer.parseInt(fragmentManager.findFragmentByTag(eventTAG).getArguments().getString("param1")));
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment, infoTAG)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(eventTAG)
+                    .commit();
+
+            mTitle = "info Evento";
+            invalidateOptionsMenu();
+            //END TEST
             return true;
         }
 
@@ -688,17 +720,24 @@ public class MainActivity extends Activity
                 .addToBackStack(eventTAG)
                 .commit();
 
+        MainActivity.this.invalidateOptionsMenu();
+
+        /*
         fragmentManager.addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
                         if (fragmentManager.getBackStackEntryCount() == 0 || !fragmentManager.getBackStackEntryAt(0).getName().equals(eventTAG)) {
                             noMenuActionBar = false;
+
                         }
+
+                        //fragment = fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
                         invalidateOptionsMenu();
                     }
 
                 }
         );
+        */
 
 
     }

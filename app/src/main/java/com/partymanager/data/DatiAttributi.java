@@ -116,7 +116,7 @@ public class DatiAttributi {
         }
     };
 
-    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta){
+    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
         DatiAttributi.getIdItem(idAttr).risposta = nuovaRisposta;
         DatiAttributi.getIdItem(idAttr).id_risposta = id_risposta;
         DatiAttributi.getIdItem(idAttr).numr = numr;

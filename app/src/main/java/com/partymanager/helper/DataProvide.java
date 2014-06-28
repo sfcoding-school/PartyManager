@@ -131,9 +131,7 @@ public class DataProvide {
 
             @Override
             protected void onPreExecute() {
-                MainActivity.progressBarVisible = true;
-                ((Activity) context).invalidateOptionsMenu();
-
+                Evento.progressBar = true;
             }
 
             @Override
@@ -150,9 +148,8 @@ public class DataProvide {
                     loadIntoAttributiAdapter(jsonArray);
                 }
 
-                MainActivity.progressBarVisible = false;
+                Evento.progressBar = false;
                 ((Activity) context).invalidateOptionsMenu();
-
                 Evento.checkTemplate();
             }
         }.execute(null, null, null);

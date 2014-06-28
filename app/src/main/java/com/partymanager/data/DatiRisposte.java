@@ -176,22 +176,23 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void cercaVotata(){
-        int max_persone = -1, id_risposta = -1; String nuovaRisposta = null;
+    public static void cercaVotata() {
+        int max_persone = -1, id_risposta = -1;
+        String nuovaRisposta = null;
 
         for (int i = 0; i < DatiRisposte.ITEMS.size(); i++) {
             int temp = 0;
             for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size(); j++) {
                 temp++;
             }
-            if (temp > max_persone){
+            if (temp > max_persone) {
                 max_persone = temp;
                 id_risposta = DatiRisposte.ITEMS.get(i).id;
                 nuovaRisposta = DatiRisposte.ITEMS.get(i).risposta;
             }
         }
 
-DatiAttributi.setNuovaRisposta(id_attr_global, max_persone, String.valueOf(id_risposta), nuovaRisposta);
+        DatiAttributi.setNuovaRisposta(id_attr_global, max_persone, String.valueOf(id_risposta), nuovaRisposta);
 
     }
 
