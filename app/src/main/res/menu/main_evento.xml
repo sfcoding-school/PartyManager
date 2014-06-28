@@ -1,7 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.partymanager.activity.MainActivity"
-    >
+    tools:context="com.partymanager.activity.MainActivity" >
 
     <item android:id="@+id/progressBarSmall"
         android:actionLayout="@layout/progressbar_small"
@@ -9,10 +8,9 @@
         android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/Nuovo_evento"
-        android:icon="@android:drawable/ic_input_add"
+    <item android:id="@+id/infoEvento"
+        android:icon="@android:drawable/ic_dialog_info"
         android:showAsAction="always"
-        android:menuCategory="container"
-   />
+        android:menuCategory="container" />
 
 </menu>

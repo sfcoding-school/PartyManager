@@ -8,6 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.partymanager.EventSupport.EventDialog;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
@@ -28,10 +32,10 @@ import com.partymanager.helper.HelperFacebook;
 public class Evento extends Fragment {
 
     // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_PARAM3 = "param3";
-    private static final String ARG_PARAM4 = "param4";
+    private static final String ID_EVENTO = "param1";
+    private static final String NOME_EVENTO = "param2";
+    private static final String ADMIN_EVENTO = "param3";
+    private static final String NUM_UTENTI = "param4";
 
     private static int idEvento;
     private String nomeEvento;
@@ -70,10 +74,10 @@ public class Evento extends Fragment {
         Log.e("Evento newInstance: ", "id: " + param1 + " nome: " + param2 + " admin: " + param3 + " #utenti: " + param4);
 
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
-        args.putString(ARG_PARAM4, param4);
+        args.putString(ID_EVENTO, param1);
+        args.putString(NOME_EVENTO, param2);
+        args.putString(ADMIN_EVENTO, param3);
+        args.putString(NUM_UTENTI, param4);
         fragment.setArguments(args);
 
         return fragment;
@@ -82,15 +86,32 @@ public class Evento extends Fragment {
     public Evento() {
     }
 
+    static public boolean progressBar = false;
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflar) {
+
+        super.onCreateOptionsMenu(menu, inflar);
+        menu.clear();
+
+        inflar.inflate(R.menu.main_evento, menu);
+
+        MenuItem prova = menu.findItem(R.id.progressBarSmall);
+        prova.setVisible(progressBar);
+
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : nomeEvento);
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            idEvento = Integer.parseInt(getArguments().getString(ARG_PARAM1));
-            nomeEvento = getArguments().getString(ARG_PARAM2);
-            adminEvento = getArguments().getString(ARG_PARAM3);
-            numUtenti = getArguments().getString(ARG_PARAM4);
+            idEvento = Integer.parseInt(getArguments().getString(ID_EVENTO));
+            nomeEvento = getArguments().getString(NOME_EVENTO);
+            adminEvento = getArguments().getString(ADMIN_EVENTO);
+            numUtenti = getArguments().getString(NUM_UTENTI);
         }
         Log.e("DEBUG", "" + idEvento);
 
@@ -98,6 +119,8 @@ public class Evento extends Fragment {
         eAdapter = DatiAttributi.init(getActivity(), idEvento, Integer.parseInt(numUtenti));
 
         dialogAddDomanda = eventDialog.returnD();
+
+        setHasOptionsMenu(true);
     }
 
     public static void checkTemplate() {
@@ -129,28 +152,28 @@ public class Evento extends Fragment {
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoE", 2);
+                templateManager("luogoE", "LuogoEvento", 4);
             }
         });
 
         quando_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("data", 3);
+                templateManager("data", "DataEvento", 5);
             }
         });
 
         quando_ora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("oraE", 5);
+                templateManager("oraE", "OrarioEvento", 6);
             }
         });
 
         dove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoI", 1);
+                templateManager("luogoI", "LuogoIncontro", 3);
             }
         });
 
@@ -158,7 +181,7 @@ public class Evento extends Fragment {
             @Override
             public void onClick(View view) {
                 eventDialog.renderSpinner();
-                eventDialog.which(0);
+                eventDialog.which("Personalizzata", 0);
                 dialogAddDomanda.show();
             }
         });
@@ -270,12 +293,12 @@ public class Evento extends Fragment {
     }
     // </editor-fold>
 
-    public void templateManager(String template, int agg) {
+    public void templateManager(String template, String quale, int agg) {
         int pos;
         if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
             EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
         } else {
-            eventDialog.which(agg);
+            eventDialog.which(quale, agg);
             dialogAddDomanda.show();
         }
     }

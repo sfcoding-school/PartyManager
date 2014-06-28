@@ -262,6 +262,7 @@ public class EventoHelper {
                 normal.setVisibility(View.VISIBLE);
                 dataL.setVisibility(View.GONE);
                 sino.setVisibility(View.GONE);
+                sino.setVisibility(View.GONE);
             }
         }
     }
@@ -576,7 +577,7 @@ public class EventoHelper {
         }.execute();
     }
 
-    private static void eliminaUser(final TextView bnt_friends, final int idEvento, final Activity activity, final int i, final ProgressBar pb_buttaFuori) {
+    public static void eliminaUser(final TextView bnt_friends, final int idEvento, final Activity activity, final int i, final ProgressBar pb_buttaFuori) {
         new AsyncTask<Void, Void, String>() {
 
             @Override

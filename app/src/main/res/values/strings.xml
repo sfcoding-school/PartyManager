@@ -23,16 +23,17 @@
     <string name="app_name">PartyManager</string>
 
     <!--EventDialog -->
-    <string name="dataE">Scegli una data per l\'Evento</string>
+    <string name="dataE">Data Evento</string>
     <string name="orarioE">Orario Evento</string>
     <string name="orarioI">Orario Incontro</string>
     <string name="luogoE">Luogo Evento</string>
-    <string name="luogoEHint">Scrivi qui il luogo</string>
     <string name="luogoI">Luogo Incontro</string>
     <string name="pers">Personalizzata</string>
+    <string name="dmndChiusa">Domanda SI/NO</string>
+
     <string name="persDH">Scrivi una domanda</string>
     <string name="persRH">Scrivi qui la tua risposta</string>
-    <string name="dmndChiusa">Domanda SI/NO</string>
+    <string name="luogoEHint">Scrivi qui il luogo</string>
     <string name="creazDom">Creazione Domanda</string>
     <string name="problInsDom">Problema nell\'inserimento nuova domanda</string>
 

@@ -85,7 +85,8 @@ public class EventDialog {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 if (first) {
-                    which(arg2);
+                    String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
+                    which(Text, arg2);
                 } else {
                     first = true;
                 }
@@ -96,31 +97,44 @@ public class EventDialog {
         });
     }
 
-    public void which(int pos) {
+    public enum Template {
+        DataEvento,
+        OrarioEvento,
+        OrarioIncontro,
+        LuogoEvento,
+        LuogoIncontro,
+        Personalizzata,
+        DomandaSINO,
+    }
+
+    public void which(String selectItem, int pos) {
         chiusura.setChecked(false);
-        switch (pos) {
-            case 0:
+        Template quale = Template.valueOf(selectItem);
+
+        switch (quale) {
+            case Personalizzata:
                 personalizzata();
                 break;
-            case 1:
+            case LuogoIncontro:
                 luogoI();
                 break;
-            case 2:
+            case LuogoEvento:
                 luogoE();
                 break;
-            case 3:
+            case DataEvento:
                 date();
                 break;
-            case 4:
+            case OrarioIncontro:
                 orarioI();
                 break;
-            case 5:
+            case OrarioEvento:
                 orarioE();
                 break;
-            case 6:
+            case DomandaSINO:
                 domanda_chiusa();
                 break;
         }
+
         sp.setSelection(pos);
     }
 

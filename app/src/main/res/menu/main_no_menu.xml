@@ -2,10 +2,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.partymanager.activity.MainActivity" >
 
-    <item android:id="@+id/progressBarSmall"
-        android:actionLayout="@layout/progressbar_small"
-        android:menuCategory="container"
-        android:showAsAction="always">
-    </item>
-
 </menu>
