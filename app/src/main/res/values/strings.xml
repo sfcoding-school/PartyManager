@@ -22,7 +22,7 @@
     <string name="new_event">Nuovo Evento</string>
     <string name="app_name">PartyManager</string>
 
-    <!--EventDialog -->
+    <!--EventDomande -->
     <string name="dataE">Data Evento</string>
     <string name="orarioE">Orario Evento</string>
     <string name="orarioI">Orario Incontro</string>

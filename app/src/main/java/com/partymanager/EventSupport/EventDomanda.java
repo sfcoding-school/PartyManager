@@ -1,18 +1,10 @@
 package com.partymanager.EventSupport;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,12 +16,11 @@ import android.widget.TimePicker;
 
 import com.partymanager.R;
 import com.partymanager.data.DatiAttributi;
-import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
 
-public class EventDialog {
+public class EventDomanda {
 
     Context context;
     Dialog dialog;
@@ -42,20 +33,13 @@ public class EventDialog {
     Spinner sp;
 
     private int idEvento;
-    private static final int DIALOG_DATA = 1;
-    private static final int DIALOG_ORARIO_E = 2;
-    private static final int DIALOG_ORARIO_I = 3;
-    private static final int DIALOG_LUOGO_I = 4;
-    private static final int DIALOG_PERSONALLIZATA = 5;
-    private static final int DIALOG_LUOGO_E = 6;
-    private static final int DIALOG_SINO = 7;
-    private Handler mResponseHandler;
-    ProgressDialog progressDialog;
+
+    public static Handler mResponseHandler;
     private boolean first;
 
-    public EventDialog(final Context context, Handler reponseHandler, int idEvento, String adminEvento) {
+    public EventDomanda(final Context context, Handler reponseHandler, int idEvento, String adminEvento) {
         this.context = context;
-        this.mResponseHandler = reponseHandler;
+        mResponseHandler = reponseHandler;
         this.idEvento = idEvento;
 
         dialog = new Dialog(context);
@@ -188,7 +172,7 @@ public class EventDialog {
                 String temp = Integer.toString(date.getDayOfMonth()) + "/" + Integer.toString(date.getMonth() + 1) + "/" + Integer.toString(date.getYear());
                 Log.e("DATASCELTA: ", temp);
 
-                addDomanda(1, "Data Evento", idEvento, "data", temp);
+                EventAsync.addDomanda(chiusura.isChecked(), context, 1, "Data Evento", idEvento, "data", temp);
 
                 dialog.dismiss();
             }
@@ -215,7 +199,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                addDomanda(2, "Orario Evento", idEvento, "oraE", temp);
+                EventAsync.addDomanda(chiusura.isChecked(), context, 2, "Orario Evento", idEvento, "oraE", temp);
                 dialog.dismiss();
             }
         });
@@ -241,7 +225,7 @@ public class EventDialog {
                 String temp = Integer.toString(orario.getCurrentHour()) + ":" + Integer.toString(orario.getCurrentMinute());
                 Log.e("ORARIOSCELTO: ", temp);
 
-                addDomanda(3, "Orario Incontro", idEvento, "oraI", temp);
+                EventAsync.addDomanda(chiusura.isChecked(), context, 3, "Orario Incontro", idEvento, "oraI", temp);
                 dialog.dismiss();
             }
         });
@@ -267,7 +251,7 @@ public class EventDialog {
                 Log.e("LUOGOSCELTO-E: ", risposta.getText().toString());
 
                 if (!risposta.getText().toString().equals("")) {
-                    addDomanda(4, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
+                    EventAsync.addDomanda(chiusura.isChecked(), context, 4, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
                 }
                 dialog.dismiss();
             }
@@ -294,7 +278,7 @@ public class EventDialog {
                 Log.e("LUOGOSCELTO-I: ", risposta.getText().toString());
 
                 if (!risposta.getText().toString().equals("")) {
-                    addDomanda(4, "Luogo Incontro", idEvento, "luogoI", risposta.getText().toString());
+                    EventAsync.addDomanda(chiusura.isChecked(), context, 4, "Luogo Incontro", idEvento, "luogoI", risposta.getText().toString());
                 }
 
                 dialog.dismiss();
@@ -326,7 +310,7 @@ public class EventDialog {
                 Log.e("PERSONALIZZATA-RISPOSTA: ", risposta.getText().toString());
 
                 if (!alto.getText().toString().equals("")) {
-                    addDomanda(5, alto.getText().toString(), idEvento, "", risposta.getText().toString());
+                    EventAsync.addDomanda(chiusura.isChecked(), context, 5, alto.getText().toString(), idEvento, "", risposta.getText().toString());
                 }
 
                 dialog.dismiss();
@@ -354,117 +338,11 @@ public class EventDialog {
 
                 Log.e("SI/NO: ", alto.getText().toString());
                 if (!alto.getText().toString().equals("")) {
-                    addDomanda(7, alto.getText().toString(), idEvento, "sino", "si");
+                    EventAsync.addDomanda(chiusura.isChecked(), context, 7, alto.getText().toString(), idEvento, "sino", "si");
                     dialog.dismiss();
                 }
             }
         });
     }
     // </editor-fold>
-
-    private void addDomanda(final int who, final String domanda, final int idEvento, final String template, final String risposta) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected void onPreExecute() {
-
-                InputMethodManager inputManager = (InputMethodManager)
-                        context.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                if (((Activity) context).getCurrentFocus() != null)
-                    inputManager.hideSoftInputFromWindow(((Activity) context).getCurrentFocus().getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
-
-                progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage(context.getString(R.string.creazDom));
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String chiusa = String.valueOf(chiusura.isChecked() ? 1 : 0);
-                String[] name, param;
-
-                if (template.equals("")) {
-                    name = new String[]{"domanda", "risposta", "chiusa"};
-                    param = new String[]{domanda, risposta, chiusa};
-                } else {
-                    name = new String[]{"domanda", "template", "risposta", "chiusa"};
-                    param = new String[]{domanda, template, risposta, chiusa};
-                }
-
-                String ris = HelperConnessione.httpPostConnection("event/" + idEvento, name, param);
-
-                Log.e("addDomanda-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                if (progressDialog.isShowing())
-                    progressDialog.dismiss();
-
-                try {
-                    int ris_temp = Integer.parseInt(ris);
-
-                    Message m = new Message();
-                    Bundle b = new Bundle();
-
-                    switch (who) {
-                        case DIALOG_DATA:
-                            b.putInt("who", 1);
-                            b.putString("data", risposta);
-                            break;
-                        case DIALOG_ORARIO_E:
-                            b.putInt("who", 2);
-                            b.putString("orario", risposta);
-                            break;
-                        case DIALOG_ORARIO_I:
-                            b.putInt("who", 3);
-                            b.putString("orario", risposta);
-                            break;
-                        case DIALOG_LUOGO_I:
-                            b.putInt("who", 4);
-                            b.putString("luogo", risposta);
-                            break;
-                        case DIALOG_LUOGO_E:
-                            b.putInt("who", 6);
-                            b.putString("luogo", risposta);
-                            break;
-                        case DIALOG_PERSONALLIZATA:
-                            b.putInt("who", 5);
-                            b.putString("pers-d", domanda);
-                            b.putString("pers-r", risposta);
-                            break;
-                        case DIALOG_SINO:
-                            b.putInt("who", 7);
-                            b.putString("domanda", domanda);
-                            break;
-                    }
-
-                    b.putBoolean("close", chiusura.isChecked());
-                    b.putInt("id_attributo", ris_temp);
-                    m.setData(b);
-                    mResponseHandler.sendMessage(m);
-
-                } catch (NumberFormatException e) {
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage(R.string.problInsDom);
-
-                    alertDialogBuilder.setPositiveButton(R.string.chiudi, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-            }
-        }.execute(null, null, null);
-    }
 }

@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.partymanager.EventSupport.EventAsync;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
@@ -125,7 +126,7 @@ public class InfoEvento extends Fragment {
                             @Override
                             public boolean onMenuItemClick(android.view.MenuItem item) {
                                 pb_buttaFuori.setVisibility(View.VISIBLE);
-                                EventoHelper.eliminaUser(member_label, idEvento, getActivity(), i, pb_buttaFuori);
+                                EventAsync.eliminaUser(member_label, idEvento, getActivity(), i, pb_buttaFuori);
                                 return true;
                             }
                         });

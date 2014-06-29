@@ -2,9 +2,7 @@ package com.partymanager.EventSupport;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,7 +21,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -37,16 +34,11 @@ import com.partymanager.R;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.data.DatiAttributi;
-import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.Friends;
-import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +49,6 @@ import java.util.Set;
 public class EventoHelper {
 
     private static EditText edt;
-    static Dialog dialogFriends;
     static ProgressBar pb;
     static ArrayList<Friends> friendList;
     static FbFriendsAdapter dataAdapter = null;
@@ -67,7 +58,6 @@ public class EventoHelper {
     static ListView amiciFB;
     static Dialog dialogAddFriends;
     static ArrayList<String> id_toSend;
-    static ProgressDialog progressDialog;
     static int posAttributi;
     static Button si;
     static Button no;
@@ -118,7 +108,7 @@ public class EventoHelper {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            eliminaRisposta(i, idEvento, DatiRisposte.getPositionItem(i).id, activity);
+                            EventAsync.eliminaRisposta(i, idEvento, DatiRisposte.getPositionItem(i).id, activity);
                             return true;
                         }
                     });
@@ -147,9 +137,9 @@ public class EventoHelper {
                     pb_add.setVisibility(View.VISIBLE);
 
                     if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                        addRisposta(activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
+                        EventAsync.addRisposta(edt, activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
                     } else {
-                        modificaChiusaAsync(activity, 0, edt.getText().toString(), idEvento);
+                        EventAsync.modificaChiusaAsync(idAttributo, activity, 0, edt.getText().toString(), idEvento);
                     }
                 }
             }
@@ -175,7 +165,7 @@ public class EventoHelper {
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(activity, finalAdapter, idEvento, "no", pb_sino, posAttributi);
                         } else {
-                            modificaChiusaAsync(activity, 0, "no", idEvento);
+                            EventAsync.modificaChiusaAsync(idAttributo, activity, 0, "no", idEvento);
                         }
                     }
                 });
@@ -188,7 +178,7 @@ public class EventoHelper {
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
                             addDomandaSino(activity, finalAdapter, idEvento, "si", pb_sino, posAttributi);
                         } else {
-                            modificaChiusaAsync(activity, 0, "si", idEvento);
+                            EventAsync.modificaChiusaAsync(idAttributo, activity, 0, "si", idEvento);
                         }
                     }
                 });
@@ -208,9 +198,9 @@ public class EventoHelper {
                         pb_data.setVisibility(View.VISIBLE);
 
                         if (DatiAttributi.getPositionItem(posAttributi).close) {
-                            modificaChiusaAsync(activity, 0, temp, idEvento);
+                            EventAsync.modificaChiusaAsync(idAttributo, activity, 0, temp, idEvento);
                         } else {
-                            addRisposta(activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
+                            EventAsync.addRisposta(edt, activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
                         }
                     }
                 });
@@ -265,160 +255,17 @@ public class EventoHelper {
         }
     }
 
-    public static void modificaChiusaAsync(final Activity activity, final int pos, final String nuova, final int idEvento) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String[] name, param;
-                name = new String[]{"risposta"};
-                param = new String[]{nuova};
-
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + idAttributo + "/" + DatiRisposte.getPositionItem(pos).id, name, param);
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                if (ris.equals("fatto")) {
-                    modificaGrafica(false);
-                    DatiRisposte.modificaRisposta(pos, nuova);
-                } else {
-                    Toast.makeText(activity, activity.getString(R.string.errModChiusa), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute(null, null, null);
-    }
-
-    private static void eliminaRisposta(final int pos, final int idEvento, final int idRisposta, final Activity activity) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + "/" + idRisposta);
-
-                Log.e("Evento-Helper-eliminaRisposta-ris: ", " \nrisposta: " + ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                if (ris.equals("fatto")) {
-                    DatiRisposte.removePositionItem(pos);
-                } else {
-                    Toast.makeText(activity, activity.getString(R.string.errDeleteRisposta), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute(null, null, null);
-    }
-
-    public static void eliminaDomanda(final int pos, final int idEvento, final Activity activity) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id);
-
-                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + " \nrisposta: " + ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                if (ris.equals("fatto")) {
-                    DatiAttributi.removePositionItem(pos);
-                } else {
-                    Toast.makeText(activity, activity.getString(R.string.errDeleteDomanda), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute(null, null, null);
-    }
-
-    private static void addRisposta(final Activity activity, final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                String[] name, param;
-                name = new String[]{"risposta"};
-                param = new String[]{risposta};
-                String ris = HelperConnessione.httpPostConnection("event/" + idEvento + "/" + id_attributo, name, param);
-
-                Log.e("addRisposta-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                pb_add.setVisibility(View.GONE);
-
-                if (dialogButton != null)
-                    dialogButton.setVisibility(View.VISIBLE);
-
-                try {
-                    JSONObject pers = new JSONObject();
-                    JSONArray userL = new JSONArray();
-                    pers.put("id_user", HelperFacebook.getFacebookId());
-                    pers.put("name", HelperFacebook.getFacebookUserName());
-                    userL.put(pers);
-                    DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template, true);
-                    edt.setText("");
-                } catch (JSONException e) {
-                    Log.e("Evento-addRisposta", "JSONException " + e);
-                    Toast.makeText(activity, activity.getString(R.string.errInsertDomanda), Toast.LENGTH_LONG).show();
-                } catch (NumberFormatException e) {
-                    Log.e("Evento-addRisposta", "risposta non numerica " + e);
-                    Toast.makeText(activity, activity.getString(R.string.errInsertDomanda), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute(null, null, null);
-    }
-
     public static void addDomandaSino(Activity activity, RisposteAdapter adapter, int idEvento, String cosa, ProgressBar pb_sino, int attuale) {
 
         if (DatiRisposte.getLenght() == 1) {
-            addRisposta(activity, idEvento, DatiAttributi.getPositionItem(attuale).id, cosa, "sino", pb_sino, null);
+            EventAsync.addRisposta(edt, activity, idEvento, DatiAttributi.getPositionItem(attuale).id, cosa, "sino", pb_sino, null);
         } else {
             if (cosa.equals("si"))
-                vota(idEvento, adapter, null, DatiRisposte.getPositionItem(0).id, 0, pb_sino);
+                EventAsync.vota(idEvento, adapter, null, DatiRisposte.getPositionItem(0).id, 0, pb_sino);
             else {
-                vota(idEvento, adapter, null, DatiRisposte.getPositionItem(1).id, 1, pb_sino);
+                EventAsync.vota(idEvento, adapter, null, DatiRisposte.getPositionItem(1).id, 1, pb_sino);
             }
         }
-    }
-
-    public static void vota(final int idEvento, final RisposteAdapter adapter, final Button vota, final int idRisposta, final int position, final ProgressBar pb_vota) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected void onPreExecute() {
-                pb_vota.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected String doInBackground(Void... params) {
-                return HelperConnessione.httpPutConnection("event/" + idEvento + "/" + adapter.getId() + "/" + idRisposta, null, null);
-            }
-
-            @Override
-            protected void onPostExecute(String ris) {
-                pb_vota.setVisibility(View.GONE);
-                if (vota != null)
-                    vota.setVisibility(View.VISIBLE);
-
-                Log.e("Evento-vota-ris:", ris);
-
-                if (ris.equals("aggiornato")) {
-                    graficaVota(position, adapter.getArg2());
-                }
-            }
-        }.execute(null, null, null);
     }
 
     public static void graficaVota(int position, int attuale) {
@@ -451,76 +298,6 @@ public class EventoHelper {
                 dialogAddFriends.dismiss();
             }
         });
-    }
-
-    private static void addFriendsToEvent(final TextView bnt_friends, final Activity activity, final int idEvento, final String List, final int quanti_aggiunti) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected void onPreExecute() {
-                progressDialog = new ProgressDialog(activity);
-                progressDialog.setMessage(activity.getApplicationContext().getString(R.string.aggiuntaAmico));
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
-
-            @Override
-            protected String doInBackground(Void... args) {
-                String ris;
-
-                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
-
-                Log.e("Evento-addFriendsToEvent-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                id_toSend.clear();
-                if (progressDialog.isShowing())
-                    progressDialog.dismiss();
-
-                if (!result.equals("fatto")) {
-                    Toast.makeText(activity, activity.getString(R.string.errAggAmico), Toast.LENGTH_LONG).show();
-                } else {
-                    dialogFriends.dismiss();
-                    FbFriendsAdapter.svuotaLista();
-
-                    DatiEventi.getIdItem(idEvento).numUtenti += quanti_aggiunti;
-                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
-                }
-            }
-        }.execute();
-    }
-
-    public static void eliminaUser(final TextView bnt_friends, final int idEvento, final Activity activity, final int i, final ProgressBar pb_buttaFuori) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... args) {
-                String ris;
-
-                ris = HelperConnessione.httpDeleteConnection("friends/" + idEvento + "/" + DatiFriends.ITEMS.get(i).getCode());
-
-                Log.e("Evento-eliminaUser-ris: ", ris);
-
-                return ris;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                pb_buttaFuori.setVisibility(View.GONE);
-                if (!result.equals("fatto")) {
-                    Toast.makeText(activity, activity.getString(R.string.errDeleteFriend), Toast.LENGTH_LONG).show();
-                } else {
-                    DatiFriends.removeItem(i);
-
-                    DatiEventi.getIdItem(idEvento).numUtenti--;
-                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
-                }
-            }
-        }.execute();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Richiesta amici FB">
@@ -648,7 +425,7 @@ public class EventoHelper {
                 JSONArray jsArray = new JSONArray(id_toSend);
 
                 Log.e("Evento-AddFriends-Persone prima di invio: ", jsArray.toString());
-                addFriendsToEvent(bnt_friends, activity, idEvento, jsArray.toString(), jsArray.length());
+                EventAsync.addFriendsToEvent(id_toSend, bnt_friends, activity, idEvento, jsArray.toString(), jsArray.length());
 
                 if (!id_to_invite.toString().equals(""))
                     sendInviti(id_to_invite.toString(), activity, dialogAddFriends);

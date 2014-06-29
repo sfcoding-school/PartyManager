@@ -20,7 +20,8 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.partymanager.EventSupport.EventDialog;
+import com.partymanager.EventSupport.EventAsync;
+import com.partymanager.EventSupport.EventDomanda;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
@@ -43,7 +44,7 @@ public class Evento extends Fragment {
     AttributiAdapter eAdapter;
     ListView listView;
     View riepilogo;
-    EventDialog eventDialog;
+    EventDomanda eventDialog;
     static TextView luogo;
     static TextView quando_data;
     static TextView quando_ora;
@@ -52,13 +53,13 @@ public class Evento extends Fragment {
     Dialog dialogAddDomanda;
 
 
-    private static final int DIALOG_DATA = 1;
-    private static final int DIALOG_ORARIO_E = 2;
-    private static final int DIALOG_ORARIO_I = 3;
-    private static final int DIALOG_LUOGO_I = 4;
-    private static final int DIALOG_PERSONALLIZATA = 5;
-    private static final int DIALOG_LUOGO_E = 6;
-    private static final int DIALOG_SINO = 7;
+    public static final int DIALOG_DATA = 1;
+    public static final int DIALOG_ORARIO_E = 2;
+    public static final int DIALOG_ORARIO_I = 3;
+    public static final int DIALOG_LUOGO_I = 4;
+    public static final int DIALOG_PERSONALLIZATA = 5;
+    public static final int DIALOG_LUOGO_E = 6;
+    public static final int DIALOG_SINO = 7;
 
     private OnFragmentInteractionListener mListener;
     // </editor-fold>
@@ -106,7 +107,7 @@ public class Evento extends Fragment {
         }
         Log.e("DEBUG", "" + idEvento);
 
-        eventDialog = new EventDialog(getActivity(), dialogMsgHandler, idEvento, adminEvento);
+        eventDialog = new EventDomanda(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
 
         dialogAddDomanda = eventDialog.returnD();
@@ -200,7 +201,7 @@ public class Evento extends Fragment {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            EventoHelper.eliminaDomanda(pos, idEvento, getActivity());
+                            EventAsync.eliminaDomanda(pos, idEvento, getActivity());
                             return true;
                         }
                     });
