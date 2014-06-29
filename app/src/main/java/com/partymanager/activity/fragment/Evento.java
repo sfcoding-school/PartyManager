@@ -34,11 +34,10 @@ public class Evento extends Fragment {
     // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
     private static final String ID_EVENTO = "param1";
 
-    private static int idEvento;
+    private int idEvento;
     private String nomeEvento;
     private String adminEvento;
     private int numUtenti;
-    private TextView bnt_friends;
     boolean animation;
 
     AttributiAdapter eAdapter;
@@ -135,10 +134,9 @@ public class Evento extends Fragment {
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
-
         final View add_domanda = view.findViewById(R.id.circle);
 
-        bnt_friends.setText(""+numUtenti);
+        //bnt_friends.setText(String.valueOf(numUtenti));
 
         luogo.setOnClickListener(new View.OnClickListener() {
             @Override
