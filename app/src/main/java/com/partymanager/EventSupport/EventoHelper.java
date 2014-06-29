@@ -1,7 +1,6 @@
 package com.partymanager.EventSupport;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -24,6 +23,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -35,14 +35,12 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
-import com.partymanager.data.Adapter.FriendsAdapter;
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.Friends;
-import com.partymanager.helper.DataProvide;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -149,9 +147,9 @@ public class EventoHelper {
                     pb_add.setVisibility(View.VISIBLE);
 
                     if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                        addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
+                        addRisposta(activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, edt.getText().toString(), DatiAttributi.getPositionItem(posAttributi).template, pb_add, dialogButton);
                     } else {
-                        modificaChiusaAsync(0, edt.getText().toString(), idEvento);
+                        modificaChiusaAsync(activity, 0, edt.getText().toString(), idEvento);
                     }
                 }
             }
@@ -175,9 +173,9 @@ public class EventoHelper {
                         pb_sino.setVisibility(View.VISIBLE);
 
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                            addDomandaSino(finalAdapter, idEvento, "no", pb_sino, posAttributi);
+                            addDomandaSino(activity, finalAdapter, idEvento, "no", pb_sino, posAttributi);
                         } else {
-                            modificaChiusaAsync(0, "no", idEvento);
+                            modificaChiusaAsync(activity, 0, "no", idEvento);
                         }
                     }
                 });
@@ -188,9 +186,9 @@ public class EventoHelper {
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                            addDomandaSino(finalAdapter, idEvento, "si", pb_sino, posAttributi);
+                            addDomandaSino(activity, finalAdapter, idEvento, "si", pb_sino, posAttributi);
                         } else {
-                            modificaChiusaAsync(0, "si", idEvento);
+                            modificaChiusaAsync(activity, 0, "si", idEvento);
                         }
                     }
                 });
@@ -210,9 +208,9 @@ public class EventoHelper {
                         pb_data.setVisibility(View.VISIBLE);
 
                         if (DatiAttributi.getPositionItem(posAttributi).close) {
-                            modificaChiusaAsync(0, temp, idEvento);
+                            modificaChiusaAsync(activity, 0, temp, idEvento);
                         } else {
-                            addRisposta(idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
+                            addRisposta(activity, idEvento, DatiAttributi.getPositionItem(posAttributi).id, temp, "data", pb_data, null);
                         }
                     }
                 });
@@ -267,7 +265,7 @@ public class EventoHelper {
         }
     }
 
-    public static void modificaChiusaAsync(final int pos, final String nuova, final int idEvento) {
+    public static void modificaChiusaAsync(final Activity activity, final int pos, final String nuova, final int idEvento) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -285,6 +283,8 @@ public class EventoHelper {
                 if (ris.equals("fatto")) {
                     modificaGrafica(false);
                     DatiRisposte.modificaRisposta(pos, nuova);
+                } else {
+                    Toast.makeText(activity, activity.getString(R.string.errModChiusa), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(null, null, null);
@@ -308,17 +308,7 @@ public class EventoHelper {
                 if (ris.equals("fatto")) {
                     DatiRisposte.removePositionItem(pos);
                 } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-                    alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteRisposta));
-
-                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    Toast.makeText(activity, activity.getString(R.string.errDeleteRisposta), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(null, null, null);
@@ -342,23 +332,13 @@ public class EventoHelper {
                 if (ris.equals("fatto")) {
                     DatiAttributi.removePositionItem(pos);
                 } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-                    alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteDomanda));
-
-                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    Toast.makeText(activity, activity.getString(R.string.errDeleteDomanda), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(null, null, null);
     }
 
-    private static void addRisposta(final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
+    private static void addRisposta(final Activity activity, final int idEvento, final int id_attributo, final String risposta, final String template, final ProgressBar pb_add, final ImageButton dialogButton) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -391,17 +371,19 @@ public class EventoHelper {
                     edt.setText("");
                 } catch (JSONException e) {
                     Log.e("Evento-addRisposta", "JSONException " + e);
+                    Toast.makeText(activity, activity.getString(R.string.errInsertDomanda), Toast.LENGTH_LONG).show();
                 } catch (NumberFormatException e) {
                     Log.e("Evento-addRisposta", "risposta non numerica " + e);
+                    Toast.makeText(activity, activity.getString(R.string.errInsertDomanda), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(null, null, null);
     }
 
-    public static void addDomandaSino(RisposteAdapter adapter, int idEvento, String cosa, ProgressBar pb_sino, int attuale) {
+    public static void addDomandaSino(Activity activity, RisposteAdapter adapter, int idEvento, String cosa, ProgressBar pb_sino, int attuale) {
 
         if (DatiRisposte.getLenght() == 1) {
-            addRisposta(idEvento, DatiAttributi.getPositionItem(attuale).id, cosa, "sino", pb_sino, null);
+            addRisposta(activity, idEvento, DatiAttributi.getPositionItem(attuale).id, cosa, "sino", pb_sino, null);
         } else {
             if (cosa.equals("si"))
                 vota(idEvento, adapter, null, DatiRisposte.getPositionItem(0).id, 0, pb_sino);
@@ -460,61 +442,6 @@ public class EventoHelper {
 
     }
 
-    public static void dialogEventUsers(final TextView bnt_friends, final int idEvento, final Activity activity, final String adminEvento) {
-        DataProvide.getFriends(idEvento, activity.getApplicationContext());
-        dialogFriends = new Dialog(activity);
-        dialogFriends.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogFriends.setContentView(R.layout.dialog_friends);
-
-        ProgressBar pb = (ProgressBar) dialogFriends.findViewById(R.id.progressBar_addFriends);
-        pb.setVisibility(View.VISIBLE);
-
-        ListView utenti = (ListView) dialogFriends.findViewById(R.id.listView_friends);
-        FriendsAdapter adapter = DatiFriends.init(idEvento, activity.getApplicationContext());
-        utenti.setEmptyView(pb);
-        utenti.setAdapter(adapter);
-
-        dialogFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                DatiFriends.removeAll();
-            }
-        });
-
-        Button addFriends = (Button) dialogFriends.findViewById(R.id.btn_addFriends);
-
-        final ProgressBar pb_buttaFuori = (ProgressBar) dialogFriends.findViewById(R.id.pb_deleteUser);
-
-        addFriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogAddFriends(bnt_friends, idEvento, activity);
-            }
-        });
-
-        utenti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
-                    PopupMenu popup = new PopupMenu(activity, view);
-                    popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                        @Override
-                        public boolean onMenuItemClick(android.view.MenuItem item) {
-                            pb_buttaFuori.setVisibility(View.VISIBLE);
-                            eliminaUser(bnt_friends, idEvento, activity, i, pb_buttaFuori);
-                            return true;
-                        }
-                    });
-                    popup.show();
-                }
-            }
-        });
-
-        dialogFriends.show();
-    }
-
     private static void sendInviti(String temp, Activity activity, final Dialog dialogAddFriends) {
         WebDialog f = HelperFacebook.inviteFriends(activity, temp);
         f.show();
@@ -555,17 +482,7 @@ public class EventoHelper {
                     progressDialog.dismiss();
 
                 if (!result.equals("fatto")) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-                    alertDialogBuilder.setMessage(activity.getString(R.string.errAggAmico));
-
-                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    Toast.makeText(activity, activity.getString(R.string.errAggAmico), Toast.LENGTH_LONG).show();
                 } else {
                     dialogFriends.dismiss();
                     FbFriendsAdapter.svuotaLista();
@@ -595,17 +512,7 @@ public class EventoHelper {
             protected void onPostExecute(String result) {
                 pb_buttaFuori.setVisibility(View.GONE);
                 if (!result.equals("fatto")) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-                    alertDialogBuilder.setMessage(activity.getString(R.string.errDeleteFriend));
-
-                    alertDialogBuilder.setPositiveButton(activity.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    Toast.makeText(activity, activity.getString(R.string.errDeleteFriend), Toast.LENGTH_LONG).show();
                 } else {
                     DatiFriends.removeItem(i);
 

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
@@ -38,6 +39,8 @@ public class InfoEvento extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private boolean modifica = false;
+    private ProgressBar pb_cambiaNome;
+    private ImageButton modificaNomeEvento;
 
     public static InfoEvento newInstance(int idEvento) {
         InfoEvento fragment = new InfoEvento();
@@ -72,9 +75,9 @@ public class InfoEvento extends Fragment {
         super.onCreateOptionsMenu(menu, inflar);
         menu.clear();
         inflar.inflate(R.menu.main_no_menu, menu);
-        getActivity().getActionBar().setTitle("Info evento");
+        getActivity().getActionBar().setTitle(getString(R.string.titleInfoEvento));
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : nomeEvento);
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : nomeEvento);
 
     }
 
@@ -84,13 +87,15 @@ public class InfoEvento extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info_evento, container, false);
 
         final TextView member_label = (TextView) view.findViewById(R.id.member_label);
-        member_label.setText(numUtenti + " MEMBRI");
+        member_label.setText(numUtenti + " " + getString(R.string.membri));
 
         final TextView TxtnomeEvento = (TextView) view.findViewById(R.id.txtInfo_NomeEvento);
         TxtnomeEvento.setText(nomeEvento);
 
         ProgressBar pb = (ProgressBar) view.findViewById(R.id.progressBar_addFriends);
         pb.setVisibility(View.VISIBLE);
+
+        pb_cambiaNome = (ProgressBar) view.findViewById(R.id.pb_cambiaNomeEvento);
 
         ListView utenti = (ListView) view.findViewById(R.id.listView_friends);
         FriendsAdapter adapter = DatiFriends.init(idEvento, getActivity().getApplicationContext());
@@ -111,32 +116,35 @@ public class InfoEvento extends Fragment {
         utenti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
-                    PopupMenu popup = new PopupMenu(getActivity(), view);
-                    popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                if (!DatiFriends.ITEMS.get(i).code.equals(adminEvento)) {
+                    if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                        PopupMenu popup = new PopupMenu(getActivity(), view);
+                        popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
-                        @Override
-                        public boolean onMenuItemClick(android.view.MenuItem item) {
-                            pb_buttaFuori.setVisibility(View.VISIBLE);
-                            EventoHelper.eliminaUser(member_label, idEvento, getActivity(), i, pb_buttaFuori);
-                            return true;
-                        }
-                    });
-                    popup.show();
+                            @Override
+                            public boolean onMenuItemClick(android.view.MenuItem item) {
+                                pb_buttaFuori.setVisibility(View.VISIBLE);
+                                EventoHelper.eliminaUser(member_label, idEvento, getActivity(), i, pb_buttaFuori);
+                                return true;
+                            }
+                        });
+                        popup.show();
+                    }
                 }
             }
         });
 
         final EditText cambiaNome = (EditText) view.findViewById(R.id.edt_cambiaNomeEvento);
 
-        final ImageButton modificaNomeEvento = (ImageButton) view.findViewById(R.id.btn_cambiaNome);
+        modificaNomeEvento = (ImageButton) view.findViewById(R.id.btn_cambiaNome);
         modificaNomeEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modifica = (!modifica);
 
                 if (!cambiaNome.getText().toString().equals(nomeEvento) && !cambiaNome.getText().toString().equals("")) {
+                    modificaNomeEvento.setVisibility(View.GONE);
                     modificaNomeEvento(TxtnomeEvento, cambiaNome.getText().toString());
                 }
 
@@ -160,6 +168,11 @@ public class InfoEvento extends Fragment {
         new AsyncTask<Void, Void, String>() {
 
             @Override
+            protected void onPreExecute() {
+                pb_cambiaNome.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             protected String doInBackground(Void... params) {
 
                 String[] name, param;
@@ -171,10 +184,14 @@ public class InfoEvento extends Fragment {
 
             @Override
             protected void onPostExecute(String ris) {
+                pb_cambiaNome.setVisibility(View.GONE);
+                modificaNomeEvento.setVisibility(View.VISIBLE);
                 if (ris.equals("fatto")) {
                     nomeEvento = nuovoNome;
                     txt.setText(nuovoNome);
                     getActivity().getActionBar().setTitle(nuovoNome);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errCambioNome), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
