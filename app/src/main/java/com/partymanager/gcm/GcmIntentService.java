@@ -192,8 +192,7 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Nuovo Evento",
                                         extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"),
                                         "checkbox_eventi",
-                                        extras.getString("id_evento")
-                                );
+                                        extras);
                                 break;
 
                             //uscito
@@ -201,13 +200,13 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Utente uscito",
                                         extras.getString("name_user") + " è uscito dall'evento " + extras.getString("nome_evento"),
                                         "checkbox_eventi",
-                                        extras.getString("id_evento"));
+                                        extras);
                                 break;
                             case 2:
                                 sendNotification("Evento rinominato",
                                         extras.getString("name_user") + " ha rinominato l'evento " + extras.getString("nome_evento") + " in " + extras.getString("nome_evento_vec"),
                                         "checkbox_eventi",
-                                        extras.getString("id_evento"));
+                                        extras);
                                 break;
                         }
                         break;
@@ -220,7 +219,7 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Nuova Domanda",
                                         extras.getString("userName") + " ha chiesto " + extras.getString("domanda"),
                                         "checkbox_domande",
-                                        extras.getString("id_evento"));
+                                        extras);
                                 break;
 
                         }
@@ -234,7 +233,7 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Nuova Risposta",
                                         extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"),
                                         "checkbox_risposte",
-                                        extras.getString("id_evento"));
+                                        extras);
 
                                 if (extras.getBoolean("agg")) {
 
@@ -248,7 +247,7 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Risposta",
                                         "anche " + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"),
                                         "checkbox_risposte",
-                                        extras.getString("id_evento"));
+                                        extras);
 
                                 if (extras.getBoolean("agg")) {
 
@@ -268,7 +267,7 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Aggiunti amici",
                                         extras.getString("user_list") + "sono stati aggiunti all'evento" + extras.getString("nome_evento"),
                                         "checkbox_utenti",
-                                        extras.getString("id_evento"));
+                                        extras);
                                 break;
 
                             //del
@@ -276,14 +275,14 @@ public class GcmIntentService extends IntentService {
                                 sendNotification("Amico eliminato",
                                         extras.getString("user_name") + " è stato rimosso dall'evento " + extras.getString("nome_evento"),
                                         "checkbox_utenti",
-                                        extras.getString("id_evento"));
+                                        extras);
                                 break;
                         }
                         break;
                     case 5:
                         //test
                         Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
-                        sendNotification("TEST", extras.getString("msg"), "checkbox_notifiche_all", "-1");
+                        sendNotification("TEST", extras.getString("msg"), "checkbox_notifiche_all", extras);
                         break;
 //>>>>>>> agg-notifiche
                 }
@@ -305,7 +304,7 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String title, String msg, String impostazione, String idEvento) {
+    private void sendNotification(String title, String msg, String impostazione, Bundle extras) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -334,9 +333,9 @@ public class GcmIntentService extends IntentService {
             if (prova) {
                 sound = Notification.DEFAULT_SOUND;
             }
-
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(String.valueOf(idEvento), Uri.EMPTY, this, MainActivity.class), 0);
+            Intent intent = new Intent("notifica", Uri.EMPTY, this, MainActivity.class);
+            intent.putExtras(extras);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)

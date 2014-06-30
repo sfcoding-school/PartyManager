@@ -2,9 +2,12 @@ package com.partymanager.helper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.partymanager.R;
@@ -31,6 +34,12 @@ public class DataProvide {
     public static void getEvent(Context context) {
         loadJson("eventi", context);
         downloadEvent(context);
+    }
+
+
+    public static void getEvent(Context context, int idEvento) {
+        loadJson("eventi", context);
+        downloadEvent(context, idEvento);
     }
 
     public static void getAttributi(Context context, int eventoId) {
@@ -70,6 +79,63 @@ public class DataProvide {
     }
 
     private static void downloadEvent(final Context context) {
+        new AsyncTask<Void, Void, JSONArray>() {
+
+            @Override
+            protected void onPreExecute() {
+                MainActivity.progressBarVisible = true;
+                ((Activity) context).invalidateOptionsMenu();
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                String json_string = HelperConnessione.httpGetConnection("event");
+                if (json_string.equals("serverOffline") || json_string.equals("connessioneAssente")) {
+                    JSONArray a = new JSONArray();
+                    JSONObject b = new JSONObject();
+                    try {
+                        b.put("error", json_string);
+                        a.put(b);
+                        return a;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return stringToJsonArray("event", json_string);
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonArray) {
+
+                MainActivity.progressBarVisible = false;
+                ((Activity) context).invalidateOptionsMenu();
+
+                if (jsonArray != null) {
+                    try {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                        if (jsonArray.getJSONObject(0).getString("error").equals("serverOffline")) {
+                            alertDialogBuilder.setMessage(context.getString(R.string.serverOffline));
+                        } else {
+                            alertDialogBuilder.setMessage(context.getString(R.string.connAssente));
+                        }
+                        alertDialogBuilder.setPositiveButton(context.getString(R.string.chiudi), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    } catch (JSONException e) {
+                        saveJson(jsonArray, "eventi", context);
+                        loadIntoEventiAdapter(jsonArray);
+                    }
+                }
+            }
+        }.execute(null, null, null);
+    }
+
+    private static void downloadEvent(final Context context, final int idEvento) {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override

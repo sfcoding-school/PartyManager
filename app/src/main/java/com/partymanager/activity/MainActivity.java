@@ -66,11 +66,11 @@ public class MainActivity extends Activity
 
     Fragment fragment = null;
     private final String eventListTAG = "eventList";
-    private final String eventTAG = "evento";
+    public final String eventTAG = "evento";
     private final String archivioTAG = "archivio";
     private final String impostazioniTAG = "impostazioni";
     private boolean infoEventoAperto = false;
-    private String infoTAG = "infoEvento";
+    private final String infoTAG = "infoEvento";
 
 
     @Override
@@ -377,19 +377,17 @@ public class MainActivity extends Activity
             } else {
                 HelperFacebook.getToken();
                 fragmentManager = getFragmentManager();
-                try {
-                    Intent inte = getIntent();
 
-                    String action = inte.getAction();
-                    int id = Integer.parseInt(action);
-                    if (id != -1) {
-                        changeFragment(0);
-                        onFragmentInteraction(id);
-                    }
-                } catch (NumberFormatException e) {
-                    Log.e("INTENT NOTIFICHE", e.toString());
+                Intent inte = getIntent();
 
+                String action = inte.getAction();
 
+                if (action.equals("notifica")) {
+                    Log.e("MAINACTIVITY-DEBUG", "sono entrato in action");
+                    //changeFragment(0);
+                    Bundle b = inte.getExtras();
+                    onFragmentInteraction(Integer.parseInt(b.getString("id_evento")));
+                } else {
                     int countBackStack = fragmentManager.getBackStackEntryCount();
 
                     if (countBackStack == 0 && fragment != null) {
@@ -398,9 +396,10 @@ public class MainActivity extends Activity
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                     } else if (countBackStack != 0) {
-                        Fragment tmp = fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
+                        String id = fragmentManager.getBackStackEntryAt(0).getName();
+                        Fragment tmp = fragmentManager.findFragmentByTag(id);
                         fragmentManager.beginTransaction()
-                                .replace(R.id.container, tmp, fragment.getTag())
+                                .replace(R.id.container, tmp, id)
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .commit();
                     } else
@@ -470,7 +469,6 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -587,6 +585,11 @@ public class MainActivity extends Activity
                 fragment = EventiListFragment.newInstance();
                 tag = eventListTAG;
                 mTitle = getString(R.string.title_section0);
+                /*
+                fragment = Evento.newInstance(18, "gesu", "123123123", 2);
+                tag = eventTAG;
+                mTitle = getString(R.string.title_section0);
+                */
                 break;
             case 1:
                 fragment = Archivio.newInstance();
@@ -672,9 +675,9 @@ public class MainActivity extends Activity
         if (id == R.id.infoEvento) {
             //deve aprire il nuovo Fragment
             //TEST
-
             infoEventoAperto = true;
             Fragment fragment = InfoEvento.newInstance(fragmentManager.findFragmentByTag(eventTAG).getArguments().getInt("param1"));
+            //fragmentManager.saveFragmentInstanceState(fragment);
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, infoTAG)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -715,7 +718,7 @@ public class MainActivity extends Activity
                 FragmentManager fragmentManager = getFragmentManager();
                 Fragment fragment = Evento.newInstance(id_evento);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, fragment)
+                        .replace(R.id.container, fragment, eventTAG)
                         .addToBackStack(eventTAG)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
@@ -749,7 +752,7 @@ public class MainActivity extends Activity
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(eventTAG)
                 .commit();
-
+        Log.e("MAINACTIVITY_DEBUG", "sono entrato in on FragmetInteraction con id" + id);
         MainActivity.this.invalidateOptionsMenu();
 
         /*

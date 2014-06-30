@@ -34,6 +34,9 @@ public class Evento extends Fragment {
 
     // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
     private static final String ID_EVENTO = "param1";
+    private static final String NOME_EVENTO = "param2";
+    private static final String ADMIN_EVENTO = "param3";
+    private static final String NUM_UTENTI = "param4";
 
     private int idEvento;
     private String nomeEvento;
@@ -100,11 +103,13 @@ public class Evento extends Fragment {
 
         if (getArguments() != null) {
             idEvento = getArguments().getInt(ID_EVENTO);
-            nomeEvento = DatiEventi.getIdItem(idEvento).name;
-            adminEvento = DatiEventi.getIdItem(idEvento).admin;
-            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+                nomeEvento = DatiEventi.getIdItem(idEvento).name;
+                adminEvento = DatiEventi.getIdItem(idEvento).admin;
+                numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+
         }
-        Log.e("DEBUG", "" + idEvento);
+
+        Log.e("EVENTO-DEBUG", "IdEvento" + idEvento + "Name" + nomeEvento + "admin" + adminEvento + "numUtenti" + numUtenti);
 
         eventDialog = new EventDomanda(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
