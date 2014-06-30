@@ -358,9 +358,10 @@ public class CreaEventoActivity extends Activity {
 
     public void onBackPressed() {
         if (a == null)
-            a = Toast.makeText(getApplicationContext(), getString(R.string.esciCreaEvento), Toast.LENGTH_LONG);
+            a = Toast.makeText(getApplicationContext(), getString(R.string.esciCreaEvento), Toast.LENGTH_SHORT);
 
         if (a.getView().isShown()) {
+
             if (id_toSend != null) id_toSend.clear();
             container_friends.setText("");
             FbFriendsAdapter.svuotaLista();

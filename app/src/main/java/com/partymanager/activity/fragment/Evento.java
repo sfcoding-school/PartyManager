@@ -139,7 +139,7 @@ public class Evento extends Fragment {
         luogoI = (TextView) view.findViewById(R.id.txt_dove_vediamo);
         final View add_domanda = view.findViewById(R.id.circle);
 
-        //bnt_friends.setText(String.valueOf(numUtenti));
+        // <editor-fold defaultstate="collapsed" desc="RiepilogoSetup">
 
         luogoE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +209,7 @@ public class Evento extends Fragment {
                 dialogAddDomanda.show();
             }
         });
+        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="listView">
         listView.setEmptyView(view.findViewById(R.id.txt_empty));
@@ -223,7 +224,6 @@ public class Evento extends Fragment {
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            final int pos, long id) {
                 cancellaDomanda(pos, arg1);
@@ -296,17 +296,11 @@ public class Evento extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         DatiAttributi.removeAll(true, idEvento);
         eAdapter.notifyDataSetChanged();
     }
-
 
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(int id);

@@ -53,7 +53,7 @@ public class HelperFacebook {
         if (facebookUserName != null)
             return facebookUserName;
         else {
-            SharedPreferences prefs = activity.getSharedPreferences(ProfileActivity.class.getSimpleName(), activity.MODE_PRIVATE);
+            SharedPreferences prefs = activity.getSharedPreferences("profilo", activity.MODE_PRIVATE);
             String name = prefs.getString("reg_username", "");
             if (name.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "username facebook not found.");
