@@ -22,10 +22,7 @@ import java.util.Comparator;
 public class DatiAttributi {
 
     private static AttributiAdapter eAdapter;
-    //<<<<<<< HEAD
-    //  public static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static Context context_global;
-    //=======
     private static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
 

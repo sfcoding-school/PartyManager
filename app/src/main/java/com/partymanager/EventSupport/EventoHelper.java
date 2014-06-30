@@ -64,7 +64,7 @@ public class EventoHelper {
     static ImageButton dialogButton;
     static DatePicker dateR;
     static Button add;
-    private static int idAttributo;
+    static int idAttributo;
     static private Dialog dialog;
     static LinearLayout normal;
     static LinearLayout sino;

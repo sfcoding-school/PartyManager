@@ -189,6 +189,8 @@ public class CreaEventoActivity extends Activity {
 
     private void updateView() {
 
+        finali = new ArrayList<Friends>();
+
         //Listener EditText per ricerca amici
         inputSearch.addTextChangedListener(new TextWatcher() {
 
@@ -223,14 +225,13 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (finali != null)
-                    finali = dataAdapter.getFinali();
+                finali = dataAdapter.getFinali();
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
                         output.append(getString(R.string.insrtNameE));
                     }
-                    if (finali == null || finali.isEmpty()) {
+                    if (finali.isEmpty()) {
                         if (output.length() != 0)
                             output.append("\n");
                         output.append(getString(R.string.insrtAE));
@@ -238,21 +239,20 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
                     id_toSend = new ArrayList<String>();
-
                     StringBuilder id_to_invite = new StringBuilder();
-                    if (finali != null) {
-                        for (Friends aFinali : finali) {
-                            if (aFinali.getAppInstalled()) {
-                                id_toSend.add(aFinali.getCode());
-                            } else {
-                                String temp = aFinali.getCode();
-                                if (id_to_invite.length() != 0)
-                                    temp = ", " + temp;
 
-                                id_to_invite.append(temp);
-                            }
+                    for (Friends aFinali : finali) {
+                        if (aFinali.getAppInstalled()) {
+                            id_toSend.add(aFinali.getCode());
+                        } else {
+                            String temp = aFinali.getCode();
+                            if (id_to_invite.length() != 0)
+                                temp = ", " + temp;
+
+                            id_to_invite.append(temp);
                         }
                     }
+
                     JSONArray jsArray = new JSONArray(id_toSend);
 
                     final SharedPreferences prefs = getPreferences();

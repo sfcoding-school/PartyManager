@@ -45,13 +45,12 @@ public class Evento extends Fragment {
     ListView listView;
     View riepilogo;
     EventDomanda eventDialog;
-    static TextView luogo;
+    static TextView luogoE;
     static TextView quando_data;
     static TextView quando_ora;
-    static TextView dove;
+    static TextView luogoI;
     int mLastFirstVisibleItem = 0;
     Dialog dialogAddDomanda;
-
 
     public static final int DIALOG_DATA = 1;
     public static final int DIALOG_ORARIO_E = 2;
@@ -109,9 +108,7 @@ public class Evento extends Fragment {
 
         eventDialog = new EventDomanda(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
-
         dialogAddDomanda = eventDialog.returnD();
-
         setHasOptionsMenu(true);
     }
 
@@ -119,8 +116,8 @@ public class Evento extends Fragment {
         String[] template = DatiAttributi.getTemplate();
 
         quando_data.setText(template[0]);
-        luogo.setText(template[1]);
-        dove.setText(template[2]);
+        luogoE.setText(template[1]);
+        luogoI.setText(template[2]);
         quando_ora.setText(template[3]);
     }
 
@@ -131,18 +128,26 @@ public class Evento extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.eventList);
         riepilogo = view.findViewById(R.id.stickyheader);
-        luogo = (TextView) view.findViewById(R.id.txt_luogo);
+        luogoE = (TextView) view.findViewById(R.id.txt_luogo);
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
-        dove = (TextView) view.findViewById(R.id.txt_dove_vediamo);
+        luogoI = (TextView) view.findViewById(R.id.txt_dove_vediamo);
         final View add_domanda = view.findViewById(R.id.circle);
 
         //bnt_friends.setText(String.valueOf(numUtenti));
 
-        luogo.setOnClickListener(new View.OnClickListener() {
+        luogoE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 templateManager("luogoE", "LuogoEvento", 4);
+            }
+        });
+
+        luogoE.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                cancellaDomanda(DatiAttributi.cercaTemplate("luogoE"), view);
+                return true;
             }
         });
 
@@ -153,6 +158,14 @@ public class Evento extends Fragment {
             }
         });
 
+        quando_data.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                cancellaDomanda(DatiAttributi.cercaTemplate("data"), view);
+                return true;
+            }
+        });
+
         quando_ora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,10 +173,26 @@ public class Evento extends Fragment {
             }
         });
 
-        dove.setOnClickListener(new View.OnClickListener() {
+        quando_ora.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                cancellaDomanda(DatiAttributi.cercaTemplate("oraE"), view);
+                return true;
+            }
+        });
+
+        luogoI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 templateManager("luogoI", "LuogoIncontro", 3);
+            }
+        });
+
+        luogoI.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                cancellaDomanda(DatiAttributi.cercaTemplate("luogoI"), view);
+                return true;
             }
         });
 
@@ -192,23 +221,7 @@ public class Evento extends Fragment {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            final int pos, long id) {
-
-                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
-                    PopupMenu popup = new PopupMenu(getActivity(), arg1);
-                    popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
-
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                        @Override
-                        public boolean onMenuItemClick(android.view.MenuItem item) {
-                            EventAsync.eliminaDomanda(pos, idEvento, getActivity());
-                            return true;
-                        }
-                    });
-
-                    popup.show();
-                }
-
+                cancellaDomanda(pos, arg1);
                 return true;
             }
         });
@@ -246,6 +259,24 @@ public class Evento extends Fragment {
         // </editor-fold>
 
         return view;
+    }
+
+    private void cancellaDomanda(final int pos, View view) {
+        if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+            PopupMenu popup = new PopupMenu(getActivity(), view);
+            popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(android.view.MenuItem item) {
+                    EventAsync.eliminaDomanda(pos, idEvento, getActivity());
+                    return true;
+                }
+            });
+
+            popup.show();
+        }
     }
 
     @Override

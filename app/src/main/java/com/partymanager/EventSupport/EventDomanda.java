@@ -251,7 +251,7 @@ public class EventDomanda {
                 Log.e("LUOGOSCELTO-E: ", risposta.getText().toString());
 
                 if (!risposta.getText().toString().equals("")) {
-                    EventAsync.addDomanda(chiusura.isChecked(), context, 4, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
+                    EventAsync.addDomanda(chiusura.isChecked(), context, 6, "Luogo Evento", idEvento, "luogoE", risposta.getText().toString());
                 }
                 dialog.dismiss();
             }

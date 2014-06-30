@@ -216,6 +216,7 @@ public class EventAsync {
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
                     DatiRisposte.removePositionItem(pos);
+                    Evento.checkTemplate();
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.errDeleteRisposta), Toast.LENGTH_LONG).show();
                 }
@@ -223,15 +224,15 @@ public class EventAsync {
         }.execute(null, null, null);
     }
 
-    public static void eliminaDomanda(final int pos, final int idEvento, final Activity activity) {
+    public static void eliminaDomanda(final int posAttr, final int idEvento, final Activity activity) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id);
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(posAttr).id);
 
-                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + " \nrisposta: " + ris);
+                Log.e("eliminaDomanda-ris: ", "event/" + idEvento + "/" + DatiAttributi.getPositionItem(posAttr).id + " \nrisposta: " + ris);
 
                 return ris;
             }
@@ -239,7 +240,8 @@ public class EventAsync {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    DatiAttributi.removePositionItem(pos);
+                    DatiAttributi.removePositionItem(posAttr);
+                    Evento.checkTemplate();
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.errDeleteDomanda), Toast.LENGTH_LONG).show();
                 }
@@ -277,6 +279,7 @@ public class EventAsync {
                     pers.put("name", HelperFacebook.getFacebookUserName());
                     userL.put(pers);
                     DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template, true);
+                    Evento.checkTemplate();
                     edt.setText("");
                 } catch (JSONException e) {
                     Log.e("Evento-addRisposta", "JSONException " + e);
@@ -312,6 +315,7 @@ public class EventAsync {
 
                 if (ris.equals("aggiornato")) {
                     EventoHelper.graficaVota(position, adapter.getArg2());
+                    Evento.checkTemplate();
                 }
             }
         }.execute(null, null, null);
