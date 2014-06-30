@@ -134,7 +134,7 @@ public class Evento extends Fragment {
         luogoI = (TextView) view.findViewById(R.id.txt_dove_vediamo);
         final View add_domanda = view.findViewById(R.id.circle);
 
-        //bnt_friends.setText(String.valueOf(numUtenti));
+        // <editor-fold defaultstate="collapsed" desc="RiepilogoSetup">
 
         luogoE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +204,7 @@ public class Evento extends Fragment {
                 dialogAddDomanda.show();
             }
         });
+        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="listView">
         listView.setEmptyView(view.findViewById(R.id.txt_empty));
