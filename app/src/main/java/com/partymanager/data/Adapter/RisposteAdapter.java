@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.partymanager.EventSupport.EventAsync;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.data.DatiRisposte;
@@ -86,7 +87,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
                 if (chiusa) {
                     EventoHelper.modificaGrafica(true);
                 } else {
-                    EventoHelper.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getPositionItem(position).id, position, pb_vota);
+                    EventAsync.vota(idEvento, RisposteAdapter.this, vota, DatiRisposte.getPositionItem(position).id, position, pb_vota);
                     vota.setVisibility(View.GONE);
                 }
             }

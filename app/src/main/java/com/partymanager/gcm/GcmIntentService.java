@@ -1,6 +1,5 @@
 package com.partymanager.gcm;
 
-import android.app.Fragment;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -284,7 +283,7 @@ public class GcmIntentService extends IntentService {
                     case 5:
                         //test
                         Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
-                        sendNotification("TEST", extras.getString("msg"), "checkbox_notifiche_all","-1");
+                        sendNotification("TEST", extras.getString("msg"), "checkbox_notifiche_all", "-1");
                         break;
 //>>>>>>> agg-notifiche
                 }

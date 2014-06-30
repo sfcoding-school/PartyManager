@@ -22,7 +22,7 @@
     <string name="new_event">Nuovo Evento</string>
     <string name="app_name">PartyManager</string>
 
-    <!--EventDialog -->
+    <!--EventDomande -->
     <string name="dataE">Data Evento</string>
     <string name="orarioE">Orario Evento</string>
     <string name="orarioI">Orario Incontro</string>
@@ -47,6 +47,7 @@
     <string name="connAssente">Connessione assente</string>
     <string name="errFB">Problema sessione FB</string>
     <string name="riprova">Riprova</string>
+    <string name="esciCreaEvento">Premi ancora una volta per uscire</string>
 
     <!--Activity Profilo e FB-->
     <string name="app_id">401068586702319</string>
@@ -136,5 +137,12 @@
     <string name="no">NO</string>
     <string name="yes">SI</string>
     <string name="rispondi">Rispondi</string>
+
+    <!-- InfoEvento -->
+    <string name="titleInfoEvento">Info evento</string>
+    <string name="membri">MEMBRI</string>
+    <string name="errCambioNome">Errore nel cambiare nome all\'evento</string>
+    <string name="errInsertDomanda">Errore nell\'inserimento di una risposta</string>
+    <string name="errModChiusa">Errore nella modifica</string>
 
 </resources>

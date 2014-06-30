@@ -390,29 +390,29 @@ public class MainActivity extends Activity
                     Log.e("INTENT NOTIFICHE", e.toString());
 
 
-                int countBackStack = fragmentManager.getBackStackEntryCount();
+                    int countBackStack = fragmentManager.getBackStackEntryCount();
 
-                if (countBackStack == 0 && fragment != null) {
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.container, fragment, fragment.getTag())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                } else if (countBackStack != 0) {
-                    Fragment tmp = fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.container, tmp, fragment.getTag())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
-                } else
-                    changeFragment(0);
+                    if (countBackStack == 0 && fragment != null) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, fragment, fragment.getTag())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else if (countBackStack != 0) {
+                        Fragment tmp = fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, tmp, fragment.getTag())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+                    } else
+                        changeFragment(0);
 
-            }
+                }
             }
         }
     }
 
     @Override
-    protected void onNewIntent(Intent intent){
+    protected void onNewIntent(Intent intent) {
         setIntent(intent);
     }
 

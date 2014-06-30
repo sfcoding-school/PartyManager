@@ -189,6 +189,8 @@ public class CreaEventoActivity extends Activity {
 
     private void updateView() {
 
+        finali = new ArrayList<Friends>();
+
         //Listener EditText per ricerca amici
         inputSearch.addTextChangedListener(new TextWatcher() {
 
@@ -223,14 +225,13 @@ public class CreaEventoActivity extends Activity {
 
         finito.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (finali != null)
-                    finali = dataAdapter.getFinali();
+                finali = dataAdapter.getFinali();
                 if ("".equals(nome_evento.getText().toString())/* || finali.isEmpty() */) { //controllo se inserito almeno un amico.. da rimettere poi
                     StringBuilder output = new StringBuilder();
                     if ("".equals(nome_evento.getText().toString())) {
                         output.append(getString(R.string.insrtNameE));
                     }
-                    if (finali == null || finali.isEmpty()) {
+                    if (finali.isEmpty()) {
                         if (output.length() != 0)
                             output.append("\n");
                         output.append(getString(R.string.insrtAE));
@@ -238,8 +239,8 @@ public class CreaEventoActivity extends Activity {
                     Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
                 } else {
                     id_toSend = new ArrayList<String>();
-
                     StringBuilder id_to_invite = new StringBuilder();
+
                     for (Friends aFinali : finali) {
                         if (aFinali.getAppInstalled()) {
                             id_toSend.add(aFinali.getCode());
@@ -251,6 +252,7 @@ public class CreaEventoActivity extends Activity {
                             id_to_invite.append(temp);
                         }
                     }
+
                     JSONArray jsArray = new JSONArray(id_toSend);
 
                     final SharedPreferences prefs = getPreferences();
@@ -306,14 +308,14 @@ public class CreaEventoActivity extends Activity {
             protected void onPostExecute(String result) {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                try{
+                try {
                     int tmp = Integer.parseInt(result);
                     FbFriendsAdapter.svuotaLista();
                     result_global = tmp;
                     if (f == null || (f != null && !f.isShowing()))
                         closeActivity(List.length() + 1, name, tmp);
 
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreaEventoActivity.this);
                     alertDialogBuilder.setMessage(getString(R.string.errCreazEvento));
 
@@ -326,15 +328,6 @@ public class CreaEventoActivity extends Activity {
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 }
-            }
-
-            private boolean isInteger(String s) {
-                try {
-                    Integer.parseInt(s);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-                return true;
             }
 
             @Override
@@ -357,18 +350,15 @@ public class CreaEventoActivity extends Activity {
 
     private void closeActivity(int num_utenti, String nome_evento, int id_evento) {
         Intent intent = new Intent();
-        Log.e("CREAEVENTO", "num_utenti " + num_utenti);
         intent.putExtra("id_evento", id_evento);
         setResult(0, intent);
-
         DatiEventi.addItem(new DatiEventi.Evento(id_evento, nome_evento, "", "", HelperFacebook.getFacebookId(), num_utenti));
-
         finish();
     }
 
     public void onBackPressed() {
         if (a == null)
-            a = Toast.makeText(getApplicationContext(), getString(R.string.errFB), Toast.LENGTH_LONG);
+            a = Toast.makeText(getApplicationContext(), getString(R.string.esciCreaEvento), Toast.LENGTH_LONG);
 
         if (a.getView().isShown()) {
             if (id_toSend != null) id_toSend.clear();
