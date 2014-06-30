@@ -218,7 +218,6 @@ public class Evento extends Fragment {
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            final int pos, long id) {
                 cancellaDomanda(pos, arg1);
@@ -291,17 +290,11 @@ public class Evento extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         DatiAttributi.removeAll(true, idEvento);
         eAdapter.notifyDataSetChanged();
     }
-
 
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(int id);

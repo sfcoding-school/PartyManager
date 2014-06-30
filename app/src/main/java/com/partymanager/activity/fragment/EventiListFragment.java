@@ -106,7 +106,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -119,7 +118,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
@@ -133,7 +131,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         super.onResume();
         // Set title
         MainActivity.mTitle = "Eventi";
-
     }
 
     @Override
@@ -177,12 +174,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
                 } else {
-/*
-<<<<<< HEAD
-                    DatiEventi.removeItem(pos);
-=======*/
                     DatiEventi.removePositionItem(pos);
-//>>>>>>> agg-notifiche
                 }
             }
         }.execute(null, null, null);
