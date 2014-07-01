@@ -190,7 +190,6 @@ public class InfoEvento extends Fragment {
                 if (ris.equals("fatto")) {
                     nomeEvento = nuovoNome;
                     txt.setText(nuovoNome);
-                    getActivity().getActionBar().setTitle(nuovoNome);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errCambioNome), Toast.LENGTH_LONG).show();
                 }
