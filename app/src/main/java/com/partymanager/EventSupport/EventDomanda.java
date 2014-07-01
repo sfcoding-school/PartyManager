@@ -33,7 +33,6 @@ public class EventDomanda {
     Spinner sp;
 
     private int idEvento;
-
     public static Handler mResponseHandler;
     private boolean first;
 

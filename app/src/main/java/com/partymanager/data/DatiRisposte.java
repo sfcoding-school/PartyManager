@@ -128,9 +128,12 @@ public class DatiRisposte {
     public static void addItem(Risposta item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
-        Collections.sort(ITEMS, comparator);
         cercaVotata();
         eAdapter.notifyDataSetChanged();
+    }
+
+    public static void ordina(){
+        Collections.sort(ITEMS, comparator);
     }
 
     public static void addItem(Risposta item, boolean controllo) {

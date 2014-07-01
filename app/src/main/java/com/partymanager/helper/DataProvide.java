@@ -223,11 +223,6 @@ public class DataProvide {
         new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
-            protected void onPreExecute() {
-
-            }
-
-            @Override
             protected JSONArray doInBackground(Void... params) {
                 String jsonString = HelperConnessione.httpGetConnection("event/" + id_evento + "/" + id_attr);
                 return stringToJsonArray("event/" + id_evento + "/" + id_attr, jsonString);
@@ -314,6 +309,8 @@ public class DataProvide {
                         ), jsonArray.getJSONObject(i).optString("template"), false
                 );
             }
+
+            DatiRisposte.ordina();
         } catch (JSONException e) {
             Log.e("DataProvide", "JSONException loadIntoRisposteAdapter: " + e);
         } catch (NullPointerException e) {

@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.data.DatiRisposte;
+import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -166,9 +168,8 @@ public class EventAsync {
                     Toast.makeText(activity, activity.getString(R.string.errDeleteFriend), Toast.LENGTH_LONG).show();
                 } else {
                     DatiFriends.removeItem(i);
-
                     DatiEventi.getIdItem(idEvento).numUtenti--;
-                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
+                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti + activity.getString(R.string.membri));
                 }
             }
         }.execute();
@@ -281,6 +282,7 @@ public class EventAsync {
                     DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template, true);
                     Evento.checkTemplate();
                     edt.setText("");
+
                 } catch (JSONException e) {
                     Log.e("Evento-addRisposta", "JSONException " + e);
                     Toast.makeText(activity, activity.getString(R.string.errInsertDomanda), Toast.LENGTH_LONG).show();
@@ -321,7 +323,7 @@ public class EventAsync {
         }.execute(null, null, null);
     }
 
-    public static void addFriendsToEvent(final ArrayList<String> id_toSend, final TextView bnt_friends, final Activity activity, final int idEvento, final String List, final int quanti_aggiunti) {
+    public static void addFriendsToEvent(final ArrayList<String> id_toSend, final ArrayList<String> name_toSend, final TextView bnt_friends, final Activity activity, final int idEvento) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -336,7 +338,9 @@ public class EventAsync {
             protected String doInBackground(Void... args) {
                 String ris;
 
-                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{List});
+                Log.e("Evento-AddFriends-Persone prima di invio: ", (new JSONArray(id_toSend)).toString());
+
+                ris = HelperConnessione.httpPostConnection("friends/" + idEvento, new String[]{"userList"}, new String[]{(new JSONArray(id_toSend)).toString()});
 
                 Log.e("Evento-addFriendsToEvent-ris: ", ris);
 
@@ -345,7 +349,6 @@ public class EventAsync {
 
             @Override
             protected void onPostExecute(String result) {
-                id_toSend.clear();
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
 
@@ -354,8 +357,12 @@ public class EventAsync {
                 } else {
                     FbFriendsAdapter.svuotaLista();
 
-                    DatiEventi.getIdItem(idEvento).numUtenti += quanti_aggiunti;
-                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti);
+                    for (int i=0; i< id_toSend.size(); i++){
+                        DatiFriends.addItem(new Friends(id_toSend.get(i), name_toSend.get(i), false, false));
+                    }
+
+                    DatiEventi.getIdItem(idEvento).numUtenti += id_toSend.size();
+                    bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti + activity.getString(R.string.membri));
                 }
             }
         }.execute();

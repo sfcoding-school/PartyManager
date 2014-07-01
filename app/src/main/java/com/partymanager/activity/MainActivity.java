@@ -383,7 +383,6 @@ public class MainActivity extends Activity
                 String action = inte.getAction();
 
                 if (action != null && action.equals("notifica")) {
-
                     //Bundle b = inte.getBundleExtra("bundle");
                     //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
