@@ -11,15 +11,21 @@ public class DatiFriends {
 
     public static ArrayList<Friends> ITEMS = new ArrayList<Friends>();
     public static FriendsAdapter eAdapter;
+    private static int idEvento;
 
     public static void removeAll() {
         ITEMS.removeAll(ITEMS);
         eAdapter.notifyDataSetChanged();
+        idEvento = -1;
+    }
+
+    public static int getIdEvento(){
+        return idEvento;
     }
 
     public static FriendsAdapter init(int idEvento, Context context) {
         eAdapter = new FriendsAdapter(context, DatiFriends.ITEMS, DatiEventi.getIdItem(idEvento).admin);
-
+        DatiFriends.idEvento = idEvento;
         DataProvide.getFriends(idEvento, context);
         return eAdapter;
     }

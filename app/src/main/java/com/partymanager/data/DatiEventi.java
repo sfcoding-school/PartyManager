@@ -24,11 +24,17 @@ public class DatiEventi {
     private static SparseArray<Evento> MAP = new SparseArray<Evento>();
     public static EventAdapter eAdapter;
     private static Context context_global;
+    private static boolean inizializzata;
 
     public static void removeAll() {
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Evento>();
         eAdapter.notifyDataSetChanged();
+        inizializzata = false;
+    }
+
+    public static boolean getInizializzata(){
+        return inizializzata;
     }
 
     public static void notifyDataChange() {
@@ -111,6 +117,7 @@ public class DatiEventi {
     }
 
     public static void addItem(Evento item) {
+        inizializzata = true;
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);

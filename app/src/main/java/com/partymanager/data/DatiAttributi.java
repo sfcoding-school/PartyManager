@@ -25,12 +25,18 @@ public class DatiAttributi {
     private static Context context_global;
     private static ArrayList<Attributo> ITEMS = new ArrayList<Attributo>();
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
+    private static int idEvento;
 
     public static AttributiAdapter init(Context context, int id, int num_pers) {
         eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS, num_pers);
+        idEvento = id;
         DataProvide.getAttributi(context, id);
         context_global = context;
         return eAdapter;
+    }
+
+    public static int getIdEvento(){
+        return idEvento;
     }
 
     public static void removeAll(boolean salva_anche, int id_evento) {
@@ -44,6 +50,7 @@ public class DatiAttributi {
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Attributo>();
         eAdapter.notifyDataSetChanged();
+        idEvento = -1;
     }
 
     private static void toJson(final ArrayList<Attributo> ITEMS_temp, final int id_evento) {
