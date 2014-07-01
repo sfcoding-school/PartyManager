@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -37,8 +38,6 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.data.Friends;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,12 +68,16 @@ public class EventoHelper {
     static LinearLayout normal;
     static LinearLayout sino;
     static LinearLayout dataL;
+    private static ArrayList<String> name_toSend;
+    static ListView risp;
 
     private static Dialog getRisposteDialog(Activity activity) {
         if (dialog == null) {
             dialog = new Dialog(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_risposte);
+            dialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         }
         return dialog;
     }
@@ -91,9 +94,9 @@ public class EventoHelper {
         dialog = getRisposteDialog(activity);
         idAttributo = DatiAttributi.getPositionItem(posAttributi).id;
 
-        final ListView risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, numUtenti, posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
-
+        risp = (ListView) dialog.findViewById(R.id.listView_risposte);
+        final RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, numUtenti, posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
+        risp.setEmptyView(dialog.findViewById(R.id.pb_risposteEmptyView));
         risp.setAdapter(adapter);
 
         risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,7 +129,6 @@ public class EventoHelper {
         edt.setVisibility(View.VISIBLE);
         edt.setHint("Scrivi qui la tua risposta");
 
-
         final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);
 
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -156,14 +158,13 @@ public class EventoHelper {
                 final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
 
                 no = (Button) dialog.findViewById(R.id.btn_risp_no);
-                final RisposteAdapter finalAdapter = adapter;
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
 
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                            addDomandaSino(activity, finalAdapter, idEvento, "no", pb_sino, posAttributi);
+                            addDomandaSino(activity, adapter, idEvento, "no", pb_sino, posAttributi);
                         } else {
                             EventAsync.modificaChiusaAsync(idAttributo, activity, 0, "no", idEvento);
                         }
@@ -176,7 +177,7 @@ public class EventoHelper {
                     public void onClick(View view) {
                         pb_sino.setVisibility(View.VISIBLE);
                         if (!DatiAttributi.getPositionItem(posAttributi).close) {
-                            addDomandaSino(activity, finalAdapter, idEvento, "si", pb_sino, posAttributi);
+                            addDomandaSino(activity, adapter, idEvento, "si", pb_sino, posAttributi);
                         } else {
                             EventAsync.modificaChiusaAsync(idAttributo, activity, 0, "si", idEvento);
                         }
@@ -407,6 +408,7 @@ public class EventoHelper {
             @Override
             public void onClick(View view) {
                 id_toSend = new ArrayList<String>();
+                name_toSend = new ArrayList<String>();
 
                 StringBuilder id_to_invite = new StringBuilder();
                 List<Friends> finali = dataAdapter.getFinali();
@@ -414,6 +416,7 @@ public class EventoHelper {
                 for (Friends aFinali : finali) {
                     if (aFinali.getAppInstalled()) {
                         id_toSend.add(aFinali.getCode());
+                        name_toSend.add(aFinali.getName());
                     } else {
                         String temp = aFinali.getCode();
                         if (id_to_invite.length() != 0)
@@ -422,23 +425,24 @@ public class EventoHelper {
                         id_to_invite.append(temp);
                     }
                 }
-                JSONArray jsArray = new JSONArray(id_toSend);
 
-                Log.e("Evento-AddFriends-Persone prima di invio: ", jsArray.toString());
-                EventAsync.addFriendsToEvent(id_toSend, bnt_friends, activity, idEvento, jsArray.toString(), jsArray.length());
+                EventAsync.addFriendsToEvent(new ArrayList<String>(id_toSend), new ArrayList<String>(name_toSend), bnt_friends, activity, idEvento);
 
                 if (!id_to_invite.toString().equals(""))
                     sendInviti(id_to_invite.toString(), activity, dialogAddFriends);
 
                 dialogAddFriends.dismiss();
+
+
             }
         });
 
         dialogAddFriends.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (id_toSend != null)
-                    id_toSend.clear();
+                if (id_toSend != null) id_toSend.clear();
+                if (name_toSend != null) name_toSend.clear();
+                FbFriendsAdapter.svuotaLista();
             }
         });
 

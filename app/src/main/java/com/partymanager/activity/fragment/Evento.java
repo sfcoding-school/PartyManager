@@ -266,6 +266,8 @@ public class Evento extends Fragment {
         });
         // </editor-fold>
 
+        checkTemplate();
+
         return view;
     }
 
@@ -369,5 +371,8 @@ public class Evento extends Fragment {
             }
         }
     };
+
+
+
     // </editor-fold>
 }

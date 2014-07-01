@@ -137,7 +137,7 @@
 
     <!-- InfoEvento -->
     <string name="titleInfoEvento">Info evento</string>
-    <string name="membri">MEMBRI</string>
+    <string name="membri">\u0020MEMBRI</string>
     <string name="errCambioNome">Errore nel cambiare nome all\'evento</string>
     <string name="errInsertDomanda">Errore nell\'inserimento di una risposta</string>
     <string name="errModChiusa">Errore nella modifica</string>
