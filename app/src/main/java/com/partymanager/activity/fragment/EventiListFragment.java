@@ -130,7 +130,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     public void onResume() {
         super.onResume();
         // Set title
-        MainActivity.mTitle = "Eventi";
+        MainActivity.mTitle = getString(R.string.title_section0);
     }
 
     @Override

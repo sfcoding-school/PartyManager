@@ -190,7 +190,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 sendNotification("Nuovo Evento",
-                                        extras.getString("adminName") + " ti ha invitato a " + extras.getString("nome_evento"),
+                                        extras.getString("adminName") + getString(R.string.NotMsgNuovoEvento) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
                                 break;
@@ -198,13 +198,13 @@ public class GcmIntentService extends IntentService {
                             //uscito
                             case 4:
                                 sendNotification("Utente uscito",
-                                        extras.getString("name_user") + " è uscito dall'evento " + extras.getString("nome_evento"),
+                                        extras.getString("name_user") + getString(R.string.NotMsgUtenteUscito) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
                                 break;
                             case 2:
                                 sendNotification("Evento rinominato",
-                                        extras.getString("name_user") + " ha rinominato l'evento " + extras.getString("nome_evento") + " in " + extras.getString("nome_evento_vec"),
+                                        extras.getString("name_user") + getString(R.string.NotMsgEventoRinominato) + extras.getString("nome_evento") + getString(R.string.NotMsgEventoRinominato2) + extras.getString("nome_evento_vec"),
                                         "checkbox_eventi",
                                         extras);
                                 break;
@@ -217,7 +217,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 sendNotification("Nuova Domanda",
-                                        extras.getString("userName") + " ha chiesto " + extras.getString("domanda"),
+                                        extras.getString("userName") + getString(R.string.NotMsgDomanda) + extras.getString("domanda"),
                                         "checkbox_domande",
                                         extras);
                                 break;
@@ -231,7 +231,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 sendNotification("Nuova Risposta",
-                                        extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"),
+                                        extras.getString("userName") + getString(R.string.NotMsgRisposta) + extras.getString("risposta") + getString(R.string.NotMsgRisposta2) + extras.getString("domanda"),
                                         "checkbox_risposte",
                                         extras);
 
@@ -245,7 +245,7 @@ public class GcmIntentService extends IntentService {
                             //mod
                             case 2:
                                 sendNotification("Risposta",
-                                        "anche " + extras.getString("userName") + " ha risposto " + extras.getString("risposta") + " alla domanda " + extras.getString("domanda"),
+                                        getString(R.string.NotMsgRisposta3) + extras.getString("userName") + getString(R.string.NotMsgRisposta) + extras.getString("risposta") + getString(R.string.NotMsgRisposta2) + extras.getString("domanda"),
                                         "checkbox_risposte",
                                         extras);
 
@@ -265,7 +265,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 sendNotification("Aggiunti amici",
-                                        extras.getString("user_list") + "sono stati aggiunti all'evento" + extras.getString("nome_evento"),
+                                        extras.getString("user_list") + getString(R.string.NotMsgAddFriends) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
                                 break;
@@ -273,7 +273,7 @@ public class GcmIntentService extends IntentService {
                             //del
                             case 3:
                                 sendNotification("Amico eliminato",
-                                        extras.getString("user_name") + " è stato rimosso dall'evento " + extras.getString("nome_evento"),
+                                        extras.getString("user_name") + getString(R.string.NotMsgDeleteFriend) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
                                 break;

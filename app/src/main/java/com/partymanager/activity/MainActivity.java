@@ -303,7 +303,7 @@ public class MainActivity extends Activity
                                 String user = b.getString("user");
                                 String userName = b.getString("userName");
                                 int idRisposta = Integer.parseInt(b.getString("id_risposta"));
-                                boolean controllo = b.getString("agg") != null && b.getString("agg").equals("1") ? true : false;
+                                boolean controllo = b.getString("agg") != null && b.getString("agg").equals("1"); // ? true : false;
                                 switch (method) {
                                     //new
                                     case 1:
@@ -655,7 +655,7 @@ public class MainActivity extends Activity
 
         String title = (String) mTitle;
         if (drawerAperto)
-            title = "Party Manager";
+            title = getString(R.string.app_name);
 
         getActionBar().setTitle(title);
 
@@ -684,7 +684,7 @@ public class MainActivity extends Activity
                     .addToBackStack(infoTAG)
                     .commit();
 
-            mTitle = "info Evento";
+            mTitle = getString(R.string.titleInfoEvento);
             invalidateOptionsMenu();
             //END TEST
             return true;

@@ -18,7 +18,6 @@ import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
-import com.partymanager.activity.ProfileActivity;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.FriendsAdapter;
 import com.partymanager.data.Friends;

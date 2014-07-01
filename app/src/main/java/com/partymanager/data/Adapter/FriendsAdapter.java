@@ -47,7 +47,7 @@ public class FriendsAdapter extends ArrayAdapter<Friends> {
         String text = DatiFriends.ITEMS.get(position).getName();
 
         if (DatiFriends.ITEMS.get(position).getCode().equals(idAdminEvento)) {
-            text += " (ADMIN)";
+            text += context.getString(R.string.FriendsAdapter);
         }
 
         name.setText(text);

@@ -25,7 +25,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
     private int id_attributo;
     private boolean chiusa;
     private int arg2;
-
+    private Context context;
     private int idEvento;
 
     public RisposteAdapter(int idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
@@ -35,6 +35,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
         this.idEvento = idEvento;
         this.chiusa = chiusa;
         this.arg2 = arg2; /* posizione attributo su DatiAttributi */
+        this.context = context;
     }
 
     public int getId() {
@@ -76,7 +77,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
         if (chiusa) {
             vota.setVisibility(View.VISIBLE);
-            vota.setText("Modifica");
+            vota.setText(context.getString(R.string.RisposteAdapter));
         }
 
         final ProgressBar pb_vota = (ProgressBar) convertView.findViewById(R.id.pb_vota);

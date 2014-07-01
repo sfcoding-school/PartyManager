@@ -15,10 +15,12 @@ import java.util.ArrayList;
 public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
     private int num_pers_evento;
+    private Context context;
 
     public AttributiAdapter(Context context, ArrayList<DatiAttributi.Attributo> Attributo, int num_pers_evento) {
         super(context, R.layout.attributi_row, Attributo);
         this.num_pers_evento = num_pers_evento;
+        this.context = context;
     }
 
     @Override
@@ -35,7 +37,6 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.attributi_row, parent, false);
 
-
             TextView name = (TextView) convertView.findViewById(R.id.txt_domanda);
             TextView details = (TextView) convertView.findViewById(R.id.txt_risposta);
 
@@ -45,16 +46,14 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
             temp.append(attr.risposta);
             if (!attr.risposta.equals("")) {
         /* la percentuale di persone che hanno votato quella domanda, rispetto alle persone che hanno risposto alla domanda */
-                temp.append(" (" + 100 * attr.numr / attr.numd + "% ha votato questa risposta, ");
+                temp.append(" (" + 100 * attr.numr / attr.numd + context.getString(R.string.AttrAdapter));
 
         /* il numero di persone che hanno risposto alla domanda rispetto alle persone totali dell'evento */
-                temp.append(attr.numd + "/" + num_pers_evento + " hanno risposto)");
+                temp.append(attr.numd + "/" + num_pers_evento + context.getString(R.string.AttrAdapter2) + ")");
             }
 
             details.setText(temp);
         }
-
-
         return convertView;
     }
 }

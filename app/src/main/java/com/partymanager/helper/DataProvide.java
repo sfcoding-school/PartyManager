@@ -2,12 +2,9 @@ package com.partymanager.helper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.partymanager.R;
