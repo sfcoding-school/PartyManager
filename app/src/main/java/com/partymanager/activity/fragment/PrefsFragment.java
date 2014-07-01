@@ -40,7 +40,7 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
         getPreferenceScreen().findPreference("checkbox_notifiche_all").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                setNotifiche(sharedPreferences.getBoolean("checkbox_notifiche_all", false));
+                setNotifiche(sharedPreferences.getBoolean("checkbox_notifiche_all", true));
                 return false;
             }
         });

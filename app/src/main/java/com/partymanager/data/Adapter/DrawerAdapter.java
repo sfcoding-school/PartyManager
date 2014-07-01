@@ -6,6 +6,8 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,15 @@ import com.facebook.Response;
 import com.facebook.model.GraphUser;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
+import com.partymanager.activity.ProfileActivity;
 import com.partymanager.helper.HelperFacebook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DrawerAdapter extends ArrayAdapter<String> {
 
@@ -32,6 +38,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
     private Boolean alto;
     private int mViewResourceId;
     Context context;
+    ImageView iv;
 
     public DrawerAdapter(Context ctx, int viewResourceId, String[] strings, TypedArray icons, Boolean alto) {
         super(ctx, viewResourceId, strings);
@@ -51,7 +58,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
         convertView = mInflater.inflate(mViewResourceId, null);
 
-        ImageView iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
+        iv = (ImageView) convertView.findViewById(R.id.imgV_drawer_line);
         iv.setImageDrawable(mIcons.getDrawable(position));
 
         final TextView tv = (TextView) convertView.findViewById(R.id.txt_drawer_line);
@@ -63,20 +70,18 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             tv.setTextSize(25);
             if (position == 0) {
                 String username = HelperFacebook.getFacebookUserName();
-                if (username == null) {
-                    Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
+                tv.setText(username);
+                Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
 
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
-                            if (user != null) {
-                                tv.setText(user.getName());
-                            }
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            tv.setText(user.getName());
                         }
-                    });
-                } else {
-                    tv.setText(username);
-                }
-                iv.setImageBitmap(loadImageFromStorage());
+                    }
+                });
+
+                loadImageFromStorage();
                 iv.setMaxWidth(50);
                 iv.setMaxWidth(50);
             } else {
@@ -90,17 +95,43 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
     }
 
-    private Bitmap loadImageFromStorage() {
+    private void loadImageFromStorage() {
         ContextWrapper cw = new ContextWrapper(getContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         try {
             File f = new File(directory, "profilelarge.jpg");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-
+            iv.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(f)));
         } catch (FileNotFoundException e) {
-
-            return null;
+            getFacebookProfilePicture(HelperFacebook.getFacebookId(), "large");
         }
+    }
+
+    private void getFacebookProfilePicture(final String userID, final String quale) {
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... args) {
+                URL imageURL;
+                Bitmap bitmap = null;
+                try {
+                    imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=" + quale);
+                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                Log.e("DrawerAdapter-onPost", String.valueOf(bitmap));
+                if (bitmap != null) {
+                    new ProfileActivity().saveToInternalStorage(bitmap, quale);
+                    iv.setImageBitmap(bitmap);
+                }
+            }
+        }.execute();
     }
 
 }

@@ -382,6 +382,7 @@ public class MainActivity extends Activity
 
                 String action = inte.getAction();
 
+                //DA ELIMINARE
                 if (action.equals("notifica")) {
                     Log.e("MAINACTIVITY-DEBUG", "sono entrato in action");
                     //changeFragment(0);

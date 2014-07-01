@@ -221,8 +221,8 @@ public class ProfileActivity extends Activity {
         }
     }
 
-    private String saveToInternalSorage(Bitmap bitmapImage, String quale) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+    public void saveToInternalStorage(Bitmap bitmapImage, String quale) {
+        ContextWrapper cw = new ContextWrapper(MainActivity.getActivity().getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File mypath = new File(directory, "profile" + quale + ".jpg");
         FileOutputStream fos;
@@ -235,7 +235,7 @@ public class ProfileActivity extends Activity {
             e.printStackTrace();
         }
 
-        return directory.getAbsolutePath();
+        //return directory.getAbsolutePath();
     }
 
     public SharedPreferences getPreferences() {
@@ -269,7 +269,7 @@ public class ProfileActivity extends Activity {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 if (bitmap != null) {
-                    saveToInternalSorage(bitmap, quale);
+                    saveToInternalStorage(bitmap, quale);
                     if (quale.equals("large"))
                         foto_profilo.setImageBitmap(bitmap);
                 }
