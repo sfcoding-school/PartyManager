@@ -103,9 +103,10 @@ public class Evento extends Fragment {
 
         if (getArguments() != null) {
             idEvento = getArguments().getInt(ID_EVENTO);
-                nomeEvento = DatiEventi.getIdItem(idEvento).name;
-                adminEvento = DatiEventi.getIdItem(idEvento).admin;
-                numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+            //controlla se sono null se no vai di gassss.
+            nomeEvento = DatiEventi.getIdItem(idEvento).name;
+            adminEvento = DatiEventi.getIdItem(idEvento).admin;
+            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
 
         }
 
