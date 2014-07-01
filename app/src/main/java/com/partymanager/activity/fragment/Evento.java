@@ -33,10 +33,10 @@ import com.partymanager.helper.HelperFacebook;
 public class Evento extends Fragment {
 
     // <editor-fold defaultstate="collapsed" desc="Variabili Globali">
-    private static final String ID_EVENTO = "param1";
-    private static final String NOME_EVENTO = "param2";
-    private static final String ADMIN_EVENTO = "param3";
-    private static final String NUM_UTENTI = "param4";
+    public static final String ID_EVENTO = "id_evento";
+    public static final String NOME_EVENTO = "nome_evento";
+    public static final String ADMIN_EVENTO = "id_admin";
+    public static final String NUM_UTENTI = "num_utenti";
 
     private int idEvento;
     private String nomeEvento;
@@ -76,6 +76,29 @@ public class Evento extends Fragment {
 
         return fragment;
     }
+/*
+    public static Evento newInstance(Bundle param) {
+        Evento fragment = new Evento();
+
+        String tmp =param.getString(NOME_EVENTO);
+        Log.e("EVENTO", "il bundle qui è " + param.toString());
+        fragment.setArguments(param);
+
+        return fragment;
+    }
+*/
+    public static Evento newInstance(int id, String nomeEvento, String admin, int numUtenti) {
+        Evento fragment = new Evento();
+
+        Bundle args = new Bundle();
+        args.putInt(ID_EVENTO, id);
+        args.putString(NOME_EVENTO, nomeEvento);
+        args.putString(ADMIN_EVENTO, admin);
+        args.putInt(NUM_UTENTI, numUtenti);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     public Evento() {
     }
@@ -102,14 +125,23 @@ public class Evento extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            idEvento = getArguments().getInt(ID_EVENTO);
-            
-            //controlla se sono null se no vai di gassss.
+            Bundle b = getArguments();
+            idEvento = b.getInt(ID_EVENTO);
+            String tmp = b.getString(NOME_EVENTO);
 
-            nomeEvento = DatiEventi.getIdItem(idEvento).name;
-            adminEvento = DatiEventi.getIdItem(idEvento).admin;
-            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+            if (tmp == null){
+                nomeEvento = DatiEventi.getIdItem(idEvento).name;
+                adminEvento = DatiEventi.getIdItem(idEvento).admin;
+                numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+                b.putString(NOME_EVENTO, nomeEvento);
+                b.putString(ADMIN_EVENTO,adminEvento);
+                b.putInt(NUM_UTENTI,numUtenti);
 
+            }else{
+                nomeEvento = b.getString(NOME_EVENTO);
+                adminEvento = b.getString(ADMIN_EVENTO);
+                numUtenti = b.getInt(NUM_UTENTI);
+            }
         }
 
         Log.e("EVENTO-DEBUG", "IdEvento" + idEvento + "Name" + nomeEvento + "admin" + adminEvento + "numUtenti" + numUtenti);
@@ -371,8 +403,5 @@ public class Evento extends Fragment {
             }
         }
     };
-
-
-
     // </editor-fold>
 }

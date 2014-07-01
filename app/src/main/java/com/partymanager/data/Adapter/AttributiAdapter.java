@@ -44,7 +44,8 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
 
             StringBuilder temp = new StringBuilder();
             temp.append(attr.risposta);
-            if (!attr.risposta.equals("")) {
+
+            if (attr.risposta != null && !attr.risposta.equals("")) {
         /* la percentuale di persone che hanno votato quella domanda, rispetto alle persone che hanno risposto alla domanda */
                 temp.append(" (" + 100 * attr.numr / attr.numd + context.getString(R.string.AttrAdapter));
 

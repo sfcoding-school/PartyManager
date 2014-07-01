@@ -40,6 +40,11 @@ public class DatiRisposte {
     public static void removeAll(int id_evento, int id_attributo) {
         toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
         removeAll();
+        id_attr_global = -1;
+    }
+
+    public static int getIdAttributo() {
+        return id_attr_global;
     }
 
     public static void notifyDataChange() {
@@ -179,6 +184,10 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static Risposta getIdItem(int idRisposta) {
+        return MAP.get(idRisposta);
+    }
+
     public static void cercaVotata() {
         int max_persone = -1, id_risposta = -1;
         String nuovaRisposta = null;
@@ -220,6 +229,12 @@ public class DatiRisposte {
             this.id = id;
             this.risposta = risposta;
             this.persone = creaLista(userList);
+        }
+
+        public Risposta(int id, String risposta, List<Persona> userList) {
+            this.id = id;
+            this.risposta = risposta;
+            this.persone = userList;
         }
 
         private List<Persona> creaLista(JSONArray userList) {

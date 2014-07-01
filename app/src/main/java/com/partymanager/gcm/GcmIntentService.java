@@ -17,6 +17,17 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
+import com.partymanager.activity.fragment.Evento;
+import com.partymanager.data.DatiAttributi;
+import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiRisposte;
+import com.partymanager.helper.HelperDataParser;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -183,6 +194,7 @@ public class GcmIntentService extends IntentService {
                      'uscito': '4'
                      }
                  */
+
                 switch (type) {
                     //event
                     case 1:
@@ -193,6 +205,16 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("adminName") + getString(R.string.NotMsgNuovoEvento) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
+                                //boolean dio = DatiEventi.getInizializzata();
+                                if (DatiEventi.getInizializzata()) {
+                                    DatiEventi.addItem(new DatiEventi.Evento(
+                                            Integer.parseInt(extras.getString(code.evento.id)),
+                                            extras.getString(code.evento.nome),
+                                            "", "",
+                                            extras.getString(code.user.idAdmin),
+                                            Integer.parseInt(extras.getString(code.evento.num))
+                                    ));
+                                }
                                 break;
 
                             //uscito
@@ -201,12 +223,19 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("name_user") + getString(R.string.NotMsgUtenteUscito) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
+                                if (DatiEventi.getInizializzata()) {
+                                    DatiEventi.removeIdItem(Integer.parseInt(extras.getString(code.evento.id)));
+                                }
+
                                 break;
                             case 2:
                                 sendNotification("Evento rinominato",
                                         extras.getString("name_user") + getString(R.string.NotMsgEventoRinominato) + extras.getString("nome_evento") + getString(R.string.NotMsgEventoRinominato2) + extras.getString("nome_evento_vec"),
                                         "checkbox_eventi",
                                         extras);
+                                if (DatiEventi.getInizializzata()) {
+                                    DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).name = extras.getString(code.evento.nome);
+                                }
                                 break;
                         }
                         break;
@@ -220,6 +249,25 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("userName") + getString(R.string.NotMsgDomanda) + extras.getString("domanda"),
                                         "checkbox_domande",
                                         extras);
+
+                                if (DatiEventi.getInizializzata()){
+                                    if (extras.getString(code.attributo.template).equals("data")){
+                                        DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).date = HelperDataParser.getCalFromString(extras.getString(code.risposta.nome));
+                                    }
+                                }
+
+                                if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))) {
+                                    DatiAttributi.addItem(new DatiAttributi.Attributo(
+                                            Integer.parseInt(extras.getString(code.attributo.id)),
+                                            extras.getString(code.attributo.nome),
+                                            extras.getString(code.risposta.nome),
+                                            extras.getString(code.attributo.template),
+                                            Boolean.parseBoolean(extras.getString(code.attributo.chiusa)),
+                                            Integer.parseInt(extras.getString(code.attributo.num)),
+                                            Integer.parseInt(extras.getString(code.risposta.num)),
+                                            extras.getString(code.risposta.nome)
+                                    ));
+                                }
                                 break;
 
                         }
@@ -235,10 +283,44 @@ public class GcmIntentService extends IntentService {
                                         "checkbox_risposte",
                                         extras);
 
-                                if (extras.getBoolean("agg")) {
+                                if (DatiEventi.getInizializzata()){
+                                    if (extras.getString(code.attributo.template).equals("data")){
 
-                                } else {
+                                    }
 
+                                }
+
+                                if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))) {
+
+                                    DatiAttributi.Attributo attr = DatiAttributi.getIdItem(Integer.parseInt(extras.getString(code.attributo.id)));
+                                    attr.numd++;
+                                    if (attr.numr < 1) {
+                                        attr.risposta = extras.getString(code.risposta.nome);
+                                        attr.id_risposta = extras.getString(code.risposta.id);
+                                        attr.numr = 1;
+                                    }
+
+                                }
+                                if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))) {
+                                    if (Boolean.parseBoolean(extras.getString("agg"))) {
+                                        DatiRisposte.addIdPersona(
+                                                Integer.parseInt(extras.getString(code.risposta.id)),
+                                                extras.getString(code.user.id),
+                                                extras.getString(code.user.nome),
+                                                true
+                                        );
+                                    } else {
+                                        List<DatiRisposte.Persona> userList = new ArrayList<DatiRisposte.Persona>();
+                                        userList.add(new DatiRisposte.Persona(
+                                                extras.getString(code.user.id),
+                                                extras.getString(code.user.nome)
+                                        ));
+                                        DatiRisposte.addItem(new DatiRisposte.Risposta(
+                                                Integer.parseInt(extras.getString(code.risposta.id)),
+                                                extras.getString(code.risposta.nome),
+                                                userList
+                                        ));
+                                    }
                                 }
                                 break;
 
@@ -249,11 +331,22 @@ public class GcmIntentService extends IntentService {
                                         "checkbox_risposte",
                                         extras);
 
-                                if (extras.getBoolean("agg")) {
 
-                                } else {
+                                if (DatiEventi.getInizializzata()){
+                                    if (extras.getString(code.attributo.template).equals("data")){
+
+                                    }
 
                                 }
+
+                                if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))){
+                                    DatiAttributi.getIdItem(Integer.parseInt(extras.getString(code.attributo.id))).risposta = extras.getString(code.risposta.nome);
+                                }
+
+                                if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))){
+                                    DatiRisposte.getIdItem(Integer.parseInt(extras.getString(code.risposta.id))).risposta = extras.getString(code.risposta.nome);
+                                }
+
                                 break;
                         }
                         break;
@@ -268,6 +361,10 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("user_list") + getString(R.string.NotMsgAddFriends) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
+                                if (DatiEventi.getInizializzata()){
+                                    DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti++;
+                                }
+                                // da implementare
                                 break;
 
                             //del
@@ -276,6 +373,10 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("user_name") + getString(R.string.NotMsgDeleteFriend) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
+                                if (DatiEventi.getInizializzata()){
+                                    DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti--;
+                                }
+
                                 break;
                         }
                         break;
@@ -287,13 +388,13 @@ public class GcmIntentService extends IntentService {
 //>>>>>>> agg-notifiche
                 }
 
-
+/*
                 if (MainActivity.handlerService != null) {
                     Message m = new Message();
                     m.setData(extras);
                     MainActivity.handlerService.sendMessage(m);
                 }
-
+*/
                 Log.i(Helper_Notifiche.TAG, "Received: " + extras.toString());
             }
         }
@@ -333,8 +434,19 @@ public class GcmIntentService extends IntentService {
                 sound = Notification.DEFAULT_SOUND;
             }
             Intent intent = new Intent("notifica", Uri.EMPTY, this, MainActivity.class);
-            intent.putExtras(extras);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:"+extras.getString(code.evento.id)+" numUtenti:"+extras.getString(code.evento.num)+" nomeEvento:"+extras.getString(code.evento.nome)+" adminEvento:"+extras.getString(code.user.idAdmin));
+
+            intent.putExtra(Evento.ID_EVENTO, Integer.parseInt(extras.getString(code.evento.id)));
+            intent.putExtra(Evento.NUM_UTENTI, Integer.parseInt(extras.getString(code.evento.num)));
+            intent.putExtra(Evento.NOME_EVENTO, extras.getString(code.evento.nome));
+            intent.putExtra(Evento.ADMIN_EVENTO, extras.getString(code.user.idAdmin));
+
+            int id = intent.getIntExtra(Evento.ID_EVENTO, -1);
+            String nome = intent.getStringExtra(Evento.NOME_EVENTO);
+            String admin = intent.getStringExtra(Evento.ADMIN_EVENTO);
+            int num = intent.getIntExtra(Evento.NUM_UTENTI, -1);
+
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
@@ -354,6 +466,55 @@ public class GcmIntentService extends IntentService {
 
 
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
+    }
+
+    static class code {
+        static class type {
+            static String evento = "1";
+            static String attributo = "2";
+            static String risposta = "3";
+            static String user = "4";
+            static String test = "5";
+        }
+
+        static class method {
+            static String newM = "1";
+            static String modify = "2";
+            static String delete = "3";
+            static String uscito = "4";
+        }
+
+        static class evento {
+            static String id = "id_evento";
+            static String nome = "nome_evento";
+            static String num = "num_utenti";
+            static String nomeVecchio = "nome_evento_vec";
+        }
+
+        static class attributo {
+            static String id = "id_attributo";
+            static String nome = "domanda";
+            static String template = "template";
+            static String chiusa = "chiusa";
+            static String num = "numd";
+        }
+
+        static class risposta {
+            static String id = "id_risposta";
+            static String nome = "nome_risposta";
+            static String agg = "agg";
+            static String num = "numr";
+        }
+
+        static class user {
+            static String id = "id_user";
+            static String nome = "nome_user";
+            static String idAdmin = "id_admin";
+            static String nomeAdmin = "nomeAdmin";
+            static String list = "user_list";
+            static String idDelete = "id_user_delete";
+            static String nomeDelete = "nome_user_delete";
         }
     }
 }

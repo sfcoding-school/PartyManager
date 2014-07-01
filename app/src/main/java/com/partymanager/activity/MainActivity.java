@@ -80,7 +80,7 @@ public class MainActivity extends Activity
         mContext = this;
         //fragmentManager = getFragmentManager();
 
-
+/*
         handlerService = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -236,7 +236,7 @@ public class MainActivity extends Activity
                             case 3:
                                 //int idAttributo = EventoHelper.getIdAttributo();
                                 //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
-                                if (event.getArguments().getString("param1").equals(b.getString("id_evento"))) {
+                                if (event.getArguments().getString(Evento.ID_EVENTO).equals(b.getString("id_evento"))) {
                                     int idAttr = Integer.parseInt(b.getString("id_attributo"));
                                     int idRisposta = b.getInt("id_risposta");
                                     String risposta = b.getString("risposta");
@@ -350,7 +350,7 @@ public class MainActivity extends Activity
                 }
             }
         };
-
+*/
 
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.fragment_nav_drawer_custom);
@@ -382,12 +382,32 @@ public class MainActivity extends Activity
 
                 String action = inte.getAction();
 
-                //DA ELIMINARE
-                if (action.equals("notifica")) {
-                    Log.e("MAINACTIVITY-DEBUG", "sono entrato in action");
+                if (action != null && action.equals("notifica")) {
+                    //Bundle b = inte.getBundleExtra("bundle");
+                    //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
-                    Bundle b = inte.getExtras();
-                    onFragmentInteraction(Integer.parseInt(b.getString("id_evento")));
+                    int id = inte.getIntExtra(Evento.ID_EVENTO, -1);
+                    String nome = inte.getStringExtra(Evento.NOME_EVENTO);
+                    String admin = inte.getStringExtra(Evento.ADMIN_EVENTO);
+                    int num = inte.getIntExtra(Evento.NUM_UTENTI, -1);
+
+                    Fragment tmp = Evento.newInstance(
+                    id,nome,admin,num
+                    );
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, tmp, eventTAG)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    /*
+                    fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+                        public void onBackStackChanged() {
+                            if (fragmentManager.getBackStackEntryCount() == 0) {
+                                changeFragment(0);
+                                invalidateOptionsMenu();
+                                fragmentManager.removeOnBackStackChangedListener(this);
+                            }
+                        }
+                    });*/
                 } else {
                     int countBackStack = fragmentManager.getBackStackEntryCount();
 
@@ -413,6 +433,10 @@ public class MainActivity extends Activity
 
     @Override
     protected void onNewIntent(Intent intent) {
+        int id = intent.getIntExtra(Evento.ID_EVENTO, -1);
+        String nome = intent.getStringExtra(Evento.NOME_EVENTO);
+        String admin = intent.getStringExtra(Evento.ADMIN_EVENTO);
+        int num = intent.getIntExtra(Evento.NUM_UTENTI, -1);
         setIntent(intent);
     }
 
@@ -677,7 +701,8 @@ public class MainActivity extends Activity
             //deve aprire il nuovo Fragment
             //TEST
             infoEventoAperto = true;
-            Fragment fragment = InfoEvento.newInstance(fragmentManager.findFragmentByTag(eventTAG).getArguments().getInt("param1"));
+            Bundle b = fragmentManager.findFragmentByTag(eventTAG).getArguments();
+            Fragment fragment = InfoEvento.newInstance(b);
             //fragmentManager.saveFragmentInstanceState(fragment);
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, infoTAG)

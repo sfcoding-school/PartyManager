@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +33,6 @@ import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
 public class InfoEvento extends Fragment {
-    private static final String ID_EVENTO = "idEvento";
-
     private int idEvento;
     private int numUtenti;
     private String adminEvento;
@@ -43,11 +43,22 @@ public class InfoEvento extends Fragment {
     private ProgressBar pb_cambiaNome;
     private ImageButton modificaNomeEvento;
 
-    public static InfoEvento newInstance(int idEvento) {
+    public static InfoEvento newInstance(int idEvento, String adminEvento, String nomeEvento, int numUtenti) {
         InfoEvento fragment = new InfoEvento();
         Bundle args = new Bundle();
-        args.putInt(ID_EVENTO, idEvento);
+        args.putInt(Evento.ID_EVENTO, idEvento);
+        args.putString(Evento.NOME_EVENTO, nomeEvento);
+        args.putString(Evento.ADMIN_EVENTO, adminEvento);
+        args.putInt(Evento.NUM_UTENTI, numUtenti);
+
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static InfoEvento newInstance(Bundle b) {
+        InfoEvento fragment = new InfoEvento();
+        Log.e("INFO-EVENTO", "sono entrato in action " + b.toString());
+        fragment.setArguments(b);
         return fragment;
     }
 
@@ -60,12 +71,11 @@ public class InfoEvento extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            idEvento = getArguments().getInt(ID_EVENTO);
-
-            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
-            adminEvento = DatiEventi.getIdItem(idEvento).admin;
-            nomeEvento = DatiEventi.getIdItem(idEvento).name;
-
+            Bundle b = getArguments();
+            idEvento = b.getInt(Evento.ID_EVENTO);
+            numUtenti = (b.getInt(Evento.NUM_UTENTI));
+            adminEvento = b.getString(Evento.ADMIN_EVENTO);
+            nomeEvento = b.getString(Evento.NOME_EVENTO);
         }
 
         setHasOptionsMenu(true);
