@@ -13,6 +13,7 @@ import com.partymanager.helper.DataProvide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,10 +40,9 @@ public class DatiAttributi {
         return idEvento;
     }
 
-    public static void removeAll(boolean salva_anche, int id_evento) {
-        if (salva_anche) {
-            toJson(new ArrayList<Attributo>(ITEMS), id_evento);
-        }
+    public static void removeAll(int id_evento) {
+        toJson(new ArrayList<Attributo>(ITEMS), id_evento);
+        idEvento = -1;
         removeAll();
     }
 
@@ -50,7 +50,6 @@ public class DatiAttributi {
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Attributo>();
         eAdapter.notifyDataSetChanged();
-        idEvento = -1;
     }
 
     private static void toJson(final ArrayList<Attributo> ITEMS_temp, final int id_evento) {
@@ -96,11 +95,16 @@ public class DatiAttributi {
         }.execute(null, null, null);
     }
 
-    public static void addItem(Attributo item) {
+    public static void addItem(Attributo item, boolean notify) {
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+
+    public static void addItem(Attributo item) {
+        addItem(item, true);
     }
 
     private static Comparator<Attributo> comparator = new Comparator<Attributo>() {
@@ -127,17 +131,25 @@ public class DatiAttributi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removePositionItem(int pos) {
+    public static void removePositionItem(int pos, boolean notify) {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
         MAP.remove(i);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void removePositionItem(int pos){
+        removePositionItem(pos, true);
     }
 
-    public static void removeIdItem(int idAttributo) {
+    public static void removeIdItem(int idAttributo, boolean notify) {
         ITEMS.remove(MAP.get(idAttributo));
         MAP.remove(idAttributo);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void removeIdItem(int idAttributo){
+        removeIdItem(idAttributo,true);
     }
 
     public static void notifyDataChange() {

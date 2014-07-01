@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -22,12 +23,19 @@ import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 
+import org.w3c.dom.Attr;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
+    public static final String NOTIFY = "notify";
+    public static final int EVENTI = 1;
+    public static final int ATTRIBUTI = 2;
+    public static final int RISPOSTE = 3;
+    public static final int FRIENDS = 4;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -190,7 +198,7 @@ public class GcmIntentService extends IntentService {
                      'uscito': '4'
                      }
                  */
-
+                Bundle bmsg = new Bundle();
                 switch (type) {
                     //event
                     case 1:
@@ -209,7 +217,7 @@ public class GcmIntentService extends IntentService {
                                             "", "",
                                             extras.getString(code.user.idAdmin),
                                             Integer.parseInt(extras.getString(code.evento.num))
-                                    ));
+                                    ), false);
                                 }
                                 break;
 
@@ -220,7 +228,7 @@ public class GcmIntentService extends IntentService {
                                         "checkbox_eventi",
                                         extras);
                                 if (DatiEventi.getInizializzata()) {
-                                    DatiEventi.removeIdItem(Integer.parseInt(extras.getString(code.evento.id)));
+                                    DatiEventi.removeIdItem(Integer.parseInt(extras.getString(code.evento.id)), false);
                                 }
 
                                 break;
@@ -234,6 +242,7 @@ public class GcmIntentService extends IntentService {
                                 }
                                 break;
                         }
+                        bmsg.putInt(NOTIFY, EVENTI);
                         break;
 
                     //attr
@@ -247,7 +256,7 @@ public class GcmIntentService extends IntentService {
                                         extras);
 
                                 if (DatiEventi.getInizializzata()) {
-                                    if (extras.getString(code.attributo.template).equals("data")) {
+                                    if (extras.getString(code.attributo.template)!=null && extras.getString(code.attributo.template).equals("data")) {
                                         DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).date = HelperDataParser.getCalFromString(extras.getString(code.risposta.nome));
                                     }
                                 }
@@ -262,11 +271,12 @@ public class GcmIntentService extends IntentService {
                                             Integer.parseInt(extras.getString(code.attributo.num)),
                                             Integer.parseInt(extras.getString(code.risposta.num)),
                                             extras.getString(code.risposta.nome)
-                                    ));
+                                    ), false);
                                 }
                                 break;
 
                         }
+                        bmsg.putInt(NOTIFY, ATTRIBUTI);
                         break;
 
                     //risp
@@ -303,7 +313,7 @@ public class GcmIntentService extends IntentService {
                                                 Integer.parseInt(extras.getString(code.risposta.id)),
                                                 extras.getString(code.user.id),
                                                 extras.getString(code.user.nome),
-                                                true
+                                                true, false
                                         );
                                     } else {
                                         List<DatiRisposte.Persona> userList = new ArrayList<DatiRisposte.Persona>();
@@ -311,11 +321,11 @@ public class GcmIntentService extends IntentService {
                                                 extras.getString(code.user.id),
                                                 extras.getString(code.user.nome)
                                         ));
-                                        DatiRisposte.addItem(new DatiRisposte.Risposta(
+                                        DatiRisposte.addItemNoNotify(new DatiRisposte.Risposta(
                                                 Integer.parseInt(extras.getString(code.risposta.id)),
                                                 extras.getString(code.risposta.nome),
                                                 userList
-                                        ));
+                                        ), false);
                                     }
                                 }
                                 break;
@@ -345,12 +355,12 @@ public class GcmIntentService extends IntentService {
 
                                 break;
                         }
+                        bmsg.putInt(NOTIFY, RISPOSTE);
                         break;
 
                     //user
                     case 4:
                         switch (method) {
-
                             //new
                             case 1:
                                 sendNotification("Aggiunti amici",
@@ -375,6 +385,7 @@ public class GcmIntentService extends IntentService {
 
                                 break;
                         }
+                        bmsg.putInt(NOTIFY, FRIENDS);
                         break;
                     case 5:
                         //test
@@ -384,13 +395,13 @@ public class GcmIntentService extends IntentService {
 //>>>>>>> agg-notifiche
                 }
 
-/*
+
                 if (MainActivity.handlerService != null) {
                     Message m = new Message();
-                    m.setData(extras);
+                    m.setData(bmsg);
                     MainActivity.handlerService.sendMessage(m);
                 }
-*/
+
                 Log.i(Helper_Notifiche.TAG, "Received: " + extras.toString());
             }
         }

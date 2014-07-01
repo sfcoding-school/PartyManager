@@ -228,7 +228,7 @@ public class InfoEvento extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        DatiFriends.removeAll();
+        DatiFriends.removeAll(true);
     }
 
     public interface OnFragmentInteractionListener {

@@ -88,17 +88,25 @@ public class DatiEventi {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeIdItem(int idEvento) {
+    public static void removeIdItem(int idEvento, boolean notify) {
         ITEMS.remove(MAP.get(idEvento));
         MAP.remove(idEvento);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void removeIdItem(int idEvento){
+        removeIdItem(idEvento,true);
     }
 
-    public static void removePositionItem(int position) {
+    public static void removePositionItem(int position, boolean notify) {
         int i = ITEMS.get(position).id;
         ITEMS.remove(position);
         MAP.remove(i);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void removePositionItem(int position){
+        removePositionItem(position, true);
     }
 
     public static Evento getIdItem(int idEvento) {
@@ -117,11 +125,16 @@ public class DatiEventi {
     }
 
     public static void addItem(Evento item) {
+        addItem(item, true);
+    }
+
+    public static void addItem(Evento item, boolean notify) {
         inizializzata = true;
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);
-        eAdapter.notifyDataSetChanged();
+        if(notify)
+            eAdapter.notifyDataSetChanged();
     }
 
     private static Comparator<Evento> comparator = new Comparator<Evento>() {

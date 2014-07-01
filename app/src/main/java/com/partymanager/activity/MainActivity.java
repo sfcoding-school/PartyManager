@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -36,7 +37,11 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.InfoEvento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.Adapter.DrawerAdapter;
+import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiFriends;
+import com.partymanager.data.DatiRisposte;
+import com.partymanager.gcm.GcmIntentService;
 import com.partymanager.helper.HelperFacebook;
 
 public class MainActivity extends Activity
@@ -63,7 +68,7 @@ public class MainActivity extends Activity
     private boolean infoEventoAperto = false;
     private final String infoTAG = "infoEvento";
 
-
+    private FragmentManager.OnBackStackChangedListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,15 +76,29 @@ public class MainActivity extends Activity
         mContext = this;
         //fragmentManager = getFragmentManager();
 
-/*
+
         handlerService = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 Log.e("SERVICEHANDLER", "arrivato il messaggio " + msg.toString());
                 Bundle b = msg.getData();
-                int type = Integer.parseInt(b.getString("type"));
-                int method = Integer.parseInt(b.getString("method"));
-
+                int type = b.getInt(GcmIntentService.NOTIFY);
+                //int method = Integer.parseInt(b.getString("method"));
+                switch (type){
+                    case GcmIntentService.EVENTI:
+                        DatiEventi.notifyDataChange();
+                        break;
+                    case GcmIntentService.ATTRIBUTI:
+                        DatiAttributi.notifyDataChange();
+                        break;
+                    case GcmIntentService.RISPOSTE:
+                        DatiRisposte.notifyDataChange();
+                        break;
+                    case GcmIntentService.FRIENDS:
+                        DatiFriends.notifyDataChange();
+                        break;
+                }
+/*
                 fragmentManager = getFragmentManager();
                 Fragment eventList = fragmentManager.findFragmentByTag(eventListTAG);
                 Fragment event = fragmentManager.findFragmentByTag(eventTAG);
@@ -338,11 +357,9 @@ public class MainActivity extends Activity
                     }
 
 
-                }
+                }*/
             }
         };
-*/
-
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.fragment_nav_drawer_custom);
 
@@ -351,7 +368,6 @@ public class MainActivity extends Activity
         setNavigationDrawer();
 
         setUp();
-
     }
 
 
@@ -388,17 +404,22 @@ public class MainActivity extends Activity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, tmp, eventTAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .addToBackStack(eventTAG)
                             .commit();
-                    /*
-                    fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+
+                    listener = new FragmentManager.OnBackStackChangedListener() {
                         public void onBackStackChanged() {
                             if (fragmentManager.getBackStackEntryCount() == 0) {
                                 changeFragment(0);
                                 invalidateOptionsMenu();
-                                fragmentManager.removeOnBackStackChangedListener(this);
+
                             }
                         }
-                    });*/
+                    };
+
+                    fragmentManager.addOnBackStackChangedListener(listener);
+
+
                 } else {
                     int countBackStack = fragmentManager.getBackStackEntryCount();
 
@@ -424,10 +445,6 @@ public class MainActivity extends Activity
 
     @Override
     protected void onNewIntent(Intent intent) {
-        int id = intent.getIntExtra(Evento.ID_EVENTO, -1);
-        String nome = intent.getStringExtra(Evento.NOME_EVENTO);
-        String admin = intent.getStringExtra(Evento.ADMIN_EVENTO);
-        int num = intent.getIntExtra(Evento.NUM_UTENTI, -1);
         setIntent(intent);
     }
 
@@ -595,6 +612,7 @@ public class MainActivity extends Activity
 
     private void changeFragment(int pos) {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (listener != null) fragmentManager.removeOnBackStackChangedListener(listener);
         String tag = null;
         switch (pos) {
             case 0:
@@ -761,6 +779,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onFragmentInteraction(int id) {
+        if (listener != null) fragmentManager.removeOnBackStackChangedListener(listener);
         //noMenuActionBar = true;
         Fragment fragment = Evento.newInstance(id);
         //fragmentManager.popBackStackImmediate();

@@ -39,8 +39,8 @@ public class DatiRisposte {
 
     public static void removeAll(int id_evento, int id_attributo) {
         toJson(new ArrayList<Risposta>(ITEMS), id_evento, id_attributo);
-        removeAll();
         id_attr_global = -1;
+        removeAll();
     }
 
     public static int getIdAttributo() {
@@ -58,12 +58,6 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeIdItem(int idRisposta) {
-        ITEMS.remove(MAP.get(idRisposta));
-        MAP.remove(idRisposta);
-        cercaVotata();
-        eAdapter.notifyDataSetChanged();
-    }
 
     private static void toJson(final ArrayList<Risposta> ITEMS_temp, final int id_evento, final int id_attributo) {
         new AsyncTask<Void, Void, JSONArray>() {
@@ -125,6 +119,12 @@ public class DatiRisposte {
         cercaVotata();
     }
 
+    public static void addItem(Risposta item, boolean controllo) {
+        if (controllo) cercami();
+        addItem(item);
+        cercaVotata();
+    }
+
     public static void addItem(Risposta item) {
         ITEMS.add(item);
         MAP.put(item.id, item);
@@ -132,15 +132,24 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
+    public static void addItemNoNotify(Risposta item, String template, boolean controllo) {
+        DatiRisposte.template = template;
+        addItemNoNotify(item, controllo);
+        cercaVotata();
+    }
+
+    public static void addItemNoNotify(Risposta item, boolean controllo) {
+        if (controllo) cercami();
+        ITEMS.add(item);
+        MAP.put(item.id, item);
+        cercaVotata();
+    }
+
+
     public static void ordina() {
         Collections.sort(ITEMS, comparator);
     }
 
-    public static void addItem(Risposta item, boolean controllo) {
-        if (controllo) cercami();
-        addItem(item);
-        cercaVotata();
-    }
 
     private static Comparator<Risposta> comparator = new Comparator<Risposta>() {
         @Override
@@ -159,12 +168,29 @@ public class DatiRisposte {
         }
     };
 
-    public static void removePositionItem(int pos) {
+    public static void removePositionItem(int pos, boolean notify) {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
         MAP.remove(i);
         cercaVotata();
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+
+    public static void removePositionItem(int pos) {
+        removePositionItem(pos, true);
+    }
+
+    public static void removeIdItem(int idRisposta, boolean notify) {
+        ITEMS.remove(MAP.get(idRisposta));
+        MAP.remove(idRisposta);
+        cercaVotata();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+
+    public static void removeIdItem(int idRisposta) {
+        removeIdItem(idRisposta, true);
     }
 
     public static void modificaRisposta(int pos, String nuova) {
@@ -172,10 +198,15 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo) {
+    public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo, boolean notify) {
         if (controllo) cercami();
         MAP.get(idRisposta).addPersona(new Persona(idUser, name));
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+
+    public static void addIdPersona(int idRisposta, String idUser, String name, boolean controllo) {
+        addIdPersona(idRisposta, idUser, name, controllo, true);
     }
 
     public static void addPositionPersona(int position, String idUser, String name, boolean controllo) {

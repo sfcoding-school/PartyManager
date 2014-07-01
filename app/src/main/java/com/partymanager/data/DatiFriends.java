@@ -13,10 +13,14 @@ public class DatiFriends {
     public static FriendsAdapter eAdapter;
     private static int idEvento;
 
-    public static void removeAll() {
+    public static void removeAll(boolean cancella) {
         ITEMS.removeAll(ITEMS);
         eAdapter.notifyDataSetChanged();
-        idEvento = -1;
+        if (cancella)
+            idEvento = -1;
+    }
+    public static void removeAll(){
+        removeAll(false);
     }
 
     public static int getIdEvento() {
@@ -30,14 +34,23 @@ public class DatiFriends {
         return eAdapter;
     }
 
-    public static void addItem(Friends item) {
+    public static void addItem(Friends item, boolean notify) {
         ITEMS.add(item);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeItem(int i) {
+    public static void addItem(Friends item) {
+        addItem(item,true);
+    }
+
+    public static void removeItem(int i, boolean notify) {
         ITEMS.remove(i);
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void removeItem(int i){
+        removeItem(i, true);
     }
 
     public static void notifyDataChange() {

@@ -336,7 +336,7 @@ public class Evento extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        DatiAttributi.removeAll(true, idEvento);
+        DatiAttributi.removeAll(idEvento);
         eAdapter.notifyDataSetChanged();
     }
 
