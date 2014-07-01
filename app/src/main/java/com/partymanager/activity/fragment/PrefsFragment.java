@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        MainActivity.mTitle = getString(R.string.title_section2);
     }
 
     @Override

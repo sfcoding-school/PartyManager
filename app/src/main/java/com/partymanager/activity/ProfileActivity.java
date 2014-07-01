@@ -88,9 +88,10 @@ public class ProfileActivity extends Activity {
                 //Toast.makeText(getApplicationContext(), sign, Toast.LENGTH_LONG).show();
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "error1 - ProfileActivity", Toast.LENGTH_LONG).show();
+            Log.e("ProfileActivity:", "PackageManager.NameNotFoundExceptio" + e);
+            //Toast.makeText(getApplicati
         } catch (NoSuchAlgorithmException e) {
-            Toast.makeText(getApplicationContext(), "error2 - ProfileActivity", Toast.LENGTH_LONG).show();
+            Log.e("ProfileActivity:", "NoSuchAlgorithmException" + e);
         }
 
         //Inizializzazione componenti layout
@@ -115,7 +116,6 @@ public class ProfileActivity extends Activity {
                 session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
             }
         }
-
         updateView();
     }
 
@@ -148,7 +148,7 @@ public class ProfileActivity extends Activity {
         session = Session.getActiveSession();
         if (session.isOpened()) {
 
-            buttonLoginLogout.setText("Logout");
+            buttonLoginLogout.setText(getString(R.string.logout));
             foto_profilo.setVisibility(View.VISIBLE);
             textInstructionsOrLink.setText("");
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
@@ -200,7 +200,7 @@ public class ProfileActivity extends Activity {
         } else {
             foto_profilo.setVisibility(View.GONE);
             textInstructionsOrLink.setText(R.string.instruction);
-            buttonLoginLogout.setText("Login");
+            buttonLoginLogout.setText(getString(R.string.login));
             buttonLoginLogout.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     onClickLogin();
@@ -225,24 +225,20 @@ public class ProfileActivity extends Activity {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File mypath = new File(directory, "profile" + quale + ".jpg");
-
         FileOutputStream fos;
+
         try {
-
             fos = new FileOutputStream(mypath);
-
-            // Use the compress method on the BitMap object to write image to the OutputStream
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return directory.getAbsolutePath();
     }
 
     public SharedPreferences getPreferences() {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
         return getSharedPreferences("profilo", Context.MODE_PRIVATE);
     }
 
@@ -278,9 +274,7 @@ public class ProfileActivity extends Activity {
                         foto_profilo.setImageBitmap(bitmap);
                 }
             }
-
         }.execute();
-
     }
 
     private void onClickLogin() {
@@ -292,7 +286,6 @@ public class ProfileActivity extends Activity {
         } else {
             Session.openActiveSession(this, true, statusCallback);
         }
-
     }
 
     private void onClickLogout() {
@@ -319,23 +312,3 @@ public class ProfileActivity extends Activity {
             finish();
     }
 }
-
- /*
-                //Notifiche
-                context = getApplicationContext();
-
-                // Check device for Play Services APK.
-                if (checkPlayServices()) {
-                    gcm = GoogleCloudMessaging.getInstance(this);
-                    regid = getRegistrationId(context);
-
-                    if (regid.isEmpty()) {
-                        registerInBackground();
-                    }else{
-                        Log.i(TAG,"regid "+regid);
-                        //mDisplay.append("reg_id: "+regid);
-                    }
-                }else{
-                    Log.i(TAG, "No valid Google Play Services APK found.");
-                }
-                */

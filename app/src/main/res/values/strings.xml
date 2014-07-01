@@ -16,12 +16,6 @@
     <string name="emptyEventi">Non hai ancora Eventi</string>
     <string name="errEsciDaEvento">Errore nell\'uscire dall\'evento</string>
 
-    <!-- altro Bho -->
-    <string name="hello_blank_fragment">Hello Archivio</string>
-    <string name="action_settings">Impostazioni</string>
-    <string name="new_event">Nuovo Evento</string>
-    <string name="app_name">PartyManager</string>
-
     <!--EventDomande -->
     <string name="dataE">Data Evento</string>
     <string name="orarioE">Orario Evento</string>
@@ -47,10 +41,13 @@
     <string name="connAssente">Connessione assente</string>
     <string name="errFB">Problema sessione FB</string>
     <string name="riprova">Riprova</string>
+    <string name="esci">Esci</string>
     <string name="esciCreaEvento">Premi ancora una volta per uscire</string>
 
     <!--Activity Profilo e FB-->
     <string name="app_id">401068586702319</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
     <string name="title_activity_main_activity3">Profilo</string>
     <string name="instruction">Per poter utilizzare l\'applicazione bisogna accedere tramite facebook.
             Fai click sul tasto sotto per accedere</string>
@@ -144,5 +141,27 @@
     <string name="errCambioNome">Errore nel cambiare nome all\'evento</string>
     <string name="errInsertDomanda">Errore nell\'inserimento di una risposta</string>
     <string name="errModChiusa">Errore nella modifica</string>
+
+    <!-- GcmIntentService -->
+    <string name="NotMsgNuovoEvento"> ti ha invitato a </string>
+    <string name="NotMsgUtenteUscito"> è uscito dall\'evento </string>
+    <string name="NotMsgEventoRinominato"> ha rinominato l\'evento </string>
+    <string name="NotMsgEventoRinominato2"> in </string>
+    <string name="NotMsgDomanda"> ha chiesto </string>
+    <string name="NotMsgRisposta"> ha risposto </string>
+    <string name="NotMsgRisposta2"> alla domanda </string>
+    <string name="NotMsgRisposta3">anche </string>
+    <string name="NotMsgAddFriends"> sono stati aggiunti all\'evento </string>
+    <string name="NotMsgDeleteFriend"> è stato rimosso dall\'evento </string>
+
+    <!-- altro Bho -->
+    <string name="hello_blank_fragment">Hello Archivio</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="new_event">Nuovo Evento</string>
+    <string name="app_name">PartyManager</string>
+    <string name="AttrAdapter">% ha votato questa risposta, </string>
+    <string name="AttrAdapter2"> hanno risposto</string>
+    <string name="FriendsAdapter"> (ADMIN)</string>
+    <string name="RisposteAdapter">Modifica</string>
 
 </resources>

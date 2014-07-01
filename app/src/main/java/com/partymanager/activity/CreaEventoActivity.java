@@ -106,7 +106,7 @@ public class CreaEventoActivity extends Activity {
                 alertDialogBuilder.setMessage(getString(R.string.connAssente));
 
 
-                alertDialogBuilder.setNegativeButton("Esci", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton(getString(R.string.esci), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (id_toSend != null) id_toSend.clear();
                         container_friends.setText("");

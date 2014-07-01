@@ -103,9 +103,9 @@ public class Evento extends Fragment {
 
         if (getArguments() != null) {
             idEvento = getArguments().getInt(ID_EVENTO);
-                nomeEvento = DatiEventi.getIdItem(idEvento).name;
-                adminEvento = DatiEventi.getIdItem(idEvento).admin;
-                numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
+            nomeEvento = DatiEventi.getIdItem(idEvento).name;
+            adminEvento = DatiEventi.getIdItem(idEvento).admin;
+            numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
 
         }
 
@@ -331,24 +331,24 @@ public class Evento extends Fragment {
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Data Evento", ris, "data", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, getString(R.string.dataE), ris, "data", close, 1, 1, null));
                         DatiEventi.addData(idEvento, ris);
                         break;
                     case DIALOG_ORARIO_E:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Evento", ris, "oraE", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, getString(R.string.orarioE), ris, "oraE", close, 1, 1, null));
                         break;
                     case DIALOG_ORARIO_I:
                         ris = msg.getData().getString("orario");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Orario Incontro", ris, "oraI", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, getString(R.string.orarioI), ris, "oraI", close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo incontro", ris, "luogoI", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo,getString(R.string.luogoI), ris, "luogoI", close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, "Luogo Evento", ris, "luogoE", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, getString(R.string.luogoE), ris, "luogoE", close, 1, 1, null));
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
