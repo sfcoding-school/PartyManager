@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -357,7 +356,7 @@ public class EventAsync {
                 } else {
                     FbFriendsAdapter.svuotaLista();
 
-                    for (int i=0; i< id_toSend.size(); i++){
+                    for (int i = 0; i < id_toSend.size(); i++) {
                         DatiFriends.addItem(new Friends(id_toSend.get(i), name_toSend.get(i), false, false));
                     }
 

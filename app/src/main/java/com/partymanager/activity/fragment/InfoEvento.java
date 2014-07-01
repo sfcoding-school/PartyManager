@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +26,6 @@ import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.FriendsAdapter;
-import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
@@ -88,7 +86,7 @@ public class InfoEvento extends Fragment {
         inflar.inflate(R.menu.main_no_menu, menu);
         getActivity().getActionBar().setTitle(getString(R.string.titleInfoEvento));
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : nomeEvento);
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
 
     }
 

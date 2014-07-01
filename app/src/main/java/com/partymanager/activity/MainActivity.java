@@ -11,7 +11,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -30,7 +29,6 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.fragment.Archivio;
 import com.partymanager.activity.fragment.EventiListFragment;
@@ -38,15 +36,8 @@ import com.partymanager.activity.fragment.Evento;
 import com.partymanager.activity.fragment.InfoEvento;
 import com.partymanager.activity.fragment.PrefsFragment;
 import com.partymanager.data.Adapter.DrawerAdapter;
-import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DatiRisposte;
-import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends Activity
         implements EventiListFragment.OnFragmentInteractionListener {
@@ -392,7 +383,7 @@ public class MainActivity extends Activity
                     int num = inte.getIntExtra(Evento.NUM_UTENTI, -1);
 
                     Fragment tmp = Evento.newInstance(
-                    id,nome,admin,num
+                            id, nome, admin, num
                     );
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, tmp, eventTAG)

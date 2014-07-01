@@ -19,7 +19,7 @@ public class DatiFriends {
         idEvento = -1;
     }
 
-    public static int getIdEvento(){
+    public static int getIdEvento() {
         return idEvento;
     }
 

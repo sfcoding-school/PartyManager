@@ -76,17 +76,18 @@ public class Evento extends Fragment {
 
         return fragment;
     }
-/*
-    public static Evento newInstance(Bundle param) {
-        Evento fragment = new Evento();
 
-        String tmp =param.getString(NOME_EVENTO);
-        Log.e("EVENTO", "il bundle qui è " + param.toString());
-        fragment.setArguments(param);
+    /*
+        public static Evento newInstance(Bundle param) {
+            Evento fragment = new Evento();
 
-        return fragment;
-    }
-*/
+            String tmp =param.getString(NOME_EVENTO);
+            Log.e("EVENTO", "il bundle qui è " + param.toString());
+            fragment.setArguments(param);
+
+            return fragment;
+        }
+    */
     public static Evento newInstance(int id, String nomeEvento, String admin, int numUtenti) {
         Evento fragment = new Evento();
 
@@ -129,15 +130,15 @@ public class Evento extends Fragment {
             idEvento = b.getInt(ID_EVENTO);
             String tmp = b.getString(NOME_EVENTO);
 
-            if (tmp == null){
+            if (tmp == null) {
                 nomeEvento = DatiEventi.getIdItem(idEvento).name;
                 adminEvento = DatiEventi.getIdItem(idEvento).admin;
                 numUtenti = DatiEventi.getIdItem(idEvento).numUtenti;
                 b.putString(NOME_EVENTO, nomeEvento);
-                b.putString(ADMIN_EVENTO,adminEvento);
-                b.putInt(NUM_UTENTI,numUtenti);
+                b.putString(ADMIN_EVENTO, adminEvento);
+                b.putInt(NUM_UTENTI, numUtenti);
 
-            }else{
+            } else {
                 nomeEvento = b.getString(NOME_EVENTO);
                 adminEvento = b.getString(ADMIN_EVENTO);
                 numUtenti = b.getInt(NUM_UTENTI);
@@ -381,7 +382,7 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_LUOGO_I:
                         ris = msg.getData().getString("luogo");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo,getString(R.string.luogoI), ris, "luogoI", close, 1, 1, null));
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, getString(R.string.luogoI), ris, "luogoI", close, 1, 1, null));
                         break;
                     case DIALOG_LUOGO_E:
                         ris = msg.getData().getString("luogo");

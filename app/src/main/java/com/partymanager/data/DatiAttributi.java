@@ -35,7 +35,7 @@ public class DatiAttributi {
         return eAdapter;
     }
 
-    public static int getIdEvento(){
+    public static int getIdEvento() {
         return idEvento;
     }
 

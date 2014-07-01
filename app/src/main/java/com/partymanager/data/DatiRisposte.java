@@ -132,7 +132,7 @@ public class DatiRisposte {
         eAdapter.notifyDataSetChanged();
     }
 
-    public static void ordina(){
+    public static void ordina() {
         Collections.sort(ITEMS, comparator);
     }
 

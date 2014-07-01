@@ -33,7 +33,7 @@ public class DatiEventi {
         inizializzata = false;
     }
 
-    public static boolean getInizializzata(){
+    public static boolean getInizializzata() {
         return inizializzata;
     }
 

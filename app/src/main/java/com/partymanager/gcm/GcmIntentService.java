@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -24,10 +23,7 @@ import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -250,8 +246,8 @@ public class GcmIntentService extends IntentService {
                                         "checkbox_domande",
                                         extras);
 
-                                if (DatiEventi.getInizializzata()){
-                                    if (extras.getString(code.attributo.template).equals("data")){
+                                if (DatiEventi.getInizializzata()) {
+                                    if (extras.getString(code.attributo.template).equals("data")) {
                                         DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).date = HelperDataParser.getCalFromString(extras.getString(code.risposta.nome));
                                     }
                                 }
@@ -283,8 +279,8 @@ public class GcmIntentService extends IntentService {
                                         "checkbox_risposte",
                                         extras);
 
-                                if (DatiEventi.getInizializzata()){
-                                    if (extras.getString(code.attributo.template).equals("data")){
+                                if (DatiEventi.getInizializzata()) {
+                                    if (extras.getString(code.attributo.template).equals("data")) {
 
                                     }
 
@@ -332,18 +328,18 @@ public class GcmIntentService extends IntentService {
                                         extras);
 
 
-                                if (DatiEventi.getInizializzata()){
-                                    if (extras.getString(code.attributo.template).equals("data")){
+                                if (DatiEventi.getInizializzata()) {
+                                    if (extras.getString(code.attributo.template).equals("data")) {
 
                                     }
 
                                 }
 
-                                if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))){
+                                if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))) {
                                     DatiAttributi.getIdItem(Integer.parseInt(extras.getString(code.attributo.id))).risposta = extras.getString(code.risposta.nome);
                                 }
 
-                                if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))){
+                                if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))) {
                                     DatiRisposte.getIdItem(Integer.parseInt(extras.getString(code.risposta.id))).risposta = extras.getString(code.risposta.nome);
                                 }
 
@@ -361,7 +357,7 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("user_list") + getString(R.string.NotMsgAddFriends) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
-                                if (DatiEventi.getInizializzata()){
+                                if (DatiEventi.getInizializzata()) {
                                     DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti++;
                                 }
                                 // da implementare
@@ -373,7 +369,7 @@ public class GcmIntentService extends IntentService {
                                         extras.getString("user_name") + getString(R.string.NotMsgDeleteFriend) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
-                                if (DatiEventi.getInizializzata()){
+                                if (DatiEventi.getInizializzata()) {
                                     DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti--;
                                 }
 
@@ -415,9 +411,9 @@ public class GcmIntentService extends IntentService {
             int colorLed;
 
             //Per ISSUE #23 (se dovesse ricapitare si mette)
-            try{
+            try {
                 colorLed = Integer.parseInt(preferences.getString("downloadType", null));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 Log.e("GcmIntentService", "NumberFormatException " + e);
                 colorLed = 16777215;
             }
@@ -434,7 +430,7 @@ public class GcmIntentService extends IntentService {
                 sound = Notification.DEFAULT_SOUND;
             }
             Intent intent = new Intent("notifica", Uri.EMPTY, this, MainActivity.class);
-            Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:"+extras.getString(code.evento.id)+" numUtenti:"+extras.getString(code.evento.num)+" nomeEvento:"+extras.getString(code.evento.nome)+" adminEvento:"+extras.getString(code.user.idAdmin));
+            Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:" + extras.getString(code.evento.id) + " numUtenti:" + extras.getString(code.evento.num) + " nomeEvento:" + extras.getString(code.evento.nome) + " adminEvento:" + extras.getString(code.user.idAdmin));
 
             intent.putExtra(Evento.ID_EVENTO, Integer.parseInt(extras.getString(code.evento.id)));
             intent.putExtra(Evento.NUM_UTENTI, Integer.parseInt(extras.getString(code.evento.num)));
