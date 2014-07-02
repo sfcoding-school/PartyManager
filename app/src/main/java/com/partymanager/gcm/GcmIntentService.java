@@ -450,7 +450,7 @@ public class GcmIntentService extends IntentService {
             }
             Intent intent = new Intent(this, MainActivity.class);
 
-            if (extras.getString("type") == code.type.evento) {
+            if (extras.getString("type").equals(code.type.evento)) {
                 intent.setAction(NOTIFICA_EVENTLIST);
             } else {
                 Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:" + extras.getString(code.evento.id) + " numUtenti:" + extras.getString(code.evento.num) + " nomeEvento:" + extras.getString(code.evento.nome) + " adminEvento:" + extras.getString(code.user.idAdmin));
