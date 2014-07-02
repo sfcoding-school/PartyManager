@@ -579,15 +579,6 @@ public class MainActivity extends Activity
                         changeFragment(position - 1);
                     }
                     drawerLayout.closeDrawer(leftRL);
-                    /*
-                    if (!(
-                            (position == 1 && mTitle.equals(getString(R.string.title_section0))) ||
-                                    (position == 2 && mTitle.equals(getString(R.string.title_section1)))
-                    )) {
-
-                    } else {
-
-                    }*/
                 }
             }
         });

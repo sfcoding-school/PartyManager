@@ -305,8 +305,8 @@ public class Evento extends Fragment {
 
         checkTemplate();
         if (!sonoEntratoInCreate){
-            DatiAttributi.notifyDataChange();
-            DatiRisposte.notifyDataChange();
+            if (DatiAttributi.getIdEvento() != -1) DatiAttributi.notifyDataChange();
+            if (DatiRisposte.getIdAttributo() != -1) DatiRisposte.notifyDataChange();
         }
         sonoEntratoInCreate = false;
         return view;
