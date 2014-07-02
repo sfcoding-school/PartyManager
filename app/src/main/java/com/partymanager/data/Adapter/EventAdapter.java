@@ -72,9 +72,10 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
                     count.setText("0");
                     count.setTextColor(Color.GREEN);
                 }
-            } else
+            } else {
                 count.setText("-" + (int) countDown);
-
+                count.setTextColor(Color.BLACK);
+            }
         } else {
             giornoN.setText("");
             giornoS.setText("");
