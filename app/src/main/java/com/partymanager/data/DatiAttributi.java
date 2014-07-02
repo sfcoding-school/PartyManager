@@ -164,7 +164,7 @@ public class DatiAttributi {
     }
 
     public static void notifyDataChange() {
-        eAdapter.notifyDataSetChanged();
+        if (eAdapter!=null) eAdapter.notifyDataSetChanged();
     }
 
     public static Attributo getIdItem(int idAttributo) {

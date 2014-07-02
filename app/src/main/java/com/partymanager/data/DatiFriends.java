@@ -54,6 +54,6 @@ public class DatiFriends {
     }
 
     public static void notifyDataChange() {
-        eAdapter.notifyDataSetChanged();
+        if (eAdapter != null) eAdapter.notifyDataSetChanged();
     }
 }

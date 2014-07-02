@@ -282,7 +282,7 @@ public class GcmIntentService extends IntentService {
                                     ), false);
                                 }
                                 break;
-
+                            //elimina atributo
                         }
                         bmsg.putInt(NOTIFY, ATTRIBUTI);
                         break;

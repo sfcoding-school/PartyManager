@@ -395,6 +395,7 @@ public class MainActivity extends Activity
                     //Bundle b = inte.getBundleExtra("bundle");
                     //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
+                    //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     int id = inte.getIntExtra(Evento.ID_EVENTO, -1);
                     String nome = inte.getStringExtra(Evento.NOME_EVENTO);
                     String admin = inte.getStringExtra(Evento.ADMIN_EVENTO);
@@ -406,7 +407,7 @@ public class MainActivity extends Activity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, tmp, eventTAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .addToBackStack(eventTAG)
+                            //.addToBackStack(eventTAG)
                             .commit();
 
                     listener = new FragmentManager.OnBackStackChangedListener() {

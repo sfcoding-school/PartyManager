@@ -38,7 +38,7 @@ public class DatiEventi {
     }
 
     public static void notifyDataChange() {
-        eAdapter.notifyDataSetChanged();
+        if (eAdapter != null) eAdapter.notifyDataSetChanged();
     }
 
     private static void toJson(final ArrayList<Evento> ITEMS_temp) {
