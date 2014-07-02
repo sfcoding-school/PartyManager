@@ -69,6 +69,7 @@ public class MainActivity extends Activity
     private final String infoTAG = "infoEvento";
 
     private FragmentManager.OnBackStackChangedListener listener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +85,7 @@ public class MainActivity extends Activity
                 Bundle b = msg.getData();
                 int type = b.getInt(GcmIntentService.NOTIFY);
                 //int method = Integer.parseInt(b.getString("method"));
-                switch (type){
+                switch (type) {
                     case GcmIntentService.EVENTI:
                         DatiEventi.notifyDataChange();
                         break;
@@ -564,14 +565,29 @@ public class MainActivity extends Activity
                     newact.putExtra("chiave", "1");
                     startActivity(newact);
                 } else {
+
+                    if (!((position == 1 &&
+                            fragmentManager.findFragmentByTag(eventListTAG) != null &&
+                            fragmentManager.findFragmentByTag(eventListTAG).isVisible()
+                    ) ||
+                            (position == 2 &&
+                                    fragmentManager.findFragmentByTag(archivioTAG) != null &&
+                                    fragmentManager.findFragmentByTag(archivioTAG).isVisible()
+                            )
+                    )
+                            ) {
+                        changeFragment(position - 1);
+                    }
+                    drawerLayout.closeDrawer(leftRL);
+                    /*
                     if (!(
                             (position == 1 && mTitle.equals(getString(R.string.title_section0))) ||
                                     (position == 2 && mTitle.equals(getString(R.string.title_section1)))
                     )) {
-                        changeFragment(position - 1);
+
                     } else {
-                        drawerLayout.closeDrawer(leftRL);
-                    }
+
+                    }*/
                 }
             }
         });
