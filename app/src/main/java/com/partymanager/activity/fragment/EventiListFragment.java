@@ -19,7 +19,9 @@ import android.widget.ProgressBar;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.EventAdapter;
+import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -33,6 +35,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private EventAdapter eAdapter;
+
+    public boolean sonoEntratoInCreate;
 
 
     public static EventiListFragment newInstance() {
@@ -58,6 +62,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             eAdapter = DatiEventi.init(getActivity());
         else
             Log.e("id_FB: ", "id fb null on " + this.getActivity().getLocalClassName());
+
+        sonoEntratoInCreate = true;
     }
 
 
@@ -99,6 +105,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                 return true;
             }
         });
+
+        if (!sonoEntratoInCreate){
+            DatiEventi.notifyDataChange();
+        }
+        sonoEntratoInCreate = false;
 
         return view;
     }
