@@ -28,6 +28,7 @@ import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
+import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperFacebook;
 
 public class Evento extends Fragment {
@@ -62,6 +63,8 @@ public class Evento extends Fragment {
     public static final int DIALOG_PERSONALLIZATA = 5;
     public static final int DIALOG_LUOGO_E = 6;
     public static final int DIALOG_SINO = 7;
+
+    private boolean sonoEntratoInCreate;
 
     private OnFragmentInteractionListener mListener;
     // </editor-fold>
@@ -143,6 +146,7 @@ public class Evento extends Fragment {
                 adminEvento = b.getString(ADMIN_EVENTO);
                 numUtenti = b.getInt(NUM_UTENTI);
             }
+            sonoEntratoInCreate = true;
         }
 
         Log.e("EVENTO-DEBUG", "IdEvento" + idEvento + "Name" + nomeEvento + "admin" + adminEvento + "numUtenti" + numUtenti);
@@ -300,7 +304,11 @@ public class Evento extends Fragment {
         // </editor-fold>
 
         checkTemplate();
-
+        if (!sonoEntratoInCreate){
+            DatiAttributi.notifyDataChange();
+            DatiRisposte.notifyDataChange();
+        }
+        sonoEntratoInCreate = false;
         return view;
     }
 
