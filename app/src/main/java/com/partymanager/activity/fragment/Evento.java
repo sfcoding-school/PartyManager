@@ -149,7 +149,7 @@ public class Evento extends Fragment {
             sonoEntratoInCreate = true;
         }
 
-        Log.e("EVENTO-DEBUG", "IdEvento" + idEvento + "Name" + nomeEvento + "admin" + adminEvento + "numUtenti" + numUtenti);
+        Log.e("EVENTO-onCreate", " IdEvento " + idEvento + " Name " + nomeEvento + " admin " + adminEvento + " numUtenti " + numUtenti);
 
         eventDialog = new EventDomanda(getActivity(), dialogMsgHandler, idEvento, adminEvento);
         eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
