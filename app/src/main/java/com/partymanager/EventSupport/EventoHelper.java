@@ -76,8 +76,7 @@ public class EventoHelper {
             dialog = new Dialog(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_risposte);
-            dialog.getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
         return dialog;
     }
@@ -127,6 +126,7 @@ public class EventoHelper {
         dialogButton = (ImageButton) dialog.findViewById(R.id.imgBSend);
         edt = (EditText) dialog.findViewById(R.id.edtxt_nuovaRisposta);
         edt.setVisibility(View.VISIBLE);
+        edt.setText("");
         edt.setHint("Scrivi qui la tua risposta");
 
         final ProgressBar pb_add = (ProgressBar) dialog.findViewById(R.id.pb_addRisposta);

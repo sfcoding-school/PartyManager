@@ -94,8 +94,9 @@ public class DatiEventi {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
-    public static void removeIdItem(int idEvento){
-        removeIdItem(idEvento,true);
+
+    public static void removeIdItem(int idEvento) {
+        removeIdItem(idEvento, true);
     }
 
     public static void removePositionItem(int position, boolean notify) {
@@ -105,7 +106,8 @@ public class DatiEventi {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
-    public static void removePositionItem(int position){
+
+    public static void removePositionItem(int position) {
         removePositionItem(position, true);
     }
 
@@ -133,7 +135,7 @@ public class DatiEventi {
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);
-        if(notify)
+        if (notify)
             eAdapter.notifyDataSetChanged();
     }
 
@@ -159,6 +161,11 @@ public class DatiEventi {
 
     public static void save() {
         toJson(new ArrayList<Evento>(ITEMS));
+    }
+
+    public static void modData(int id_evento, String risposta) {
+        MAP.get(id_evento).date = HelperDataParser.getCalFromString(risposta);
+        eAdapter.notifyDataSetChanged();
     }
 
     public static class Evento {

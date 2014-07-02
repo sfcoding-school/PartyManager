@@ -1,6 +1,7 @@
 package com.partymanager.data.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,13 +55,31 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
         details.setText(evento.details);
 
         if (evento.date != null) {
-            giornoN.setText(HelperDataParser.getGiornoNumerio(evento.date));
+            String gN = HelperDataParser.getGiornoNumerio(evento.date);
+            giornoN.setText(gN);
+
             giornoS.setText(HelperDataParser.getGiornoLettere(evento.date));
+
             mese.setText(HelperDataParser.getMese(evento.date));
+
+            long countDown = HelperDataParser.getCountDownDays(
+                    Integer.parseInt(gN),
+                    Integer.parseInt(HelperDataParser.getMeseN(evento.date)),
+                    Integer.parseInt(HelperDataParser.getYear(evento.date)));
+            if (countDown <= 0) {
+                count.setText("");
+                if (countDown == 0) {
+                    count.setText("0");
+                    count.setTextColor(Color.GREEN);
+                }
+            } else
+                count.setText("-" + (int) countDown);
+
         } else {
             giornoN.setText("");
             giornoS.setText("");
             mese.setText("");
+            count.setText("");
         }
 
         // Return the completed view to render on screen

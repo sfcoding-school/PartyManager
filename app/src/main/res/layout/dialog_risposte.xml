@@ -57,7 +57,7 @@
 
     <LinearLayout
         android:id="@+id/risposta_stringa"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_weight="0.1"
@@ -87,7 +87,7 @@
 
     <LinearLayout
         android:id="@+id/linearL_sino"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
         android:orientation="vertical"
@@ -130,7 +130,7 @@
 
     <LinearLayout
         android:id="@+id/linearL_data"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:visibility="gone">

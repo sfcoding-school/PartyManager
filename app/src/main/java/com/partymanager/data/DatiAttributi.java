@@ -13,7 +13,6 @@ import com.partymanager.helper.DataProvide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +41,16 @@ public class DatiAttributi {
 
     public static void removeAll(int id_evento) {
         toJson(new ArrayList<Attributo>(ITEMS), id_evento);
+
+        for (Attributo a : ITEMS) {
+            if (a.template != null) {
+                if (a.template.equals("data")) {
+                    DatiEventi.modData(id_evento, a.risposta);
+                    break;
+                }
+            }
+        }
+
         idEvento = -1;
         removeAll();
     }
@@ -138,7 +147,8 @@ public class DatiAttributi {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
-    public static void removePositionItem(int pos){
+
+    public static void removePositionItem(int pos) {
         removePositionItem(pos, true);
     }
 
@@ -148,8 +158,9 @@ public class DatiAttributi {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
-    public static void removeIdItem(int idAttributo){
-        removeIdItem(idAttributo,true);
+
+    public static void removeIdItem(int idAttributo) {
+        removeIdItem(idAttributo, true);
     }
 
     public static void notifyDataChange() {
