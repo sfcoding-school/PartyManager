@@ -48,7 +48,7 @@ public class DatiRisposte {
     }
 
     public static void notifyDataChange() {
-        eAdapter.notifyDataSetChanged();
+    if (eAdapter != null) eAdapter.notifyDataSetChanged();
     }
 
     public static void removeAll() {
