@@ -390,7 +390,8 @@ public class MainActivity extends Activity
 
                 String action = inte.getAction();
 
-                if (action != null && action.equals("notifica")) {
+
+                if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTO)) {
                     //Bundle b = inte.getBundleExtra("bundle");
                     //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
@@ -417,9 +418,10 @@ public class MainActivity extends Activity
                             }
                         }
                     };
-
                     fragmentManager.addOnBackStackChangedListener(listener);
 
+                } else if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTLIST)) {
+                    changeFragment(0);
 
                 } else {
                     int countBackStack = fragmentManager.getBackStackEntryCount();

@@ -36,6 +36,8 @@ public class GcmIntentService extends IntentService {
     public static final int ATTRIBUTI = 2;
     public static final int RISPOSTE = 3;
     public static final int FRIENDS = 4;
+    public static final String NOTIFICA_EVENTO = "notifica-evento";
+    public static final String NOTIFICA_EVENTLIST = "notifica-eventList";
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -256,7 +258,7 @@ public class GcmIntentService extends IntentService {
                                         extras);
 
                                 if (DatiEventi.getInizializzata()) {
-                                    if (extras.getString(code.attributo.template)!=null && extras.getString(code.attributo.template).equals("data")) {
+                                    if (extras.getString(code.attributo.template) != null && extras.getString(code.attributo.template).equals("data")) {
                                         DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).date = HelperDataParser.getCalFromString(extras.getString(code.risposta.nome));
                                     }
                                 }
@@ -440,18 +442,18 @@ public class GcmIntentService extends IntentService {
             if (prova) {
                 sound = Notification.DEFAULT_SOUND;
             }
-            Intent intent = new Intent("notifica", Uri.EMPTY, this, MainActivity.class);
-            Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:" + extras.getString(code.evento.id) + " numUtenti:" + extras.getString(code.evento.num) + " nomeEvento:" + extras.getString(code.evento.nome) + " adminEvento:" + extras.getString(code.user.idAdmin));
+            Intent intent = new Intent(this, MainActivity.class);
 
-            intent.putExtra(Evento.ID_EVENTO, Integer.parseInt(extras.getString(code.evento.id)));
-            intent.putExtra(Evento.NUM_UTENTI, Integer.parseInt(extras.getString(code.evento.num)));
-            intent.putExtra(Evento.NOME_EVENTO, extras.getString(code.evento.nome));
-            intent.putExtra(Evento.ADMIN_EVENTO, extras.getString(code.user.idAdmin));
-
-            int id = intent.getIntExtra(Evento.ID_EVENTO, -1);
-            String nome = intent.getStringExtra(Evento.NOME_EVENTO);
-            String admin = intent.getStringExtra(Evento.ADMIN_EVENTO);
-            int num = intent.getIntExtra(Evento.NUM_UTENTI, -1);
+            if (extras.getString("type") == code.type.evento) {
+                intent.setAction(NOTIFICA_EVENTLIST);
+            } else {
+                Log.e("NOTIFICHE-DEBUG", "prima di impostare l'intant -idevento:" + extras.getString(code.evento.id) + " numUtenti:" + extras.getString(code.evento.num) + " nomeEvento:" + extras.getString(code.evento.nome) + " adminEvento:" + extras.getString(code.user.idAdmin));
+                intent.setAction(NOTIFICA_EVENTO);
+                intent.putExtra(Evento.ID_EVENTO, Integer.parseInt(extras.getString(code.evento.id)));
+                intent.putExtra(Evento.NUM_UTENTI, Integer.parseInt(extras.getString(code.evento.num)));
+                intent.putExtra(Evento.NOME_EVENTO, extras.getString(code.evento.nome));
+                intent.putExtra(Evento.ADMIN_EVENTO, extras.getString(code.user.idAdmin));
+            }
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
