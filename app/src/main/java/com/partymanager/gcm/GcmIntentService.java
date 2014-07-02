@@ -223,17 +223,23 @@ public class GcmIntentService extends IntentService {
                                 }
                                 break;
 
+                            //delete
+                            case 3:
+                                if (DatiEventi.getInizializzata()) {
+                                    DatiEventi.removeIdItem(Integer.parseInt(extras.getString(code.evento.id)), false);
+                                }
+                                break;
+
                             //uscito
                             case 4:
                                 sendNotification("Utente uscito",
                                         extras.getString(code.user.nome) + getString(R.string.NotMsgUtenteUscito) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
-                                if (DatiEventi.getInizializzata()) {
-                                    DatiEventi.removeIdItem(Integer.parseInt(extras.getString(code.evento.id)), false);
-                                }
+                                //diminuire contatore num utenti
 
                                 break;
+
                             case 2:
                                 sendNotification("Evento rinominato",
                                         extras.getString(code.user.nome) + getString(R.string.NotMsgEventoRinominato) + extras.getString("nome_evento") + getString(R.string.NotMsgEventoRinominato2) + extras.getString("nome_evento_vec"),
