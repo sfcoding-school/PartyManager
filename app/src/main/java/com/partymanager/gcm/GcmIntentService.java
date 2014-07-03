@@ -297,7 +297,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 sendNotification("Nuova Risposta",
-                                        extras.getString(code.user.nome) + getString(R.string.NotMsgRisposta) + extras.getString("risposta") + getString(R.string.NotMsgRisposta2) + extras.getString("domanda"),
+                                        extras.getString(code.user.nome) + getString(R.string.NotMsgRisposta) + extras.getString(code.risposta.nome) + getString(R.string.NotMsgRisposta2) + extras.getString("domanda"),
                                         "checkbox_risposte",
                                         extras);
 
@@ -354,7 +354,7 @@ public class GcmIntentService extends IntentService {
 
 
                                 if (DatiEventi.getInizializzata()) {
-                                    if (extras.getString(code.attributo.template).equals("data")) {
+                                    if (extras.getString(code.attributo.template) != null && extras.getString(code.attributo.template).equals("data")) {
 
                                     }
 
