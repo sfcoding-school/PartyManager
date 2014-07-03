@@ -184,7 +184,7 @@ public class Evento extends Fragment {
         luogoE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoE", "LuogoEvento", 4);
+                templateManager("luogoE", "LuogoEvento");
             }
         });
 
@@ -199,7 +199,7 @@ public class Evento extends Fragment {
         quando_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("data", "DataEvento", 5);
+                templateManager("data", "DataEvento");
             }
         });
 
@@ -214,7 +214,7 @@ public class Evento extends Fragment {
         quando_ora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("oraE", "OrarioEvento", 6);
+                templateManager("oraE", "OrarioEvento");
             }
         });
 
@@ -229,7 +229,7 @@ public class Evento extends Fragment {
         luogoI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                templateManager("luogoI", "LuogoIncontro", 3);
+                templateManager("luogoI", "LuogoIncontro");
             }
         });
 
@@ -245,7 +245,7 @@ public class Evento extends Fragment {
             @Override
             public void onClick(View view) {
                 eventDialog.renderSpinner();
-                eventDialog.which("Personalizzata", 0);
+                eventDialog.which("Personalizzata");
                 dialogAddDomanda.show();
             }
         });
@@ -353,12 +353,12 @@ public class Evento extends Fragment {
     }
     // </editor-fold>
 
-    public void templateManager(String template, String quale, int agg) {
+    public void templateManager(String template, String quale) {
         int pos;
         if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
             EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
         } else {
-            eventDialog.which(quale, agg);
+            eventDialog.which(quale);
             dialogAddDomanda.show();
         }
     }

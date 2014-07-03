@@ -69,7 +69,7 @@ public class EventDomanda {
                                        int arg2, long arg3) {
                 if (first) {
                     String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
-                    which(Text, arg2);
+                    which(Text);
                 } else {
                     first = true;
                 }
@@ -90,7 +90,8 @@ public class EventDomanda {
         DomandaSINO,
     }
 
-    public void which(String selectItem, int pos) {
+    public void which(String selectItem) {
+        renderSpinner();
         chiusura.setChecked(false);
         Template quale = Template.valueOf(selectItem);
 
@@ -118,14 +119,23 @@ public class EventDomanda {
                 break;
         }
 
+        int pos = 0;
+        for(int i=0; i<list.size(); i++){
+            if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)){
+                pos = i; break;
+            }
+        }
+
         sp.setSelection(pos);
     }
+
+    ArrayList<String> list;
 
     public void renderSpinner() {
 
         String[] template = DatiAttributi.getTemplate();
 
-        ArrayList<String> list = new ArrayList<String>();
+        list = new ArrayList<String>();
 
         list.add(context.getString(R.string.pers));
         list.add(context.getString(R.string.dmndChiusa));
@@ -140,7 +150,7 @@ public class EventDomanda {
         if (template[0] == null)
             list.add(context.getString(R.string.dataE));
 
-        if (template[1] == null)
+        if (template[3] == null)
             list.add(context.getString(R.string.orarioE));
 
         ArrayAdapter<String> testAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, list);
