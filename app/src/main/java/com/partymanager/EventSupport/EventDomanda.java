@@ -19,6 +19,7 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class EventDomanda {
 
@@ -67,12 +68,13 @@ public class EventDomanda {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (first) {
-                    String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
-                    which(Text, arg2);
-                } else {
-                    first = true;
-                }
+                    if (!first) {
+                        String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
+                        which(Text, arg2);
+                    } else {
+                        first = true;
+                    }
+
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -118,14 +120,24 @@ public class EventDomanda {
                 break;
         }
 
+
+        if (pos == -1 || list.size() != 6){
+        for(int i=0; i<list.size(); i++){
+            if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)){
+                pos = i; break;
+            }
+        }}
+
         sp.setSelection(pos);
     }
+
+    ArrayList<String> list;
 
     public void renderSpinner() {
 
         String[] template = DatiAttributi.getTemplate();
 
-        ArrayList<String> list = new ArrayList<String>();
+        list = new ArrayList<String>();
 
         list.add(context.getString(R.string.pers));
         list.add(context.getString(R.string.dmndChiusa));
@@ -140,7 +152,7 @@ public class EventDomanda {
         if (template[0] == null)
             list.add(context.getString(R.string.dataE));
 
-        if (template[1] == null)
+        if (template[3] == null)
             list.add(context.getString(R.string.orarioE));
 
         ArrayAdapter<String> testAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, list);
@@ -163,6 +175,14 @@ public class EventDomanda {
         risposta.setVisibility(View.GONE);
         date.setVisibility(View.VISIBLE);
         orario.setVisibility(View.GONE);
+
+        Calendar cal=Calendar.getInstance();
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+        date.setMinDate(cal.getTimeInMillis() - 10000);
+        date.updateDate(year, month, day);
+
 
         close.setOnClickListener(new View.OnClickListener() {
 

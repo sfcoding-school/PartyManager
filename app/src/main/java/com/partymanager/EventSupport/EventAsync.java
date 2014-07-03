@@ -168,6 +168,7 @@ public class EventAsync {
                 } else {
                     DatiFriends.removeItem(i);
                     DatiEventi.getIdItem(idEvento).numUtenti--;
+                    Evento.numUtenti--;
                     bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti + activity.getString(R.string.membri));
                 }
             }
@@ -199,13 +200,13 @@ public class EventAsync {
         }.execute(null, null, null);
     }
 
-    public static void eliminaRisposta(final int pos, final int idEvento, final int idRisposta, final Activity activity) {
+    public static void eliminaRisposta(final int posAttr, final int idEvento, final int idRisposta, final Activity activity) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... params) {
 
-                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(pos).id + "/" + idRisposta);
+                String ris = HelperConnessione.httpDeleteConnection("event/" + idEvento + "/" + DatiAttributi.getPositionItem(posAttr).id + "/" + idRisposta);
 
                 Log.e("Evento-Helper-eliminaRisposta-ris: ", " \nrisposta: " + ris);
 
@@ -215,7 +216,11 @@ public class EventAsync {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    DatiRisposte.removePositionItem(pos);
+                    DatiRisposte.removeIdItem(idRisposta);
+                    if (DatiRisposte.getLenght() == 0){
+                        eliminaDomanda(posAttr, idEvento, activity);
+                        EventoHelper.closeDialog();
+                    }
                     Evento.checkTemplate();
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.errDeleteRisposta), Toast.LENGTH_LONG).show();
@@ -240,6 +245,9 @@ public class EventAsync {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
+                    if (DatiAttributi.getPositionItem(posAttr).template.equals("data")){
+                        DatiEventi.getIdItem(idEvento).date = null;
+                    }
                     DatiAttributi.removePositionItem(posAttr);
                     Evento.checkTemplate();
                 } else {
@@ -361,6 +369,7 @@ public class EventAsync {
                     }
 
                     DatiEventi.getIdItem(idEvento).numUtenti += id_toSend.size();
+                    Evento.numUtenti+= id_toSend.size();
                     bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti + activity.getString(R.string.membri));
                 }
             }

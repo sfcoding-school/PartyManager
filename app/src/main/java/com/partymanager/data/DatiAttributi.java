@@ -180,7 +180,7 @@ public class DatiAttributi {
     }
 
     public static String[] getTemplate() {
-        String[] ris = new String[]{null, null, null, null};
+        String[] ris = new String[]{null, null, null, null, null};
 
         for (Attributo a : ITEMS) {
             if (a.template != null) {
@@ -195,6 +195,9 @@ public class DatiAttributi {
 
                 if (a.template.equals("oraE"))
                     ris[3] = a.risposta;
+
+                if (a.template.equals("oraI"))
+                    ris[4] = a.risposta;
             }
         }
         return ris;
