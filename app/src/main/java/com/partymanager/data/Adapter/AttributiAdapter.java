@@ -31,7 +31,9 @@ public class AttributiAdapter extends ArrayAdapter<DatiAttributi.Attributo> {
         if (attr.template != null && (attr.template.equals("data") ||
                 attr.template.equals("luogoE") ||
                 attr.template.equals("luogoI") ||
-                attr.template.equals("oraE"))) {
+                attr.template.equals("oraE")   ||
+                attr.template.equals("oraI")
+           )) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_null, parent, false);
         } else {
 

@@ -42,7 +42,7 @@ public class Evento extends Fragment {
     private int idEvento;
     private String nomeEvento;
     private String adminEvento;
-    private int numUtenti;
+    public static int numUtenti;
     boolean animation;
 
     AttributiAdapter eAdapter;
@@ -53,6 +53,7 @@ public class Evento extends Fragment {
     static TextView quando_data;
     static TextView quando_ora;
     static TextView luogoI;
+    static TextView oraI;
     int mLastFirstVisibleItem = 0;
     Dialog dialogAddDomanda;
 
@@ -67,6 +68,7 @@ public class Evento extends Fragment {
     private boolean sonoEntratoInCreate;
 
     private OnFragmentInteractionListener mListener;
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Init + Grafica">
@@ -164,6 +166,7 @@ public class Evento extends Fragment {
         luogoE.setText(template[1]);
         luogoI.setText(template[2]);
         quando_ora.setText(template[3]);
+        oraI.setText(template[4]);
     }
 
     @Override
@@ -177,9 +180,25 @@ public class Evento extends Fragment {
         quando_data = (TextView) view.findViewById(R.id.txt_data);
         quando_ora = (TextView) view.findViewById(R.id.txt_orario);
         luogoI = (TextView) view.findViewById(R.id.txt_dove_vediamo);
+        oraI = (TextView) view.findViewById(R.id.txt_orarioI);
         final View add_domanda = view.findViewById(R.id.circle);
 
         // <editor-fold defaultstate="collapsed" desc="RiepilogoSetup">
+
+        oraI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                templateManager("oraI", "OrarioIncontro");
+            }
+        });
+
+        oraI.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                cancellaDomanda(DatiAttributi.cercaTemplate("oraI"), view);
+                return true;
+            }
+        });
 
         luogoE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,7 +264,7 @@ public class Evento extends Fragment {
             @Override
             public void onClick(View view) {
                 eventDialog.renderSpinner();
-                eventDialog.which("Personalizzata");
+                eventDialog.which("Personalizzata", 0);
                 dialogAddDomanda.show();
             }
         });
@@ -358,7 +377,7 @@ public class Evento extends Fragment {
         if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
             EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
         } else {
-            eventDialog.which(quale);
+            eventDialog.which(quale, -1);
             dialogAddDomanda.show();
         }
     }
@@ -373,7 +392,7 @@ public class Evento extends Fragment {
                 int who = msg.getData().getInt("who");
                 boolean close = msg.getData().getBoolean("close");
                 int id_attributo = msg.getData().getInt("id_attributo");
-                String ris2 = "";
+                String ris2;
                 switch (who) {
                     case DIALOG_DATA:
                         ris = msg.getData().getString("data");
@@ -398,14 +417,13 @@ public class Evento extends Fragment {
                         break;
                     case DIALOG_PERSONALLIZATA:
                         ris = msg.getData().getString("pers-d");
-                        if (close) {
-                            ris2 = msg.getData().getString("pers-r");
-                        }
+                        ris2 = msg.getData().getString("pers-r");
                         DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, null, close, 1, 1, null));
                         break;
                     case DIALOG_SINO:
                         ris = msg.getData().getString("domanda");
-                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, "sino", false, 1, 1, null));
+                        ris2 = "SI";
+                        DatiAttributi.addItem(new DatiAttributi.Attributo(id_attributo, ris, ris2, "sino", close, 1, 1, null));
                         break;
                 }
                 checkTemplate();

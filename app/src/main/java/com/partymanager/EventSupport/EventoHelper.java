@@ -224,6 +224,10 @@ public class EventoHelper {
         dialog.show();
     }
 
+    public static void closeDialog(){
+        dialog.dismiss();
+    }
+
     public static void modificaGrafica(boolean modifica) {
 
         if (DatiAttributi.getPositionItem(posAttributi).close && !modifica) {

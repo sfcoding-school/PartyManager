@@ -67,12 +67,13 @@ public class EventDomanda {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (first) {
-                    String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
-                    which(Text);
-                } else {
-                    first = true;
-                }
+                    if (!first) {
+                        String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
+                        which(Text, arg2);
+                    } else {
+                        first = true;
+                    }
+
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -90,8 +91,7 @@ public class EventDomanda {
         DomandaSINO,
     }
 
-    public void which(String selectItem) {
-        renderSpinner();
+    public void which(String selectItem, int pos) {
         chiusura.setChecked(false);
         Template quale = Template.valueOf(selectItem);
 
@@ -119,12 +119,13 @@ public class EventDomanda {
                 break;
         }
 
-        int pos = 0;
+
+        if (pos == -1 || list.size() != 6){
         for(int i=0; i<list.size(); i++){
             if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)){
                 pos = i; break;
             }
-        }
+        }}
 
         sp.setSelection(pos);
     }
