@@ -152,6 +152,8 @@
     <string name="NotMsgRisposta2">\u0020 alla domanda \u0020</string>
     <string name="NotMsgRisposta3">anche \u0020</string>
     <string name="NotMsgAddFriends">\u0020 sono stati aggiunti all\'evento \u0020</string>
+    <string name="NotMsgAddFriendsSolo">è stato aggiunto all\'evento\u0020</string>
+    <string name="NotMsgAddFriendsMe">sei stato invitato all\'evento\u0020</string>
     <string name="NotMsgDeleteFriend">\u0020 è stato rimosso dall\'evento \u0020</string>
 
     <!-- altro Bho -->
@@ -163,5 +165,7 @@
     <string name="AttrAdapter2">\u0020 hanno risposto</string>
     <string name="FriendsAdapter">\u0020(ADMIN)</string>
     <string name="RisposteAdapter">Modifica</string>
+
+
 
 </resources>

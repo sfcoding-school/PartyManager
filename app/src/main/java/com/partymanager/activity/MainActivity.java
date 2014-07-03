@@ -91,11 +91,15 @@ public class MainActivity extends Activity
                         break;
                     case GcmIntentService.ATTRIBUTI:
                         DatiAttributi.notifyDataChange();
+                        DatiEventi.notifyDataChange();
                         break;
-                    case GcmIntentService.RISPOSTE:
+                    /*case GcmIntentService.RISPOSTE:
+                        DatiEventi.notifyDataChange();
+                        DatiAttributi.notifyDataChange();
                         DatiRisposte.notifyDataChange();
-                        break;
+                        break;*/
                     case GcmIntentService.FRIENDS:
+                        DatiEventi.notifyDataChange();
                         DatiFriends.notifyDataChange();
                         break;
                 }
@@ -404,18 +408,21 @@ public class MainActivity extends Activity
                     Fragment tmp = Evento.newInstance(
                             id, nome, admin, num
                     );
+                    if (fragmentManager.findFragmentByTag(eventTAG) != null)
+                        fragmentManager.popBackStackImmediate(eventTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, tmp, eventTAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            //.addToBackStack(eventTAG)
+                            .addToBackStack(eventTAG)
                             .commit();
 
                     listener = new FragmentManager.OnBackStackChangedListener() {
                         public void onBackStackChanged() {
                             if (fragmentManager.getBackStackEntryCount() == 0) {
+                                if (fragmentManager.findFragmentByTag(eventListTAG) != null)
+                                    fragmentManager.popBackStackImmediate(eventListTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 changeFragment(0);
                                 invalidateOptionsMenu();
-
                             }
                         }
                     };
@@ -450,6 +457,7 @@ public class MainActivity extends Activity
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
+        onStart();
     }
 
     @Override
@@ -647,11 +655,19 @@ public class MainActivity extends Activity
                 break;
         }
 
+        if (tag.equals(impostazioniTAG)) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(impostazioniTAG)
+                    .commit();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, tag)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+        }
         drawerLayout.closeDrawer(leftRL);
     }
 

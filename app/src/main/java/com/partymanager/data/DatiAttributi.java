@@ -133,11 +133,15 @@ public class DatiAttributi {
         }
     };
 
-    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
+    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta, boolean notify) {
         DatiAttributi.getIdItem(idAttr).risposta = nuovaRisposta;
         DatiAttributi.getIdItem(idAttr).id_risposta = id_risposta;
         DatiAttributi.getIdItem(idAttr).numr = numr;
-        eAdapter.notifyDataSetChanged();
+        if (notify)
+            eAdapter.notifyDataSetChanged();
+    }
+    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
+        setNuovaRisposta(idAttr,numr,id_risposta,nuovaRisposta,true);
     }
 
     public static void removePositionItem(int pos, boolean notify) {
@@ -164,7 +168,7 @@ public class DatiAttributi {
     }
 
     public static void notifyDataChange() {
-        if (eAdapter!=null) eAdapter.notifyDataSetChanged();
+        if (eAdapter != null) eAdapter.notifyDataSetChanged();
     }
 
     public static Attributo getIdItem(int idAttributo) {

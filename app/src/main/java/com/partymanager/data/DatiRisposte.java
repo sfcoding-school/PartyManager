@@ -135,14 +135,14 @@ public class DatiRisposte {
     public static void addItemNoNotify(Risposta item, String template, boolean controllo) {
         DatiRisposte.template = template;
         addItemNoNotify(item, controllo);
-        cercaVotata();
+        cercaVotata(false);
     }
 
     public static void addItemNoNotify(Risposta item, boolean controllo) {
         if (controllo) cercami();
         ITEMS.add(item);
         MAP.put(item.id, item);
-        cercaVotata();
+        cercaVotata(false);
     }
 
 
@@ -219,7 +219,7 @@ public class DatiRisposte {
         return MAP.get(idRisposta);
     }
 
-    public static void cercaVotata() {
+    public static void cercaVotata(boolean notify) {
         int max_persone = -1, id_risposta = -1;
         String nuovaRisposta = null;
 
@@ -235,8 +235,12 @@ public class DatiRisposte {
             }
         }
 
-        DatiAttributi.setNuovaRisposta(id_attr_global, max_persone, String.valueOf(id_risposta), nuovaRisposta);
+        DatiAttributi.setNuovaRisposta(id_attr_global, max_persone, String.valueOf(id_risposta), nuovaRisposta, notify);
 
+    }
+
+    public static void cercaVotata() {
+        cercaVotata(true);
     }
 
     private static void cercami() {

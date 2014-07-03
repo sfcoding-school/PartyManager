@@ -22,7 +22,11 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
+import com.partymanager.helper.HelperFacebook;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
@@ -298,7 +302,7 @@ public class GcmIntentService extends IntentService {
                                         extras);
 
                                 if (DatiEventi.getInizializzata()) {
-                                    if (extras.getString(code.attributo.template).equals("data")) {
+                                    if (extras.getString(code.attributo.template) != null && extras.getString(code.attributo.template).equals("data")) {
 
                                     }
 
@@ -307,14 +311,17 @@ public class GcmIntentService extends IntentService {
                                 if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))) {
 
                                     DatiAttributi.Attributo attr = DatiAttributi.getIdItem(Integer.parseInt(extras.getString(code.attributo.id)));
-                                    attr.numd++;
-                                    if (attr.numr < 1) {
+                                    //attr.numd++;
+
+                                    if (attr.numr <= 1) {
                                         attr.risposta = extras.getString(code.risposta.nome);
                                         attr.id_risposta = extras.getString(code.risposta.id);
-                                        attr.numr = 1;
+                                        //attr.numr = 1;
                                     }
+                                    Log.e("NOTIFICHE_DEBUG", attr.risposta + " " + attr.numr);
 
                                 }
+                                /*
                                 if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))) {
                                     if (Boolean.parseBoolean(extras.getString("agg"))) {
                                         DatiRisposte.addIdPersona(
@@ -335,7 +342,7 @@ public class GcmIntentService extends IntentService {
                                                 userList
                                         ), false);
                                     }
-                                }
+                                }*/
                                 break;
 
                             //mod
@@ -356,11 +363,11 @@ public class GcmIntentService extends IntentService {
                                 if (DatiAttributi.getIdEvento() == Integer.parseInt(extras.getString(code.evento.id))) {
                                     DatiAttributi.getIdItem(Integer.parseInt(extras.getString(code.attributo.id))).risposta = extras.getString(code.risposta.nome);
                                 }
-
+/*
                                 if (DatiRisposte.getIdAttributo() == Integer.parseInt(extras.getString(code.attributo.id))) {
                                     DatiRisposte.getIdItem(Integer.parseInt(extras.getString(code.risposta.id))).risposta = extras.getString(code.risposta.nome);
                                 }
-
+*/
                                 break;
                         }
                         bmsg.putInt(NOTIFY, RISPOSTE);
@@ -371,12 +378,49 @@ public class GcmIntentService extends IntentService {
                         switch (method) {
                             //new
                             case 1:
-                                sendNotification("Aggiunti amici",
-                                        extras.getString("user_list") + getString(R.string.NotMsgAddFriends) + extras.getString("nome_evento"),
-                                        "checkbox_utenti",
-                                        extras);
-                                if (DatiEventi.getInizializzata()) {
-                                    DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti++;
+                                String user = "";
+                                int size = 0;
+                                try {
+                                    Log.e("NOTIFICHE-DEBUG", extras.getString(code.user.list));
+                                    JSONArray userList = new JSONArray(extras.getString(code.user.list));
+                                    size = userList.length();
+                                    String idMio = HelperFacebook.getFacebookId();
+                                    Log.e("NOTIFICHE-DEBUG", "" + size);
+                                    for (int i = 0; i < size; i++) {
+                                        if (!userList.getJSONObject(i).getString(code.user.id).equals(idMio))
+                                            user += userList.getJSONObject(i).getString("name") + " ";
+                                        else {
+                                            user = null;
+                                            break;
+                                        }
+                                    }
+                                    String msg = null;
+                                    if (user != null) {
+                                        msg = size <= 1 ? getString(R.string.NotMsgAddFriendsSolo) : getString(R.string.NotMsgAddFriends);
+                                        msg = user + msg;
+                                    } else
+                                        msg = getString(R.string.NotMsgAddFriendsMe);
+
+                                    sendNotification("Aggiunti amici",
+                                            msg + extras.getString(code.evento.nome),
+                                            "checkbox_utenti",
+                                            extras);
+
+                                    if (user != null && DatiEventi.getInizializzata())
+                                        DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti++;
+                                    else {
+                                        DatiEventi.addItem(new DatiEventi.Evento(
+                                                        Integer.parseInt(extras.getString(code.evento.id)),
+                                                        extras.getString(code.evento.nome),
+                                                        "",
+                                                        "",
+                                                        extras.getString(code.user.idAdmin),
+                                                        Integer.parseInt(extras.getString(code.evento.num))
+                                                ), false
+                                        );
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 // da implementare
                                 break;
