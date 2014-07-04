@@ -245,7 +245,7 @@ public class EventAsync {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    if (DatiAttributi.getPositionItem(posAttr).template.equals("data")) {
+                    if (DatiAttributi.getPositionItem(posAttr).template != null && DatiAttributi.getPositionItem(posAttr).template.equals("data")) {
                         DatiEventi.getIdItem(idEvento).date = null;
                     }
                     DatiAttributi.removePositionItem(posAttr);
