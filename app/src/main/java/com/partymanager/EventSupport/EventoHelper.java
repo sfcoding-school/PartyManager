@@ -41,7 +41,7 @@ import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -193,12 +193,16 @@ public class EventoHelper {
                 dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
                 add = (Button) dialog.findViewById(R.id.button_rispndi_data);
 
+                /*
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
+
                 dateR.setMinDate(cal.getTimeInMillis() - 10000);
                 dateR.updateDate(year, month, day);
+                */
+                setMinDate(dateR, new GregorianCalendar().getTimeInMillis() - 1000);
 
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -230,6 +234,14 @@ public class EventoHelper {
         modificaGrafica(false);
 
         dialog.show();
+    }
+
+    public static void setMinDate(DatePicker dateR, long time) {
+        try {
+            dateR.setMinDate(time);
+        }catch(IllegalArgumentException e){
+            setMinDate(dateR, time - 1000);
+        }
     }
 
     public static void closeDialog() {

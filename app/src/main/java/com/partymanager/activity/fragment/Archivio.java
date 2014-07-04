@@ -5,11 +5,16 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
+import com.partymanager.data.DatiEventi;
 
 public class Archivio extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -34,12 +39,24 @@ public class Archivio extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflar) {
+
+        super.onCreateOptionsMenu(menu, inflar);
+        menu.clear();
+
+        inflar.inflate(R.menu.main_no_menu, menu);
+
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section1));
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
