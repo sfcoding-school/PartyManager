@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.internal.ex;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
@@ -443,7 +444,7 @@ public class GcmIntentService extends IntentService {
 
                 if (MainActivity.handlerService != null) {
                     Message m = new Message();
-                    m.setData(bmsg);
+                    m.setData(extras);
                     MainActivity.handlerService.sendMessage(m);
                 }
 
@@ -521,8 +522,8 @@ public class GcmIntentService extends IntentService {
         }
     }
 
-    static class code {
-        static class type {
+    static public class code {
+        static public class type {
             static String evento = "1";
             static String attributo = "2";
             static String risposta = "3";
@@ -530,11 +531,11 @@ public class GcmIntentService extends IntentService {
             static String test = "5";
         }
 
-        static class method {
-            static String newM = "1";
-            static String modify = "2";
-            static String delete = "3";
-            static String uscito = "4";
+        static public class method {
+            static public String newM = "1";
+            static public String modify = "2";
+            static public String delete = "3";
+            static public String uscito = "4";
         }
 
         static class evento {
