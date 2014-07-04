@@ -365,11 +365,11 @@ public class Evento extends Fragment {
         }*/
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         DatiAttributi.removeAll(idEvento);
-        eAdapter.notifyDataSetChanged();
     }
 
     public interface OnFragmentInteractionListener {

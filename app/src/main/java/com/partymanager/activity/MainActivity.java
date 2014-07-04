@@ -94,11 +94,11 @@ public class MainActivity extends Activity
                         DatiAttributi.notifyDataChange();
                         DatiEventi.notifyDataChange();
                         break;
-                    /*case GcmIntentService.RISPOSTE:
+                    case GcmIntentService.RISPOSTE:
                         DatiEventi.notifyDataChange();
                         DatiAttributi.notifyDataChange();
-                        DatiRisposte.notifyDataChange();
-                        break;*/
+                        //DatiRisposte.notifyDataChange();
+                        break;
                     case GcmIntentService.FRIENDS:
                         DatiEventi.notifyDataChange();
                         DatiFriends.notifyDataChange();
@@ -145,13 +145,17 @@ public class MainActivity extends Activity
                     String nome = inte.getStringExtra(Evento.NOME_EVENTO);
                     String admin = inte.getStringExtra(Evento.ADMIN_EVENTO);
                     int num = inte.getIntExtra(Evento.NUM_UTENTI, -1);
-
+                    /*
+                    if (fragmentManager.findFragmentByTag(eventTAG) != null) {
+                        fragmentManager.popBackStackImmediate(eventTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                    */
                     Fragment tmp = Evento.newInstance(
                             id, nome, admin, num
                     );
-                    if (fragmentManager.findFragmentByTag(eventTAG) != null)
-                        fragmentManager.popBackStackImmediate(eventTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                     fragmentManager.beginTransaction()
+                            .remove(fragmentManager.findFragmentByTag(eventTAG))
                             .replace(R.id.container, tmp, eventTAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .addToBackStack(eventTAG)

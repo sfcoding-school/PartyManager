@@ -28,7 +28,7 @@ public class DatiAttributi {
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
     private static int idEvento;
 
-    public static AttributiAdapter init(Context context, int idEvent) {
+    synchronized public static AttributiAdapter init(Context context, int idEvent) {
         eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS);
         idEvento = idEvent;
         DataProvide.getAttributi(context, idEvent);
@@ -40,9 +40,10 @@ public class DatiAttributi {
         return idEvento;
     }
 
-    public static void removeAll(int id_evento) {
+    synchronized public static void removeAll(int id_evento) {
         toJson(new ArrayList<Attributo>(ITEMS), id_evento);
 
+        /*
         for (Attributo a : ITEMS) {
             if (a.template != null) {
                 if (a.template.equals("data")) {
@@ -51,12 +52,13 @@ public class DatiAttributi {
                 }
             }
         }
+        */
 
         idEvento = -1;
         removeAll();
     }
 
-    public static void removeAll() {
+    synchronized public static void removeAll() {
         ITEMS.removeAll(ITEMS);
         MAP = new SparseArray<Attributo>();
         eAdapter.notifyDataSetChanged();
@@ -105,7 +107,7 @@ public class DatiAttributi {
         }.execute(null, null, null);
     }
 
-    public static void addItem(Attributo item, boolean notify) {
+    synchronized public static void addItem(Attributo item, boolean notify) {
         ITEMS.add(item);
         MAP.put(item.id, item);
         Collections.sort(ITEMS, comparator);
@@ -113,7 +115,7 @@ public class DatiAttributi {
             eAdapter.notifyDataSetChanged();
     }
 
-    public static void addItem(Attributo item) {
+    synchronized public static void addItem(Attributo item) {
         addItem(item, true);
     }
 
@@ -134,7 +136,7 @@ public class DatiAttributi {
         }
     };
 
-    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta, boolean notify) {
+    synchronized public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta, boolean notify) {
         DatiAttributi.getIdItem(idAttr).risposta = nuovaRisposta;
         DatiAttributi.getIdItem(idAttr).id_risposta = id_risposta;
         DatiAttributi.getIdItem(idAttr).numr = numr;
@@ -142,11 +144,11 @@ public class DatiAttributi {
             eAdapter.notifyDataSetChanged();
     }
 
-    public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
+    synchronized public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
         setNuovaRisposta(idAttr, numr, id_risposta, nuovaRisposta, true);
     }
 
-    public static void removePositionItem(int pos, boolean notify) {
+    synchronized public static void removePositionItem(int pos, boolean notify) {
         int i = ITEMS.get(pos).id;
         ITEMS.remove(pos);
         MAP.remove(i);
@@ -154,22 +156,22 @@ public class DatiAttributi {
             eAdapter.notifyDataSetChanged();
     }
 
-    public static void removePositionItem(int pos) {
+    synchronized public static void removePositionItem(int pos) {
         removePositionItem(pos, true);
     }
 
-    public static void removeIdItem(int idAttributo, boolean notify) {
+    synchronized public static void removeIdItem(int idAttributo, boolean notify) {
         ITEMS.remove(MAP.get(idAttributo));
         MAP.remove(idAttributo);
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
 
-    public static void removeIdItem(int idAttributo) {
+    synchronized public static void removeIdItem(int idAttributo) {
         removeIdItem(idAttributo, true);
     }
 
-    public static void notifyDataChange() {
+    synchronized public static void notifyDataChange() {
         if (eAdapter != null) {
             eAdapter.notifyDataSetChanged();
             Evento.checkTemplate();
