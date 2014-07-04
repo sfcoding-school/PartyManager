@@ -89,7 +89,7 @@ public class EventoHelper {
         else return -1;
     }
 
-    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento) {
+    public static void dialogRisposte(final String adminEvento, final int posAttr, final Activity activity, final int idEvento) {
         posAttributi = posAttr;
 
         dialog = getRisposteDialog(activity);
@@ -112,7 +112,7 @@ public class EventoHelper {
 
                         @Override
                         public boolean onMenuItemClick(android.view.MenuItem item) {
-                            EventAsync.eliminaRisposta(i, idEvento, DatiRisposte.getPositionItem(i).id, activity);
+                            EventAsync.eliminaRisposta(posAttr, idEvento, DatiRisposte.getPositionItem(i).id, activity);
                             return true;
                         }
                     });

@@ -116,13 +116,11 @@ public class DatiRisposte {
         if (controllo) cercami();
         DatiRisposte.template = template;
         addItem(item);
-        cercaVotata();
     }
 
     public static void addItem(Risposta item, boolean controllo) {
         if (controllo) cercami();
         addItem(item);
-        cercaVotata();
     }
 
     public static void addItem(Risposta item) {
