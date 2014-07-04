@@ -122,8 +122,13 @@ public class Evento extends Fragment {
         MenuItem prova = menu.findItem(R.id.progressBarSmall);
         prova.setVisible(progressBar);
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : nomeEvento);
+        String temp;
+        if (DatiEventi.getInizializzata())
+            temp = DatiEventi.getIdItem(idEvento).name;
+        else
+            temp = nomeEvento;
 
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : temp);
     }
 
     @Override
