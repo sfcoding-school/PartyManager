@@ -6,6 +6,8 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
@@ -19,6 +21,17 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        setHasOptionsMenu(true);
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflar) {
+
+        super.onCreateOptionsMenu(menu, inflar);
+        menu.clear();
+
+        inflar.inflate(R.menu.main_no_menu, menu);
+
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section2));
     }
 
     @Override

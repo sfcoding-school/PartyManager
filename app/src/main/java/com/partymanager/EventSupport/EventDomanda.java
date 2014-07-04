@@ -20,6 +20,7 @@ import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class EventDomanda {
 
@@ -178,12 +179,17 @@ public class EventDomanda {
         date.setVisibility(View.VISIBLE);
         orario.setVisibility(View.GONE);
 
+        /*
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        date.setMinDate(cal.getTimeInMillis() - 10000);
         date.updateDate(year, month, day);
+        */
+
+        EventoHelper.setMinDate(date, new GregorianCalendar().getTimeInMillis() -1000);
+
+
 
 
         close.setOnClickListener(new View.OnClickListener() {
