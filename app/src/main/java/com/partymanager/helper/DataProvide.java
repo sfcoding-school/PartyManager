@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
@@ -167,6 +168,7 @@ public class DataProvide {
 
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
+                EventoHelper.risp.setEmptyView(null);
                 if (jsonArray != null) {
                     saveJson(jsonArray, "risposte_" + id_evento + "_" + id_attr, context);
                     loadIntoRisposteAdapter(jsonArray);

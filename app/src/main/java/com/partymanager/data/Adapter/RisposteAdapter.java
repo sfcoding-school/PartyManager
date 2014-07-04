@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.partymanager.EventSupport.EventAsync;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
+import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
@@ -21,16 +22,14 @@ import java.util.ArrayList;
 
 public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
-    private int num_pers_evento;
     private int id_attributo;
     private boolean chiusa;
     private int arg2;
     private Context context;
     private int idEvento;
 
-    public RisposteAdapter(int idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int num_pers_evento, int id_attributo, int arg2, boolean chiusa) {
+    public RisposteAdapter(int idEvento, Context context, ArrayList<DatiRisposte.Risposta> Risposta, int id_attributo, int arg2, boolean chiusa) {
         super(context, R.layout.risposta_row, Risposta);
-        this.num_pers_evento = num_pers_evento;
         this.id_attributo = id_attributo;
         this.idEvento = idEvento;
         this.chiusa = chiusa;
@@ -96,7 +95,7 @@ public class RisposteAdapter extends ArrayAdapter<DatiRisposte.Risposta> {
 
         if (DatiRisposte.template != null && DatiRisposte.template.equals("sino")) {
             vota.setVisibility(View.GONE);
-            temp_risposta += " " + (100 * DatiRisposte.getPositionItem(position).persone.size()) / num_pers_evento + "%";
+            temp_risposta += " " + (100 * DatiRisposte.getPositionItem(position).persone.size()) / Evento.numUtenti + "%";
         }
         risp.setText(temp_risposta);
 

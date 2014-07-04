@@ -29,9 +29,9 @@ public class DatiRisposte {
     private static Context context_global;
     private static int id_attr_global;
 
-    public static RisposteAdapter init(Context context, int id_evento, int id_attr, int num_pers, int arg2, boolean chiusa) {
+    public static RisposteAdapter init(Context context, int id_evento, int id_attr, int arg2, boolean chiusa) {
         context_global = context;
-        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, num_pers, id_attr, arg2, chiusa);
+        eAdapter = new RisposteAdapter(id_evento, context, DatiRisposte.ITEMS, id_attr, arg2, chiusa);
         DataProvide.getRisposte(id_evento, id_attr, context);
         id_attr_global = id_attr;
         return eAdapter;
@@ -48,7 +48,7 @@ public class DatiRisposte {
     }
 
     public static void notifyDataChange() {
-    if (eAdapter != null) eAdapter.notifyDataSetChanged();
+        if (eAdapter != null) eAdapter.notifyDataSetChanged();
     }
 
     public static void removeAll() {

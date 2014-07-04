@@ -40,7 +40,6 @@ import com.partymanager.data.Adapter.DrawerAdapter;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
-import com.partymanager.data.DatiRisposte;
 import com.partymanager.gcm.GcmIntentService;
 import com.partymanager.helper.HelperFacebook;
 

@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -20,17 +19,11 @@ import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperDataParser;
 import com.partymanager.helper.HelperFacebook;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Attr;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;

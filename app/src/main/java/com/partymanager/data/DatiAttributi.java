@@ -27,10 +27,10 @@ public class DatiAttributi {
     private static SparseArray<Attributo> MAP = new SparseArray<Attributo>();
     private static int idEvento;
 
-    public static AttributiAdapter init(Context context, int id, int num_pers) {
-        eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS, num_pers);
-        idEvento = id;
-        DataProvide.getAttributi(context, id);
+    public static AttributiAdapter init(Context context, int idEvent) {
+        eAdapter = new AttributiAdapter(context, DatiAttributi.ITEMS);
+        idEvento = idEvent;
+        DataProvide.getAttributi(context, idEvent);
         context_global = context;
         return eAdapter;
     }
@@ -140,8 +140,9 @@ public class DatiAttributi {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
+
     public static void setNuovaRisposta(int idAttr, int numr, String id_risposta, String nuovaRisposta) {
-        setNuovaRisposta(idAttr,numr,id_risposta,nuovaRisposta,true);
+        setNuovaRisposta(idAttr, numr, id_risposta, nuovaRisposta, true);
     }
 
     public static void removePositionItem(int pos, boolean notify) {

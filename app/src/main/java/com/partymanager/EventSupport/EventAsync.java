@@ -217,7 +217,7 @@ public class EventAsync {
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
                     DatiRisposte.removeIdItem(idRisposta);
-                    if (DatiRisposte.getLenght() == 0){
+                    if (DatiRisposte.getLenght() == 0) {
                         eliminaDomanda(posAttr, idEvento, activity);
                         EventoHelper.closeDialog();
                     }
@@ -245,7 +245,7 @@ public class EventAsync {
             @Override
             protected void onPostExecute(String ris) {
                 if (ris.equals("fatto")) {
-                    if (DatiAttributi.getPositionItem(posAttr).template.equals("data")){
+                    if (DatiAttributi.getPositionItem(posAttr).template.equals("data")) {
                         DatiEventi.getIdItem(idEvento).date = null;
                     }
                     DatiAttributi.removePositionItem(posAttr);
@@ -369,7 +369,7 @@ public class EventAsync {
                     }
 
                     DatiEventi.getIdItem(idEvento).numUtenti += id_toSend.size();
-                    Evento.numUtenti+= id_toSend.size();
+                    Evento.numUtenti += id_toSend.size();
                     bnt_friends.setText("" + DatiEventi.getIdItem(idEvento).numUtenti + activity.getString(R.string.membri));
                 }
             }

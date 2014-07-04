@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.partymanager.R;
 
@@ -44,8 +45,12 @@ public class Archivio extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_eventi, container, false);
+        View view = inflater.inflate(R.layout.fragment_eventi, container, false);
+
+        TextView test = (TextView) view.findViewById(R.id.txt_emptyE);
+        test.setText("Disponibile in futuro!");
+
+        return view;
     }
 
     public void onButtonPressed(Uri uri) {

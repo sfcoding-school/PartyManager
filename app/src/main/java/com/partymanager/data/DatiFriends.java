@@ -19,7 +19,8 @@ public class DatiFriends {
         if (cancella)
             idEvento = -1;
     }
-    public static void removeAll(){
+
+    public static void removeAll() {
         removeAll(false);
     }
 
@@ -41,7 +42,7 @@ public class DatiFriends {
     }
 
     public static void addItem(Friends item) {
-        addItem(item,true);
+        addItem(item, true);
     }
 
     public static void removeItem(int i, boolean notify) {
@@ -49,7 +50,8 @@ public class DatiFriends {
         if (notify)
             eAdapter.notifyDataSetChanged();
     }
-    public static void removeItem(int i){
+
+    public static void removeItem(int i) {
         removeItem(i, true);
     }
 

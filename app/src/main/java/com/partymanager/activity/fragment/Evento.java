@@ -154,7 +154,7 @@ public class Evento extends Fragment {
         Log.e("EVENTO-onCreate", " IdEvento " + idEvento + " Name " + nomeEvento + " admin " + adminEvento + " numUtenti " + numUtenti);
 
         eventDialog = new EventDomanda(getActivity(), dialogMsgHandler, idEvento, adminEvento);
-        eAdapter = DatiAttributi.init(getActivity(), idEvento, numUtenti);
+        eAdapter = DatiAttributi.init(getActivity(), idEvento);
         dialogAddDomanda = eventDialog.returnD();
         setHasOptionsMenu(true);
     }
@@ -278,7 +278,7 @@ public class Evento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,
                                     long arg3) {
-                EventoHelper.dialogRisposte(adminEvento, arg2, getActivity(), idEvento, numUtenti);
+                EventoHelper.dialogRisposte(adminEvento, arg2, getActivity(), idEvento);
             }
         });
 
@@ -323,7 +323,7 @@ public class Evento extends Fragment {
         // </editor-fold>
 
         checkTemplate();
-        if (!sonoEntratoInCreate){
+        if (!sonoEntratoInCreate) {
             if (DatiAttributi.getIdEvento() != -1) DatiAttributi.notifyDataChange();
             if (DatiRisposte.getIdAttributo() != -1) DatiRisposte.notifyDataChange();
         }
@@ -375,7 +375,7 @@ public class Evento extends Fragment {
     public void templateManager(String template, String quale) {
         int pos;
         if ((pos = DatiAttributi.cercaTemplate(template)) != -1) {
-            EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento, numUtenti);
+            EventoHelper.dialogRisposte(adminEvento, pos, getActivity(), idEvento);
         } else {
             eventDialog.which(quale, -1);
             dialogAddDomanda.show();

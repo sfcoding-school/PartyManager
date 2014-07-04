@@ -68,12 +68,12 @@ public class EventDomanda {
 
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                    if (!first) {
-                        String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
-                        which(Text, arg2);
-                    } else {
-                        first = true;
-                    }
+                if (!first) {
+                    String Text = sp.getSelectedItem().toString().replace(" ", "").replace("/", "");
+                    which(Text, arg2);
+                } else {
+                    first = true;
+                }
 
             }
 
@@ -121,12 +121,14 @@ public class EventDomanda {
         }
 
 
-        if (pos == -1 || list.size() != 6){
-        for(int i=0; i<list.size(); i++){
-            if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)){
-                pos = i; break;
+        if (pos == -1 || list.size() != 6) {
+            for (int i = 0; i < list.size(); i++) {
+                if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)) {
+                    pos = i;
+                    break;
+                }
             }
-        }}
+        }
 
         sp.setSelection(pos);
     }
@@ -176,10 +178,10 @@ public class EventDomanda {
         date.setVisibility(View.VISIBLE);
         orario.setVisibility(View.GONE);
 
-        Calendar cal=Calendar.getInstance();
-        int year=cal.get(Calendar.YEAR);
-        int month=cal.get(Calendar.MONTH);
-        int day=cal.get(Calendar.DAY_OF_MONTH);
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         date.setMinDate(cal.getTimeInMillis() - 10000);
         date.updateDate(year, month, day);
 

@@ -19,9 +19,7 @@ import android.widget.ProgressBar;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.EventAdapter;
-import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
-import com.partymanager.data.DatiRisposte;
 import com.partymanager.helper.HelperConnessione;
 import com.partymanager.helper.HelperFacebook;
 
@@ -106,7 +104,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             }
         });
 
-        if (!sonoEntratoInCreate){
+        if (!sonoEntratoInCreate) {
             DatiEventi.notifyDataChange();
         }
         sonoEntratoInCreate = false;

@@ -70,7 +70,7 @@ public class EventoHelper {
     static LinearLayout sino;
     static LinearLayout dataL;
     private static ArrayList<String> name_toSend;
-    static ListView risp;
+    static public ListView risp;
 
     private static Dialog getRisposteDialog(Activity activity) {
         if (dialog == null) {
@@ -88,14 +88,14 @@ public class EventoHelper {
         else return -1;
     }
 
-    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento, int numUtenti) {
+    public static void dialogRisposte(final String adminEvento, int posAttr, final Activity activity, final int idEvento) {
         posAttributi = posAttr;
 
         dialog = getRisposteDialog(activity);
         idAttributo = DatiAttributi.getPositionItem(posAttributi).id;
 
         risp = (ListView) dialog.findViewById(R.id.listView_risposte);
-        final RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, numUtenti, posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
+        final RisposteAdapter adapter = DatiRisposte.init(activity.getApplicationContext(), idEvento, DatiAttributi.getPositionItem(posAttributi).id, posAttributi, DatiAttributi.getPositionItem(posAttributi).close);
         risp.setEmptyView(dialog.findViewById(R.id.pb_risposteEmptyView));
         risp.setAdapter(adapter);
 
@@ -193,10 +193,10 @@ public class EventoHelper {
                 dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
                 add = (Button) dialog.findViewById(R.id.button_rispndi_data);
 
-                Calendar cal=Calendar.getInstance();
-                int year=cal.get(Calendar.YEAR);
-                int month=cal.get(Calendar.MONTH);
-                int day=cal.get(Calendar.DAY_OF_MONTH);
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
                 dateR.setMinDate(cal.getTimeInMillis() - 10000);
                 dateR.updateDate(year, month, day);
 
@@ -232,7 +232,7 @@ public class EventoHelper {
         dialog.show();
     }
 
-    public static void closeDialog(){
+    public static void closeDialog() {
         dialog.dismiss();
     }
 
