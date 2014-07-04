@@ -30,13 +30,13 @@ public class HelperFacebook {
 
     private static String facebookId;
     private static String facebookUserName;
-    private static Activity activity = MainActivity.getActivity();
+    //private static Activity activity = MainActivity.getActivity();
 
-    public static String getFacebookId() {
+    public static String getFacebookId(Context context) {
         if (facebookId != null)
             return facebookId;
         else {
-            SharedPreferences prefs = activity.getSharedPreferences("profilo", Context.MODE_PRIVATE);
+            SharedPreferences prefs = context.getSharedPreferences("profilo", Context.MODE_PRIVATE);
             String id = prefs.getString("reg_id", "");
             if (id.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "id facebook not found.");
@@ -48,11 +48,11 @@ public class HelperFacebook {
         }
     }
 
-    public static String getFacebookUserName() {
+    public static String getFacebookUserName(Context context) {
         if (facebookUserName != null)
             return facebookUserName;
         else {
-            SharedPreferences prefs = activity.getSharedPreferences("profilo", activity.MODE_PRIVATE);
+            SharedPreferences prefs = context.getSharedPreferences("profilo", context.MODE_PRIVATE);
             String name = prefs.getString("reg_username", "");
             if (name.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "username facebook not found.");
@@ -113,7 +113,7 @@ public class HelperFacebook {
     }
 
     public static String getToken() {
-        Session session = getSession(activity);
+        Session session = getSession(MainActivity.getActivity());
         String token = session.getAccessToken();
         Log.e("TOKEN - getToken", token);
         return token;

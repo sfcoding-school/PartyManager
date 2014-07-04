@@ -351,7 +351,7 @@ public class CreaEventoActivity extends Activity {
         Intent intent = new Intent();
         intent.putExtra("id_evento", id_evento);
         setResult(0, intent);
-        DatiEventi.addItem(new DatiEventi.Evento(id_evento, nome_evento, "", "", HelperFacebook.getFacebookId(), num_utenti));
+        DatiEventi.addItem(new DatiEventi.Evento(id_evento, nome_evento, "", "", HelperFacebook.getFacebookId(getApplicationContext()), num_utenti));
         finish();
     }
 

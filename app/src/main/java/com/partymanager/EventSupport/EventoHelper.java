@@ -32,6 +32,7 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.partymanager.R;
+import com.partymanager.activity.MainActivity;
 import com.partymanager.data.Adapter.FbFriendsAdapter;
 import com.partymanager.data.Adapter.RisposteAdapter;
 import com.partymanager.data.DatiAttributi;
@@ -102,7 +103,7 @@ public class EventoHelper {
         risp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                if (adminEvento.equals(HelperFacebook.getFacebookId(activity))) {
 
                     PopupMenu popup = new PopupMenu(activity, view);
                     popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
@@ -296,7 +297,7 @@ public class EventoHelper {
     public static void graficaVota(int position, int attuale) {
 
         if (DatiRisposte.getLenght() > position) //serve come controllo di sicurezza ma non dovrebbe mai capitare
-            DatiRisposte.addPositionPersona(position, HelperFacebook.getFacebookId(), HelperFacebook.getFacebookUserName(), true);
+            DatiRisposte.addPositionPersona(position, HelperFacebook.getFacebookId(MainActivity.getActivity()), HelperFacebook.getFacebookUserName(MainActivity.getActivity()), true);
 
         int temp = 0;
         String risposta_max = null;

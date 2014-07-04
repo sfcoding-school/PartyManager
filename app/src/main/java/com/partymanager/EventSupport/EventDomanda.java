@@ -52,7 +52,7 @@ public class EventDomanda {
         close = (Button) dialog.findViewById(R.id.btn_close);
         orario = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-        if (!HelperFacebook.getFacebookId().equals(adminEvento)) {
+        if (!HelperFacebook.getFacebookId(context).equals(adminEvento)) {
             chiusura.setVisibility(View.GONE);
         } else {
             chiusura.setVisibility(View.VISIBLE);

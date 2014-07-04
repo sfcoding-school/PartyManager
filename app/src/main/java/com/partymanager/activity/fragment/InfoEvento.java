@@ -126,7 +126,7 @@ public class InfoEvento extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                 if (!DatiFriends.ITEMS.get(i).code.equals(adminEvento)) {
-                    if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+                    if (adminEvento.equals(HelperFacebook.getFacebookId(getActivity().getApplicationContext()))) {
                         PopupMenu popup = new PopupMenu(getActivity(), view);
                         popup.getMenuInflater().inflate(R.menu.popup_butta_fuori, popup.getMenu());
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

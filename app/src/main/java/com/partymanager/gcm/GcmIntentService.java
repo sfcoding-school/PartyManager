@@ -234,10 +234,15 @@ public class GcmIntentService extends IntentService {
                                         extras.getString(code.user.nome) + getString(R.string.NotMsgUtenteUscito) + extras.getString("nome_evento"),
                                         "checkbox_eventi",
                                         extras);
-                                //diminuire contatore num utenti
+
+                                aggNumUtentu(
+                                        Integer.parseInt(extras.getString(code.evento.num)),
+                                        Integer.parseInt(extras.getString(code.evento.id))
+                                );
 
                                 break;
 
+                            //mod
                             case 2:
                                 sendNotification("Evento rinominato",
                                         extras.getString(code.user.nome) + getString(R.string.NotMsgEventoRinominato) + extras.getString("nome_evento") + getString(R.string.NotMsgEventoRinominato2) + extras.getString("nome_evento_vec"),
@@ -378,7 +383,7 @@ public class GcmIntentService extends IntentService {
                                     Log.e("NOTIFICHE-DEBUG", extras.getString(code.user.list));
                                     JSONArray userList = new JSONArray(extras.getString(code.user.list));
                                     size = userList.length();
-                                    String idMio = HelperFacebook.getFacebookId();
+                                    String idMio = HelperFacebook.getFacebookId(getApplicationContext());
                                     Log.e("NOTIFICHE-DEBUG", "" + size);
                                     for (int i = 0; i < size; i++) {
                                         if (!userList.getJSONObject(i).getString(code.user.id).equals(idMio))
@@ -401,7 +406,10 @@ public class GcmIntentService extends IntentService {
                                             extras);
 
                                     if (user != null && DatiEventi.getInizializzata())
-                                        DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti++;
+                                        aggNumUtentu(
+                                                Integer.parseInt(extras.getString(code.evento.num)),
+                                                Integer.parseInt(extras.getString(code.evento.id))
+                                        );
                                     else {
                                         DatiEventi.addItem(new DatiEventi.Evento(
                                                         Integer.parseInt(extras.getString(code.evento.id)),
@@ -416,29 +424,28 @@ public class GcmIntentService extends IntentService {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                // da implementare
                                 break;
 
                             //del
                             case 3:
                                 sendNotification("Amico eliminato",
-                                        extras.getString(code.user.nome) + getString(R.string.NotMsgDeleteFriend) + extras.getString("nome_evento"),
+                                        extras.getString(code.user.nomeDelete) + getString(R.string.NotMsgDeleteFriend) + extras.getString("nome_evento"),
                                         "checkbox_utenti",
                                         extras);
-                                if (DatiEventi.getInizializzata()) {
-                                    DatiEventi.getIdItem(Integer.parseInt(extras.getString(code.evento.id))).numUtenti--;
-                                }
-
+                                aggNumUtentu(
+                                        Integer.parseInt(extras.getString(code.evento.num)),
+                                        Integer.parseInt(extras.getString(code.evento.id))
+                                );
                                 break;
                         }
                         bmsg.putInt(NOTIFY, FRIENDS);
                         break;
+
                     case 5:
                         //test
                         Log.e(Helper_Notifiche.TAG, "test " + extras.toString());
                         sendNotification("TEST", extras.getString("msg"), "checkbox_notifiche_all", extras);
                         break;
-//>>>>>>> agg-notifiche
                 }
 
 
@@ -455,6 +462,16 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
+    private void aggNumUtentu(int numUtenti, int idEvento){
+        if (DatiEventi.getInizializzata()) {
+            DatiEventi.getIdItem(idEvento).numUtenti = numUtenti;
+
+        }
+
+        if (DatiAttributi.getIdEvento() == idEvento) {
+            Evento.numUtenti = numUtenti;
+        }
+    }
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.

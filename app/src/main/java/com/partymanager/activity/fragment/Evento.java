@@ -339,7 +339,7 @@ public class Evento extends Fragment {
     }
 
     private void cancellaDomanda(final int pos, View view) {
-        if (adminEvento.equals(HelperFacebook.getFacebookId())) {
+        if (adminEvento.equals(HelperFacebook.getFacebookId(getActivity().getApplicationContext()))) {
             PopupMenu popup = new PopupMenu(getActivity(), view);
             popup.getMenuInflater().inflate(R.menu.popup_delete, popup.getMenu());
 
@@ -375,6 +375,11 @@ public class Evento extends Fragment {
         if (listener != null) listener.onDestroyCallBack();
     }
 
+    /*
+    public static void changeNumUtenti(int numUtenti, int idEvento) {
+            Evento.numUtenti = numUtenti;
+    }
+*/
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(int id);
     }

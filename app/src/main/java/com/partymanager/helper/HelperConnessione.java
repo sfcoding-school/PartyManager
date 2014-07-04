@@ -2,6 +2,8 @@ package com.partymanager.helper;
 
 import android.util.Log;
 
+import com.partymanager.activity.MainActivity;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -28,7 +30,7 @@ public class HelperConnessione {
 
     static public boolean login() {
         String[] name = {"idFacebook", "token"};
-        String[] param = {HelperFacebook.getFacebookId(), HelperFacebook.getToken()};
+        String[] param = {HelperFacebook.getFacebookId(MainActivity.getActivity()), HelperFacebook.getToken()};
         String ris = HelperConnessione.httpPostConnection("login", name, param);
         Log.e("DATA_PROVIDE", "login " + ris);
         return ris.equals("fatto");

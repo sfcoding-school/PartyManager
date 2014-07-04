@@ -58,7 +58,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        String idFacebook = HelperFacebook.getFacebookId();
+        String idFacebook = HelperFacebook.getFacebookId(getActivity().getApplicationContext());
         if (idFacebook != null)
             eAdapter = DatiEventi.init(getActivity());
         else
@@ -105,7 +105,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                                            final int pos, long id) {
                 PopupMenu popup = new PopupMenu(getActivity(), arg1);
                 int temp = R.menu.popup_esci_da_evento;
-                if (DatiEventi.getPositionItem(pos).admin.equals(HelperFacebook.getFacebookId()))
+                if (DatiEventi.getPositionItem(pos).admin.equals(HelperFacebook.getFacebookId(getActivity().getApplicationContext())))
                     temp = R.menu.popup_delete;
 
                 popup.getMenuInflater().inflate(temp, popup.getMenu());

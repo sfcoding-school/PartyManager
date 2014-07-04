@@ -247,7 +247,7 @@ public class DatiRisposte {
         Boolean trovato = false;
         for (int i = 0; i < DatiRisposte.ITEMS.size() && !trovato; i++) {
             for (int j = 0; DatiRisposte.ITEMS.get(i).persone != null && j < DatiRisposte.ITEMS.get(i).persone.size() && !trovato; j++) {
-                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId())) {
+                if (DatiRisposte.ITEMS.get(i).persone.get(j).id_fb.equals(HelperFacebook.getFacebookId(context_global))) {
                     DatiRisposte.ITEMS.get(i).persone.remove(j);
                     trovato = true;
                 }

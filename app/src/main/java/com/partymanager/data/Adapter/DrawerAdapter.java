@@ -69,7 +69,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         } else {
             tv.setTextSize(25);
             if (position == 0) {
-                String username = HelperFacebook.getFacebookUserName();
+                String username = HelperFacebook.getFacebookUserName(context);
                 tv.setText(username);
                 Request.executeMeRequestAsync(HelperFacebook.getSession(MainActivity.getActivity()), new Request.GraphUserCallback() {
 
@@ -102,7 +102,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             File f = new File(directory, "profilelarge.jpg");
             iv.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(f)));
         } catch (FileNotFoundException e) {
-            getFacebookProfilePicture(HelperFacebook.getFacebookId(), "large");
+            getFacebookProfilePicture(HelperFacebook.getFacebookId(context), "large");
         }
     }
 

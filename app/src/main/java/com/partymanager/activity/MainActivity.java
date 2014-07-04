@@ -68,7 +68,6 @@ public class MainActivity extends Activity
     private final String infoTAG = "infoEvento";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +86,16 @@ public class MainActivity extends Activity
                 switch (type) {
                     case GcmIntentService.EVENTI:
                         DatiEventi.notifyDataChange();
-                        if (b.getString("method").equals(GcmIntentService.code.method.modify))
+                        String method = b.getString("method");
+                        if (method.equals(GcmIntentService.code.method.modify))
                             invalidateOptionsMenu();
+                        if (method.equals(GcmIntentService.code.method.uscito)) {
+                            //Evento f = (Evento)fragmentManager.findFragmentByTag(eventTAG);
+                            //if (f!=null){
+                            //    f.changeNumUtenti();
+                            DatiAttributi.notifyDataChange();
+                        }
+
                         break;
                     case GcmIntentService.ATTRIBUTI:
                         DatiAttributi.notifyDataChange();
@@ -101,7 +108,7 @@ public class MainActivity extends Activity
                         break;
                     case GcmIntentService.FRIENDS:
                         DatiEventi.notifyDataChange();
-                        DatiFriends.notifyDataChange();
+                        DatiAttributi.notifyDataChange();
                         break;
                 }
             }
@@ -208,7 +215,6 @@ public class MainActivity extends Activity
                 .commit();
         fragmentManager.addOnBackStackChangedListener(listener);
     }
-
 
 
     @Override

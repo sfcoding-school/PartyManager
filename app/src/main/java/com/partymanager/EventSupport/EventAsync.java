@@ -283,8 +283,8 @@ public class EventAsync {
                 try {
                     JSONObject pers = new JSONObject();
                     JSONArray userL = new JSONArray();
-                    pers.put("id_user", HelperFacebook.getFacebookId());
-                    pers.put("name", HelperFacebook.getFacebookUserName());
+                    pers.put("id_user", HelperFacebook.getFacebookId(activity));
+                    pers.put("name", HelperFacebook.getFacebookUserName(activity));
                     userL.put(pers);
                     DatiRisposte.addItem(new DatiRisposte.Risposta(Integer.parseInt(ris), risposta, userL), template, true);
                     Evento.checkTemplate();
