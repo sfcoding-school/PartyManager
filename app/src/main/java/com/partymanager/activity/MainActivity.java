@@ -67,7 +67,7 @@ public class MainActivity extends Activity
     private boolean infoEventoAperto = false;
     private final String infoTAG = "infoEvento";
 
-    private FragmentManager.OnBackStackChangedListener listener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class MainActivity extends Activity
                 switch (type) {
                     case GcmIntentService.EVENTI:
                         DatiEventi.notifyDataChange();
-                        if(b.getString("method").equals(GcmIntentService.code.method.modify))
+                        if (b.getString("method").equals(GcmIntentService.code.method.modify))
                             invalidateOptionsMenu();
                         break;
                     case GcmIntentService.ATTRIBUTI:
@@ -131,7 +131,7 @@ public class MainActivity extends Activity
                 HelperFacebook.getToken();
                 fragmentManager = getFragmentManager();
 
-                Intent inte = getIntent();
+                final Intent inte = getIntent();
 
                 String action = inte.getAction();
 
@@ -141,37 +141,21 @@ public class MainActivity extends Activity
                     //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
                     //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    int id = inte.getIntExtra(Evento.ID_EVENTO, -1);
-                    String nome = inte.getStringExtra(Evento.NOME_EVENTO);
-                    String admin = inte.getStringExtra(Evento.ADMIN_EVENTO);
-                    int num = inte.getIntExtra(Evento.NUM_UTENTI, -1);
-                    /*
+
+
                     if (fragmentManager.findFragmentByTag(eventTAG) != null) {
+                        ((Evento) fragmentManager.findFragmentByTag(eventTAG)).addListener(
+                                new Evento.OnDestroyCallBackListener() {
+                                    @Override
+                                    public void onDestroyCallBack() {
+                                        goToEventNotifica(inte);
+                                    }
+                                }
+                        );
                         fragmentManager.popBackStackImmediate(eventTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                    */
-                    Fragment tmp = Evento.newInstance(
-                            id, nome, admin, num
-                    );
+                    } else
+                        goToEventNotifica(inte);
 
-                    fragmentManager.beginTransaction()
-                            .remove(fragmentManager.findFragmentByTag(eventTAG))
-                            .replace(R.id.container, tmp, eventTAG)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .addToBackStack(eventTAG)
-                            .commit();
-
-                    listener = new FragmentManager.OnBackStackChangedListener() {
-                        public void onBackStackChanged() {
-                            if (fragmentManager.getBackStackEntryCount() == 0) {
-                                if (fragmentManager.findFragmentByTag(eventListTAG) != null)
-                                    fragmentManager.popBackStackImmediate(eventListTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                changeFragment(0);
-                                invalidateOptionsMenu();
-                            }
-                        }
-                    };
-                    fragmentManager.addOnBackStackChangedListener(listener);
 
                 } else if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTLIST)) {
                     changeFragment(0);
@@ -198,6 +182,34 @@ public class MainActivity extends Activity
             }
         }
     }
+
+    private FragmentManager.OnBackStackChangedListener listener = new FragmentManager.OnBackStackChangedListener() {
+        public void onBackStackChanged() {
+            if (fragmentManager.getBackStackEntryCount() == 0) {
+                if (fragmentManager.findFragmentByTag(eventListTAG) != null)
+                    fragmentManager.popBackStackImmediate(eventListTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                changeFragment(0);
+                invalidateOptionsMenu();
+            }
+        }
+    };
+
+    private void goToEventNotifica(Intent inte) {
+        Fragment tmp = Evento.newInstance(
+                inte.getIntExtra(Evento.ID_EVENTO, -1),
+                inte.getStringExtra(Evento.NOME_EVENTO),
+                inte.getStringExtra(Evento.ADMIN_EVENTO),
+                inte.getIntExtra(Evento.NUM_UTENTI, -1)
+        );
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, tmp, eventTAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(eventTAG)
+                .commit();
+        fragmentManager.addOnBackStackChangedListener(listener);
+    }
+
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -364,7 +376,7 @@ public class MainActivity extends Activity
             }
         });
     }
-    // </editor-fold>
+// </editor-fold>
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -414,6 +426,7 @@ public class MainActivity extends Activity
                     .commit();
         }
         drawerLayout.closeDrawer(leftRL);
+        invalidateOptionsMenu();
     }
 
     public static Activity getActivity() {
@@ -581,6 +594,7 @@ public class MainActivity extends Activity
 
 
     }
+
 }
 
 /*

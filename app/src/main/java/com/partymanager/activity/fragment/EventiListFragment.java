@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -62,6 +65,23 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             Log.e("id_FB: ", "id fb null on " + this.getActivity().getLocalClassName());
 
         sonoEntratoInCreate = true;
+        setHasOptionsMenu(true);
+    }
+
+    static public boolean progressBar = false;
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflar) {
+
+        super.onCreateOptionsMenu(menu, inflar);
+        menu.clear();
+
+        inflar.inflate(R.menu.main, menu);
+
+        MenuItem prova = menu.findItem(R.id.progressBarSmall);
+        prova.setVisible(progressBar);
+
+        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section0));
     }
 
 

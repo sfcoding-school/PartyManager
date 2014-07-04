@@ -10,6 +10,7 @@ import android.util.Log;
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
+import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
@@ -75,7 +76,7 @@ public class DataProvide {
 
             @Override
             protected void onPreExecute() {
-                MainActivity.progressBarVisible = true;
+                EventiListFragment.progressBar = true;
                 ((Activity) context).invalidateOptionsMenu();
             }
 
@@ -99,7 +100,7 @@ public class DataProvide {
             @Override
             protected void onPostExecute(JSONArray jsonArray) {
 
-                MainActivity.progressBarVisible = false;
+                EventiListFragment.progressBar = false;
                 ((Activity) context).invalidateOptionsMenu();
 
                 if (jsonArray != null) {
