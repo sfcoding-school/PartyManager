@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.partymanager.activity.fragment.Evento;
 import com.partymanager.data.Adapter.AttributiAdapter;
 import com.partymanager.helper.DataProvide;
 
@@ -169,7 +170,10 @@ public class DatiAttributi {
     }
 
     public static void notifyDataChange() {
-        if (eAdapter != null) eAdapter.notifyDataSetChanged();
+        if (eAdapter != null) {
+            eAdapter.notifyDataSetChanged();
+            Evento.checkTemplate();
+        }
     }
 
     public static Attributo getIdItem(int idAttributo) {
