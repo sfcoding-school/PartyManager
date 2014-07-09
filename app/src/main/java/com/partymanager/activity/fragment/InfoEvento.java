@@ -40,6 +40,7 @@ public class InfoEvento extends Fragment {
     private boolean modifica = false;
     private ProgressBar pb_cambiaNome;
     private ImageButton modificaNomeEvento;
+    public static TextView member_label;
 
     public static InfoEvento newInstance(int idEvento, String adminEvento, String nomeEvento, int numUtenti) {
         InfoEvento fragment = new InfoEvento();
@@ -95,7 +96,7 @@ public class InfoEvento extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info_evento, container, false);
 
-        final TextView member_label = (TextView) view.findViewById(R.id.member_label);
+        member_label = (TextView) view.findViewById(R.id.member_label);
         member_label.setText(numUtenti + " " + getString(R.string.membri));
 
         final TextView TxtnomeEvento = (TextView) view.findViewById(R.id.txtInfo_NomeEvento);

@@ -9,9 +9,9 @@ import android.util.Log;
 
 import com.partymanager.EventSupport.EventoHelper;
 import com.partymanager.R;
-import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.EventiListFragment;
 import com.partymanager.activity.fragment.Evento;
+import com.partymanager.activity.fragment.InfoEvento;
 import com.partymanager.data.DatiAttributi;
 import com.partymanager.data.DatiEventi;
 import com.partymanager.data.DatiFriends;
@@ -65,7 +65,7 @@ public class DataProvide {
 
                 if (jsonArray != null) {
                     saveJson(jsonArray, "friends" + idEvento, context);
-                    loadIntoFriendsAdapter(jsonArray);
+                    loadIntoFriendsAdapter(jsonArray, context);
                 }
             }
         }.execute(null, null, null);
@@ -180,7 +180,7 @@ public class DataProvide {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="loadInto...Adapter">
-    private static void loadIntoFriendsAdapter(JSONArray jsonArray) {
+    private static void loadIntoFriendsAdapter(JSONArray jsonArray, Context context) {
         DatiFriends.removeAll();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -188,6 +188,7 @@ public class DataProvide {
                                 jsonArray.getJSONObject(i).getString("name"), false, false)
                 );
             }
+            InfoEvento.member_label.setText(jsonArray.length() + context.getString(R.string.membri));
         } catch (JSONException e) {
             Log.e("DataProvide", "JSONException loadIntoEventiAdapter: " + e);
         } catch (NullPointerException e) {
@@ -278,7 +279,7 @@ public class DataProvide {
                     if (name.contains("risposte"))
                         loadIntoRisposteAdapter(jsonArray);
                     if (name.contains("friends"))
-                        loadIntoFriendsAdapter(jsonArray);
+                        loadIntoFriendsAdapter(jsonArray, context);
                 }
             }
         }.execute(null, null, null);
