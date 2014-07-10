@@ -83,12 +83,6 @@ public class EventoHelper {
         return dialog;
     }
 
-    public static int getIdAttributo() {
-        if (dialog != null && dialog.isShowing())
-            return idAttributo;
-        else return -1;
-    }
-
     public static void dialogRisposte(final String adminEvento, final int posAttr, final Activity activity, final int idEvento) {
         posAttributi = posAttr;
 
@@ -240,7 +234,7 @@ public class EventoHelper {
     public static void setMinDate(DatePicker dateR, long time) {
         try {
             dateR.setMinDate(time);
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             setMinDate(dateR, time - 1000);
         }
     }

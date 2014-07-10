@@ -19,7 +19,6 @@ import com.partymanager.data.DatiAttributi;
 import com.partymanager.helper.HelperFacebook;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class EventDomanda {
@@ -124,7 +123,7 @@ public class EventDomanda {
 
         if (pos == -1 || list.size() != 6) {
             for (int i = 0; i < list.size(); i++) {
-                if ((list.get(i).toString().replace(" ", "").replace("/", "")).equals(selectItem)) {
+                if ((list.get(i).replace(" ", "").replace("/", "")).equals(selectItem)) {
                     pos = i;
                     break;
                 }
@@ -187,9 +186,7 @@ public class EventDomanda {
         date.updateDate(year, month, day);
         */
 
-        EventoHelper.setMinDate(date, new GregorianCalendar().getTimeInMillis() -1000);
-
-
+        EventoHelper.setMinDate(date, new GregorianCalendar().getTimeInMillis() - 1000);
 
 
         close.setOnClickListener(new View.OnClickListener() {

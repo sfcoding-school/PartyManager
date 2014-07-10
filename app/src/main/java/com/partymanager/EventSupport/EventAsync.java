@@ -220,6 +220,11 @@ public class EventAsync {
                     if (DatiRisposte.getLenght() == 0) {
                         eliminaDomanda(posAttr, idEvento, activity);
                         EventoHelper.closeDialog();
+                    } else {
+                        if (String.valueOf(idRisposta).equals(DatiAttributi.getPositionItem(posAttr).id_risposta)) {
+                            DatiAttributi.getPositionItem(posAttr).id_risposta = null;
+                            DatiAttributi.getPositionItem(posAttr).risposta = null;
+                        }
                     }
                     Evento.checkTemplate();
                 } else {

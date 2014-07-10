@@ -14,7 +14,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.internal.ex;
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
 import com.partymanager.activity.fragment.Evento;
@@ -462,7 +461,7 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void aggNumUtentu(int numUtenti, int idEvento){
+    private void aggNumUtentu(int numUtenti, int idEvento) {
         if (DatiEventi.getInizializzata()) {
             DatiEventi.getIdItem(idEvento).numUtenti = numUtenti;
 
@@ -472,6 +471,7 @@ public class GcmIntentService extends IntentService {
             Evento.numUtenti = numUtenti;
         }
     }
+
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.

@@ -3,8 +3,6 @@ package com.partymanager.activity.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -445,14 +443,17 @@ public class Evento extends Fragment {
     };
     // </editor-fold>
 
-    public static interface OnDestroyCallBackListener{
+    public static interface OnDestroyCallBackListener {
         public void onDestroyCallBack();
     }
+
     private OnDestroyCallBackListener listener;
-    public void addListener(OnDestroyCallBackListener listener){
-        this.listener=listener;
+
+    public void addListener(OnDestroyCallBackListener listener) {
+        this.listener = listener;
     }
-    public void removeListener(OnDestroyCallBackListener listener){
-        this.listener=null;
+
+    public void removeListener(OnDestroyCallBackListener listener) {
+        this.listener = null;
     }
 }
