@@ -311,7 +311,7 @@ public class CreaEventoActivity extends Activity {
                     int tmp = Integer.parseInt(result);
                     FbFriendsAdapter.svuotaLista();
                     result_global = tmp;
-                    if (f == null || (f != null && !f.isShowing()))
+                    if (f == null || !f.isShowing())
                         closeActivity(List.length() + 1, name, tmp);
 
                 } catch (NumberFormatException e) {
@@ -360,7 +360,6 @@ public class CreaEventoActivity extends Activity {
             a = Toast.makeText(getApplicationContext(), getString(R.string.esciCreaEvento), Toast.LENGTH_SHORT);
 
         if (a.getView().isShown()) {
-
             if (id_toSend != null) id_toSend.clear();
             container_friends.setText("");
             FbFriendsAdapter.svuotaLista();

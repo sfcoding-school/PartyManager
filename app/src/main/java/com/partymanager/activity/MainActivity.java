@@ -47,7 +47,6 @@ public class MainActivity extends Activity
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private FragmentManager fragmentManager;
-    private boolean noMenuActionBar = false;
     private static boolean drawerAperto = false;
     public static CharSequence mTitle;
     private static Activity mContext;
@@ -63,7 +62,6 @@ public class MainActivity extends Activity
     public final String eventTAG = "evento";
     private final String archivioTAG = "archivio";
     private final String impostazioniTAG = "impostazioni";
-    private boolean infoEventoAperto = false;
     private final String infoTAG = "infoEvento";
 
 
@@ -72,8 +70,6 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
 
         mContext = this;
-        //fragmentManager = getFragmentManager();
-
 
         handlerService = new Handler() {
             @Override
@@ -112,16 +108,14 @@ public class MainActivity extends Activity
                 }
             }
         };
-        //setContentView(R.layout.activity_main);
-        setContentView(R.layout.fragment_nav_drawer_custom);
 
+        setContentView(R.layout.fragment_nav_drawer_custom);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setNavigationDrawer();
 
         setUp();
     }
-
 
     @Override
     protected void onStart() {
@@ -138,16 +132,13 @@ public class MainActivity extends Activity
                 fragmentManager = getFragmentManager();
 
                 final Intent inte = getIntent();
-
                 String action = inte.getAction();
-
 
                 if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTO)) {
                     //Bundle b = inte.getBundleExtra("bundle");
                     //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
                     //changeFragment(0);
                     //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
 
                     if (fragmentManager.findFragmentByTag(eventTAG) != null) {
                         ((Evento) fragmentManager.findFragmentByTag(eventTAG)).addListener(
@@ -161,7 +152,6 @@ public class MainActivity extends Activity
                         fragmentManager.popBackStackImmediate(eventTAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     } else
                         goToEventNotifica(inte);
-
 
                 } else if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTLIST)) {
                     changeFragment(0);
@@ -183,7 +173,6 @@ public class MainActivity extends Activity
                                 .commit();
                     } else
                         changeFragment(0);
-
                 }
             }
         }
@@ -214,7 +203,6 @@ public class MainActivity extends Activity
                 .commit();
         fragmentManager.addOnBackStackChangedListener(listener);
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -417,7 +405,7 @@ public class MainActivity extends Activity
                 break;
         }
 
-        if (tag.equals(impostazioniTAG)) {
+        if (tag != null && tag.equals(impostazioniTAG)) {
             fragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, tag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -498,7 +486,6 @@ public class MainActivity extends Activity
         if (id == R.id.infoEvento) {
             //deve aprire il nuovo Fragment
             //TEST
-            infoEventoAperto = true;
             Bundle b = fragmentManager.findFragmentByTag(eventTAG).getArguments();
             Fragment fragment = InfoEvento.newInstance(b);
             //fragmentManager.saveFragmentInstanceState(fragment);
@@ -599,7 +586,6 @@ public class MainActivity extends Activity
 
 
     }
-
 }
 
 /*
