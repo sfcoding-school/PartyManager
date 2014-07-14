@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ddd"
-    >
+    android:background="#ddd">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -30,9 +30,9 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
             android:textSize="16sp"
-            android:hint="@string/daDEf"/>
+            android:hint="@string/daDEf" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -58,7 +58,7 @@
             android:textSize="16sp"
             android:layout_marginLeft="30dp"
             android:hint="@string/daDEf"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,9 +68,9 @@
             android:textSize="16sp"
             android:layout_marginLeft="15dp"
             android:hint="@string/daDEf"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -86,9 +86,9 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginLeft="15dp" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -103,7 +103,7 @@
             android:textSize="16sp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="30dp"
-            android:hint="@string/daDEf"/>
+            android:hint="@string/daDEf" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
             android:layout_marginTop="5dp"
             android:textSize="16sp"
             android:layout_marginLeft="30dp"
-            android:hint="@string/daDEf"/>
+            android:hint="@string/daDEf" />
 
     </LinearLayout>
 </LinearLayout>

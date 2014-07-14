@@ -48,8 +48,6 @@ public class GcmIntentService extends IntentService {
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
                 /*
@@ -377,7 +375,7 @@ public class GcmIntentService extends IntentService {
                             //new
                             case 1:
                                 String user = "";
-                                int size = 0;
+                                int size;
                                 try {
                                     Log.e("NOTIFICHE-DEBUG", extras.getString(code.user.list));
                                     JSONArray userList = new JSONArray(extras.getString(code.user.list));
@@ -392,7 +390,7 @@ public class GcmIntentService extends IntentService {
                                             break;
                                         }
                                     }
-                                    String msg = null;
+                                    String msg;
                                     if (user != null) {
                                         msg = size <= 1 ? getString(R.string.NotMsgAddFriendsSolo) : getString(R.string.NotMsgAddFriends);
                                         msg = user + msg;

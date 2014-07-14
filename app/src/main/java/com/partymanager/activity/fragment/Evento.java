@@ -66,9 +66,6 @@ public class Evento extends Fragment {
     public static final int DIALOG_SINO = 7;
 
     private boolean sonoEntratoInCreate;
-
-    private OnFragmentInteractionListener mListener;
-
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Init + Grafica">
@@ -82,17 +79,6 @@ public class Evento extends Fragment {
         return fragment;
     }
 
-    /*
-        public static Evento newInstance(Bundle param) {
-            Evento fragment = new Evento();
-
-            String tmp =param.getString(NOME_EVENTO);
-            Log.e("EVENTO", "il bundle qui è " + param.toString());
-            fragment.setArguments(param);
-
-            return fragment;
-        }
-    */
     public static Evento newInstance(int id, String nomeEvento, String admin, int numUtenti) {
         Evento fragment = new Evento();
 
@@ -372,15 +358,6 @@ public class Evento extends Fragment {
         DatiAttributi.removeAll(idEvento);
         if (listener != null) listener.onDestroyCallBack();
     }
-
-    /*
-    public static void changeNumUtenti(int numUtenti, int idEvento) {
-            Evento.numUtenti = numUtenti;
-    }
-*/
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(int id);
-    }
     // </editor-fold>
 
     public void templateManager(String template, String quale) {
@@ -453,7 +430,4 @@ public class Evento extends Fragment {
         this.listener = listener;
     }
 
-    public void removeListener(OnDestroyCallBackListener listener) {
-        this.listener = null;
-    }
 }

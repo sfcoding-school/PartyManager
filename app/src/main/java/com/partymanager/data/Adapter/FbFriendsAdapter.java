@@ -128,7 +128,7 @@ public class FbFriendsAdapter extends ArrayAdapter<Friends> {
             for (int i = 0; i < DatiFriends.ITEMS.size(); i++) {
                 if (friends1.code.equals(DatiFriends.ITEMS.get(i).code)) {
                     holder.name.setTextColor(Color.GRAY);
-                    holder.foto_profilo.setAlpha(100);
+                    holder.foto_profilo.setImageAlpha(100);
                     holder.installed.setAlpha(100);
                     holder.name.setEnabled(false);
                 }

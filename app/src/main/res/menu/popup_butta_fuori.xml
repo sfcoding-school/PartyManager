@@ -1,7 +1,7 @@
-<menu xmlns:androclass="http://schemas.android.com/apk/res/android" >
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
 
     <item
         androclass:id="@+id/delte_users"
-        androclass:title="Buttalo fuori dall'evento"/>
+        androclass:title="Buttalo fuori dall'evento" />
 
 </menu>  

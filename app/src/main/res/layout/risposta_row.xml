@@ -40,13 +40,13 @@
             android:layout_height="wrap_content"
             android:text="vota"
             android:id="@+id/button_voto"
-            android:focusable="false"/>
+            android:focusable="false" />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/pb_vota"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

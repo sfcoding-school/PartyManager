@@ -1,27 +1,27 @@
-<menu xmlns:androclass="http://schemas.android.com/apk/res/android" >
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
 
     <item
         androclass:id="@+id/one"
-        androclass:title="Data Evento"/>
+        androclass:title="Data Evento" />
 
     <item
         androclass:id="@+id/two"
-        androclass:title="Ora Evento"/>
+        androclass:title="Ora Evento" />
 
     <item
         androclass:id="@+id/three"
-        androclass:title="Ora Incontro"/>
+        androclass:title="Ora Incontro" />
 
     <item
         androclass:id="@+id/four"
-        androclass:title="Luogo Incontro"/>
+        androclass:title="Luogo Incontro" />
 
     <item
         androclass:id="@+id/six"
-        androclass:title="Luogo Evento"/>
+        androclass:title="Luogo Evento" />
 
     <item
         androclass:id="@+id/five"
-        androclass:title="Personalizzata"/>
+        androclass:title="Personalizzata" />
 
 </menu>  

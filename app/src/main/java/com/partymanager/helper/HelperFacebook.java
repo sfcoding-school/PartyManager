@@ -52,7 +52,7 @@ public class HelperFacebook {
         if (facebookUserName != null)
             return facebookUserName;
         else {
-            SharedPreferences prefs = context.getSharedPreferences("profilo", context.MODE_PRIVATE);
+            SharedPreferences prefs = context.getSharedPreferences("profilo", Context.MODE_PRIVATE);
             String name = prefs.getString("reg_username", "");
             if (name.isEmpty()) {
                 Log.e("HELPER_FACEBOOK", "username facebook not found.");

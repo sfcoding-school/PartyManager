@@ -17,7 +17,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 
 import com.partymanager.R;
 import com.partymanager.activity.MainActivity;
@@ -28,13 +27,7 @@ import com.partymanager.helper.HelperFacebook;
 
 public class EventiListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static ProgressBar progressBarLarge;
-    private String mParam1;
-    private String mParam2;
     private OnFragmentInteractionListener mListener;
-    private ListView listView;
     private EventAdapter eAdapter;
 
     public boolean sonoEntratoInCreate;
@@ -42,8 +35,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
 
     public static EventiListFragment newInstance() {
 
-        EventiListFragment fragment = new EventiListFragment();
-        return fragment;
+        return new EventiListFragment();
     }
 
     public EventiListFragment() {
@@ -52,11 +44,6 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         String idFacebook = HelperFacebook.getFacebookId(getActivity().getApplicationContext());
         if (idFacebook != null)
@@ -91,10 +78,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         View view = inflater.inflate(R.layout.fragment_eventi, container, false);
 
         // Set the adapter
-        listView = (ListView) view.findViewById(R.id.eventList);
-        //((AdapterView<ListAdapter>) mListView).setAdapter(eAdapter);
+        ListView listView = (ListView) view.findViewById(R.id.eventList);
 
-        // Set OnItemClickListener so we can be notified on item clicks
         listView.setOnItemClickListener(this);
         listView.setEmptyView(view.findViewById(R.id.txt_emptyE));
         listView.setAdapter(eAdapter);
@@ -169,9 +154,11 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             // fragment is attached to one) that an item has been selected.
             int idEvento = DatiEventi.getPositionItem(position).id;
             Log.e("EVENTLIST", "" + idEvento);
+            /*
             String name = DatiEventi.getPositionItem(position).name;
             String admin = DatiEventi.getPositionItem(position).admin;
             String numU = Integer.toString(DatiEventi.getPositionItem(position).numUtenti);
+            */
             mListener.onFragmentInteraction(idEvento);
         }
     }

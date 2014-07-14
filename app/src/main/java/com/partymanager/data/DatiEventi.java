@@ -73,7 +73,7 @@ public class DatiEventi {
             protected void onPostExecute(JSONArray js) {
                 if (js != null) {
                     Log.e("DatiEventi-toJson-onPost", js.toString());
-                    if (js != null && js.length() > 0) {
+                    if (js.length() > 0) {
                         DataProvide.saveJson(js, "eventi", context_global);
                     } else {
                         Log.e("DatiEventi-toJson", "Non ho salvato array vuoto");

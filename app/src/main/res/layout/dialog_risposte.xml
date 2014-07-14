@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/txt_domanda_dialog"
@@ -29,7 +29,7 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textAlignment="center" />
-            </LinearLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
@@ -42,8 +42,7 @@
             android:layout_height="match_parent"
             android:divider="#ff000000"
             android:dividerHeight="0.2dp"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -81,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:id="@+id/pb_addRisposta"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

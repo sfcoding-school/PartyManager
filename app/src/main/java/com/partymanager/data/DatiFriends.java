@@ -54,8 +54,4 @@ public class DatiFriends {
     public static void removeItem(int i) {
         removeItem(i, true);
     }
-
-    public static void notifyDataChange() {
-        if (eAdapter != null) eAdapter.notifyDataSetChanged();
-    }
 }

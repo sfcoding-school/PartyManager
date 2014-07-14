@@ -1,43 +1,40 @@
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Notifiche">
+    <PreferenceCategory android:title="Notifiche">
 
         <CheckBoxPreference
             android:key="checkbox_notifiche_all"
             android:title="@string/notifiche1"
-            android:defaultValue="true"
-            />
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_eventi"
             android:title="@string/notifiche2"
             android:summary="@string/notifiche_sum2"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_domande"
             android:title="@string/notifiche3"
             android:summary="@string/notifiche_sum3"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_risposte"
             android:title="@string/notifiche4"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_allarme"
             android:title="@string/notifiche5"
             android:summary="@string/notifiche_sum5"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_utenti"
             android:title="@string/notifiche6"
             android:summary="@string/notifiche_sum6"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <ListPreference
             android:title="LED"
@@ -45,20 +42,19 @@
             android:key="downloadType"
             android:defaultValue="16777215"
             android:entries="@array/listArrayLED"
-            android:entryValues="@array/listValuesLED"
-            />
+            android:entryValues="@array/listValuesLED" />
 
         <CheckBoxPreference
             android:key="checkbox_vibrate"
             android:title="@string/notifiche8"
             android:summary="@string/notifiche_sum8"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="checkbox_sound"
             android:title="@string/notifiche9"
             android:summary="@string/notifiche_sum9"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 

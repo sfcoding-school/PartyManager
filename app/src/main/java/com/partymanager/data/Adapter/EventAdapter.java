@@ -32,24 +32,17 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
         DatiEventi.Evento evento = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.event_list_row, parent, false);
         }
 
-        // Lookup view for data population
         TextView name = (TextView) convertView.findViewById(R.id.name);
         TextView details = (TextView) convertView.findViewById(R.id.details);
         TextView count = (TextView) convertView.findViewById(R.id.count);
         TextView giornoN = (TextView) convertView.findViewById(R.id.giornoN);
         TextView giornoS = (TextView) convertView.findViewById(R.id.giornoS);
         TextView mese = (TextView) convertView.findViewById(R.id.mese);
-
-        //TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-
-        // Populate the data into the template view using the data object
 
         name.setText(evento.name);
         details.setText(evento.details);
@@ -83,7 +76,6 @@ public class EventAdapter extends ArrayAdapter<DatiEventi.Evento> {
             count.setText("");
         }
 
-        // Return the completed view to render on screen
         return convertView;
     }
 }

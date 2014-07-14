@@ -39,7 +39,8 @@
         android:layout_alignEnd="@+id/inputSearch" />
 
     <!-- Editext for Search -->
-    <EditText android:id="@+id/inputSearch"
+    <EditText
+        android:id="@+id/inputSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Ricerca amici.."
@@ -50,7 +51,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ListView android:id="@+id/listView1" android:layout_width="fill_parent"
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="visible"
         android:layout_below="@+id/inputSearch"

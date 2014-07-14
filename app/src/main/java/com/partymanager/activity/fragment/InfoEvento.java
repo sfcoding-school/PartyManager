@@ -85,7 +85,7 @@ public class InfoEvento extends Fragment {
         super.onCreateOptionsMenu(menu, inflar);
         menu.clear();
         inflar.inflate(R.menu.main_no_menu, menu);
-        getActivity().getActionBar().setTitle(getString(R.string.titleInfoEvento));
+        //getActivity().getActionBar().setTitle(getString(R.string.titleInfoEvento));
 
         getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
 
@@ -204,12 +204,6 @@ public class InfoEvento extends Fragment {
                 }
             }
         }.execute();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
