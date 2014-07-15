@@ -64,7 +64,7 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
+        if (getActionBar() != null) getActionBar().hide();
 
         //Passaggio dati tra activity per click Profilo
         Bundle datipassati = getIntent().getExtras();
@@ -187,7 +187,6 @@ public class ProfileActivity extends Activity {
                         if (user != null) {
 
                             getFacebookProfilePicture(user.getId(), "large");
-                            //getFacebookProfilePicture(user.getId(), "small");
                             textInstructionsOrLink.setText(user.getName());
                             username = user.getName();
                             id_fb = user.getId();

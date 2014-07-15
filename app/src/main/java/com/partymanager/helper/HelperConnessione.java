@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelperConnessione {
-    //private static final String URL = "http://apipm.sfcoding.com/";
     private static final String URL = "http://apipm.sfcoding.com/";
 
     private static HttpClient httpclient = null;
@@ -33,15 +32,6 @@ public class HelperConnessione {
         String[] param = {HelperFacebook.getFacebookId(MainActivity.getActivity()), HelperFacebook.getToken()};
         String ris = HelperConnessione.httpPostConnection("login", name, param);
         Log.e("DATA_PROVIDE", "login " + ris);
-        return ris.equals("fatto");
-    }
-
-
-    static public boolean logout() {
-        String[] name = {};
-        String[] param = {};
-        String ris = HelperConnessione.httpPostConnection("logout", name, param);
-
         return ris.equals("fatto");
     }
 

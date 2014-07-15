@@ -36,6 +36,7 @@ public class EventDomanda {
     private int idEvento;
     public static Handler mResponseHandler;
     private boolean first;
+    ArrayList<String> list;
 
     public EventDomanda(final Context context, Handler reponseHandler, int idEvento, String adminEvento) {
         this.context = context;
@@ -57,7 +58,6 @@ public class EventDomanda {
             chiusura.setVisibility(View.VISIBLE);
         }
 
-        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT); //per tutto schermo
         dialog.setCanceledOnTouchOutside(true);
 
         sp = (Spinner) dialog.findViewById(R.id.spinner);
@@ -133,8 +133,6 @@ public class EventDomanda {
         sp.setSelection(pos);
     }
 
-    ArrayList<String> list;
-
     public void renderSpinner() {
 
         String[] template = DatiAttributi.getTemplate();
@@ -163,8 +161,6 @@ public class EventDomanda {
     }
 
     public Dialog returnD() {
-        //InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         return dialog;
     }
 
@@ -177,14 +173,6 @@ public class EventDomanda {
         risposta.setVisibility(View.GONE);
         date.setVisibility(View.VISIBLE);
         orario.setVisibility(View.GONE);
-
-        /*
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        date.updateDate(year, month, day);
-        */
 
         EventoHelper.setMinDate(date, new GregorianCalendar().getTimeInMillis() - 1000);
 

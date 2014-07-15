@@ -50,28 +50,25 @@ import java.util.Set;
 public class EventoHelper {
 
     private static EditText edt;
-    static ProgressBar pb;
-    static ArrayList<Friends> friendList;
-    static FbFriendsAdapter dataAdapter = null;
-    static ArrayList<Friends> friendsList;
-    static List<GraphUser> friends;
-    static EditText inputSearch;
-    static ListView amiciFB;
-    static Dialog dialogAddFriends;
-    static ArrayList<String> id_toSend;
-    static int posAttributi;
-    static Button si;
-    static Button no;
-    static ImageButton dialogButton;
-    static DatePicker dateR;
-    static Button add;
-    static int idAttributo;
-    static private Dialog dialog;
-    static LinearLayout normal;
-    static LinearLayout sino;
-    static LinearLayout dataL;
+    private static ProgressBar pb;
+    private static ArrayList<Friends> friendList;
+    private static FbFriendsAdapter dataAdapter = null;
+    private static ArrayList<Friends> friendsList;
+    private static List<GraphUser> friends;
+    private static EditText inputSearch;
+    private static ListView amiciFB;
+    private static Dialog dialogAddFriends;
+    private static ArrayList<String> id_toSend;
+    private static int posAttributi;
+    private static ImageButton dialogButton;
+    private static DatePicker dateR;
+    private static int idAttributo;
+    private static Dialog dialog;
+    private static LinearLayout normal;
+    private static LinearLayout sino;
+    private static LinearLayout dataL;
     private static ArrayList<String> name_toSend;
-    static public ListView risp;
+    public static ListView risp;
 
     private static Dialog getRisposteDialog(Activity activity) {
         if (dialog == null) {
@@ -153,7 +150,7 @@ public class EventoHelper {
 
                 final ProgressBar pb_sino = (ProgressBar) dialog.findViewById(R.id.pb_sino);
 
-                no = (Button) dialog.findViewById(R.id.btn_risp_no);
+                Button no = (Button) dialog.findViewById(R.id.btn_risp_no);
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -167,7 +164,7 @@ public class EventoHelper {
                     }
                 });
 
-                si = (Button) dialog.findViewById(R.id.btn_risp_si);
+                Button si = (Button) dialog.findViewById(R.id.btn_risp_si);
                 si.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -186,17 +183,8 @@ public class EventoHelper {
 
                 final ProgressBar pb_data = (ProgressBar) dialog.findViewById(R.id.pb_data);
                 dateR = (DatePicker) dialog.findViewById(R.id.datePicker_risposta);
-                add = (Button) dialog.findViewById(R.id.button_rispndi_data);
+                Button add = (Button) dialog.findViewById(R.id.button_rispndi_data);
 
-                /*
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                dateR.setMinDate(cal.getTimeInMillis() - 10000);
-                dateR.updateDate(year, month, day);
-                */
                 setMinDate(dateR, new GregorianCalendar().getTimeInMillis() - 1000);
 
                 add.setOnClickListener(new View.OnClickListener() {

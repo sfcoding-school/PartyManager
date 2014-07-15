@@ -31,7 +31,8 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
 
         inflar.inflate(R.menu.main_no_menu, menu);
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section2));
+        if (getActivity() != null && getActivity().getActionBar() != null)
+            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section2));
     }
 
     @Override

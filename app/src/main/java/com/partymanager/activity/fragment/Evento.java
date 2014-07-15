@@ -1,6 +1,5 @@
 package com.partymanager.activity.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -43,7 +42,7 @@ public class Evento extends Fragment {
     private String nomeEvento;
     private String adminEvento;
     public static int numUtenti;
-    boolean animation;
+    private boolean animation;
 
     AttributiAdapter eAdapter;
     ListView listView;
@@ -114,7 +113,8 @@ public class Evento extends Fragment {
         else
             temp = nomeEvento;
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : temp);
+        if (getActivity() != null && getActivity().getActionBar() != null)
+            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : temp);
     }
 
     @Override
@@ -339,18 +339,6 @@ public class Evento extends Fragment {
             popup.show();
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        /*try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
-        }*/
-    }
-
 
     @Override
     public void onDestroy() {

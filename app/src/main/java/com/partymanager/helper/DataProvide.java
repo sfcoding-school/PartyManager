@@ -296,27 +296,6 @@ public class DataProvide {
         }.execute(null, null, null);
     }
 
-    public static void addElementJson(final JSONObject element, final String jsonName, final Context context) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    JSONArray jsonArray = loadJsonFromFile(jsonName, context);
-                    if (jsonArray != null) {
-                        jsonArray = jsonArray.put(element);
-                        saveJsonToFile(jsonArray, jsonName, context);
-                    } else {
-                        Log.e("DataProvide-addElementJson: ", "jsonArray == null");
-                    }
-                    return null;
-                } catch (NullPointerException e) {
-                    Log.e("DataProvide-addElementJson: ", "NullPointerException " + jsonName + " " + e);
-                    return null;
-                }
-            }
-        }.execute(null, null, null);
-    }
-
     private static synchronized JSONArray loadJsonFromFile(String fileName, Context context) {
         try {
             FileInputStream fis = context.openFileInput(fileName);

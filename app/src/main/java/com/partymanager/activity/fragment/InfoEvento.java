@@ -1,8 +1,6 @@
 package com.partymanager.activity.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,23 +34,10 @@ public class InfoEvento extends Fragment {
     private String adminEvento;
     private String nomeEvento;
 
-    private OnFragmentInteractionListener mListener;
     private boolean modifica = false;
     private ProgressBar pb_cambiaNome;
     private ImageButton modificaNomeEvento;
     public static TextView member_label;
-
-    public static InfoEvento newInstance(int idEvento, String adminEvento, String nomeEvento, int numUtenti) {
-        InfoEvento fragment = new InfoEvento();
-        Bundle args = new Bundle();
-        args.putInt(Evento.ID_EVENTO, idEvento);
-        args.putString(Evento.NOME_EVENTO, nomeEvento);
-        args.putString(Evento.ADMIN_EVENTO, adminEvento);
-        args.putInt(Evento.NUM_UTENTI, numUtenti);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public static InfoEvento newInstance(Bundle b) {
         InfoEvento fragment = new InfoEvento();
@@ -85,9 +70,9 @@ public class InfoEvento extends Fragment {
         super.onCreateOptionsMenu(menu, inflar);
         menu.clear();
         inflar.inflate(R.menu.main_no_menu, menu);
-        //getActivity().getActionBar().setTitle(getString(R.string.titleInfoEvento));
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
+        if (getActivity() != null && getActivity().getActionBar() != null)
+            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
 
     }
 
@@ -207,27 +192,8 @@ public class InfoEvento extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        /*
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-        */
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
         DatiFriends.removeAll(true);
     }
-
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
-    }
-
 }

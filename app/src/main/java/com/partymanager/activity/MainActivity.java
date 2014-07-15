@@ -135,11 +135,6 @@ public class MainActivity extends Activity
                 String action = inte.getAction();
 
                 if (action != null && action.equals(GcmIntentService.NOTIFICA_EVENTO)) {
-                    //Bundle b = inte.getBundleExtra("bundle");
-                    //Log.e("MAINACTIVITY-DEBUG", "sono entrato in action "+b.toString());
-                    //changeFragment(0);
-                    //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                     if (fragmentManager.findFragmentByTag(eventTAG) != null) {
                         ((Evento) fragmentManager.findFragmentByTag(eventTAG)).addListener(
                                 new Evento.OnDestroyCallBackListener() {
@@ -450,11 +445,8 @@ public class MainActivity extends Activity
 
         int temp = R.menu.main;
 
-        if (drawerAperto) {
-
+        if (drawerAperto)
             temp = R.menu.main_no_menu;
-
-        }
 
         getMenuInflater().inflate(temp, menu);
 
@@ -468,7 +460,7 @@ public class MainActivity extends Activity
         if (drawerAperto)
             title = getString(R.string.app_name);
 
-        getActionBar().setTitle(title);
+        if (getActionBar() != null) getActionBar().setTitle(title);
 
         return false;
     }
@@ -556,9 +548,7 @@ public class MainActivity extends Activity
     @Override
     public void onFragmentInteraction(int id) {
         if (listener != null) fragmentManager.removeOnBackStackChangedListener(listener);
-        //noMenuActionBar = true;
         Fragment fragment = Evento.newInstance(id);
-        //fragmentManager.popBackStackImmediate();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, eventTAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -566,285 +556,5 @@ public class MainActivity extends Activity
                 .commit();
         Log.e("MAINACTIVITY_DEBUG", "sono entrato in on FragmetInteraction con id" + id);
         MainActivity.this.invalidateOptionsMenu();
-
-        /*
-        fragmentManager.addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    public void onBackStackChanged() {
-                        if (fragmentManager.getBackStackEntryCount() == 0 || !fragmentManager.getBackStackEntryAt(0).getName().equals(eventTAG)) {
-                            noMenuActionBar = false;
-
-                        }
-
-                        //fragment = fragmentManager.findFragmentById(fragmentManager.getBackStackEntryAt(0).getId());
-                        invalidateOptionsMenu();
-                    }
-
-                }
-        );
-        */
-
-
     }
 }
-
-/*
-                fragmentManager = getFragmentManager();
-                Fragment eventList = fragmentManager.findFragmentByTag(eventListTAG);
-                Fragment event = fragmentManager.findFragmentByTag(eventTAG);
-                int dialogIdAttributo = EventoHelper.getIdAttributo();
-
-                //EVENTLIST VISIBILE
-                if (eventList != null && eventList.isVisible()) {
-                    switch (type) {
-                        //event
-                        case 1:
-                            int idEvento = Integer.parseInt(b.getString("id_evento"));
-
-                            switch (method) {
-                                //new
-                                case 1:
-                                    DatiEventi.addItem(
-                                            new DatiEventi.Evento(
-                                                    idEvento,
-                                                    b.getString("nome_evento"),
-                                                    "",
-                                                    "",
-                                                    b.getString("admin"),
-                                                    Integer.parseInt(b.getString("num_utenti"))
-                                            )
-                                    );
-                                    break;
-
-                                //'del'
-                                case 3:
-                                    DatiEventi.removeIdItem(idEvento);
-                                    break;
-                                //'uscito'
-                                case 4:
-                                    DatiEventi.getIdItem(idEvento).numUtenti -= 1;
-                                    DatiEventi.notifyDataChange();
-                                    break;
-                            }
-                            break;
-
-                        //attr
-                        case 2:
-                            switch (method) {
-                                //new
-                                case 1:
-                                    idEvento = Integer.parseInt(b.getString("id_evento"));
-                                    //String idAttributo = b.getString("id_attributo");
-                                    String idRisposta = b.getString("id_risposta");
-                                    //String domanda = b.getString("domanda");
-                                    String risposta = b.getString("risposta");
-                                    String template = b.getString("template");
-                                    //boolean chiusa = Boolean.parseBoolean(b.getString("chiusa"));
-                                    //int numD = Integer.parseInt(b.getString("numd"));
-                                    //int numR = Integer.parseInt(b.getString("numr"));
-
-                                    if (template != null && idRisposta != null && template.equals("data") && !idRisposta.equals("None")) {
-                                        DatiEventi.getIdItem(idEvento).date = HelperDataParser.getCalFromString(risposta);
-                                        DatiEventi.notifyDataChange();
-                                    }
-                                    break;
-
-                                //del
-                                case 3:
-                                    //aggingere l'eliminazione della data se viene eliminato un attributo con template uguale a data
-                                    break;
-                            }
-
-                            break;
-
-                        //risp
-                        case 3:
-                            //aggiornare la data dell'evento se viene votata o aggiunta una nuova risposta su un attributo con template data
-                            switch (method) {
-                                //new
-                                case 1:
-
-                                    break;
-
-                                //mod
-                                case 2:
-                                    break;
-                            }
-                            break;
-
-                        //user
-                        case 4:
-                            idEvento = b.getInt("id_evento");
-
-                            switch (method) {
-                                //new
-                                case 1:
-                                    int numAddUser = 0;
-                                    try {
-                                        numAddUser = new JSONArray(b.getString("user_list")).length();
-                                    } catch (JSONException e) {
-                                        Log.e("AGG-NOTIFICHE", e.toString());
-                                    }
-                                    DatiEventi.getIdItem(idEvento).numUtenti += numAddUser;
-                                    DatiEventi.notifyDataChange();
-                                    break;
-
-                                //del
-                                case 3:
-                                    DatiEventi.getIdItem(idEvento).numUtenti--;
-                                    DatiEventi.notifyDataChange();
-                                    break;
-                            }
-
-
-                            break;
-                    }
-                } else //EVENTO VISIBILE
-                    if (event != null && event.isVisible()) {
-                        switch (type) {
-                            //attr
-                            case 2:
-                                if (event.getArguments().getString("param1").equals(b.getString("id_evento"))) {
-                                    int idAttr = Integer.parseInt(b.getString("id_attributo"));
-                                    switch (method) {
-                                        //new
-                                        case 1:
-                                            //boolean chiusa = Boolean.parseBoolean();
-                                            //String id, String domanda, String risposta, String template, chiusa, int numd, int numr, String id_risposta
-                                            DatiAttributi.addItem(
-                                                    new DatiAttributi.Attributo(
-                                                            idAttr,
-                                                            b.getString("domanda"),
-                                                            b.getString("risposta"),
-                                                            b.getString("template"),
-                                                            b.getBoolean("chiusa"),
-                                                            Integer.parseInt(b.getString("numd")),
-                                                            Integer.parseInt(b.getString("numr")),
-                                                            b.getString("id_risposta")
-                                                    )
-                                            );
-                                            break;
-                                        //del
-                                        case 3:
-                                            DatiAttributi.removeIdItem(idAttr);
-                                    }
-                                }
-
-                                break;
-
-                            //risp
-                            case 3:
-                                //int idAttributo = EventoHelper.getIdAttributo();
-                                //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
-                                if (event.getArguments().getString(Evento.ID_EVENTO).equals(b.getString("id_evento"))) {
-                                    int idAttr = Integer.parseInt(b.getString("id_attributo"));
-                                    int idRisposta = b.getInt("id_risposta");
-                                    String risposta = b.getString("risposta");
-                                    DatiAttributi.Attributo attr = DatiAttributi.getIdItem(idAttr);
-
-                                    switch (method) {
-                                        //new
-                                        case 1:
-                                            //String id, String risposta, String template, JSONArray userList
-                                            if (attr.numr <= 1) {
-                                                attr.id_risposta = String.valueOf(idRisposta);
-                                                attr.risposta = risposta;
-                                                attr.numr = 1;
-                                                DatiAttributi.notifyDataChange();
-                                            }
-
-                                            break;
-
-                                        //delete
-                                        case 3:
-                                            //problemi implementativi
-
-                                            break;
-
-                                        //mod
-                                        case 2:
-                                            int numr = Integer.parseInt(b.getString("numr"));
-                                            if (numr >= attr.numr) {
-                                                attr.id_risposta = String.valueOf(idRisposta);
-                                                attr.risposta = risposta;
-                                                attr.numr = numr;
-                                                DatiAttributi.notifyDataChange();
-                                            }
-
-                                            break;
-
-                                    }
-                                    break;
-                                }
-                                //user
-                            case 4:
-                                switch (method) {
-
-                                    //new
-                                    case 1:
-                                        //da implementare
-                                        break;
-
-                                    //del
-                                    case 3:
-                                        //da implementare
-                                        break;
-                                }
-                                break;
-                        }
-                    } //RISPOSTE VISIBILE
-                if (dialogIdAttributo != -1) {
-                    switch (type) {
-                        //risp
-                        case 3:
-                            //int idAttributo = EventoHelper.getIdAttributo();
-                            //int idAttrNotifica = Integer.parseInt(b.getString("id_attributo"));
-                            if (dialogIdAttributo == Integer.parseInt(b.getString("id_attributo"))) {
-                                String user = b.getString("user");
-                                String userName = b.getString("userName");
-                                int idRisposta = Integer.parseInt(b.getString("id_risposta"));
-                                boolean controllo = b.getString("agg") != null && b.getString("agg").equals("1"); // ? true : false;
-                                switch (method) {
-                                    //new
-                                    case 1:
-                                        String risposta = b.getString("risposta");
-
-                                        JSONArray userList = null;
-                                        try {
-                                            JSONObject json = new JSONObject();
-                                            json.put("id_user", user);
-                                            json.put("name", userName);
-                                            userList = new JSONArray();
-                                            userList.put(json);
-                                        } catch (JSONException e) {
-                                            Log.e("AGG-NOTIFICHE", e.toString());
-                                        }
-
-                                        //String id, String risposta, String template, JSONArray userList
-                                        DatiRisposte.addItem(
-                                                new DatiRisposte.Risposta(
-                                                        idRisposta,
-                                                        risposta,
-                                                        userList
-                                                ), controllo
-                                        );
-                                        break;
-
-                                    //del
-                                    case 3:
-                                        DatiRisposte.removeIdItem(idRisposta);
-                                        break;
-                                    //mod
-                                    case 2:
-                                        //int numr = Integer.parseInt(b.getString("numr"));
-                                        DatiRisposte.addIdPersona(idRisposta, user, userName, controllo);
-                                        break;
-                                }
-                                break;
-                            }
-
-
-                    }
-
-
-                }*/

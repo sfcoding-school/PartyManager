@@ -30,7 +30,6 @@ public class HelperFacebook {
 
     private static String facebookId;
     private static String facebookUserName;
-    //private static Activity activity = MainActivity.getActivity();
 
     public static String getFacebookId(Context context) {
         if (facebookId != null)

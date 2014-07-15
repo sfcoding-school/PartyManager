@@ -68,7 +68,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         MenuItem prova = menu.findItem(R.id.progressBarSmall);
         prova.setVisible(progressBar);
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section0));
+        if (getActivity() != null && getActivity().getActionBar() != null)
+            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section0));
     }
 
 
@@ -77,9 +78,7 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eventi, container, false);
 
-        // Set the adapter
         ListView listView = (ListView) view.findViewById(R.id.eventList);
-
         listView.setOnItemClickListener(this);
         listView.setEmptyView(view.findViewById(R.id.txt_emptyE));
         listView.setAdapter(eAdapter);
@@ -118,20 +117,10 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         setHasOptionsMenu(true);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = (OnFragmentInteractionListener) activity;
     }
 
     @Override
@@ -141,24 +130,10 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // Set title
-        MainActivity.mTitle = getString(R.string.title_section0);
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
             int idEvento = DatiEventi.getPositionItem(position).id;
             Log.e("EVENTLIST", "" + idEvento);
-            /*
-            String name = DatiEventi.getPositionItem(position).name;
-            String admin = DatiEventi.getPositionItem(position).admin;
-            String numU = Integer.toString(DatiEventi.getPositionItem(position).numUtenti);
-            */
             mListener.onFragmentInteraction(idEvento);
         }
     }
@@ -195,5 +170,4 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
             }
         }.execute(null, null, null);
     }
-
 }

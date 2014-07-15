@@ -160,7 +160,7 @@
     <string name="hello_blank_fragment">Hello Archivio</string>
     <string name="action_settings">Impostazioni</string>
     <string name="new_event">Nuovo Evento</string>
-    <string name="app_name">PartyManager</string>
+    <string name="app_name">Party Manager</string>
     <string name="AttrAdapter">% ha votato questa risposta, \u0020</string>
     <string name="AttrAdapter2">\u0020 hanno risposto</string>
     <string name="FriendsAdapter">\u0020(ADMIN)</string>
