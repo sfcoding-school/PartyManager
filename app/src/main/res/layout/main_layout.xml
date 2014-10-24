@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Main layout -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/headerbar"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Toolbar-->
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/fragment_nav_drawer_custom" />
+
+</LinearLayout>
