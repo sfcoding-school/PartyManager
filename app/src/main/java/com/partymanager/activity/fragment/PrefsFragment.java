@@ -6,6 +6,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -30,9 +31,9 @@ public class PrefsFragment extends PreferenceFragment implements SharedPreferenc
         menu.clear();
 
         inflar.inflate(R.menu.main_no_menu, menu);
+        if (((ActionBarActivity)getActivity()) != null && ((ActionBarActivity)getActivity()).getSupportActionBar() != null)
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section2));
 
-        if (getActivity() != null && getActivity().getActionBar() != null)
-            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section2));
     }
 
     @Override

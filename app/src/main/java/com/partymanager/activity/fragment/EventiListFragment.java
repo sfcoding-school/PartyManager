@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -68,8 +69,8 @@ public class EventiListFragment extends Fragment implements AbsListView.OnItemCl
         MenuItem prova = menu.findItem(R.id.progressBarSmall);
         prova.setVisible(progressBar);
 
-        if (getActivity() != null && getActivity().getActionBar() != null)
-            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section0));
+        if (((ActionBarActivity)getActivity()) != null && ((ActionBarActivity)getActivity()).getSupportActionBar() != null)
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.title_section0));
     }
 
 

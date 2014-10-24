@@ -3,6 +3,7 @@ package com.partymanager.activity.fragment;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,8 +72,9 @@ public class InfoEvento extends Fragment {
         menu.clear();
         inflar.inflate(R.menu.main_no_menu, menu);
 
-        if (getActivity() != null && getActivity().getActionBar() != null)
-            getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
+        if (((ActionBarActivity)getActivity()) != null && ((ActionBarActivity)getActivity()).getSupportActionBar() != null)
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? getString(R.string.app_name) : getString(R.string.titleInfoEvento));
+
 
     }
 

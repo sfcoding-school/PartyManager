@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,8 @@ public class Archivio extends Fragment {
 
         inflar.inflate(R.menu.main_no_menu, menu);
 
-        getActivity().getActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section1));
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(MainActivity.drawerIsOpen(inflar, menu) ? "Party Manager" : getString(R.string.title_section1));
+
     }
 
     @Override
