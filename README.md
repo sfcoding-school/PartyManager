@@ -3,5 +3,5 @@ PartyManager
 
 [Here](SLIDES.pdf) find the slides of the project. 
 
-### Development Visualization
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/s11Ml2aXydI/0.jpg)](https://www.youtube.com/watch?v=s11Ml2aXydI)
+**click here to see the developement visualization video**
+[![Development Visualization](https://j.gifs.com/W61Vnn.gif)](https://www.youtube.com/watch?v=s11Ml2aXydI)
